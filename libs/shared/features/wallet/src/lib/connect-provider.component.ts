@@ -1,0 +1,50 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { Wallet } from './intefaces';
+
+@Component({
+  selector: 'nx-dapp-connect-provider',
+  template: `
+    <button mat-menu-item class="flex items-center" (click)="connect()">
+      <img class="inline-block w-6 h-6 mr-2" [src]="icon" />
+      {{ label }}
+    </button>
+  `,
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ConnectProviderComponent implements OnInit, OnDestroy {
+  private _destroy = new Subject();
+  @Input() label!: string;
+  @Input() icon!: string;
+  @Input() url!: string;
+  @Input() adapter!: Wallet;
+  @Output() connected = new EventEmitter();
+
+  ngOnInit() {
+    fromEvent(this.adapter, 'connect')
+      .pipe(takeUntil(this._destroy))
+      .subscribe(this.connected);
+  }
+
+  ngOnDestroy() {
+    this._destroy.next();
+    this._destroy.complete();
+  }
+
+  connect() {
+    if (this.adapter) {
+      this.adapter.connect();
+    }
+  }
+}

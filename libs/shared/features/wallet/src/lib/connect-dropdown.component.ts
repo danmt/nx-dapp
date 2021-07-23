@@ -1,18 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-const ASSETS_URL =
-  'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets';
-
-const WALLET_PROVIDERS = [
-  {
-    title: 'Sollet',
-    icon: `${ASSETS_URL}/sollet.svg`,
-  },
-  {
-    title: 'Phantom',
-    icon: `https://raydium.io/_nuxt/img/phantom.d9e3c61.png`,
-  },
-];
+import Wallet from '@project-serum/sol-wallet-adapter';
 
 @Component({
   selector: 'nx-dapp-connect-dropdown',
@@ -21,20 +8,36 @@ const WALLET_PROVIDERS = [
       Connect
     </button>
     <mat-menu #menu="matMenu">
-      <button
-        mat-menu-item
-        *ngFor="let provider of walletProviders"
-        class="flex items-center"
-      >
-        <img class="inline-block w-6 h-6 mr-2" [src]="provider.icon" />
-
-        {{ provider.title }}
-      </button>
+      <ng-container *ngFor="let wallet of wallets">
+        <nx-dapp-connect-provider
+          *ngIf="wallet.adapter"
+          [label]="wallet.label"
+          [icon]="wallet.icon"
+          [url]="wallet.url"
+          [adapter]="wallet.adapter"
+          (connected)="onConnected()"
+        >
+        </nx-dapp-connect-provider>
+      </ng-container>
     </mat-menu>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectDropdownComponent {
-  walletProviders = WALLET_PROVIDERS;
+  wallets = [
+    {
+      label: 'Sollet',
+      icon: 'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg',
+      url: 'https://www.sollet.io',
+      adapter: new Wallet(
+        'https://www.sollet.io',
+        'https://solana-api.projectserum.com/'
+      ),
+    },
+  ];
+
+  onConnected() {
+    console.log('wallet connected');
+  }
 }
