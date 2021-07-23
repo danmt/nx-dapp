@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@nx-dapp/shared/features/wallet": [
+        "libs/shared/features/wallet/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
