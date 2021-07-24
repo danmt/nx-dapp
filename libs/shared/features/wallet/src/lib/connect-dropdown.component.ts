@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import Wallet from '@project-serum/sol-wallet-adapter';
+import { PhantomWallet } from './wallets/phantom.wallet';
+import { SolongWallet } from './wallets/solong.wallet';
 
 @Component({
   selector: 'nx-dapp-connect-dropdown',
@@ -34,6 +36,18 @@ export class ConnectDropdownComponent {
         'https://www.sollet.io',
         'https://solana-api.projectserum.com/'
       ),
+    },
+    {
+      label: 'Phantom',
+      icon: `https://raydium.io/_nuxt/img/phantom.d9e3c61.png`,
+      url: 'https://phantom.app/',
+      adapter: new PhantomWallet(),
+    },
+    {
+      label: 'Solong',
+      url: 'https://solongwallet.com',
+      icon: 'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/solong.png',
+      adapter: new SolongWallet(),
     },
   ];
 
