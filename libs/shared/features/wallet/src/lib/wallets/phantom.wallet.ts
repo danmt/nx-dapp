@@ -22,12 +22,19 @@ interface PhantomProvider {
 }
 
 export class PhantomWallet extends EventEmitter {
-  _provider: PhantomProvider;
+  // _provider: PhantomProvider;
 
   constructor() {
     super();
     this.connect = this.connect.bind(this);
-    this._provider = (window as any).solana;
+    // this._provider = (window as any).solana;
+  }
+
+  private get _provider(): PhantomProvider | undefined {
+    if ((window as any)?.solana?.isPhantom) {
+      return (window as any).solana;
+    }
+    return undefined;
   }
 
   private _handleConnect = (...args: any) => {
@@ -39,11 +46,11 @@ export class PhantomWallet extends EventEmitter {
   };
 
   get connected() {
-    return this._provider.isConnected;
+    return this._provider?.isConnected;
   }
 
   get autoApprove() {
-    return this._provider.autoApprove;
+    return this._provider?.autoApprove;
   }
 
   // eslint-disable-next-line
@@ -58,16 +65,19 @@ export class PhantomWallet extends EventEmitter {
   }
 
   get publicKey() {
-    return this._provider.publicKey;
+    return this._provider?.publicKey;
   }
 
   // eslint-disable-next-line
   async signTransaction(transaction: Transaction) {
-    return this._provider.signTransaction(transaction);
+    return this._provider?.signTransaction(transaction);
   }
 
   connect() {
-    if (this._provider && !this._provider.listeners('connect').length) {
+    if (!this._provider) {
+      throw new Error('Phantom not available');
+    }
+    if (!this._provider.listeners('connect').length) {
       this._provider.on('connect', this._handleConnect);
     }
     if (!this._provider.listeners('disconnect').length) {
@@ -77,6 +87,9 @@ export class PhantomWallet extends EventEmitter {
   }
 
   disconnect() {
+    if (!this._provider) {
+      throw new Error('Phantom not available');
+    }
     return this._provider.disconnect();
   }
 }

@@ -51,6 +51,12 @@ export class ConnectDropdownComponent {
     },
   ];
 
+  ngOnInit() {
+    setTimeout(() => {
+      console.log((window as any).solana);
+    }, 5000);
+  }
+
   onConnected() {
     console.log('wallet connected');
   }
