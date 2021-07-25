@@ -13,7 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Wallet } from './interfaces';
 
 @Component({
-  selector: 'nx-dapp-connect-provider',
+  selector: 'nx-dapp-wallet-option',
   template: `
     <button mat-menu-item class="flex items-center" (click)="connect()">
       <img class="inline-block w-6 h-6 mr-2" [src]="icon" />
@@ -23,7 +23,7 @@ import { Wallet } from './interfaces';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConnectProviderComponent implements OnInit, OnDestroy {
+export class WalletOptionComponent implements OnInit, OnDestroy {
   private _destroy = new Subject();
   @Input() label!: string;
   @Input() icon!: string;

@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
-import { ConnectDropdownComponent } from './connect-dropdown.component';
-import { ConnectProviderComponent } from './connect-provider.component';
+import { WalletsDropdownComponent } from './wallets-dropdown.component';
+import { WalletOptionComponent } from './wallet-option.component';
 
 @NgModule({
   imports: [CommonModule, MatButtonModule, MatMenuModule],
-  declarations: [ConnectDropdownComponent, ConnectProviderComponent],
-  exports: [ConnectDropdownComponent],
+  declarations: [WalletsDropdownComponent, WalletOptionComponent],
+  exports: [WalletsDropdownComponent],
 })
 export class WalletModule {}

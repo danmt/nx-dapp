@@ -6,7 +6,7 @@ import { PhantomWalletAdapter, SolongWalletAdapter } from './adapters';
 import { Wallet } from './interfaces';
 
 @Component({
-  selector: 'nx-dapp-connect-dropdown',
+  selector: 'nx-dapp-wallets-dropdown',
   template: `
     <button
       mat-raised-button
@@ -26,22 +26,21 @@ import { Wallet } from './interfaces';
     </button>
     <mat-menu #menu="matMenu">
       <ng-container *ngFor="let wallet of wallets">
-        <nx-dapp-connect-provider
-          *ngIf="wallet.adapter"
+        <nx-dapp-wallet-option
           [label]="wallet.label"
           [icon]="wallet.icon"
           [url]="wallet.url"
           [adapter]="wallet.adapter"
           (connected)="onConnected($event)"
         >
-        </nx-dapp-connect-provider>
+        </nx-dapp-wallet-option>
       </ng-container>
     </mat-menu>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConnectDropdownComponent {
+export class WalletsDropdownComponent {
   wallets = [
     {
       label: 'Sollet',
