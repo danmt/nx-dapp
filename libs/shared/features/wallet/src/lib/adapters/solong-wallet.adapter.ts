@@ -2,11 +2,6 @@ import { PublicKey, PublicKeyInitData, Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
 type SolongEvent = 'disconnect' | 'connect';
-type SolongRequestMethod =
-  | 'connect'
-  | 'disconnect'
-  | 'signTransaction'
-  | 'signAllTransactions';
 
 interface SolongProvider {
   publicKey: PublicKey;
@@ -17,7 +12,6 @@ interface SolongProvider {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   on: (event: SolongEvent, handler: (args: unknown) => void) => void;
-  request: (method: SolongRequestMethod, params: unknown) => Promise<unknown>;
   listeners: (event: SolongEvent) => (() => void)[];
   selectAccount: () => Promise<PublicKeyInitData>;
 }

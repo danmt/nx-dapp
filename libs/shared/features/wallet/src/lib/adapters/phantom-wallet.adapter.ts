@@ -4,11 +4,6 @@ import EventEmitter from 'eventemitter3';
 import { Wallet } from '../interfaces';
 
 type PhantomEvent = 'disconnect' | 'connect';
-type PhantomRequestMethod =
-  | 'connect'
-  | 'disconnect'
-  | 'signTransaction'
-  | 'signAllTransactions';
 
 interface PhantomProvider {
   publicKey: PublicKey;
@@ -19,7 +14,6 @@ interface PhantomProvider {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   on: (event: PhantomEvent, handler: (args: unknown) => void) => void;
-  request: (method: PhantomRequestMethod, params: unknown) => Promise<unknown>;
   listeners: (event: PhantomEvent) => (() => void)[];
 }
 
