@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import Wallet from '@project-serum/sol-wallet-adapter';
-import { PhantomWallet } from './wallets/phantom.wallet';
-import { SolongWallet } from './wallets/solong.wallet';
+import WalletAdapter from '@project-serum/sol-wallet-adapter';
+
+import { PhantomWalletAdapter } from './adapters/phantom-wallet.adapter';
+import { SolongWalletAdapter } from './adapters/solong-wallet.adapter';
+import { Wallet } from './intefaces';
 
 @Component({
   selector: 'nx-dapp-connect-dropdown',
@@ -17,7 +19,7 @@ import { SolongWallet } from './wallets/solong.wallet';
           [icon]="wallet.icon"
           [url]="wallet.url"
           [adapter]="wallet.adapter"
-          (connected)="onConnected()"
+          (connected)="onConnected($event)"
         >
         </nx-dapp-connect-provider>
       </ng-container>
@@ -32,7 +34,7 @@ export class ConnectDropdownComponent {
       label: 'Sollet',
       icon: 'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg',
       url: 'https://www.sollet.io',
-      adapter: new Wallet(
+      adapter: new WalletAdapter(
         'https://www.sollet.io',
         'https://solana-api.projectserum.com/'
       ),
@@ -41,23 +43,17 @@ export class ConnectDropdownComponent {
       label: 'Phantom',
       icon: `https://raydium.io/_nuxt/img/phantom.d9e3c61.png`,
       url: 'https://phantom.app/',
-      adapter: new PhantomWallet(),
+      adapter: new PhantomWalletAdapter(),
     },
     {
       label: 'Solong',
       url: 'https://solongwallet.com',
       icon: 'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/solong.png',
-      adapter: new SolongWallet(),
+      adapter: new SolongWalletAdapter(),
     },
   ];
 
-  ngOnInit() {
-    setTimeout(() => {
-      console.log((window as any).solana);
-    }, 5000);
-  }
-
-  onConnected() {
-    console.log('wallet connected');
+  onConnected(wallet: Wallet) {
+    console.log('wallet connected', wallet);
   }
 }

@@ -1,5 +1,7 @@
-import EventEmitter from 'eventemitter3';
 import { PublicKey, Transaction } from '@solana/web3.js';
+import EventEmitter from 'eventemitter3';
+
+import { Wallet } from '../intefaces';
 
 type PhantomEvent = 'disconnect' | 'connect';
 type PhantomRequestMethod =
@@ -16,31 +18,33 @@ interface PhantomProvider {
   signAllTransactions: (transactions: Transaction[]) => Promise<Transaction[]>;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  on: (event: PhantomEvent, handler: (args: any) => void) => void;
-  request: (method: PhantomRequestMethod, params: any) => Promise<any>;
+  on: (event: PhantomEvent, handler: (args: unknown) => void) => void;
+  request: (method: PhantomRequestMethod, params: unknown) => Promise<unknown>;
   listeners: (event: PhantomEvent) => (() => void)[];
 }
 
-export class PhantomWallet extends EventEmitter {
-  // _provider: PhantomProvider;
-
+export class PhantomWalletAdapter extends EventEmitter implements Wallet {
   constructor() {
     super();
-    this.connect = this.connect.bind(this);
-    // this._provider = (window as any).solana;
   }
 
-  private get _provider(): PhantomProvider | undefined {
-    if ((window as any)?.solana?.isPhantom) {
-      return (window as any).solana;
+  private get _provider(): PhantomProvider {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const phantom = (window as any)?.solana;
+
+    if (!phantom?.isPhantom) {
+      throw new Error('Phantom not available');
     }
-    return undefined;
+
+    return phantom;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _handleConnect = (...args: any) => {
     this.emit('connect', ...args);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _handleDisconnect = (...args: any) => {
     this.emit('disconnect', ...args);
   };
@@ -53,30 +57,21 @@ export class PhantomWallet extends EventEmitter {
     return this._provider?.autoApprove;
   }
 
-  // eslint-disable-next-line
   async signAllTransactions(
     transactions: Transaction[]
   ): Promise<Transaction[]> {
-    if (!this._provider) {
-      return transactions;
-    }
-
     return this._provider.signAllTransactions(transactions);
   }
 
   get publicKey() {
-    return this._provider?.publicKey;
+    return this._provider.publicKey;
   }
 
-  // eslint-disable-next-line
   async signTransaction(transaction: Transaction) {
-    return this._provider?.signTransaction(transaction);
+    return this._provider.signTransaction(transaction);
   }
 
   connect() {
-    if (!this._provider) {
-      throw new Error('Phantom not available');
-    }
     if (!this._provider.listeners('connect').length) {
       this._provider.on('connect', this._handleConnect);
     }
@@ -87,9 +82,6 @@ export class PhantomWallet extends EventEmitter {
   }
 
   disconnect() {
-    if (!this._provider) {
-      throw new Error('Phantom not available');
-    }
     return this._provider.disconnect();
   }
 }

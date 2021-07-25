@@ -29,12 +29,12 @@ export class ConnectProviderComponent implements OnInit, OnDestroy {
   @Input() icon!: string;
   @Input() url!: string;
   @Input() adapter!: Wallet;
-  @Output() connected = new EventEmitter();
+  @Output() connected = new EventEmitter<Wallet>();
 
   ngOnInit() {
     fromEvent(this.adapter, 'connect')
       .pipe(takeUntil(this._destroy))
-      .subscribe(this.connected);
+      .subscribe(() => this.connected.emit(this.adapter));
   }
 
   ngOnDestroy() {
@@ -43,8 +43,6 @@ export class ConnectProviderComponent implements OnInit, OnDestroy {
   }
 
   connect() {
-    if (this.adapter) {
-      this.adapter.connect();
-    }
+    this.adapter.connect();
   }
 }
