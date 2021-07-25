@@ -1,14 +1,27 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import WalletAdapter from '@project-serum/sol-wallet-adapter';
+import { BehaviorSubject } from 'rxjs';
 
-import { PhantomWalletAdapter } from './adapters/phantom-wallet.adapter';
-import { SolongWalletAdapter } from './adapters/solong-wallet.adapter';
+import { PhantomWalletAdapter, SolongWalletAdapter } from './adapters';
 import { Wallet } from './interfaces';
 
 @Component({
   selector: 'nx-dapp-connect-dropdown',
   template: `
-    <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="wallet$ | async as wallet"
+      (click)="disconnect(wallet)"
+    >
+      Disconnect
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [matMenuTriggerFor]="menu"
+      *ngIf="(wallet$ | async) === null"
+    >
       Connect
     </button>
     <mat-menu #menu="matMenu">
@@ -41,7 +54,7 @@ export class ConnectDropdownComponent {
     },
     {
       label: 'Phantom',
-      icon: `https://raydium.io/_nuxt/img/phantom.d9e3c61.png`,
+      icon: 'https://raydium.io/_nuxt/img/phantom.d9e3c61.png',
       url: 'https://phantom.app/',
       adapter: new PhantomWalletAdapter(),
     },
@@ -52,8 +65,15 @@ export class ConnectDropdownComponent {
       adapter: new SolongWalletAdapter(),
     },
   ];
+  private _wallet = new BehaviorSubject<Wallet | null>(null);
+  wallet$ = this._wallet.asObservable();
+
+  async disconnect(wallet: Wallet) {
+    await wallet.disconnect();
+    this._wallet.next(null);
+  }
 
   onConnected(wallet: Wallet) {
-    console.log('wallet connected', wallet);
+    this._wallet.next(wallet);
   }
 }
