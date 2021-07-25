@@ -10,7 +10,7 @@ import {
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { Wallet } from './intefaces';
+import { Wallet } from './interfaces';
 
 @Component({
   selector: 'nx-dapp-connect-provider',

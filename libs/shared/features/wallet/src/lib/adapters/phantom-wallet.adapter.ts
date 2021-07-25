@@ -1,7 +1,7 @@
 import { PublicKey, Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
-import { Wallet } from '../intefaces';
+import { Wallet } from '../interfaces';
 
 type PhantomEvent = 'disconnect' | 'connect';
 type PhantomRequestMethod =

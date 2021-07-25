@@ -3,7 +3,7 @@ import WalletAdapter from '@project-serum/sol-wallet-adapter';
 
 import { PhantomWalletAdapter } from './adapters/phantom-wallet.adapter';
 import { SolongWalletAdapter } from './adapters/solong-wallet.adapter';
-import { Wallet } from './intefaces';
+import { Wallet } from './interfaces';
 
 @Component({
   selector: 'nx-dapp-connect-dropdown',
