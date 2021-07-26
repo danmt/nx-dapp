@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-connections-data-access-connections',
+  displayName: 'shared-connection-ui-connections-dropdown',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../../coverage/libs/shared/connections/data-access/connections',
+    '../../../../../coverage/libs/shared/connection/ui/connections-dropdown',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

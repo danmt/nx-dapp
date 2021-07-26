@@ -15,20 +15,20 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-dapp/shared/connections/data-access/connections": [
-        "libs/shared/connections/data-access/connections/src/index.ts"
+      "@nx-dapp/shared/connection/data-access/connections": [
+        "libs/shared/connection/data-access/connections/src/index.ts"
       ],
-      "@nx-dapp/shared/connections/data-access/endpoints": [
-        "libs/shared/connections/data-access/endpoints/src/index.ts"
+      "@nx-dapp/shared/connection/data-access/endpoints": [
+        "libs/shared/connection/data-access/endpoints/src/index.ts"
       ],
-      "@nx-dapp/shared/connections/data-access/tokens": [
-        "libs/shared/connections/data-access/tokens/src/index.ts"
+      "@nx-dapp/shared/connection/data-access/tokens": [
+        "libs/shared/connection/data-access/tokens/src/index.ts"
       ],
-      "@nx-dapp/shared/connections/ui/dropdown": [
-        "libs/shared/connections/ui/dropdown/src/index.ts"
+      "@nx-dapp/shared/connection/ui/connections-dropdown": [
+        "libs/shared/connection/ui/connections-dropdown/src/index.ts"
       ],
-      "@nx-dapp/shared/wallets/ui/dropdown": [
-        "libs/shared/wallets/ui/dropdown/src/index.ts"
+      "@nx-dapp/shared/connection/ui/wallets-dropdown": [
+        "libs/shared/connection/ui/wallets-dropdown/src/index.ts"
       ]
     }
   },

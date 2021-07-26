@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import {
   Endpoint,
   getSelected as getSelectedEndpoint,
-} from '@nx-dapp/shared/connections/data-access/endpoints';
+} from '@nx-dapp/shared/connection/data-access/endpoints';
 import { filter, tap } from 'rxjs/operators';
 
 import { ConnectionsService } from '../connections.service';

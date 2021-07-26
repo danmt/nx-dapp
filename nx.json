@@ -27,19 +27,19 @@
     ]
   },
   "projects": {
-    "shared-connections-data-access-connections": {
+    "shared-connection-data-access-connections": {
       "tags": []
     },
-    "shared-connections-data-access-endpoints": {
+    "shared-connection-data-access-endpoints": {
       "tags": []
     },
-    "shared-connections-data-access-tokens": {
+    "shared-connection-data-access-tokens": {
       "tags": []
     },
-    "shared-connections-ui-dropdown": {
+    "shared-connection-ui-connections-dropdown": {
       "tags": []
     },
-    "shared-wallets-ui-dropdown": {
+    "shared-connection-ui-wallets-dropdown": {
       "tags": []
     },
     "web-client": {

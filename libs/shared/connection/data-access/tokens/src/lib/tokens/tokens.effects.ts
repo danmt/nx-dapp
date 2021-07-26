@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import {
   Endpoint,
   getSelected as getSelectedEndpoint,
-} from '@nx-dapp/shared/connections/data-access/endpoints';
+} from '@nx-dapp/shared/connection/data-access/endpoints';
 import { TokenListProvider } from '@solana/spl-token-registry';
 import { defer, from, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';

@@ -5,7 +5,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Endpoint } from '@nx-dapp/shared/connections/data-access/endpoints';
+import { Endpoint } from '@nx-dapp/shared/connection/data-access/endpoints';
 
 @Component({
   selector: 'nx-dapp-connections-dropdown',

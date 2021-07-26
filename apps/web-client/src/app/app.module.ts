@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { ConnectionsDropdownModule } from '@nx-dapp/shared/connections/ui/dropdown';
-import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connections/data-access/tokens';
-import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connections/data-access/endpoints';
-import { ConnectionsModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connections/data-access/connections';
-import { WalletModule } from '@nx-dapp/shared/wallets/ui/dropdown';
+import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
+import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
+import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connection/data-access/endpoints';
+import { ConnectionsModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connection/data-access/connections';
+import { WalletModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
 
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';

@@ -4,7 +4,7 @@ import { init, selectEndpoint } from './app.actions';
 import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
-} from '@nx-dapp/shared/connections/data-access/endpoints';
+} from '@nx-dapp/shared/connection/data-access/endpoints';
 
 @Component({
   selector: 'nx-dapp-root',
