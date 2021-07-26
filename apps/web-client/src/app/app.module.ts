@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { ConnectionModule } from '@nx-dapp/shared/features/connection';
+import { ConnectionsDropdownModule } from '@nx-dapp/shared/connections/ui/dropdown';
+import { DataAccessModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connections/data-access/tokens';
+import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connections/data-access/endpoints';
 import { WalletModule } from '@nx-dapp/shared/features/wallet';
 
 import { AppComponent } from './app.component';
@@ -18,7 +20,9 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     BrowserModule,
     RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
     BrowserAnimationsModule,
-    ConnectionModule,
+    ConnectionsDropdownModule,
+    ConnectionsDataAccessModule,
+    EndpointsDataAccessModule,
     WalletModule,
     StoreModule.forRoot(
       {},

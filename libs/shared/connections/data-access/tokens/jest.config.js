@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'shared-features-connection',
-  preset: '../../../../jest.preset.js',
+  displayName: 'shared-connections-data-access-tokens',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +8,8 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/features/connection',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/connections/data-access/tokens',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

@@ -27,7 +27,13 @@
     ]
   },
   "projects": {
-    "shared-features-connection": {
+    "shared-connections-data-access-endpoints": {
+      "tags": []
+    },
+    "shared-connections-data-access-tokens": {
+      "tags": []
+    },
+    "shared-connections-ui-dropdown": {
       "tags": []
     },
     "shared-features-wallet": {

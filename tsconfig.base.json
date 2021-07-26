@@ -15,8 +15,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-dapp/shared/features/connection": [
-        "libs/shared/features/connection/src/index.ts"
+      "@nx-dapp/shared/connections/data-access/endpoints": [
+        "libs/shared/connections/data-access/endpoints/src/index.ts"
+      ],
+      "@nx-dapp/shared/connections/data-access/tokens": [
+        "libs/shared/connections/data-access/tokens/src/index.ts"
+      ],
+      "@nx-dapp/shared/connections/ui/dropdown": [
+        "libs/shared/connections/ui/dropdown/src/index.ts"
       ],
       "@nx-dapp/shared/features/wallet": [
         "libs/shared/features/wallet/src/index.ts"

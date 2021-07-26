@@ -1,17 +1,17 @@
 {
   "version": 2,
   "projects": {
-    "shared-features-connection": {
+    "shared-connections-data-access-endpoints": {
       "projectType": "library",
-      "root": "libs/shared/features/connection",
-      "sourceRoot": "libs/shared/features/connection/src",
+      "root": "libs/shared/connections/data-access/endpoints",
+      "sourceRoot": "libs/shared/connections/data-access/endpoints/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/features/connection"],
+          "outputs": ["coverage/libs/shared/connections/data-access/endpoints"],
           "options": {
-            "jestConfig": "libs/shared/features/connection/jest.config.js",
+            "jestConfig": "libs/shared/connections/data-access/endpoints/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -19,8 +19,58 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/shared/features/connection/src/**/*.ts",
-              "libs/shared/features/connection/src/**/*.html"
+              "libs/shared/connections/data-access/endpoints/src/**/*.ts",
+              "libs/shared/connections/data-access/endpoints/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-connections-data-access-tokens": {
+      "projectType": "library",
+      "root": "libs/shared/connections/data-access/tokens",
+      "sourceRoot": "libs/shared/connections/data-access/tokens/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/connections/data-access/tokens"],
+          "options": {
+            "jestConfig": "libs/shared/connections/data-access/tokens/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/connections/data-access/tokens/src/**/*.ts",
+              "libs/shared/connections/data-access/tokens/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-connections-ui-dropdown": {
+      "projectType": "library",
+      "root": "libs/shared/connections/ui/dropdown",
+      "sourceRoot": "libs/shared/connections/ui/dropdown/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/connections/ui/dropdown"],
+          "options": {
+            "jestConfig": "libs/shared/connections/ui/dropdown/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/connections/ui/dropdown/src/**/*.ts",
+              "libs/shared/connections/ui/dropdown/src/**/*.html"
             ]
           }
         }

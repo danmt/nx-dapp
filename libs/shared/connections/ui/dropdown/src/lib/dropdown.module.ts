@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
-import { ConnectionsDropdownComponent } from './connections-dropdown.component';
+import { ConnectionsDropdownComponent } from './dropdown.component';
 
 @NgModule({
   imports: [
@@ -16,4 +16,4 @@ import { ConnectionsDropdownComponent } from './connections-dropdown.component';
   declarations: [ConnectionsDropdownComponent],
   exports: [ConnectionsDropdownComponent],
 })
-export class ConnectionModule {}
+export class ConnectionsDropdownModule {}
