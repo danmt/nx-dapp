@@ -2,23 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
   Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {
-  ENV as ChainID,
-  TokenInfo,
-  TokenListProvider,
-} from '@solana/spl-token-registry';
-import { clusterApiUrl, Connection } from '@solana/web3.js';
-import { defer, from } from 'rxjs';
-import { map, startWith, switchMap } from 'rxjs/operators';
-
-import {
-  Endpoint,
-  ENV,
-} from '@nx-dapp/shared/connections/data-access/endpoints';
+import { Endpoint } from '@nx-dapp/shared/connections/data-access/endpoints';
 
 @Component({
   selector: 'nx-dapp-connections-dropdown',
@@ -43,24 +30,4 @@ export class ConnectionsDropdownComponent {
     this.endpoint ? this.endpoint.id : this._defaultEndpoint
   );
   @Output() endpointSelected = this.endpointControl.valueChanges;
-
-  // WIP: Remove this part down here
-  chain$ = this.endpointControl.valueChanges.pipe(
-    startWith(this._defaultEndpoint),
-    map(
-      (endpointId: string) =>
-        this.endpoints.find((endpoint) => endpoint.id === endpointId) ||
-        this.endpoints[0]
-    )
-  );
-  connections$ = this.chain$.pipe(
-    map((chain) => ({
-      connection: new Connection(chain.url, 'recent'),
-      sendConnection: new Connection(chain.url, 'recent'),
-    }))
-  );
-  connection$ = this.connections$.pipe(map(({ connection }) => connection));
-  sendConnection$ = this.connections$.pipe(
-    map(({ sendConnection }) => sendConnection)
-  );
 }
