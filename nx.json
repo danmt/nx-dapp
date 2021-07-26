@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "shared-connections-data-access-connections": {
+      "tags": []
+    },
     "shared-connections-data-access-endpoints": {
       "tags": []
     },

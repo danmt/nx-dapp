@@ -1,6 +1,33 @@
 {
   "version": 2,
   "projects": {
+    "shared-connections-data-access-connections": {
+      "projectType": "library",
+      "root": "libs/shared/connections/data-access/connections",
+      "sourceRoot": "libs/shared/connections/data-access/connections/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/shared/connections/data-access/connections"
+          ],
+          "options": {
+            "jestConfig": "libs/shared/connections/data-access/connections/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/connections/data-access/connections/src/**/*.ts",
+              "libs/shared/connections/data-access/connections/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-connections-data-access-endpoints": {
       "projectType": "library",
       "root": "libs/shared/connections/data-access/endpoints",
