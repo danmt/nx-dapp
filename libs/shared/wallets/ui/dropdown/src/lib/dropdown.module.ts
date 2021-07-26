@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
-import { WalletsDropdownComponent } from './wallets-dropdown.component';
-import { WalletOptionComponent } from './wallet-option.component';
+import { WalletsDropdownComponent } from './dropdown.component';
+import { WalletOptionComponent } from './option.component';
 
 @NgModule({
   imports: [CommonModule, MatButtonModule, MatMenuModule],

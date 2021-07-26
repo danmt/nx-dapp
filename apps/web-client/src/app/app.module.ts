@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connections/ui/dropdown';
 import { DataAccessModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connections/data-access/tokens';
 import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connections/data-access/endpoints';
-import { WalletModule } from '@nx-dapp/shared/features/wallet';
+import { WalletModule } from '@nx-dapp/shared/wallets/ui/dropdown';
 
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';

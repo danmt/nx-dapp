@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'shared-features-wallet',
-  preset: '../../../../jest.preset.js',
+  displayName: 'shared-wallets-ui-dropdown',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/features/wallet',
+  coverageDirectory: '../../../../../coverage/libs/shared/wallets/ui/dropdown',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

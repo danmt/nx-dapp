@@ -76,17 +76,17 @@
         }
       }
     },
-    "shared-features-wallet": {
+    "shared-wallets-ui-dropdown": {
       "projectType": "library",
-      "root": "libs/shared/features/wallet",
-      "sourceRoot": "libs/shared/features/wallet/src",
+      "root": "libs/shared/wallets/ui/dropdown",
+      "sourceRoot": "libs/shared/wallets/ui/dropdown/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/features/wallet"],
+          "outputs": ["coverage/libs/shared/wallets/ui/dropdown"],
           "options": {
-            "jestConfig": "libs/shared/features/wallet/jest.config.js",
+            "jestConfig": "libs/shared/wallets/ui/dropdown/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -94,8 +94,8 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/shared/features/wallet/src/**/*.ts",
-              "libs/shared/features/wallet/src/**/*.html"
+              "libs/shared/wallets/ui/dropdown/src/**/*.ts",
+              "libs/shared/wallets/ui/dropdown/src/**/*.html"
             ]
           }
         }

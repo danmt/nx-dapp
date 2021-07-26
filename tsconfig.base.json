@@ -24,8 +24,8 @@
       "@nx-dapp/shared/connections/ui/dropdown": [
         "libs/shared/connections/ui/dropdown/src/index.ts"
       ],
-      "@nx-dapp/shared/features/wallet": [
-        "libs/shared/features/wallet/src/index.ts"
+      "@nx-dapp/shared/wallets/ui/dropdown": [
+        "libs/shared/wallets/ui/dropdown/src/index.ts"
       ]
     }
   },
