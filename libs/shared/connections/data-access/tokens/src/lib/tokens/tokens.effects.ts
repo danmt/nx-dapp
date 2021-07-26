@@ -32,5 +32,5 @@ export class TokensEffects {
     )
   );
 
-  constructor(private readonly actions$: Actions, private store: Store) {}
+  constructor(private store: Store) {}
 }
