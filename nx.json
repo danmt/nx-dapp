@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "shared-features-connection": {
+      "tags": []
+    },
     "shared-features-wallet": {
       "tags": []
     },

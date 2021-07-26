@@ -1,6 +1,31 @@
 {
   "version": 2,
   "projects": {
+    "shared-features-connection": {
+      "projectType": "library",
+      "root": "libs/shared/features/connection",
+      "sourceRoot": "libs/shared/features/connection/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/features/connection"],
+          "options": {
+            "jestConfig": "libs/shared/features/connection/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/features/connection/src/**/*.ts",
+              "libs/shared/features/connection/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-features-wallet": {
       "projectType": "library",
       "root": "libs/shared/features/wallet",
@@ -9,9 +34,7 @@
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/features/wallet"
-          ],
+          "outputs": ["coverage/libs/shared/features/wallet"],
           "options": {
             "jestConfig": "libs/shared/features/wallet/jest.config.js",
             "passWithNoTests": true
@@ -36,9 +59,7 @@
       "targets": {
         "build": {
           "executor": "@angular-devkit/build-angular:browser",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/web-client",
             "index": "apps/web-client/src/index.html",
@@ -118,9 +139,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/web-client"
-          ],
+          "outputs": ["coverage/apps/web-client"],
           "options": {
             "jestConfig": "apps/web-client/jest.config.js",
             "passWithNoTests": true
@@ -149,9 +168,7 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/web-client-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/web-client-e2e/**/*.{js,ts}"]
           }
         }
       }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { ConnectionModule } from '@nx-dapp/shared/features/connection';
 import { WalletModule } from '@nx-dapp/shared/features/wallet';
 
 import { AppComponent } from './app.component';
@@ -11,8 +12,9 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
-    WalletModule,
     BrowserAnimationsModule,
+    ConnectionModule,
+    WalletModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

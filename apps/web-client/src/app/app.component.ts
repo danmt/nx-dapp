@@ -3,7 +3,10 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'nx-dapp-root',
   template: `
-    <nx-dapp-connect-dropdown></nx-dapp-connect-dropdown>
+    <header>
+      <nx-dapp-wallets-dropdown></nx-dapp-wallets-dropdown>
+      <nx-dapp-connections-dropdown></nx-dapp-connections-dropdown>
+    </header>
     <h1>First Dapp</h1>
   `,
   styles: [``],

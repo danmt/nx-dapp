@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/shared/features/connection": [
+        "libs/shared/features/connection/src/index.ts"
+      ],
       "@nx-dapp/shared/features/wallet": [
         "libs/shared/features/wallet/src/index.ts"
       ]

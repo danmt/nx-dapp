@@ -40,6 +40,7 @@
     "@angular/router": "^12.1.0",
     "@nrwl/angular": "^12.6.0",
     "@project-serum/sol-wallet-adapter": "^0.2.5",
+    "@solana/spl-token-registry": "^0.2.203",
     "@solana/web3.js": "^1.22.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
