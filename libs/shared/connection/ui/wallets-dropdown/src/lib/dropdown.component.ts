@@ -1,78 +1,63 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import WalletAdapter from '@project-serum/sol-wallet-adapter';
-import { BehaviorSubject } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
 
-import { PhantomWalletAdapter, SolongWalletAdapter } from './adapters';
-import { Wallet } from './interfaces';
+import { DEFAULT_WALLET, Wallet } from '@nx-dapp/shared/wallet-adapter/base';
 
 @Component({
   selector: 'nx-dapp-wallets-dropdown',
   template: `
+    <mat-form-field appearance="fill">
+      <mat-label>Wallet</mat-label>
+      <mat-select [formControl]="walletControl">
+        <mat-option *ngFor="let wallet of wallets" [value]="wallet.name">
+          {{ wallet.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <button
+      *ngIf="!isConnected"
       mat-raised-button
       color="primary"
-      *ngIf="wallet$ | async as wallet"
-      (click)="disconnect(wallet)"
-    >
-      Disconnect
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      [matMenuTriggerFor]="menu"
-      *ngIf="(wallet$ | async) === null"
+      (click)="onConnect()"
+      type="button"
     >
       Connect
     </button>
-    <mat-menu #menu="matMenu">
-      <ng-container *ngFor="let wallet of wallets">
-        <nx-dapp-wallet-option
-          [label]="wallet.label"
-          [icon]="wallet.icon"
-          [url]="wallet.url"
-          [adapter]="wallet.adapter"
-          (connected)="onConnected($event)"
-        >
-        </nx-dapp-wallet-option>
-      </ng-container>
-    </mat-menu>
+    <button
+      *ngIf="isConnected"
+      mat-raised-button
+      color="primary"
+      (click)="onDisconnect()"
+      type="button"
+    >
+      Disconnect
+    </button>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletsDropdownComponent {
-  wallets = [
-    {
-      label: 'Sollet',
-      icon: 'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg',
-      url: 'https://www.sollet.io',
-      adapter: new WalletAdapter(
-        'https://www.sollet.io',
-        'https://solana-api.projectserum.com/'
-      ),
-    },
-    {
-      label: 'Phantom',
-      icon: 'https://raydium.io/_nuxt/img/phantom.d9e3c61.png',
-      url: 'https://phantom.app/',
-      adapter: new PhantomWalletAdapter(),
-    },
-    {
-      label: 'Solong',
-      url: 'https://solongwallet.com',
-      icon: 'https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/solong.png',
-      adapter: new SolongWalletAdapter(),
-    },
-  ];
-  private _wallet = new BehaviorSubject<Wallet | null>(null);
-  wallet$ = this._wallet.asObservable();
+  @Input() wallet: Wallet | null = null;
+  @Input() wallets: Wallet[] = [];
+  @Input() isConnected: boolean | null = null;
+  walletControl = new FormControl(
+    this.wallet ? this.wallet.name : DEFAULT_WALLET
+  );
+  @Output() selectWallet = this.walletControl.valueChanges;
+  @Output() connect = new EventEmitter();
+  @Output() disconnect = new EventEmitter();
 
-  async disconnect(wallet: Wallet) {
-    await wallet.disconnect();
-    this._wallet.next(null);
+  onConnect() {
+    this.connect.emit();
   }
 
-  onConnected(wallet: Wallet) {
-    this._wallet.next(wallet);
+  onDisconnect() {
+    this.disconnect.emit();
   }
 }

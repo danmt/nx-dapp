@@ -29,6 +29,27 @@
       ],
       "@nx-dapp/shared/connection/ui/wallets-dropdown": [
         "libs/shared/connection/ui/wallets-dropdown/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/adapters/phantom": [
+        "libs/shared/wallet-adapter/adapters/phantom/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/adapters/sollet": [
+        "libs/shared/wallet-adapter/adapters/sollet/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/adapters/solong": [
+        "libs/shared/wallet-adapter/adapters/solong/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/base": [
+        "libs/shared/wallet-adapter/base/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/provider": [
+        "libs/shared/wallet-adapter/provider/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/rx": [
+        "libs/shared/wallet-adapter/rx/src/index.ts"
+      ],
+      "@nx-dapp/shared/wallet-adapter/wallets": [
+        "libs/shared/wallet-adapter/wallets/src/index.ts"
       ]
     }
   },
