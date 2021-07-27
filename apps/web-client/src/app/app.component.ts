@@ -50,8 +50,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(init());
-
-    this.walletService.state$.subscribe((a) => console.log('state', a));
   }
 
   onSelectEndpoint(endpointId: string) {
