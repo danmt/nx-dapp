@@ -199,6 +199,31 @@
         }
       }
     },
+    "shared-wallet-adapter-angular": {
+      "projectType": "library",
+      "root": "libs/shared/wallet-adapter/angular",
+      "sourceRoot": "libs/shared/wallet-adapter/angular/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/angular"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/angular/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/wallet-adapter/angular/src/**/*.ts",
+              "libs/shared/wallet-adapter/angular/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-wallet-adapter-base": {
       "root": "libs/shared/wallet-adapter/base",
       "sourceRoot": "libs/shared/wallet-adapter/base/src",
@@ -216,31 +241,6 @@
           "options": {
             "jestConfig": "libs/shared/wallet-adapter/base/jest.config.js",
             "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-wallet-adapter-provider": {
-      "projectType": "library",
-      "root": "libs/shared/wallet-adapter/provider",
-      "sourceRoot": "libs/shared/wallet-adapter/provider/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/wallet-adapter/provider"],
-          "options": {
-            "jestConfig": "libs/shared/wallet-adapter/provider/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/wallet-adapter/provider/src/**/*.ts",
-              "libs/shared/wallet-adapter/provider/src/**/*.html"
-            ]
           }
         }
       }

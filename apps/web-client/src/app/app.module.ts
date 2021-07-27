@@ -11,7 +11,7 @@ import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/co
 import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
 import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
-import { walletServiceProvider } from '@nx-dapp/shared/wallet-adapter/provider';
+import { walletServiceProvider } from '@nx-dapp/shared/wallet-adapter/angular';
 import {
   getPhantomWallet,
   getSolletWallet,

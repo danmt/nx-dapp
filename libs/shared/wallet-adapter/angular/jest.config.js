@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-wallet-adapter-provider',
+  displayName: 'shared-wallet-adapter-angular',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/wallet-adapter/provider',
+  coverageDirectory: '../../../../coverage/libs/shared/wallet-adapter/angular',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

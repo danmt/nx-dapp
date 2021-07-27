@@ -51,10 +51,10 @@
     "shared-wallet-adapter-adapters-solong": {
       "tags": []
     },
-    "shared-wallet-adapter-base": {
+    "shared-wallet-adapter-angular": {
       "tags": []
     },
-    "shared-wallet-adapter-provider": {
+    "shared-wallet-adapter-base": {
       "tags": []
     },
     "shared-wallet-adapter-rx": {

@@ -4,7 +4,7 @@ import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
-import { WALLET_SERVICE } from '@nx-dapp/shared/wallet-adapter/provider';
+import { WALLET_SERVICE } from '@nx-dapp/shared/wallet-adapter/angular';
 import { WalletName } from '@nx-dapp/shared/wallet-adapter/base';
 import { WalletService } from '@nx-dapp/shared/wallet-adapter/rx';
 import {
