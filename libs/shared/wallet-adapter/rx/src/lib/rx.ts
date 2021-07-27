@@ -5,6 +5,7 @@ import {
   WalletNotReadyError,
   WalletNotSelectedError,
 } from '@nx-dapp/shared/wallet-adapter/base';
+import { Transaction } from '@solana/web3.js';
 import {
   BehaviorSubject,
   combineLatest,
@@ -98,6 +99,33 @@ export class WalletService {
     }
     return from(defer(() => adapter.disconnect()));
   }
+
+  private handleSignTransaction(
+    transaction: Transaction,
+    { adapter, connected, wallet }: WalletState
+  ) {
+    if (!connected) {
+      return throwError(new WalletNotConnectedError());
+    }
+    if (!adapter || !wallet) {
+      return throwError(new WalletNotSelectedError());
+    }
+    return from(defer(() => adapter.signTransaction(transaction)));
+  }
+
+  private handleSignAllTransactions(
+    transactions: Transaction[],
+    { adapter, connected, wallet }: WalletState
+  ) {
+    if (!connected) {
+      return throwError(new WalletNotConnectedError());
+    }
+    if (!adapter || !wallet) {
+      return throwError(new WalletNotSelectedError());
+    }
+    return from(defer(() => adapter.signAllTransactions(transactions)));
+  }
+
   loadWallets(wallets: Wallet[]) {
     this._dispatcher.next(new LoadWalletsAction(wallets));
   }
@@ -139,6 +167,20 @@ export class WalletService {
       tap(() => this._dispatcher.next(new DisconnectingAction(true))),
       concatMap(this.handleDisconnect),
       tap(() => this._dispatcher.next(new DisconnectingAction(false)))
+    );
+  }
+
+  signTransaction(transaction: Transaction) {
+    return this.state$.pipe(
+      take(1),
+      concatMap((state) => this.handleSignTransaction(transaction, state))
+    );
+  }
+
+  signAllTransactions(transactions: Transaction[]) {
+    return this.state$.pipe(
+      take(1),
+      concatMap((state) => this.handleSignAllTransactions(transactions, state))
     );
   }
 }
