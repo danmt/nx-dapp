@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
   }
 
   onWalletSelected(walletName: WalletName) {
-    this.walletService.setWalletName(walletName);
+    this.walletService.selectWallet(walletName);
   }
 
   onWalletConnect() {

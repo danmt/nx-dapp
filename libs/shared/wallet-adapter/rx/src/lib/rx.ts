@@ -5,7 +5,6 @@ import {
   defer,
   from,
   merge,
-  Subject,
   throwError,
 } from 'rxjs';
 import {
@@ -34,8 +33,7 @@ import { reducer, walletInitialState, WalletState } from './state';
 
 export class WalletService {
   private readonly _dispatcher = new BehaviorSubject<Action>(new InitAction());
-  private readonly _connecting = new Subject<boolean>();
-  private readonly _disconnecting = new Subject<boolean>();
+
   state$ = this._dispatcher.pipe(
     scan(reducer, walletInitialState),
     shareReplay({
@@ -43,8 +41,6 @@ export class WalletService {
       bufferSize: 1,
     })
   );
-  connecting$ = this._connecting.asObservable();
-  disconnecting$ = this._disconnecting.asObservable();
   ready$ = this.state$.pipe(map(({ ready }) => ready));
   connected$ = this.state$.pipe(map(({ connected }) => connected));
   walletName$ = this.state$.pipe(map(({ selectedWallet }) => selectedWallet));
@@ -66,13 +62,7 @@ export class WalletService {
     merge(
       this.onReady$.pipe(mapTo(new ReadyAction())),
       this.onConnect$.pipe(mapTo(new ConnectAction())),
-      this.onDisconnect$.pipe(mapTo(new DisconnectAction())),
-      this.connecting$.pipe(
-        map((connecting) => new ConnectingAction(connecting))
-      ),
-      this.disconnecting$.pipe(
-        map((disconnecting) => new DisconnectingAction(disconnecting))
-      )
+      this.onDisconnect$.pipe(mapTo(new DisconnectAction()))
     ).subscribe((action: Action) => this._dispatcher.next(action));
   }
 
@@ -80,7 +70,7 @@ export class WalletService {
     this._dispatcher.next(new LoadWalletsAction(wallets));
   }
 
-  setWalletName(walletName: WalletName) {
+  selectWallet(walletName: WalletName) {
     this._dispatcher.next(new SelectWalletAction(walletName));
   }
 
@@ -128,18 +118,18 @@ export class WalletService {
   connect() {
     return this.state$.pipe(
       take(1),
-      tap(() => this._connecting.next(true)),
+      tap(() => this._dispatcher.next(new ConnectingAction(true))),
       concatMap(this.handleConnect),
-      tap(() => this._connecting.next(false))
+      tap(() => this._dispatcher.next(new ConnectingAction(false)))
     );
   }
 
   disconnect() {
     return this.state$.pipe(
       take(1),
-      tap(() => this._disconnecting.next(true)),
+      tap(() => this._dispatcher.next(new DisconnectingAction(true))),
       concatMap(this.handleDisconnect),
-      tap(() => this._disconnecting.next(false))
+      tap(() => this._dispatcher.next(new DisconnectingAction(false)))
     );
   }
 }
