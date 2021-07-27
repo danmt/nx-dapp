@@ -1,4 +1,10 @@
-import { Wallet, WalletName } from '@nx-dapp/shared/wallet-adapter/base';
+import {
+  Wallet,
+  WalletName,
+  WalletNotConnectedError,
+  WalletNotReadyError,
+  WalletNotSelectedError,
+} from '@nx-dapp/shared/wallet-adapter/base';
 import {
   BehaviorSubject,
   combineLatest,
@@ -11,6 +17,7 @@ import {
 import {
   concatMap,
   distinctUntilChanged,
+  filter,
   map,
   mapTo,
   scan,
@@ -72,6 +79,25 @@ export class WalletService {
     ).subscribe((action: Action) => this._dispatcher.next(action));
   }
 
+  private handleConnect({ ready, wallet, adapter }: WalletState) {
+    if (!ready) {
+      return throwError(new WalletNotReadyError());
+    }
+    if (!wallet || !adapter) {
+      return throwError(new WalletNotSelectedError());
+    }
+    return from(defer(() => adapter.connect()));
+  }
+
+  private handleDisconnect({ connected, wallet, adapter }: WalletState) {
+    if (!connected) {
+      return throwError(new WalletNotConnectedError());
+    }
+    if (!wallet || !adapter) {
+      return throwError(new WalletNotSelectedError());
+    }
+    return from(defer(() => adapter.disconnect()));
+  }
   loadWallets(wallets: Wallet[]) {
     this._dispatcher.next(new LoadWalletsAction(wallets));
   }
@@ -93,50 +119,13 @@ export class WalletService {
       );
   }
 
-  private handleConnect({
-    ready,
-    connected,
-    connecting,
-    wallet,
-    adapter,
-  }: WalletState) {
-    if (!ready) {
-      return throwError('Wallet not ready');
-    } else if (connected) {
-      return throwError('Wallet already connected');
-    } else if (connecting) {
-      return throwError('Wallet already connecting');
-    } else if (!wallet) {
-      return throwError('Wallet not selected');
-    } else if (!adapter) {
-      return throwError('Wallet adapter not selected');
-    } else {
-      return from(defer(() => adapter.connect()));
-    }
-  }
-
-  private handleDisconnect({
-    connected,
-    disconnecting,
-    wallet,
-    adapter,
-  }: WalletState) {
-    if (!connected) {
-      return throwError('Wallet already disconnected');
-    } else if (disconnecting) {
-      return throwError('Wallet already disconnecting');
-    } else if (!wallet) {
-      return throwError('Wallet not selected');
-    } else if (!adapter) {
-      return throwError('Wallet adapter not selected');
-    } else {
-      return from(defer(() => adapter.disconnect()));
-    }
-  }
-
   connect() {
     return this.state$.pipe(
       take(1),
+      filter(
+        ({ connected, connecting, disconnecting }) =>
+          !connected && !connecting && !disconnecting
+      ),
       tap(() => this._dispatcher.next(new ConnectingAction(true))),
       concatMap(this.handleConnect),
       tap(() => this._dispatcher.next(new ConnectingAction(false)))
@@ -146,6 +135,7 @@ export class WalletService {
   disconnect() {
     return this.state$.pipe(
       take(1),
+      filter(({ disconnecting }) => !disconnecting),
       tap(() => this._dispatcher.next(new DisconnectingAction(true))),
       concatMap(this.handleDisconnect),
       tap(() => this._dispatcher.next(new DisconnectingAction(false)))
