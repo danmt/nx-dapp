@@ -42,6 +42,27 @@
     "shared-connection-ui-wallets-dropdown": {
       "tags": []
     },
+    "shared-wallet-adapter-adapters-phantom": {
+      "tags": []
+    },
+    "shared-wallet-adapter-adapters-sollet": {
+      "tags": []
+    },
+    "shared-wallet-adapter-adapters-solong": {
+      "tags": []
+    },
+    "shared-wallet-adapter-angular": {
+      "tags": []
+    },
+    "shared-wallet-adapter-base": {
+      "tags": []
+    },
+    "shared-wallet-adapter-rx": {
+      "tags": []
+    },
+    "shared-wallet-adapter-wallets": {
+      "tags": []
+    },
     "web-client": {
       "tags": []
     },

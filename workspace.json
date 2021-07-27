@@ -130,6 +130,163 @@
         }
       }
     },
+    "shared-wallet-adapter-adapters-phantom": {
+      "root": "libs/shared/wallet-adapter/adapters/phantom",
+      "sourceRoot": "libs/shared/wallet-adapter/adapters/phantom/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/wallet-adapter/adapters/phantom/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/adapters/phantom"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/adapters/phantom/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-wallet-adapter-adapters-sollet": {
+      "root": "libs/shared/wallet-adapter/adapters/sollet",
+      "sourceRoot": "libs/shared/wallet-adapter/adapters/sollet/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/wallet-adapter/adapters/sollet/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/adapters/sollet"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/adapters/sollet/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-wallet-adapter-adapters-solong": {
+      "root": "libs/shared/wallet-adapter/adapters/solong",
+      "sourceRoot": "libs/shared/wallet-adapter/adapters/solong/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/wallet-adapter/adapters/solong/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/adapters/solong"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/adapters/solong/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-wallet-adapter-angular": {
+      "projectType": "library",
+      "root": "libs/shared/wallet-adapter/angular",
+      "sourceRoot": "libs/shared/wallet-adapter/angular/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/angular"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/angular/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/wallet-adapter/angular/src/**/*.ts",
+              "libs/shared/wallet-adapter/angular/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-wallet-adapter-base": {
+      "root": "libs/shared/wallet-adapter/base",
+      "sourceRoot": "libs/shared/wallet-adapter/base/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/wallet-adapter/base/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/base"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/base/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-wallet-adapter-rx": {
+      "root": "libs/shared/wallet-adapter/rx",
+      "sourceRoot": "libs/shared/wallet-adapter/rx/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/wallet-adapter/rx/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/rx"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/rx/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-wallet-adapter-wallets": {
+      "root": "libs/shared/wallet-adapter/wallets",
+      "sourceRoot": "libs/shared/wallet-adapter/wallets/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/wallet-adapter/wallets/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/wallet-adapter/wallets"],
+          "options": {
+            "jestConfig": "libs/shared/wallet-adapter/wallets/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "web-client": {
       "projectType": "application",
       "root": "apps/web-client",

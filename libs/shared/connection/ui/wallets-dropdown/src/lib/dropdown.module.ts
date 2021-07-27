@@ -1,14 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 import { WalletsDropdownComponent } from './dropdown.component';
-import { WalletOptionComponent } from './option.component';
 
 @NgModule({
-  imports: [CommonModule, MatButtonModule, MatMenuModule],
-  declarations: [WalletsDropdownComponent, WalletOptionComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
+  declarations: [WalletsDropdownComponent],
   exports: [WalletsDropdownComponent],
 })
-export class WalletModule {}
+export class WalletsDropdownModule {}
