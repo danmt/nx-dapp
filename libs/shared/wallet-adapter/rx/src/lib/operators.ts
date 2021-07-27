@@ -15,8 +15,8 @@ export const fromAdapterEvent =
       isNotNull,
       switchMap((adapter) =>
         fromEventPattern(
-          (callback) => adapter.on(eventName, callback),
-          (callback) => adapter.off(eventName, callback)
+          (addHandler) => adapter.on(eventName, addHandler),
+          (removeHandler) => adapter.off(eventName, removeHandler)
         )
       )
     );

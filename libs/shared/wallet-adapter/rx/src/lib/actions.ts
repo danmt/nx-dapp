@@ -32,6 +32,10 @@ export class SelectWalletAction {
   constructor(public payload: WalletName) {}
 }
 
+export class ClearWalletAction {
+  type = 'clearWallet';
+}
+
 export class LoadWalletsAction {
   type = 'loadWallets';
 
@@ -46,4 +50,5 @@ export type Action =
   | DisconnectingAction
   | ReadyAction
   | SelectWalletAction
+  | ClearWalletAction
   | LoadWalletsAction;

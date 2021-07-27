@@ -20,7 +20,7 @@ export interface WalletState {
   disconnecting: boolean;
   autoApprove: boolean;
   ready: boolean;
-  selectedWallet: WalletName;
+  selectedWallet: WalletName | null;
   wallets: Wallet[];
   wallet: Wallet | null;
   adapter: WalletAdapter | null;
@@ -83,7 +83,6 @@ export const reducer = (state: WalletState, action: Action) => {
         wallet,
         adapter,
         ready: adapter?.ready || false,
-        publicKey: adapter?.publicKey || null,
       };
     }
     case 'selectWallet': {
@@ -100,6 +99,21 @@ export const reducer = (state: WalletState, action: Action) => {
         adapter,
         ready: adapter?.ready || false,
         publicKey: adapter?.publicKey || null,
+        autoApprove: adapter?.autoApprove || false,
+      };
+    }
+    case 'clearWallet': {
+      return {
+        ...state,
+        selectedWallet: null,
+        wallet: null,
+        adapter: null,
+        ready: false,
+        publicKey: null,
+        connected: false,
+        autoApprove: false,
+        connecting: false,
+        disconnecting: false,
       };
     }
     default:

@@ -5,10 +5,12 @@ import {
   defer,
   from,
   merge,
+  of,
   throwError,
 } from 'rxjs';
 import {
   concatMap,
+  distinctUntilChanged,
   map,
   mapTo,
   scan,
@@ -19,6 +21,7 @@ import {
 
 import {
   Action,
+  ClearWalletAction,
   ConnectAction,
   ConnectingAction,
   DisconnectAction,
@@ -33,7 +36,7 @@ import { reducer, walletInitialState, WalletState } from './state';
 
 export class WalletService {
   private readonly _dispatcher = new BehaviorSubject<Action>(new InitAction());
-
+  actions$ = this._dispatcher.asObservable();
   state$ = this._dispatcher.pipe(
     scan(reducer, walletInitialState),
     shareReplay({
@@ -50,7 +53,10 @@ export class WalletService {
       wallets.find((wallet) => wallet.name === walletName)
     )
   );
-  adapter$ = this.state$.pipe(map(({ adapter }) => adapter));
+  adapter$ = this.state$.pipe(
+    map(({ adapter }) => adapter),
+    distinctUntilChanged()
+  );
   onReady$ = this.adapter$.pipe(fromAdapterEvent('ready'));
   onConnect$ = this.adapter$.pipe(fromAdapterEvent('connect'));
   onDisconnect$ = this.adapter$.pipe(fromAdapterEvent('disconnect'));
@@ -71,7 +77,20 @@ export class WalletService {
   }
 
   selectWallet(walletName: WalletName) {
-    this._dispatcher.next(new SelectWalletAction(walletName));
+    this._dispatcher.next(new ClearWalletAction());
+
+    this.state$
+      .pipe(
+        take(1),
+        concatMap(({ wallet, connected }) =>
+          wallet?.name === walletName && connected
+            ? this.disconnect()
+            : of(true)
+        )
+      )
+      .subscribe(() =>
+        this._dispatcher.next(new SelectWalletAction(walletName))
+      );
   }
 
   private handleConnect({
