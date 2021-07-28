@@ -4,6 +4,8 @@ import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
+import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
+import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
 import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
 import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
 import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
@@ -48,11 +50,26 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store,
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
-    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService
+    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
+    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService
   ) {}
 
   ngOnInit() {
+    this.accountService.state$.subscribe((a) => console.log(a));
+
     this.store.dispatch(init());
+
+    this.connectionService.connection$.subscribe((connection) =>
+      this.accountService.loadConnection(connection)
+    );
+
+    this.walletService.publicKey$.subscribe((publicKey) =>
+      this.accountService.loadWalletPublicKey(publicKey)
+    );
+
+    this.walletService.connected$.subscribe((connected) =>
+      this.accountService.loadWalletConnected(connected)
+    );
   }
 
   onSelectEndpoint(endpointId: string) {

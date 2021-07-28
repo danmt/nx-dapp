@@ -45,6 +45,15 @@
     "shared-operators-not-null": {
       "tags": []
     },
+    "solana-account-adapter-angular": {
+      "tags": []
+    },
+    "solana-account-adapter-base": {
+      "tags": []
+    },
+    "solana-account-adapter-rx": {
+      "tags": []
+    },
     "solana-connection-adapter-angular": {
       "tags": []
     },
