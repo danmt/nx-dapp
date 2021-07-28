@@ -39,6 +39,9 @@
       "@nx-dapp/shared/connection/ui/wallets-dropdown": [
         "libs/shared/connection/ui/wallets-dropdown/src/index.ts"
       ],
+      "@nx-dapp/shared/operators/not-null": [
+        "libs/shared/operators/not-null/src/index.ts"
+      ],
       "@nx-dapp/shared/wallet-adapter/adapters/phantom": [
         "libs/shared/wallet-adapter/adapters/phantom/src/index.ts"
       ],

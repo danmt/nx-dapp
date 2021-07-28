@@ -51,6 +51,9 @@
     "shared-connection-ui-wallets-dropdown": {
       "tags": []
     },
+    "shared-operators-not-null": {
+      "tags": []
+    },
     "shared-wallet-adapter-adapters-phantom": {
       "tags": []
     },

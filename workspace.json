@@ -197,6 +197,27 @@
         }
       }
     },
+    "shared-operators-not-null": {
+      "root": "libs/shared/operators/not-null",
+      "sourceRoot": "libs/shared/operators/not-null/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/operators/not-null/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/operators/not-null"],
+          "options": {
+            "jestConfig": "libs/shared/operators/not-null/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-wallet-adapter-adapters-phantom": {
       "root": "libs/shared/wallet-adapter/adapters/phantom",
       "sourceRoot": "libs/shared/wallet-adapter/adapters/phantom/src",
