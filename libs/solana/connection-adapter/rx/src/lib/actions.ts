@@ -7,5 +7,3 @@ export class SelectEndpointAction {
 
   constructor(public payload: string) {}
 }
-
-export type Action = InitAction | SelectEndpointAction;

@@ -1,11 +1,12 @@
 import { BehaviorSubject, merge } from 'rxjs';
 import { map, scan, shareReplay } from 'rxjs/operators';
 
-import { Action, InitAction, SelectEndpointAction } from './actions';
+import { InitAction, SelectEndpointAction } from './actions';
 import { fromAccountChangeEvent, fromSlotChangeEvent } from './operators';
 import { connectionInitialState, reducer } from './state';
+import { Action, IConnectionService } from './types';
 
-export class ConnectionService {
+export class ConnectionService implements IConnectionService {
   private readonly _dispatcher = new BehaviorSubject<Action>(new InitAction());
   actions$ = this._dispatcher.asObservable();
   state$ = this._dispatcher.pipe(

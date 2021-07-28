@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
-import { ConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
 import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
+import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
+import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
 import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
 import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
 import { IWalletService } from '@nx-dapp/solana/wallet-adapter/rx';
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store,
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
-    @Inject(CONNECTION_SERVICE) private connectionService: ConnectionService
+    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService
   ) {}
 
   ngOnInit() {

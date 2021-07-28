@@ -1,20 +1,12 @@
 import {
   DEFAULT_ENDPOINT,
   DEFAULT_SLIPPAGE,
-  Endpoint,
   ENDPOINTS,
-  ENV,
 } from '@nx-dapp/solana/connection-adapter/base';
 import { Connection } from '@solana/web3.js';
-import { Action, SelectEndpointAction } from './actions';
 
-export interface ConnectionState {
-  endpoint: string;
-  endpoints: Endpoint[];
-  slippage: number;
-  connection: Connection;
-  sendConnection: Connection;
-}
+import { SelectEndpointAction } from './actions';
+import { Action, ConnectionState } from './types';
 
 export const connectionInitialState: ConnectionState = {
   endpoint: DEFAULT_ENDPOINT,
