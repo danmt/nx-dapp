@@ -41,14 +41,3 @@ export class LoadWalletsAction {
 
   constructor(public payload: Wallet[]) {}
 }
-
-export type Action =
-  | InitAction
-  | ConnectAction
-  | DisconnectAction
-  | ConnectingAction
-  | DisconnectingAction
-  | ReadyAction
-  | SelectWalletAction
-  | ClearWalletAction
-  | LoadWalletsAction;

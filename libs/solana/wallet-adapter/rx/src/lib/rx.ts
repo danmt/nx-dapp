@@ -4,7 +4,7 @@ import {
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
-} from '@nx-dapp/shared/wallet-adapter/base';
+} from '@nx-dapp/solana/wallet-adapter/base';
 import { Transaction } from '@solana/web3.js';
 import {
   BehaviorSubject,
@@ -28,7 +28,6 @@ import {
 } from 'rxjs/operators';
 
 import {
-  Action,
   ClearWalletAction,
   ConnectAction,
   ConnectingAction,
@@ -41,8 +40,9 @@ import {
 } from './actions';
 import { fromAdapterEvent } from './operators';
 import { reducer, walletInitialState, WalletState } from './state';
+import { Action, IWalletService } from './types';
 
-export class WalletService {
+export class WalletService implements IWalletService {
   private readonly _dispatcher = new BehaviorSubject<Action>(new InitAction());
   actions$ = this._dispatcher.asObservable();
   state$ = this._dispatcher.pipe(
@@ -54,30 +54,38 @@ export class WalletService {
   );
   ready$ = this.state$.pipe(map(({ ready }) => ready));
   connected$ = this.state$.pipe(map(({ connected }) => connected));
-  walletName$ = this.state$.pipe(map(({ selectedWallet }) => selectedWallet));
+  walletName$ = this.state$.pipe(
+    map(({ selectedWallet }) => selectedWallet || null)
+  );
   wallets$ = this.state$.pipe(map(({ wallets }) => wallets));
   wallet$ = combineLatest([this.walletName$, this.wallets$]).pipe(
-    map(([walletName, wallets]) =>
-      wallets.find((wallet) => wallet.name === walletName)
+    map(
+      ([walletName, wallets]) =>
+        wallets.find((wallet) => wallet.name === walletName) || null
     )
   );
   adapter$ = this.state$.pipe(
     map(({ adapter }) => adapter),
     distinctUntilChanged()
   );
-  onReady$ = this.adapter$.pipe(fromAdapterEvent('ready'));
-  onConnect$ = this.adapter$.pipe(fromAdapterEvent('connect'));
-  onDisconnect$ = this.adapter$.pipe(fromAdapterEvent('disconnect'));
+  publicKey$ = this.state$.pipe(map(({ publicKey }) => publicKey));
+  onReady$ = this.adapter$
+    .pipe(fromAdapterEvent('ready'))
+    .pipe(mapTo(new ReadyAction()));
+  onConnect$ = this.adapter$
+    .pipe(fromAdapterEvent('connect'))
+    .pipe(mapTo(new ConnectAction()));
+  onDisconnect$ = this.adapter$
+    .pipe(fromAdapterEvent('disconnect'))
+    .pipe(mapTo(new DisconnectAction()));
   onError$ = this.adapter$.pipe(fromAdapterEvent('error'));
 
   constructor(wallets: Wallet[]) {
     this.loadWallets(wallets);
 
-    merge(
-      this.onReady$.pipe(mapTo(new ReadyAction())),
-      this.onConnect$.pipe(mapTo(new ConnectAction())),
-      this.onDisconnect$.pipe(mapTo(new DisconnectAction()))
-    ).subscribe((action: Action) => this._dispatcher.next(action));
+    merge(this.onReady$, this.onConnect$, this.onDisconnect$).subscribe(
+      (action: Action) => this._dispatcher.next(action)
+    );
   }
 
   private handleConnect({ ready, wallet, adapter }: WalletState) {

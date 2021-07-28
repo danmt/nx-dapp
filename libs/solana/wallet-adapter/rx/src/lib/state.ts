@@ -5,13 +5,14 @@ import {
   WalletName,
 } from '@nx-dapp/solana/wallet-adapter/base';
 import { PublicKey } from '@solana/web3.js';
+
 import {
-  Action,
   ConnectingAction,
   DisconnectingAction,
   LoadWalletsAction,
   SelectWalletAction,
 } from './actions';
+import { Action } from './types';
 
 export interface WalletState {
   publicKey: PublicKey | null;

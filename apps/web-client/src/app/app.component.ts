@@ -8,7 +8,7 @@ import {
 } from '@nx-dapp/shared/connection/data-access/endpoints';
 import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
 import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
-import { WalletService } from '@nx-dapp/solana/wallet-adapter/rx';
+import { IWalletService } from '@nx-dapp/solana/wallet-adapter/rx';
 import {
   getPhantomWallet,
   getSolletWallet,
@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store,
-    @Inject(WALLET_SERVICE) private walletService: WalletService,
+    @Inject(WALLET_SERVICE) private walletService: IWalletService,
     @Inject(CONNECTION_SERVICE) private connectionService: ConnectionService
   ) {}
 
