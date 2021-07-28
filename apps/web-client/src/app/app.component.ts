@@ -1,19 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CONNECTION_SERVICE } from '@nx-dapp/shared/connection-adapter/angular';
-import { ConnectionService } from '@nx-dapp/shared/connection-adapter/rx';
+import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
+import { ConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
 import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
-import { WALLET_SERVICE } from '@nx-dapp/shared/wallet-adapter/angular';
-import { WalletName } from '@nx-dapp/shared/wallet-adapter/base';
-import { WalletService } from '@nx-dapp/shared/wallet-adapter/rx';
+import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
+import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
+import { WalletService } from '@nx-dapp/solana/wallet-adapter/rx';
 import {
   getPhantomWallet,
   getSolletWallet,
   getSolongWallet,
-} from '@nx-dapp/shared/wallet-adapter/wallets';
+} from '@nx-dapp/solana/wallet-adapter/wallets';
 
 import { init, selectEndpoint } from './app.actions';
 

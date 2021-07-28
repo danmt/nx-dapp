@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { DEFAULT_WALLET, Wallet } from '@nx-dapp/shared/wallet-adapter/base';
+import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana/wallet-adapter/base';
 
 @Component({
   selector: 'nx-dapp-wallets-dropdown',

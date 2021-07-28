@@ -6,18 +6,18 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { connectionServiceProvider } from '@nx-dapp/shared/connection-adapter/angular';
+import { connectionServiceProvider } from '@nx-dapp/solana/connection-adapter/angular';
 import { ConnectionsModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connection/data-access/connections';
 import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connection/data-access/endpoints';
 import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
 import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
-import { walletServiceProvider } from '@nx-dapp/shared/wallet-adapter/angular';
+import { walletServiceProvider } from '@nx-dapp/solana/wallet-adapter/angular';
 import {
   getPhantomWallet,
   getSolletWallet,
   getSolongWallet,
-} from '@nx-dapp/shared/wallet-adapter/wallets';
+} from '@nx-dapp/solana/wallet-adapter/wallets';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';

@@ -27,15 +27,6 @@
     ]
   },
   "projects": {
-    "shared-connection-adapter-angular": {
-      "tags": []
-    },
-    "shared-connection-adapter-base": {
-      "tags": []
-    },
-    "shared-connection-adapter-rx": {
-      "tags": []
-    },
     "shared-connection-data-access-connections": {
       "tags": []
     },
@@ -54,25 +45,34 @@
     "shared-operators-not-null": {
       "tags": []
     },
-    "shared-wallet-adapter-adapters-phantom": {
+    "solana-connection-adapter-angular": {
       "tags": []
     },
-    "shared-wallet-adapter-adapters-sollet": {
+    "solana-connection-adapter-base": {
       "tags": []
     },
-    "shared-wallet-adapter-adapters-solong": {
+    "solana-connection-adapter-rx": {
       "tags": []
     },
-    "shared-wallet-adapter-angular": {
+    "solana-wallet-adapter-adapters-phantom": {
       "tags": []
     },
-    "shared-wallet-adapter-base": {
+    "solana-wallet-adapter-adapters-sollet": {
       "tags": []
     },
-    "shared-wallet-adapter-rx": {
+    "solana-wallet-adapter-adapters-solong": {
       "tags": []
     },
-    "shared-wallet-adapter-wallets": {
+    "solana-wallet-adapter-angular": {
+      "tags": []
+    },
+    "solana-wallet-adapter-base": {
+      "tags": []
+    },
+    "solana-wallet-adapter-rx": {
+      "tags": []
+    },
+    "solana-wallet-adapter-wallets": {
       "tags": []
     },
     "web-client": {
