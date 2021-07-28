@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { CONNECTION_SERVICE } from '@nx-dapp/shared/connection-adapter/angular';
+import { ConnectionService } from '@nx-dapp/shared/connection-adapter/rx';
 import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
@@ -45,7 +47,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store,
-    @Inject(WALLET_SERVICE) private walletService: WalletService
+    @Inject(WALLET_SERVICE) private walletService: WalletService,
+    @Inject(CONNECTION_SERVICE) private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
@@ -54,6 +57,8 @@ export class AppComponent implements OnInit {
 
   onSelectEndpoint(endpointId: string) {
     this.store.dispatch(selectEndpoint({ selectedId: endpointId }));
+
+    this.connectionService.setEndpoint(endpointId);
   }
 
   onWalletSelected(walletName: WalletName) {
