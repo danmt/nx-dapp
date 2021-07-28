@@ -1,6 +1,73 @@
 {
   "version": 2,
   "projects": {
+    "shared-connection-adapter-angular": {
+      "projectType": "library",
+      "root": "libs/shared/connection-adapter/angular",
+      "sourceRoot": "libs/shared/connection-adapter/angular/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/connection-adapter/angular"],
+          "options": {
+            "jestConfig": "libs/shared/connection-adapter/angular/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/connection-adapter/angular/src/**/*.ts",
+              "libs/shared/connection-adapter/angular/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-connection-adapter-base": {
+      "root": "libs/shared/connection-adapter/base",
+      "sourceRoot": "libs/shared/connection-adapter/base/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/connection-adapter/base/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/connection-adapter/base"],
+          "options": {
+            "jestConfig": "libs/shared/connection-adapter/base/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-connection-adapter-rx": {
+      "root": "libs/shared/connection-adapter/rx",
+      "sourceRoot": "libs/shared/connection-adapter/rx/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/connection-adapter/rx/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/connection-adapter/rx"],
+          "options": {
+            "jestConfig": "libs/shared/connection-adapter/rx/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-connection-data-access-connections": {
       "projectType": "library",
       "root": "libs/shared/connection/data-access/connections",

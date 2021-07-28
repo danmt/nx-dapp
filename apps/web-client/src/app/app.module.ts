@@ -6,6 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { connectionServiceProvider } from '@nx-dapp/shared/connection-adapter/angular';
 import { ConnectionsModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connection/data-access/connections';
 import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connection/data-access/endpoints';
 import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
@@ -52,6 +53,7 @@ import { AppComponent } from './app.component';
       getSolletWallet(),
       getSolongWallet(),
     ]),
+    connectionServiceProvider(),
   ],
   bootstrap: [AppComponent],
 })

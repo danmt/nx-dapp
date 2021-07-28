@@ -15,6 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/shared/connection-adapter/angular": [
+        "libs/shared/connection-adapter/angular/src/index.ts"
+      ],
+      "@nx-dapp/shared/connection-adapter/base": [
+        "libs/shared/connection-adapter/base/src/index.ts"
+      ],
+      "@nx-dapp/shared/connection-adapter/rx": [
+        "libs/shared/connection-adapter/rx/src/index.ts"
+      ],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"
       ],

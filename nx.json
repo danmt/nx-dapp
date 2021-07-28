@@ -27,6 +27,15 @@
     ]
   },
   "projects": {
+    "shared-connection-adapter-angular": {
+      "tags": []
+    },
+    "shared-connection-adapter-base": {
+      "tags": []
+    },
+    "shared-connection-adapter-rx": {
+      "tags": []
+    },
     "shared-connection-data-access-connections": {
       "tags": []
     },
