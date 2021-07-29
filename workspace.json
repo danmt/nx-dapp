@@ -151,6 +151,27 @@
         }
       }
     },
+    "shared-operators-of-type": {
+      "root": "libs/shared/operators/of-type",
+      "sourceRoot": "libs/shared/operators/of-type/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/operators/of-type/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/operators/of-type"],
+          "options": {
+            "jestConfig": "libs/shared/operators/of-type/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-account-adapter-angular": {
       "projectType": "library",
       "root": "libs/solana/account-adapter/angular",

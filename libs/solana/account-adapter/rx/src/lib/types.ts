@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   InitAction,
   LoadConnectionAction,
+  LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   LoadWalletPublicKeyAction,
@@ -14,15 +15,16 @@ export type Action =
   | LoadConnectionAction
   | LoadWalletPublicKeyAction
   | LoadWalletConnectedAction
-  | LoadTokenAccountsAction;
+  | LoadTokenAccountsAction
+  | LoadNativeAccountAction;
 
 export interface AccountState {
   userAccounts: TokenAccount[];
   tokenAccounts: TokenAccount[];
   nativeAccount: AccountInfo<Buffer> | null;
-  connection: Connection | null;
+  /* connection: Connection | null;
   walletPublicKey: PublicKey | null;
-  walletConnected: boolean;
+  walletConnected: boolean; */
 }
 
 export interface IAccountService {
@@ -31,7 +33,8 @@ export interface IAccountService {
 
   loadConnection(connection: Connection): void;
 
-  loadWalletPublicKey(publicKey: PublicKey | null): void;
+  loadWalletPublicKey(publicKey: PublicKey): void;
 
   loadWalletConnected(publicKey: boolean): void;
+  changeAccount(account: AccountInfo<Buffer>): void;
 }

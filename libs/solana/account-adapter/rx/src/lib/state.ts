@@ -1,23 +1,18 @@
-import {
-  LoadConnectionAction,
-  LoadTokenAccountsAction,
-  LoadWalletConnectedAction,
-  LoadWalletPublicKeyAction,
-} from './actions';
+import { LoadNativeAccountAction, LoadTokenAccountsAction } from './actions';
 import { AccountState, Action } from './types';
 
 export const accountInitialState: AccountState = {
   userAccounts: [],
   tokenAccounts: [],
   nativeAccount: null,
-  connection: null,
+  /* connection: null,
   walletPublicKey: null,
-  walletConnected: false,
+  walletConnected: false, */
 };
 
 export const reducer = (state: AccountState, action: Action) => {
   switch (action.type) {
-    case 'loadConnection':
+    /* case 'loadConnection':
       return {
         ...state,
         connection: (action as LoadConnectionAction).payload,
@@ -31,15 +26,26 @@ export const reducer = (state: AccountState, action: Action) => {
       return {
         ...state,
         walletConnected: (action as LoadWalletConnectedAction).payload,
-      };
+      }; */
     case 'loadTokenAccounts':
       return {
         ...state,
-        tokenAccounts: (action as LoadTokenAccountsAction).payload,
-        userAccounts: (action as LoadTokenAccountsAction).payload.filter(
+        tokenAccounts: (action as LoadTokenAccountsAction).payload
+          .tokenAccounts,
+        userAccounts: (
+          action as LoadTokenAccountsAction
+        ).payload.tokenAccounts.filter(
           (account) =>
-            account.info.owner.toBase58() === state.walletPublicKey?.toBase58()
+            account.info.owner.toBase58() ===
+            (
+              action as LoadTokenAccountsAction
+            ).payload.walletPublicKey.toBase58()
         ),
+      };
+    case 'loadNativeAccount':
+      return {
+        ...state,
+        nativeAccount: (action as LoadNativeAccountAction).payload,
       };
     default:
       return state;

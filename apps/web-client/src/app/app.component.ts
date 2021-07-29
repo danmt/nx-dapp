@@ -4,6 +4,7 @@ import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
 import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
 import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
@@ -16,6 +17,7 @@ import {
   getSolletWallet,
   getSolongWallet,
 } from '@nx-dapp/solana/wallet-adapter/wallets';
+import { combineLatest } from 'rxjs';
 
 import { init, selectEndpoint } from './app.actions';
 
@@ -55,7 +57,12 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.accountService.state$.subscribe((a) => console.log(a));
+    this.accountService.actions$.subscribe((actions) =>
+      console.log('actions', actions)
+    );
+    this.accountService.state$.subscribe((state) =>
+      console.log('state', state)
+    );
 
     this.store.dispatch(init());
 
@@ -63,12 +70,23 @@ export class AppComponent implements OnInit {
       this.accountService.loadConnection(connection)
     );
 
-    this.walletService.publicKey$.subscribe((publicKey) =>
-      this.accountService.loadWalletPublicKey(publicKey)
-    );
+    this.walletService.publicKey$
+      .pipe(isNotNull)
+      .subscribe((publicKey) =>
+        this.accountService.loadWalletPublicKey(publicKey)
+      );
 
     this.walletService.connected$.subscribe((connected) =>
       this.accountService.loadWalletConnected(connected)
+    );
+
+    combineLatest([
+      this.connectionService.connection$,
+      this.walletService.publicKey$.pipe(isNotNull),
+    ]).pipe();
+
+    this.connectionService.onConnectionAccountChange$.subscribe((account) =>
+      this.accountService.changeAccount(account)
     );
   }
 

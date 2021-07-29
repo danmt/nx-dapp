@@ -33,6 +33,9 @@
       "@nx-dapp/shared/operators/not-null": [
         "libs/shared/operators/not-null/src/index.ts"
       ],
+      "@nx-dapp/shared/operators/of-type": [
+        "libs/shared/operators/of-type/src/index.ts"
+      ],
       "@nx-dapp/solana/account-adapter/angular": [
         "libs/solana/account-adapter/angular/src/index.ts"
       ],
