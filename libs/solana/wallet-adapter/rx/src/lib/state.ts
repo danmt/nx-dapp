@@ -1,31 +1,15 @@
-import {
-  DEFAULT_WALLET,
-  Wallet,
-  WalletAdapter,
-  WalletName,
-} from '@nx-dapp/solana/wallet-adapter/base';
-import { PublicKey } from '@solana/web3.js';
+import { DEFAULT_WALLET } from '@nx-dapp/solana/wallet-adapter/base';
 
 import {
-  ConnectingAction,
-  DisconnectingAction,
+  ChangeWalletAction,
   LoadWalletsAction,
-  SelectWalletAction,
+  SignTransactionAction,
+  SignTransactionsAction,
+  TransactionSignedAction,
+  TransactionsSignedAction,
+  WalletChangedAction,
 } from './actions';
-import { Action } from './types';
-
-export interface WalletState {
-  publicKey: PublicKey | null;
-  connected: boolean;
-  connecting: boolean;
-  disconnecting: boolean;
-  autoApprove: boolean;
-  ready: boolean;
-  selectedWallet: WalletName | null;
-  wallets: Wallet[];
-  wallet: Wallet | null;
-  adapter: WalletAdapter | null;
-}
+import { Action, WalletState } from './types';
 
 export const walletInitialState: WalletState = {
   publicKey: null,
@@ -38,6 +22,8 @@ export const walletInitialState: WalletState = {
   wallets: [],
   wallet: null,
   adapter: null,
+  signing: false,
+  transactions: [],
 };
 
 export const reducer = (state: WalletState, action: Action) => {
@@ -46,30 +32,6 @@ export const reducer = (state: WalletState, action: Action) => {
       return {
         ...state,
         ready: true,
-      };
-    case 'connect':
-      return {
-        ...state,
-        connected: true,
-        publicKey: state.adapter?.publicKey || null,
-        autoApprove: state.adapter?.autoApprove || false,
-      };
-    case 'connecting':
-      return {
-        ...state,
-        connecting: (action as ConnectingAction).payload,
-      };
-    case 'disconnect':
-      return {
-        ...state,
-        connected: false,
-        publicKey: null,
-        autoApprove: false,
-      };
-    case 'disconnecting':
-      return {
-        ...state,
-        disconnecting: (action as DisconnectingAction).payload,
       };
     case 'loadWallets': {
       const wallet =
@@ -86,27 +48,10 @@ export const reducer = (state: WalletState, action: Action) => {
         ready: adapter?.ready || false,
       };
     }
-    case 'selectWallet': {
-      const wallet =
-        state.wallets.find(
-          (wallet) => wallet.name === (action as SelectWalletAction).payload
-        ) || null;
-      const adapter = wallet?.adapter() || null;
-
+    case 'changeWallet': {
       return {
         ...state,
-        selectedWallet: (action as SelectWalletAction).payload,
-        wallet,
-        adapter,
-        ready: adapter?.ready || false,
-        publicKey: adapter?.publicKey || null,
-        autoApprove: adapter?.autoApprove || false,
-      };
-    }
-    case 'clearWallet': {
-      return {
-        ...state,
-        selectedWallet: null,
+        selectedWallet: (action as ChangeWalletAction).payload,
         wallet: null,
         adapter: null,
         ready: false,
@@ -115,6 +60,94 @@ export const reducer = (state: WalletState, action: Action) => {
         autoApprove: false,
         connecting: false,
         disconnecting: false,
+      };
+    }
+    case 'walletChanged': {
+      const adapter = (action as WalletChangedAction).payload.adapter();
+
+      return {
+        ...state,
+        wallet: (action as WalletChangedAction).payload,
+        adapter,
+        ready: adapter?.ready || false,
+        publicKey: adapter?.publicKey || null,
+        autoApprove: adapter?.autoApprove || false,
+      };
+    }
+    case 'connectWallet': {
+      return {
+        ...state,
+        connecting: true,
+      };
+    }
+    case 'walletConnected': {
+      return {
+        ...state,
+        connecting: false,
+        connected: true,
+        publicKey: state.adapter?.publicKey || null,
+        autoApprove: state.adapter?.autoApprove || false,
+      };
+    }
+    case 'disconnectWallet': {
+      return {
+        ...state,
+        disconnecting: true,
+      };
+    }
+    case 'walletDisconnected': {
+      return {
+        ...state,
+        disconnecting: false,
+        connected: false,
+        publicKey: null,
+        autoApprove: false,
+      };
+    }
+    case 'signTransaction': {
+      return {
+        ...state,
+        signing: true,
+        transactions: [
+          ...state.transactions,
+          (action as SignTransactionAction).payload,
+        ],
+      };
+    }
+    case 'transactionSigned': {
+      const transactions = state.transactions.filter(
+        (transaction) =>
+          transaction === (action as TransactionSignedAction).payload
+      );
+
+      return {
+        ...state,
+        transactions,
+        signing: transactions.length > 0,
+      };
+    }
+    case 'signTransactions': {
+      return {
+        ...state,
+        signing: true,
+        transactions: [
+          ...state.transactions,
+          ...(action as SignTransactionsAction).payload,
+        ],
+      };
+    }
+    case 'transactionsSigned': {
+      const signedTransactions = (action as TransactionsSignedAction).payload;
+      const transactions = state.transactions.filter((transaction) =>
+        signedTransactions.some(
+          (signedTransaction) => signedTransaction === transaction
+        )
+      );
+
+      return {
+        ...state,
+        transactions,
+        signing: transactions.length > 0,
       };
     }
     default:
