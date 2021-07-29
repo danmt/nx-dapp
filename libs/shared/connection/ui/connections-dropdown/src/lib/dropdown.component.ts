@@ -29,5 +29,5 @@ export class ConnectionsDropdownComponent {
   endpointControl = new FormControl(
     this.endpoint ? this.endpoint.id : this._defaultEndpoint
   );
-  @Output() endpointSelected = this.endpointControl.valueChanges;
+  @Output() selectEndpoint = this.endpointControl.valueChanges;
 }

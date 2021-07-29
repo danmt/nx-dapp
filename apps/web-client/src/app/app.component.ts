@@ -27,15 +27,15 @@ import { init, selectEndpoint } from './app.actions';
       <nx-dapp-wallets-dropdown
         [wallets]="wallets"
         [isConnected]="isConnected$ | async"
-        (selectWallet)="onWalletSelected($event)"
-        (connect)="onWalletConnect()"
-        (disconnect)="onWalletDisconnect()"
+        (changeWallet)="onChangeWallet($event)"
+        (connectWallet)="onConnectWallet()"
+        (disconnectWallet)="onDisconnectWallet()"
       ></nx-dapp-wallets-dropdown>
       <ng-container *ngIf="endpoints$ | async as endpoints">
         <nx-dapp-connections-dropdown
           [endpoints]="endpoints"
           [endpoint]="endpoint$ | async"
-          (endpointSelected)="onSelectEndpoint($event)"
+          (selectEndpoint)="onSelectEndpoint($event)"
         ></nx-dapp-connections-dropdown>
       </ng-container>
     </header>
@@ -90,15 +90,15 @@ export class AppComponent implements OnInit {
     this.connectionService.setEndpoint(endpointId);
   }
 
-  onWalletSelected(walletName: WalletName) {
-    this.walletService.selectWallet(walletName);
+  onChangeWallet(walletName: WalletName) {
+    this.walletService.changeWallet(walletName);
   }
 
-  onWalletConnect() {
-    this.walletService.connect().subscribe();
+  onConnectWallet() {
+    this.walletService.connect();
   }
 
-  onWalletDisconnect() {
-    this.walletService.disconnect().subscribe();
+  onDisconnectWallet() {
+    this.walletService.disconnect();
   }
 }
