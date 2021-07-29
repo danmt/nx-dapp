@@ -1,3 +1,4 @@
+import { TokenAccount } from '@nx-dapp/solana/account-adapter/base';
 import { Connection, PublicKey } from '@solana/web3.js';
 
 export class InitAction {
@@ -20,4 +21,10 @@ export class LoadWalletConnectedAction {
   type = 'loadWalletConnected';
 
   constructor(public payload: boolean) {}
+}
+
+export class LoadTokenAccountsAction {
+  type = 'loadTokenAccounts';
+
+  constructor(public payload: TokenAccount[]) {}
 }

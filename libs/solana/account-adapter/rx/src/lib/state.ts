@@ -1,5 +1,6 @@
 import {
   LoadConnectionAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   LoadWalletPublicKeyAction,
 } from './actions';
@@ -7,6 +8,7 @@ import { AccountState, Action } from './types';
 
 export const accountInitialState: AccountState = {
   userAccounts: [],
+  tokenAccounts: [],
   nativeAccount: null,
   connection: null,
   walletPublicKey: null,
@@ -29,6 +31,11 @@ export const reducer = (state: AccountState, action: Action) => {
       return {
         ...state,
         walletConnected: (action as LoadWalletConnectedAction).payload,
+      };
+    case 'loadTokenAccounts':
+      return {
+        ...state,
+        tokenAccounts: (action as LoadTokenAccountsAction).payload,
       };
     default:
       return state;

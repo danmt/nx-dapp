@@ -1,11 +1,20 @@
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { TokenAccountParser } from '@nx-dapp/solana/account-adapter/base';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';
+import { BehaviorSubject, combineLatest, defer, from } from 'rxjs';
 import {
-  distinctUntilChanged
+  distinctUntilChanged,
+  map,
+  scan,
+  shareReplay,
+  switchMap,
 } from 'rxjs/operators';
 
 import {
   InitAction,
   LoadConnectionAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   LoadWalletPublicKeyAction,
 } from './actions';
@@ -30,6 +39,38 @@ export class AccountService implements IAccountService {
     map(({ walletPublicKey }) => walletPublicKey),
     distinctUntilChanged()
   );
+
+  constructor() {
+    combineLatest([
+      this.connection$.pipe(isNotNull),
+      this.walletPublicKey$.pipe(isNotNull),
+    ])
+      .pipe(
+        switchMap(([connection, walletPublicKey]) =>
+          from(
+            defer(() =>
+              connection.getTokenAccountsByOwner(walletPublicKey, {
+                programId: TOKEN_PROGRAM_ID,
+              })
+            )
+          ).pipe(
+            map((accounts) =>
+              accounts.value
+                .filter((info) => info.account.data.length > 0)
+                .map((info) =>
+                  TokenAccountParser(
+                    new PublicKey(info.pubkey.toBase58()),
+                    info.account
+                  )
+                )
+            )
+          )
+        )
+      )
+      .subscribe((tokenAccounts) =>
+        this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts))
+      );
+  }
 
   loadConnection(connection: Connection) {
     this._dispatcher.next(new LoadConnectionAction(connection));
