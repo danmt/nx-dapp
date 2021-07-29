@@ -45,66 +45,59 @@ export class AccountService implements IAccountService {
     })
   );
 
+  private loadNativeAccount$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(
+      ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
+    ),
+  ]).pipe(
+    switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
+      from(defer(() => connection.getAccountInfo(walletPublicKey)))
+    ),
+    isNotNull,
+    map((account) => new LoadNativeAccountAction(account))
+  );
+
+  private loadTokenAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(
+      ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
+    ),
+  ]).pipe(
+    switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
+      from(
+        defer(() =>
+          connection.getTokenAccountsByOwner(walletPublicKey, {
+            programId: TOKEN_PROGRAM_ID,
+          })
+        )
+      ).pipe(
+        map(
+          (accounts) =>
+            new LoadTokenAccountsAction({
+              tokenAccounts: accounts.value
+                .filter((info) => info.account.data.length > 0)
+                .map((info) =>
+                  TokenAccountParser(
+                    new PublicKey(info.pubkey.toBase58()),
+                    info.account
+                  )
+                ),
+              walletPublicKey,
+            })
+        )
+      )
+    )
+  );
+
   constructor() {
-    this.runEffects([
-      this.loadTokenAccountsEffect(),
-      this.loadNativeAccountEffect(),
-    ]);
+    this.runEffects([this.loadTokenAccounts$, this.loadNativeAccount$]);
   }
 
   private runEffects(effects: Observable<Action>[]) {
     merge(...effects)
       .pipe(takeUntil(this._destroy), observeOn(asyncScheduler))
       .subscribe((action) => this._dispatcher.next(action));
-  }
-
-  private loadTokenAccountsEffect() {
-    return combineLatest([
-      this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-      this.actions$.pipe(
-        ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
-      ),
-    ]).pipe(
-      switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
-        from(
-          defer(() =>
-            connection.getTokenAccountsByOwner(walletPublicKey, {
-              programId: TOKEN_PROGRAM_ID,
-            })
-          )
-        ).pipe(
-          map(
-            (accounts) =>
-              new LoadTokenAccountsAction({
-                tokenAccounts: accounts.value
-                  .filter((info) => info.account.data.length > 0)
-                  .map((info) =>
-                    TokenAccountParser(
-                      new PublicKey(info.pubkey.toBase58()),
-                      info.account
-                    )
-                  ),
-                walletPublicKey,
-              })
-          )
-        )
-      )
-    );
-  }
-
-  private loadNativeAccountEffect() {
-    return combineLatest([
-      this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-      this.actions$.pipe(
-        ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
-      ),
-    ]).pipe(
-      switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
-        from(defer(() => connection.getAccountInfo(walletPublicKey)))
-      ),
-      isNotNull,
-      map((account) => new LoadNativeAccountAction(account))
-    );
   }
 
   loadConnection(connection: Connection) {
