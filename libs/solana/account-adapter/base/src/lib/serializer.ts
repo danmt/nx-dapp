@@ -1,5 +1,7 @@
 import { AccountLayout, u64 } from '@solana/spl-token';
 import { AccountInfo, PublicKey } from '@solana/web3.js';
+import { Buffer } from 'buffer';
+
 import { TokenAccount } from './types';
 
 const deserializeAccount = (data: Buffer) => {
