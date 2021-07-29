@@ -306,6 +306,27 @@
         }
       }
     },
+    "solana-market-adapter-rx": {
+      "root": "libs/solana/market-adapter/rx",
+      "sourceRoot": "libs/solana/market-adapter/rx/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana/market-adapter/rx/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana/market-adapter/rx"],
+          "options": {
+            "jestConfig": "libs/solana/market-adapter/rx/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-wallet-adapter-adapters-phantom": {
       "root": "libs/solana/wallet-adapter/adapters/phantom",
       "sourceRoot": "libs/solana/wallet-adapter/adapters/phantom/src",

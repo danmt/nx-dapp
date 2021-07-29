@@ -66,6 +66,9 @@
     "solana-connection-adapter-rx": {
       "tags": []
     },
+    "solana-market-adapter-rx": {
+      "tags": []
+    },
     "solana-wallet-adapter-adapters-phantom": {
       "tags": []
     },

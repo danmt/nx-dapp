@@ -54,6 +54,9 @@
       "@nx-dapp/solana/connection-adapter/rx": [
         "libs/solana/connection-adapter/rx/src/index.ts"
       ],
+      "@nx-dapp/solana/market-adapter/rx": [
+        "libs/solana/market-adapter/rx/src/index.ts"
+      ],
       "@nx-dapp/solana/wallet-adapter/adapters/phantom": [
         "libs/solana/wallet-adapter/adapters/phantom/src/index.ts"
       ],
