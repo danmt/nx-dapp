@@ -36,6 +36,10 @@ export const reducer = (state: AccountState, action: Action) => {
       return {
         ...state,
         tokenAccounts: (action as LoadTokenAccountsAction).payload,
+        userAccounts: (action as LoadTokenAccountsAction).payload.filter(
+          (account) =>
+            account.info.owner.toBase58() === state.walletPublicKey?.toBase58()
+        ),
       };
     default:
       return state;
