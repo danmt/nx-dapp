@@ -4,6 +4,9 @@ import {
   getAllEndpoints,
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
+import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
 import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
 import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
 import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
@@ -24,15 +27,15 @@ import { init, selectEndpoint } from './app.actions';
       <nx-dapp-wallets-dropdown
         [wallets]="wallets"
         [isConnected]="isConnected$ | async"
-        (selectWallet)="onWalletSelected($event)"
-        (connect)="onWalletConnect()"
-        (disconnect)="onWalletDisconnect()"
+        (changeWallet)="onChangeWallet($event)"
+        (connectWallet)="onConnectWallet()"
+        (disconnectWallet)="onDisconnectWallet()"
       ></nx-dapp-wallets-dropdown>
       <ng-container *ngIf="endpoints$ | async as endpoints">
         <nx-dapp-connections-dropdown
           [endpoints]="endpoints"
           [endpoint]="endpoint$ | async"
-          (endpointSelected)="onSelectEndpoint($event)"
+          (selectEndpoint)="onSelectEndpoint($event)"
         ></nx-dapp-connections-dropdown>
       </ng-container>
     </header>
@@ -48,11 +51,30 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store,
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
-    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService
+    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
+    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService
   ) {}
 
   ngOnInit() {
     this.store.dispatch(init());
+
+    this.connectionService.connection$.subscribe((connection) =>
+      this.accountService.loadConnection(connection)
+    );
+
+    this.walletService.publicKey$
+      .pipe(isNotNull)
+      .subscribe((publicKey) =>
+        this.accountService.loadWalletPublicKey(publicKey)
+      );
+
+    this.walletService.connected$.subscribe((connected) =>
+      this.accountService.loadWalletConnected(connected)
+    );
+
+    this.connectionService.onConnectionAccountChange$.subscribe((account) =>
+      this.accountService.changeAccount(account)
+    );
   }
 
   onSelectEndpoint(endpointId: string) {
@@ -61,15 +83,15 @@ export class AppComponent implements OnInit {
     this.connectionService.setEndpoint(endpointId);
   }
 
-  onWalletSelected(walletName: WalletName) {
-    this.walletService.selectWallet(walletName);
+  onChangeWallet(walletName: WalletName) {
+    this.walletService.changeWallet(walletName);
   }
 
-  onWalletConnect() {
-    this.walletService.connect().subscribe();
+  onConnectWallet() {
+    this.walletService.connect();
   }
 
-  onWalletDisconnect() {
-    this.walletService.disconnect().subscribe();
+  onDisconnectWallet() {
+    this.walletService.disconnect();
   }
 }

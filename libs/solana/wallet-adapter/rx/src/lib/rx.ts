@@ -1,3 +1,5 @@
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
   Wallet,
   WalletName,
@@ -7,42 +9,55 @@ import {
 } from '@nx-dapp/solana/wallet-adapter/base';
 import { Transaction } from '@solana/web3.js';
 import {
+  asyncScheduler,
   BehaviorSubject,
   combineLatest,
   defer,
   from,
   merge,
+  Observable,
   of,
+  Subject,
   throwError,
 } from 'rxjs';
 import {
   concatMap,
   distinctUntilChanged,
+  exhaustMap,
   filter,
   map,
   mapTo,
+  observeOn,
   scan,
   shareReplay,
-  take,
-  tap,
+  switchMap,
+  takeUntil,
+  withLatestFrom,
 } from 'rxjs/operators';
 
 import {
-  ClearWalletAction,
+  ChangeWalletAction,
   ConnectAction,
-  ConnectingAction,
+  ConnectWalletAction,
   DisconnectAction,
-  DisconnectingAction,
+  DisconnectWalletAction,
   InitAction,
   LoadWalletsAction,
   ReadyAction,
-  SelectWalletAction,
+  SignTransactionAction,
+  SignTransactionsAction,
+  TransactionSignedAction,
+  TransactionsSignedAction,
+  WalletChangedAction,
+  WalletConnectedAction,
+  WalletDisconnectedAction,
 } from './actions';
 import { fromAdapterEvent } from './operators';
-import { reducer, walletInitialState, WalletState } from './state';
-import { Action, IWalletService } from './types';
+import { reducer, walletInitialState } from './state';
+import { Action, IWalletService, WalletState } from './types';
 
 export class WalletService implements IWalletService {
+  private readonly _destroy = new Subject();
   private readonly _dispatcher = new BehaviorSubject<Action>(new InitAction());
   actions$ = this._dispatcher.asObservable();
   state$ = this._dispatcher.pipe(
@@ -52,23 +67,37 @@ export class WalletService implements IWalletService {
       bufferSize: 1,
     })
   );
-  ready$ = this.state$.pipe(map(({ ready }) => ready));
-  connected$ = this.state$.pipe(map(({ connected }) => connected));
-  walletName$ = this.state$.pipe(
-    map(({ selectedWallet }) => selectedWallet || null)
+  ready$ = this.state$.pipe(
+    map(({ ready }) => ready),
+    distinctUntilChanged()
   );
-  wallets$ = this.state$.pipe(map(({ wallets }) => wallets));
+  connected$ = this.state$.pipe(
+    map(({ connected }) => connected),
+    distinctUntilChanged()
+  );
+  walletName$ = this.state$.pipe(
+    map(({ selectedWallet }) => selectedWallet || null),
+    distinctUntilChanged()
+  );
+  wallets$ = this.state$.pipe(
+    map(({ wallets }) => wallets),
+    distinctUntilChanged()
+  );
   wallet$ = combineLatest([this.walletName$, this.wallets$]).pipe(
     map(
       ([walletName, wallets]) =>
         wallets.find((wallet) => wallet.name === walletName) || null
-    )
+    ),
+    distinctUntilChanged()
   );
   adapter$ = this.state$.pipe(
     map(({ adapter }) => adapter),
     distinctUntilChanged()
   );
-  publicKey$ = this.state$.pipe(map(({ publicKey }) => publicKey));
+  publicKey$ = this.state$.pipe(
+    map(({ publicKey }) => publicKey),
+    distinctUntilChanged()
+  );
   onReady$ = this.adapter$
     .pipe(fromAdapterEvent('ready'))
     .pipe(mapTo(new ReadyAction()));
@@ -80,12 +109,89 @@ export class WalletService implements IWalletService {
     .pipe(mapTo(new DisconnectAction()));
   onError$ = this.adapter$.pipe(fromAdapterEvent('error'));
 
-  constructor(wallets: Wallet[]) {
-    this.loadWallets(wallets);
+  private connectWallet$ = this.actions$.pipe(
+    ofType<ConnectWalletAction>('connectWallet'),
+    withLatestFrom(this.state$),
+    filter(([, { connected, disconnecting }]) => !connected && !disconnecting),
+    exhaustMap(([, state]) =>
+      this.handleConnect(state).pipe(map(() => new WalletConnectedAction()))
+    )
+  );
 
-    merge(this.onReady$, this.onConnect$, this.onDisconnect$).subscribe(
-      (action: Action) => this._dispatcher.next(action)
-    );
+  private disconnectWallet$ = this.actions$.pipe(
+    ofType<ConnectWalletAction>('disconnectWallet'),
+    withLatestFrom(this.state$),
+    filter(([, { connected, connecting }]) => connected && !connecting),
+    exhaustMap(([, state]) =>
+      this.handleDisconnect(state).pipe(
+        map(() => new WalletDisconnectedAction())
+      )
+    )
+  );
+
+  private changeWallet$ = this.actions$.pipe(
+    ofType<ChangeWalletAction>('changeWallet'),
+    withLatestFrom(this.state$),
+    filter(
+      ([{ payload: walletName }, { wallet }]) => walletName === wallet?.name
+    ),
+    switchMap(([action, state]) =>
+      of(action).pipe(
+        concatMap(() =>
+          !state.connected ? of(null) : this.handleDisconnect(state)
+        ),
+        map(
+          () =>
+            state.wallets.find((wallet) => wallet.name === action.payload) ||
+            null
+        ),
+        isNotNull,
+        map((wallet) => new WalletChangedAction(wallet))
+      )
+    )
+  );
+
+  private signTransaction$ = this.actions$.pipe(
+    ofType<SignTransactionAction>('signTransaction'),
+    withLatestFrom(this.state$),
+    filter(([, { signing }]) => signing),
+    exhaustMap(([{ payload: transaction }, state]) =>
+      this.handleSignTransaction(transaction, state).pipe(
+        map(() => new TransactionSignedAction(transaction))
+      )
+    )
+  );
+
+  private signTransactions$ = this.actions$.pipe(
+    ofType<SignTransactionsAction>('signTransactions'),
+    withLatestFrom(this.state$),
+    filter(([, { signing }]) => signing),
+    exhaustMap(([{ payload: transactions }, state]) =>
+      this.handleSignAllTransactions(transactions, state).pipe(
+        map(() => new TransactionsSignedAction(transactions))
+      )
+    )
+  );
+
+  constructor(wallets: Wallet[]) {
+    this.runEffects([
+      this.onReady$,
+      this.onConnect$,
+      this.onDisconnect$,
+      this.connectWallet$,
+      this.disconnectWallet$,
+      this.changeWallet$,
+      this.signTransaction$,
+      this.signTransactions$,
+    ]);
+
+    this.loadWallets(wallets);
+  }
+
+  private runEffects(effects: Observable<Action>[]) {
+    merge(...effects)
+      .pipe(takeUntil(this._destroy), observeOn(asyncScheduler))
+      .subscribe((action) => this._dispatcher.next(action));
   }
 
   private handleConnect({ ready, wallet, adapter }: WalletState) {
@@ -138,57 +244,28 @@ export class WalletService implements IWalletService {
     this._dispatcher.next(new LoadWalletsAction(wallets));
   }
 
-  selectWallet(walletName: WalletName) {
-    this._dispatcher.next(new ClearWalletAction());
-
-    this.state$
-      .pipe(
-        take(1),
-        concatMap(({ wallet, connected }) =>
-          wallet?.name === walletName && connected
-            ? this.disconnect()
-            : of(true)
-        )
-      )
-      .subscribe(() =>
-        this._dispatcher.next(new SelectWalletAction(walletName))
-      );
+  changeWallet(walletName: WalletName) {
+    this._dispatcher.next(new ChangeWalletAction(walletName));
   }
 
   connect() {
-    return this.state$.pipe(
-      take(1),
-      filter(
-        ({ connected, connecting, disconnecting }) =>
-          !connected && !connecting && !disconnecting
-      ),
-      tap(() => this._dispatcher.next(new ConnectingAction(true))),
-      concatMap(this.handleConnect),
-      tap(() => this._dispatcher.next(new ConnectingAction(false)))
-    );
+    this._dispatcher.next(new ConnectWalletAction());
   }
 
   disconnect() {
-    return this.state$.pipe(
-      take(1),
-      filter(({ disconnecting }) => !disconnecting),
-      tap(() => this._dispatcher.next(new DisconnectingAction(true))),
-      concatMap(this.handleDisconnect),
-      tap(() => this._dispatcher.next(new DisconnectingAction(false)))
-    );
+    this._dispatcher.next(new DisconnectWalletAction());
   }
 
   signTransaction(transaction: Transaction) {
-    return this.state$.pipe(
-      take(1),
-      concatMap((state) => this.handleSignTransaction(transaction, state))
-    );
+    this._dispatcher.next(new SignTransactionAction(transaction));
   }
 
   signAllTransactions(transactions: Transaction[]) {
-    return this.state$.pipe(
-      take(1),
-      concatMap((state) => this.handleSignAllTransactions(transactions, state))
-    );
+    this._dispatcher.next(new SignTransactionsAction(transactions));
+  }
+
+  destroy() {
+    this._destroy.next();
+    this._destroy.complete();
   }
 }

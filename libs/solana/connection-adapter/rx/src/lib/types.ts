@@ -1,5 +1,5 @@
 import { Endpoint, ENV } from '@nx-dapp/solana/connection-adapter/base';
-import { Connection } from '@solana/web3.js';
+import { AccountInfo, Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
 import { InitAction, SelectEndpointAction } from './actions';
@@ -23,7 +23,7 @@ export interface IConnectionService {
   env$: Observable<ENV>;
   connection$: Observable<Connection>;
   sendConnection$: Observable<Connection>;
-  onConnectionAccountChange$: Observable<unknown>; // TODO: use proper type
+  onConnectionAccountChange$: Observable<AccountInfo<Buffer>>; // TODO: use proper type
   onConnectionSlotChange$: Observable<unknown>; // TODO: use proper type
   onSendConnectionAccountChange$: Observable<unknown>; // TODO: use proper type
   onSendConnectionSlotChange$: Observable<unknown>; // TODO: use proper type

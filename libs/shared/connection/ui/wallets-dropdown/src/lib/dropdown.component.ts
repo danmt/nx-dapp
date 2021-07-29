@@ -24,7 +24,7 @@ import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana/wallet-adapter/base';
       *ngIf="!isConnected"
       mat-raised-button
       color="primary"
-      (click)="onConnect()"
+      (click)="onConnectWallet()"
       type="button"
     >
       Connect
@@ -33,7 +33,7 @@ import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana/wallet-adapter/base';
       *ngIf="isConnected"
       mat-raised-button
       color="primary"
-      (click)="onDisconnect()"
+      (click)="onDisconnectWallet()"
       type="button"
     >
       Disconnect
@@ -49,15 +49,15 @@ export class WalletsDropdownComponent {
   walletControl = new FormControl(
     this.wallet ? this.wallet.name : DEFAULT_WALLET
   );
-  @Output() selectWallet = this.walletControl.valueChanges;
-  @Output() connect = new EventEmitter();
-  @Output() disconnect = new EventEmitter();
+  @Output() changeWallet = this.walletControl.valueChanges;
+  @Output() connectWallet = new EventEmitter();
+  @Output() disconnectWallet = new EventEmitter();
 
-  onConnect() {
-    this.connect.emit();
+  onConnectWallet() {
+    this.connectWallet.emit();
   }
 
-  onDisconnect() {
-    this.disconnect.emit();
+  onDisconnectWallet() {
+    this.disconnectWallet.emit();
   }
 }

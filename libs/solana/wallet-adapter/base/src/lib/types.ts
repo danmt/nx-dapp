@@ -40,4 +40,4 @@ export interface Wallet {
   adapter: () => WalletAdapter;
 }
 
-export const DEFAULT_WALLET = WalletName.Phantom;
+export const DEFAULT_WALLET = WalletName.Sollet;

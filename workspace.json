@@ -151,6 +151,94 @@
         }
       }
     },
+    "shared-operators-of-type": {
+      "root": "libs/shared/operators/of-type",
+      "sourceRoot": "libs/shared/operators/of-type/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/operators/of-type/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/operators/of-type"],
+          "options": {
+            "jestConfig": "libs/shared/operators/of-type/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "solana-account-adapter-angular": {
+      "projectType": "library",
+      "root": "libs/solana/account-adapter/angular",
+      "sourceRoot": "libs/solana/account-adapter/angular/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana/account-adapter/angular"],
+          "options": {
+            "jestConfig": "libs/solana/account-adapter/angular/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/solana/account-adapter/angular/src/**/*.ts",
+              "libs/solana/account-adapter/angular/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "solana-account-adapter-base": {
+      "root": "libs/solana/account-adapter/base",
+      "sourceRoot": "libs/solana/account-adapter/base/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana/account-adapter/base/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana/account-adapter/base"],
+          "options": {
+            "jestConfig": "libs/solana/account-adapter/base/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "solana-account-adapter-rx": {
+      "root": "libs/solana/account-adapter/rx",
+      "sourceRoot": "libs/solana/account-adapter/rx/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana/account-adapter/rx/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana/account-adapter/rx"],
+          "options": {
+            "jestConfig": "libs/solana/account-adapter/rx/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-connection-adapter-angular": {
       "projectType": "library",
       "root": "libs/solana/connection-adapter/angular",
