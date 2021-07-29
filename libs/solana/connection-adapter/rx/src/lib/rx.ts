@@ -1,5 +1,5 @@
 import { BehaviorSubject, merge } from 'rxjs';
-import { map, scan, shareReplay } from 'rxjs/operators';
+import { distinctUntilChanged, map, scan, shareReplay } from 'rxjs/operators';
 
 import { InitAction, SelectEndpointAction } from './actions';
 import { fromAccountChangeEvent, fromSlotChangeEvent } from './operators';
@@ -16,19 +16,33 @@ export class ConnectionService implements IConnectionService {
       bufferSize: 1,
     })
   );
-  endpoints$ = this.state$.pipe(map(({ endpoints }) => endpoints));
-  endpoint$ = this.state$.pipe(map(({ endpoint }) => endpoint));
+  endpoints$ = this.state$.pipe(
+    map(({ endpoints }) => endpoints),
+    distinctUntilChanged()
+  );
+  endpoint$ = this.state$.pipe(
+    map(({ endpoint }) => endpoint),
+    distinctUntilChanged()
+  );
   chain$ = this.state$.pipe(
     map(
       ({ endpoints, endpoint: selectedEndpoint }) =>
         endpoints.find(({ endpoint }) => selectedEndpoint === endpoint) ||
         endpoints[0]
-    )
+    ),
+    distinctUntilChanged()
   );
-  env$ = this.chain$.pipe(map(({ name }) => name));
-  connection$ = this.state$.pipe(map(({ connection }) => connection));
+  env$ = this.chain$.pipe(
+    map(({ name }) => name),
+    distinctUntilChanged()
+  );
+  connection$ = this.state$.pipe(
+    map(({ connection }) => connection),
+    distinctUntilChanged()
+  );
   sendConnection$ = this.state$.pipe(
-    map(({ sendConnection }) => sendConnection)
+    map(({ sendConnection }) => sendConnection),
+    distinctUntilChanged()
   );
   onConnectionAccountChange$ = this.connection$.pipe(fromAccountChangeEvent);
   onConnectionSlotChange$ = this.connection$.pipe(fromSlotChangeEvent);

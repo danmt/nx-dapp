@@ -1,6 +1,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-import { BehaviorSubject } from 'rxjs';
-import { scan, shareReplay } from 'rxjs/operators';
+import {
+  distinctUntilChanged
+} from 'rxjs/operators';
 
 import {
   InitAction,
@@ -20,6 +21,14 @@ export class AccountService implements IAccountService {
       refCount: false,
       bufferSize: 1,
     })
+  );
+  connection$ = this.state$.pipe(
+    map(({ connection }) => connection),
+    distinctUntilChanged()
+  );
+  walletPublicKey$ = this.state$.pipe(
+    map(({ walletPublicKey }) => walletPublicKey),
+    distinctUntilChanged()
   );
 
   loadConnection(connection: Connection) {

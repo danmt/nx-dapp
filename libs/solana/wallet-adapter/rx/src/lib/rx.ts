@@ -52,23 +52,37 @@ export class WalletService implements IWalletService {
       bufferSize: 1,
     })
   );
-  ready$ = this.state$.pipe(map(({ ready }) => ready));
-  connected$ = this.state$.pipe(map(({ connected }) => connected));
-  walletName$ = this.state$.pipe(
-    map(({ selectedWallet }) => selectedWallet || null)
+  ready$ = this.state$.pipe(
+    map(({ ready }) => ready),
+    distinctUntilChanged()
   );
-  wallets$ = this.state$.pipe(map(({ wallets }) => wallets));
+  connected$ = this.state$.pipe(
+    map(({ connected }) => connected),
+    distinctUntilChanged()
+  );
+  walletName$ = this.state$.pipe(
+    map(({ selectedWallet }) => selectedWallet || null),
+    distinctUntilChanged()
+  );
+  wallets$ = this.state$.pipe(
+    map(({ wallets }) => wallets),
+    distinctUntilChanged()
+  );
   wallet$ = combineLatest([this.walletName$, this.wallets$]).pipe(
     map(
       ([walletName, wallets]) =>
         wallets.find((wallet) => wallet.name === walletName) || null
-    )
+    ),
+    distinctUntilChanged()
   );
   adapter$ = this.state$.pipe(
     map(({ adapter }) => adapter),
     distinctUntilChanged()
   );
-  publicKey$ = this.state$.pipe(map(({ publicKey }) => publicKey));
+  publicKey$ = this.state$.pipe(
+    map(({ publicKey }) => publicKey),
+    distinctUntilChanged()
+  );
   onReady$ = this.adapter$
     .pipe(fromAdapterEvent('ready'))
     .pipe(mapTo(new ReadyAction()));
