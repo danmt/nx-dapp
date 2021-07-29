@@ -17,7 +17,6 @@ import {
   getSolletWallet,
   getSolongWallet,
 } from '@nx-dapp/solana/wallet-adapter/wallets';
-import { combineLatest } from 'rxjs';
 
 import { init, selectEndpoint } from './app.actions';
 
@@ -79,11 +78,6 @@ export class AppComponent implements OnInit {
     this.walletService.connected$.subscribe((connected) =>
       this.accountService.loadWalletConnected(connected)
     );
-
-    combineLatest([
-      this.connectionService.connection$,
-      this.walletService.publicKey$.pipe(isNotNull),
-    ]).pipe();
 
     this.connectionService.onConnectionAccountChange$.subscribe((account) =>
       this.accountService.changeAccount(account)
