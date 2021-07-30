@@ -22,9 +22,6 @@ export interface AccountState {
   userAccounts: TokenAccount[];
   tokenAccounts: TokenAccount[];
   nativeAccount: AccountInfo<Buffer> | null;
-  /* connection: Connection | null;
-  walletPublicKey: PublicKey | null;
-  walletConnected: boolean; */
 }
 
 export interface IAccountService {
