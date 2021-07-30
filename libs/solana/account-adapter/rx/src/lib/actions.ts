@@ -61,5 +61,5 @@ export class GetMintAccountsAction {
 export class LoadMintAccountsAction {
   type = 'loadMintAccounts';
 
-  constructor(public payload: AccountInfo<Buffer>[]) {}
+  constructor(public payload: TokenAccount[]) {}
 }

@@ -30,7 +30,7 @@ export interface AccountState {
   tokenAccounts: TokenAccount[];
   nativeAccount: TokenAccount | null;
   selectedMintAddresses: PublicKey[];
-  mintAccounts: AccountInfo<Buffer>[];
+  mintAccounts: TokenAccount[];
 }
 
 export interface IAccountService {
@@ -38,7 +38,7 @@ export interface IAccountService {
   actions$: Observable<Action>;
   userAccounts$: Observable<TokenAccount[]>;
   nativeAccount$: Observable<TokenAccount | null>;
-  mintAccounts$: Observable<AccountInfo<Buffer>[]>;
+  mintAccounts$: Observable<TokenAccount[]>;
 
   loadConnection(connection: Connection): void;
 

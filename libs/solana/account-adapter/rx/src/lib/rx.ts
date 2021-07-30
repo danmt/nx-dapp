@@ -141,9 +141,12 @@ export class AccountService implements IAccountService {
     mergeMap(([{ payload: connection }, { payload: mintKeys }]) =>
       combineLatest(
         mintKeys.map((mintKey) =>
-          from(defer(() => connection.getAccountInfo(mintKey))).pipe(isNotNull)
+          from(defer(() => connection.getAccountInfo(mintKey))).pipe(
+            isNotNull,
+            map((account) => wrapNativeToken(mintKey, account))
+          )
         )
-      ).pipe(map((account) => new LoadMintAccountsAction(account)))
+      ).pipe(map((accounts) => new LoadMintAccountsAction(accounts)))
     )
   );
 
