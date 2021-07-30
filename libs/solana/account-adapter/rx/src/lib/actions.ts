@@ -37,5 +37,17 @@ export class LoadTokenAccountsAction {
 export class LoadNativeAccountAction {
   type = 'loadNativeAccount';
 
+  constructor(public payload: TokenAccount) {}
+}
+
+export class ChangeAccountAction {
+  type = 'changeAccount';
+
   constructor(public payload: AccountInfo<Buffer>) {}
+}
+
+export class AccountChangedAction {
+  type = 'accountChanged';
+
+  constructor(public payload: TokenAccount) {}
 }

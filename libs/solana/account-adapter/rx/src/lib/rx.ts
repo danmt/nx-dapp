@@ -1,6 +1,9 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { TokenAccountParser } from '@nx-dapp/solana/account-adapter/base';
+import {
+  TokenAccountParser,
+  wrapNativeToken,
+} from '@nx-dapp/solana/account-adapter/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
@@ -24,6 +27,7 @@ import {
 } from 'rxjs/operators';
 
 import {
+  ChangeAccountAction,
   InitAction,
   LoadConnectionAction,
   LoadNativeAccountAction,
@@ -49,6 +53,10 @@ export class AccountService implements IAccountService {
     map(({ userAccounts }) => userAccounts),
     distinctUntilChanged()
   );
+  nativeAccount$ = this.state$.pipe(
+    map(({ nativeAccount }) => nativeAccount),
+    distinctUntilChanged()
+  );
 
   private loadNativeAccount$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
@@ -57,10 +65,28 @@ export class AccountService implements IAccountService {
     ),
   ]).pipe(
     switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
-      from(defer(() => connection.getAccountInfo(walletPublicKey)))
+      from(defer(() => connection.getAccountInfo(walletPublicKey))).pipe(
+        isNotNull,
+        map(
+          (account) =>
+            new LoadNativeAccountAction(
+              wrapNativeToken(walletPublicKey, account)
+            )
+        )
+      )
+    )
+  );
+
+  private accountChanged$ = combineLatest([
+    this.actions$.pipe(ofType<ChangeAccountAction>('changeAccount')),
+    this.actions$.pipe(
+      ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
     ),
-    isNotNull,
-    map((account) => new LoadNativeAccountAction(account))
+  ]).pipe(
+    map(
+      ([{ payload: account }, { payload: walletPublicKey }]) =>
+        new LoadNativeAccountAction(wrapNativeToken(walletPublicKey, account))
+    )
   );
 
   private loadTokenAccounts$ = combineLatest([
@@ -96,7 +122,11 @@ export class AccountService implements IAccountService {
   );
 
   constructor() {
-    this.runEffects([this.loadTokenAccounts$, this.loadNativeAccount$]);
+    this.runEffects([
+      this.loadTokenAccounts$,
+      this.loadNativeAccount$,
+      this.accountChanged$,
+    ]);
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -118,7 +148,7 @@ export class AccountService implements IAccountService {
   }
 
   changeAccount(account: AccountInfo<Buffer>) {
-    this._dispatcher.next(new LoadNativeAccountAction(account));
+    this._dispatcher.next(new ChangeAccountAction(account));
   }
 
   destroy() {

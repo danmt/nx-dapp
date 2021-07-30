@@ -25,6 +25,7 @@ export const reducer = (state: AccountState, action: Action) => {
         ),
       };
     case 'loadNativeAccount':
+    case 'accountChanged':
       return {
         ...state,
         nativeAccount: (action as LoadNativeAccountAction).payload,
