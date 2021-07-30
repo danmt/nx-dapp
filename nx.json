@@ -75,6 +75,9 @@
     "solana-market-adapter-rx": {
       "tags": []
     },
+    "solana-utils-u64": {
+      "tags": []
+    },
     "solana-wallet-adapter-adapters-phantom": {
       "tags": []
     },

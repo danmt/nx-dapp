@@ -63,6 +63,7 @@
       "@nx-dapp/solana/market-adapter/rx": [
         "libs/solana/market-adapter/rx/src/index.ts"
       ],
+      "@nx-dapp/solana/utils/u64": ["libs/solana/utils/u64/src/index.ts"],
       "@nx-dapp/solana/wallet-adapter/adapters/phantom": [
         "libs/solana/wallet-adapter/adapters/phantom/src/index.ts"
       ],
