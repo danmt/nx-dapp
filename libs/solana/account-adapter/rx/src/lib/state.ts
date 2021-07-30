@@ -7,7 +7,6 @@ import {
 import { AccountState, Action } from './types';
 
 export const accountInitialState: AccountState = {
-  userAccounts: [],
   tokenAccounts: [],
   nativeAccount: null,
   selectedMintAddresses: [],
@@ -31,15 +30,6 @@ export const reducer = (state: AccountState, action: Action) => {
         ...state,
         tokenAccounts: (action as LoadTokenAccountsAction).payload
           .tokenAccounts,
-        userAccounts: (
-          action as LoadTokenAccountsAction
-        ).payload.tokenAccounts.filter(
-          (account) =>
-            account.info.owner.toBase58() ===
-            (
-              action as LoadTokenAccountsAction
-            ).payload.walletPublicKey.toBase58()
-        ),
       };
     case 'loadNativeAccount':
     case 'accountChanged':

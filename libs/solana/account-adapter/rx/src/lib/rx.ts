@@ -52,13 +52,19 @@ export class AccountService implements IAccountService {
       bufferSize: 1,
     })
   );
-  userAccounts$ = this.state$.pipe(
-    map(({ userAccounts }) => userAccounts),
+  tokenAccounts$ = this.state$.pipe(
+    map(({ tokenAccounts }) => tokenAccounts),
     distinctUntilChanged()
   );
   nativeAccount$ = this.state$.pipe(
     map(({ nativeAccount }) => nativeAccount),
     distinctUntilChanged()
+  );
+  userAccounts$ = combineLatest([
+    this.tokenAccounts$,
+    this.nativeAccount$.pipe(isNotNull),
+  ]).pipe(
+    map(([tokenAccounts, nativeAccount]) => [...tokenAccounts, nativeAccount])
   );
   mintAccounts$ = this.state$.pipe(
     map(({ mintAccounts }) => mintAccounts),

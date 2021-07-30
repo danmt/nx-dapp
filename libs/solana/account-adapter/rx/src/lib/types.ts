@@ -27,7 +27,6 @@ export type Action =
   | LoadMintAccountsAction;
 
 export interface AccountState {
-  userAccounts: TokenAccount[];
   tokenAccounts: TokenAccount[];
   nativeAccount: TokenAccount | null;
   selectedMintAddresses: PublicKey[];
