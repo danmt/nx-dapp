@@ -306,6 +306,31 @@
         }
       }
     },
+    "solana-market-adapter-angular": {
+      "projectType": "library",
+      "root": "libs/solana/market-adapter/angular",
+      "sourceRoot": "libs/solana/market-adapter/angular/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana/market-adapter/angular"],
+          "options": {
+            "jestConfig": "libs/solana/market-adapter/angular/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/solana/market-adapter/angular/src/**/*.ts",
+              "libs/solana/market-adapter/angular/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "solana-market-adapter-rx": {
       "root": "libs/solana/market-adapter/rx",
       "sourceRoot": "libs/solana/market-adapter/rx/src",

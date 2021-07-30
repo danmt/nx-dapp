@@ -9,6 +9,8 @@ import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
 import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
 import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
 import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
+import { MARKET_SERVICE } from '@nx-dapp/solana/market-adapter/angular';
+import { IMarketService } from '@nx-dapp/solana/market-adapter/rx';
 import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
 import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
 import { IWalletService } from '@nx-dapp/solana/wallet-adapter/rx';
@@ -52,7 +54,8 @@ export class AppComponent implements OnInit {
     private store: Store,
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
     @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
-    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService
+    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService,
+    @Inject(MARKET_SERVICE) private marketService: IMarketService
   ) {}
 
   ngOnInit() {
@@ -74,6 +77,10 @@ export class AppComponent implements OnInit {
 
     this.connectionService.onConnectionAccountChange$.subscribe((account) =>
       this.accountService.changeAccount(account)
+    );
+
+    this.accountService.userAccounts$.subscribe((userAccounts) =>
+      this.marketService.loadUserAccounts(userAccounts)
     );
   }
 

@@ -66,6 +66,9 @@
     "solana-connection-adapter-rx": {
       "tags": []
     },
+    "solana-market-adapter-angular": {
+      "tags": []
+    },
     "solana-market-adapter-rx": {
       "tags": []
     },

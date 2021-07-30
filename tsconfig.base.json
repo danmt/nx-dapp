@@ -54,6 +54,9 @@
       "@nx-dapp/solana/connection-adapter/rx": [
         "libs/solana/connection-adapter/rx/src/index.ts"
       ],
+      "@nx-dapp/solana/market-adapter/angular": [
+        "libs/solana/market-adapter/angular/src/index.ts"
+      ],
       "@nx-dapp/solana/market-adapter/rx": [
         "libs/solana/market-adapter/rx/src/index.ts"
       ],

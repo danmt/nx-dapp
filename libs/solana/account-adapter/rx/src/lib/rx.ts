@@ -14,6 +14,7 @@ import {
   Subject,
 } from 'rxjs';
 import {
+  distinctUntilChanged,
   map,
   observeOn,
   scan,
@@ -43,6 +44,10 @@ export class AccountService implements IAccountService {
       refCount: false,
       bufferSize: 1,
     })
+  );
+  userAccounts$ = this.state$.pipe(
+    map(({ userAccounts }) => userAccounts),
+    distinctUntilChanged()
   );
 
   private loadNativeAccount$ = combineLatest([

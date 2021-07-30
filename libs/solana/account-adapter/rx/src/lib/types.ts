@@ -27,6 +27,7 @@ export interface AccountState {
 export interface IAccountService {
   state$: Observable<AccountState>;
   actions$: Observable<Action>;
+  userAccounts$: Observable<TokenAccount[]>;
 
   loadConnection(connection: Connection): void;
 

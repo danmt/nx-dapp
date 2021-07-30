@@ -1,17 +1,28 @@
+import { TokenAccount } from '@nx-dapp/solana/account-adapter/base';
 import { AccountInfo, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
-import { InitAction } from './actions';
+import {
+  InitAction,
+  LoadMarketMintsAction,
+  LoadUserAccountsAction,
+} from './actions';
 
 export interface MarketState {
+  marketMints: string[];
   marketByMint: Map<string, SerumMarket>;
 }
 
-export type Action = InitAction;
+export type Action =
+  | InitAction
+  | LoadUserAccountsAction
+  | LoadMarketMintsAction;
 
 export interface IMarketService {
   actions$: Observable<Action>;
   state$: Observable<MarketState>;
+
+  loadUserAccounts(userAccounts: TokenAccount[]): void;
 }
 
 export interface SerumMarket {
