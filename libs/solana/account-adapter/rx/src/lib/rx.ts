@@ -19,6 +19,7 @@ import {
 import {
   distinctUntilChanged,
   map,
+  mergeMap,
   observeOn,
   scan,
   shareReplay,
@@ -28,8 +29,10 @@ import {
 
 import {
   ChangeAccountAction,
+  GetMintAccountsAction,
   InitAction,
   LoadConnectionAction,
+  LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
@@ -55,6 +58,10 @@ export class AccountService implements IAccountService {
   );
   nativeAccount$ = this.state$.pipe(
     map(({ nativeAccount }) => nativeAccount),
+    distinctUntilChanged()
+  );
+  mintAccounts$ = this.state$.pipe(
+    map(({ mintAccounts }) => mintAccounts),
     distinctUntilChanged()
   );
 
@@ -121,11 +128,25 @@ export class AccountService implements IAccountService {
     )
   );
 
+  private loadMintAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<GetMintAccountsAction>('getMintAccounts')),
+  ]).pipe(
+    mergeMap(([{ payload: connection }, { payload: mintKeys }]) =>
+      combineLatest(
+        mintKeys.map((mintKey) =>
+          from(defer(() => connection.getAccountInfo(mintKey))).pipe(isNotNull)
+        )
+      ).pipe(map((account) => new LoadMintAccountsAction(account)))
+    )
+  );
+
   constructor() {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
+      this.loadMintAccounts$,
     ]);
   }
 
@@ -149,6 +170,10 @@ export class AccountService implements IAccountService {
 
   changeAccount(account: AccountInfo<Buffer>) {
     this._dispatcher.next(new ChangeAccountAction(account));
+  }
+
+  getMintAccounts(publicKeys: PublicKey[]) {
+    this._dispatcher.next(new GetMintAccountsAction(publicKeys));
   }
 
   destroy() {

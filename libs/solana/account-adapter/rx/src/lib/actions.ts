@@ -51,3 +51,15 @@ export class AccountChangedAction {
 
   constructor(public payload: TokenAccount) {}
 }
+
+export class GetMintAccountsAction {
+  type = 'getMintAccounts';
+
+  constructor(public payload: PublicKey[]) {}
+}
+
+export class LoadMintAccountsAction {
+  type = 'loadMintAccounts';
+
+  constructor(public payload: AccountInfo<Buffer>[]) {}
+}

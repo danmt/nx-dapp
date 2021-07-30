@@ -19,6 +19,8 @@ import {
   getSolletWallet,
   getSolongWallet,
 } from '@nx-dapp/solana/wallet-adapter/wallets';
+import { NATIVE_MINT } from '@solana/spl-token';
+import { PublicKey } from '@solana/web3.js';
 
 import { init, selectEndpoint } from './app.actions';
 
@@ -88,6 +90,11 @@ export class AppComponent implements OnInit {
       .subscribe((nativeAccount) =>
         this.marketService.loadNativeAccount(nativeAccount)
       );
+
+    this.accountService.getMintAccounts([
+      new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
+      NATIVE_MINT,
+    ]);
   }
 
   onSelectEndpoint(endpointId: string) {
