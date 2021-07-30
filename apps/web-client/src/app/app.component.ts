@@ -82,6 +82,12 @@ export class AppComponent implements OnInit {
     this.accountService.userAccounts$.subscribe((userAccounts) =>
       this.marketService.loadUserAccounts(userAccounts)
     );
+
+    this.accountService.nativeAccount$
+      .pipe(isNotNull)
+      .subscribe((nativeAccount) =>
+        this.marketService.loadNativeAccount(nativeAccount)
+      );
   }
 
   onSelectEndpoint(endpointId: string) {

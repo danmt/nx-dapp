@@ -1,10 +1,11 @@
 import { TokenAccount } from '@nx-dapp/solana/account-adapter/base';
-import { AccountInfo, PublicKey } from '@solana/web3.js';
+import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 import { Observable } from 'rxjs';
 
 import {
   InitAction,
   LoadMarketMintsAction,
+  LoadNativeAccountAction,
   LoadUserAccountsAction,
 } from './actions';
 
@@ -16,6 +17,7 @@ export interface MarketState {
 export type Action =
   | InitAction
   | LoadUserAccountsAction
+  | LoadNativeAccountAction
   | LoadMarketMintsAction;
 
 export interface IMarketService {
@@ -23,29 +25,6 @@ export interface IMarketService {
   state$: Observable<MarketState>;
 
   loadUserAccounts(userAccounts: TokenAccount[]): void;
-}
 
-export interface SerumMarket {
-  marketInfo: {
-    address: PublicKey;
-    name: string;
-    programId: PublicKey;
-    deprecated: boolean;
-  };
-
-  // 1st query
-  marketAccount?: AccountInfo<Buffer>;
-
-  // 2nd query
-  mintBase?: AccountInfo<Buffer>;
-  mintQuote?: AccountInfo<Buffer>;
-  bidAccount?: AccountInfo<Buffer>;
-  askAccount?: AccountInfo<Buffer>;
-  eventQueue?: AccountInfo<Buffer>;
-
-  swap?: {
-    dailyVolume: number;
-  };
-
-  midPrice?: (mint?: PublicKey) => number;
+  loadNativeAccount(nativeAccount: TokenAccount): void;
 }

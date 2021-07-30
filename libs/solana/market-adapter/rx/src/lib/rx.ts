@@ -6,6 +6,7 @@ import {
   merge,
   Observable,
   Subject,
+  combineLatest,
 } from 'rxjs';
 import {
   filter,
@@ -20,6 +21,7 @@ import {
 import {
   InitAction,
   LoadMarketMintsAction,
+  LoadNativeAccountAction,
   LoadUserAccountsAction,
 } from './actions';
 import { marketInitialState, reducer } from './state';
@@ -37,7 +39,7 @@ export class MarketService implements IMarketService {
     })
   );
 
-  private loadMarketMints$ = this.actions$.pipe(
+  /* private loadMarketMints$ = this.actions$.pipe(
     ofType<LoadUserAccountsAction>('loadUserAccounts'),
     withLatestFrom(this.state$),
     map(([{ payload: userAccounts }, { marketMints }]) => {
@@ -46,6 +48,32 @@ export class MarketService implements IMarketService {
 
       return { marketMints, newMints };
     }),
+    filter(
+      ({ marketMints, newMints }) => marketMints.length !== newMints.length
+    ),
+    map(({ newMints }) => new LoadMarketMintsAction(newMints))
+  ); */
+
+  private loadMarketMints$ = combineLatest([
+    this.actions$.pipe(ofType<LoadNativeAccountAction>('loadNativeAccount')),
+    this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+  ]).pipe(
+    withLatestFrom(this.state$),
+    map(
+      ([
+        [{ payload: nativeAccount }, { payload: userAccounts }],
+        { marketMints },
+      ]) => {
+        const mints = [...userAccounts, nativeAccount].map((a) =>
+          a.info.mint.toBase58()
+        );
+        const newMints = [...new Set([...marketMints, ...mints]).values()];
+
+        console.log({ marketMints, newMints });
+
+        return { marketMints, newMints };
+      }
+    ),
     filter(
       ({ marketMints, newMints }) => marketMints.length !== newMints.length
     ),
@@ -63,7 +91,13 @@ export class MarketService implements IMarketService {
   }
 
   loadUserAccounts(userAccounts: TokenAccount[]) {
+    console.log('user accounts action');
     this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
+  }
+
+  loadNativeAccount(nativeAccount: TokenAccount) {
+    console.log('native account action');
+    this._dispatcher.next(new LoadNativeAccountAction(nativeAccount));
   }
 
   destroy() {

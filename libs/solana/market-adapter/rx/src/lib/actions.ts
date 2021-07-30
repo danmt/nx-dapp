@@ -10,6 +10,12 @@ export class LoadUserAccountsAction {
   constructor(public payload: TokenAccount[]) {}
 }
 
+export class LoadNativeAccountAction {
+  type = 'loadNativeAccount';
+
+  constructor(public payload: TokenAccount) {}
+}
+
 export class LoadMarketMintsAction {
   type = 'loadMarketMints';
 

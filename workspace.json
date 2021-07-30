@@ -331,6 +331,27 @@
         }
       }
     },
+    "solana-market-adapter-base": {
+      "root": "libs/solana/market-adapter/base",
+      "sourceRoot": "libs/solana/market-adapter/base/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana/market-adapter/base/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana/market-adapter/base"],
+          "options": {
+            "jestConfig": "libs/solana/market-adapter/base/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-market-adapter-rx": {
       "root": "libs/solana/market-adapter/rx",
       "sourceRoot": "libs/solana/market-adapter/rx/src",
@@ -536,7 +557,9 @@
             "scripts": [],
             "customWebpackConfig": {
               "path": "apps/web-client/webpack.config.js",
-              "mergeStrategies": { "externals": "replace" }
+              "mergeStrategies": {
+                "externals": "replace"
+              }
             }
           },
           "configurations": {
