@@ -1,4 +1,5 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { TokenAccountParser } from '@nx-dapp/solana/account-adapter/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
@@ -21,7 +22,6 @@ import {
   takeUntil,
 } from 'rxjs/operators';
 
-import { ofType } from '../../../../../shared/operators/of-type/src';
 import {
   InitAction,
   LoadConnectionAction,
