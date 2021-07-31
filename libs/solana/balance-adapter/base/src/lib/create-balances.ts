@@ -6,6 +6,7 @@ import {
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
 import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
+import { Balance } from './types';
 
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
@@ -98,16 +99,16 @@ export const createBalances = (
   marketByMint: Map<string, SerumMarket>,
   marketAccounts: ParsedAccountBase[],
   marketHelperAccounts: ParsedAccountBase[]
-) => {
-  const balanceLamports = userAccounts.reduce(
+): Balance => {
+  const lamports = userAccounts.reduce(
     (res, item) => (res += item.info.amount.toNumber()),
     0
   );
-  const balance = fromLamports(balanceLamports, mintAccount.info);
+  const tokenQuantity = fromLamports(lamports, mintAccount.info);
   const marketAddress = marketByMint
     .get(mintAccount.pubkey.toBase58())
     ?.marketInfo.address.toBase58();
-  const balanceUSD = getMidPrice(
+  const tokenPrice = getMidPrice(
     marketAddress,
     mintAccount.pubkey.toBase58(),
     marketAccounts,
@@ -115,13 +116,13 @@ export const createBalances = (
   );
 
   return {
-    balanceLamports,
+    lamports,
     accounts: userAccounts.sort((a, b) =>
       b.info.amount.sub(a.info.amount).toNumber()
     ),
-    mintAccount,
-    balance,
-    balanceUSD,
-    hasBalance: balance > 0 && userAccounts.length > 0,
+    tokenQuantity,
+    tokenPrice,
+    tokenInUSD: tokenQuantity * tokenPrice,
+    hasBalance: tokenQuantity > 0 && userAccounts.length > 0,
   };
 };
