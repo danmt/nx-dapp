@@ -23,6 +23,7 @@ export type Action =
 export interface IMarketService {
   actions$: Observable<Action>;
   state$: Observable<MarketState>;
+  marketByMint$: Observable<Map<string, SerumMarket>>;
 
   loadUserAccounts(userAccounts: TokenAccount[]): void;
 

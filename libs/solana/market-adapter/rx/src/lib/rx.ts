@@ -9,6 +9,7 @@ import {
   combineLatest,
 } from 'rxjs';
 import {
+  distinctUntilChanged,
   filter,
   map,
   observeOn,
@@ -38,21 +39,10 @@ export class MarketService implements IMarketService {
       bufferSize: 1,
     })
   );
-
-  /* private loadMarketMints$ = this.actions$.pipe(
-    ofType<LoadUserAccountsAction>('loadUserAccounts'),
-    withLatestFrom(this.state$),
-    map(([{ payload: userAccounts }, { marketMints }]) => {
-      const mints = userAccounts.map((a) => a.info.mint.toBase58());
-      const newMints = [...new Set([...marketMints, ...mints]).values()];
-
-      return { marketMints, newMints };
-    }),
-    filter(
-      ({ marketMints, newMints }) => marketMints.length !== newMints.length
-    ),
-    map(({ newMints }) => new LoadMarketMintsAction(newMints))
-  ); */
+  marketByMint$ = this.state$.pipe(
+    map(({ marketByMint }) => marketByMint),
+    distinctUntilChanged()
+  );
 
   private loadMarketMints$ = combineLatest([
     this.actions$.pipe(ofType<LoadNativeAccountAction>('loadNativeAccount')),
@@ -68,8 +58,6 @@ export class MarketService implements IMarketService {
           a.info.mint.toBase58()
         );
         const newMints = [...new Set([...marketMints, ...mints]).values()];
-
-        console.log({ marketMints, newMints });
 
         return { marketMints, newMints };
       }
@@ -91,12 +79,10 @@ export class MarketService implements IMarketService {
   }
 
   loadUserAccounts(userAccounts: TokenAccount[]) {
-    console.log('user accounts action');
     this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
   }
 
   loadNativeAccount(nativeAccount: TokenAccount) {
-    console.log('native account action');
     this._dispatcher.next(new LoadNativeAccountAction(nativeAccount));
   }
 
