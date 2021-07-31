@@ -28,6 +28,7 @@ export type Action =
 
 export interface BalanceState {
   balances: Balance[];
+  totalInUSD: number;
 }
 
 export interface IBalanceService {
