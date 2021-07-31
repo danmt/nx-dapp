@@ -33,6 +33,7 @@ export interface BalanceState {
 export interface IBalanceService {
   state$: Observable<BalanceState>;
   actions$: Observable<Action>;
+  balances$: Observable<Balance[]>;
 
   loadMarketAccounts(marketAccounts: ParsedAccountBase[]): void;
 

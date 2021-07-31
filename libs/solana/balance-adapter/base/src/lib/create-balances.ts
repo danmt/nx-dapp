@@ -1,9 +1,15 @@
-import { ParsedAccountBase } from '@nx-dapp/solana/account-adapter/base';
+import {
+  MintTokenAccount,
+  ParsedAccountBase,
+  TokenAccount,
+} from '@nx-dapp/solana/account-adapter/base';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
+import { MintInfo } from '@solana/spl-token';
+import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 
-export const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
+const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
-const bestBidOffer = (bidsBook: Orderbook, asksBook: Orderbook) => {
+const getBestBidOffer = (bidsBook: Orderbook, asksBook: Orderbook) => {
   const bestBid = bidsBook.getL2(1);
   const bestAsk = asksBook.getL2(1);
 
@@ -14,7 +20,14 @@ const bestBidOffer = (bidsBook: Orderbook, asksBook: Orderbook) => {
   return 0;
 };
 
-export const getMidPrice = (
+const fromLamports = (lamports: number, mint: MintInfo, rate = 1) => {
+  const amount = Math.floor(lamports);
+
+  const precision = Math.pow(10, mint?.decimals || 0);
+  return (amount / precision) * rate;
+};
+
+const getMidPrice = (
   marketAddress: string | undefined,
   mintAddress: string,
   marketAccounts: ParsedAccountBase[],
@@ -73,8 +86,42 @@ export const getMidPrice = (
     const bidsBook = new Orderbook(market, bids.accountFlags, bids.slab);
     const asksBook = new Orderbook(market, asks.accountFlags, asks.slab);
 
-    return bestBidOffer(bidsBook, asksBook);
+    return getBestBidOffer(bidsBook, asksBook);
   }
 
   return 0;
+};
+
+export const createBalances = (
+  userAccounts: TokenAccount[],
+  mintAccount: MintTokenAccount,
+  marketByMint: Map<string, SerumMarket>,
+  marketAccounts: ParsedAccountBase[],
+  marketHelperAccounts: ParsedAccountBase[]
+) => {
+  const balanceLamports = userAccounts.reduce(
+    (res, item) => (res += item.info.amount.toNumber()),
+    0
+  );
+  const balance = fromLamports(balanceLamports, mintAccount.info);
+  const marketAddress = marketByMint
+    .get(mintAccount.pubkey.toBase58())
+    ?.marketInfo.address.toBase58();
+  const balanceUSD = getMidPrice(
+    marketAddress,
+    mintAccount.pubkey.toBase58(),
+    marketAccounts,
+    marketHelperAccounts
+  );
+
+  return {
+    balanceLamports,
+    accounts: userAccounts.sort((a, b) =>
+      b.info.amount.sub(a.info.amount).toNumber()
+    ),
+    mintAccount,
+    balance,
+    balanceUSD,
+    hasBalance: balance > 0 && userAccounts.length > 0,
+  };
 };

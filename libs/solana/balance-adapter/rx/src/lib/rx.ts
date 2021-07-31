@@ -4,30 +4,23 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
-import {
-  fromLamports,
-  getMidPrice,
-} from '@nx-dapp/solana/balance-adapter/base';
+import { createBalances } from '@nx-dapp/solana/balance-adapter/base';
 import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 import {
   asyncScheduler,
   BehaviorSubject,
   combineLatest,
-  from,
   merge,
   Observable,
   Subject,
 } from 'rxjs';
 import {
-  concatMap,
-  filter,
+  distinctUntilChanged,
   map,
-  mergeMap,
   observeOn,
   scan,
   shareReplay,
   takeUntil,
-  toArray,
 } from 'rxjs/operators';
 
 import {
@@ -53,6 +46,10 @@ export class BalanceService implements IBalanceService {
       bufferSize: 1,
     })
   );
+  balances$ = this.state$.pipe(
+    map(({ balances }) => balances),
+    distinctUntilChanged()
+  );
 
   private loadBalances$ = combineLatest([
     this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
@@ -63,7 +60,7 @@ export class BalanceService implements IBalanceService {
       ofType<LoadMarketHelperAccountsAction>('loadMarketHelperAccounts')
     ),
   ]).pipe(
-    concatMap(
+    map(
       ([
         { payload: mintAccounts },
         { payload: userAccounts },
@@ -71,48 +68,22 @@ export class BalanceService implements IBalanceService {
         { payload: marketByMint },
         { payload: marketHelperAccounts },
       ]) =>
-        from(mintAccounts).pipe(
-          mergeMap((mintAccount) =>
-            from(userAccounts).pipe(
-              filter(
+        new LoadBalancesAction(
+          mintAccounts.map((mintAccount) =>
+            createBalances(
+              userAccounts.filter(
                 (userAccount) =>
                   userAccount.info.mint.toBase58() ===
                   mintAccount.pubkey.toBase58()
               ),
-              toArray(),
-              map((accounts) => {
-                const balanceLamports = accounts.reduce(
-                  (res, item) => (res += item.info.amount.toNumber()),
-                  0
-                );
-                const balance = fromLamports(balanceLamports, mintAccount.info);
-                const marketAddress = marketByMint
-                  .get(mintAccount.pubkey.toBase58())
-                  ?.marketInfo.address.toBase58();
-                const balanceUSD = getMidPrice(
-                  marketAddress,
-                  mintAccount.pubkey.toBase58(),
-                  marketAccounts,
-                  marketHelperAccounts
-                );
-
-                return {
-                  balanceLamports,
-                  accounts: userAccounts.sort((a, b) =>
-                    b.info.amount.sub(a.info.amount).toNumber()
-                  ),
-                  mintAccount,
-                  balance,
-                  balanceUSD,
-                  hasBalance: balance > 0 && accounts.length > 0,
-                };
-              })
+              mintAccount,
+              marketByMint,
+              marketAccounts,
+              marketHelperAccounts
             )
-          ),
-          toArray()
+          )
         )
-    ),
-    map((balances) => new LoadBalancesAction(balances))
+    )
   );
 
   constructor() {
