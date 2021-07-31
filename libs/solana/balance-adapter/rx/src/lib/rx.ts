@@ -50,6 +50,10 @@ export class BalanceService implements IBalanceService {
     map(({ balances }) => balances),
     distinctUntilChanged()
   );
+  totalInUSD$ = this.state$.pipe(
+    map(({ totalInUSD }) => totalInUSD),
+    distinctUntilChanged()
+  );
 
   private loadBalances$ = combineLatest([
     this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),

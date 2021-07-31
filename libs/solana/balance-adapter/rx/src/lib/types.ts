@@ -35,6 +35,7 @@ export interface IBalanceService {
   state$: Observable<BalanceState>;
   actions$: Observable<Action>;
   balances$: Observable<Balance[]>;
+  totalInUSD$: Observable<number>;
 
   loadMarketAccounts(marketAccounts: ParsedAccountBase[]): void;
 
