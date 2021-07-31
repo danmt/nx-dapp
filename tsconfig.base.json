@@ -45,6 +45,15 @@
       "@nx-dapp/solana/account-adapter/rx": [
         "libs/solana/account-adapter/rx/src/index.ts"
       ],
+      "@nx-dapp/solana/balance-adapter/angular": [
+        "libs/solana/balance-adapter/angular/src/index.ts"
+      ],
+      "@nx-dapp/solana/balance-adapter/base": [
+        "libs/solana/balance-adapter/base/src/index.ts"
+      ],
+      "@nx-dapp/solana/balance-adapter/rx": [
+        "libs/solana/balance-adapter/rx/src/index.ts"
+      ],
       "@nx-dapp/solana/connection-adapter/angular": [
         "libs/solana/connection-adapter/angular/src/index.ts"
       ],

@@ -7,6 +7,8 @@ import {
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
 import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
+import { BALANCE_SERVICE } from '@nx-dapp/solana/balance-adapter/angular';
+import { IBalanceService } from '@nx-dapp/solana/balance-adapter/rx';
 import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
 import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
 import { MARKET_SERVICE } from '@nx-dapp/solana/market-adapter/angular';
@@ -57,7 +59,8 @@ export class AppComponent implements OnInit {
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
     @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
     @Inject(ACCOUNT_SERVICE) private accountService: IAccountService,
-    @Inject(MARKET_SERVICE) private marketService: IMarketService
+    @Inject(MARKET_SERVICE) private marketService: IMarketService,
+    @Inject(BALANCE_SERVICE) private balanceService: IBalanceService
   ) {}
 
   ngOnInit() {
@@ -81,9 +84,10 @@ export class AppComponent implements OnInit {
       this.accountService.changeAccount(account)
     );
 
-    this.accountService.userAccounts$.subscribe((userAccounts) =>
-      this.marketService.loadUserAccounts(userAccounts)
-    );
+    this.accountService.userAccounts$.subscribe((userAccounts) => {
+      this.marketService.loadUserAccounts(userAccounts);
+      this.balanceService.loadUserAccounts(userAccounts);
+    });
 
     this.accountService.nativeAccount$
       .pipe(isNotNull)
@@ -95,6 +99,14 @@ export class AppComponent implements OnInit {
       new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
       NATIVE_MINT,
     ]);
+
+    this.accountService.mintAccounts$.subscribe((mintAccounts) => {
+      this.balanceService.loadMintAccounts(mintAccounts);
+    });
+
+    this.marketService.marketByMint$.subscribe((marketByMint) => {
+      this.balanceService.loadMarketByMint(marketByMint);
+    });
   }
 
   onSelectEndpoint(endpointId: string) {

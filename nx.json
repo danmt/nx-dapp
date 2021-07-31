@@ -57,6 +57,15 @@
     "solana-account-adapter-rx": {
       "tags": []
     },
+    "solana-balance-adapter-angular": {
+      "tags": []
+    },
+    "solana-balance-adapter-base": {
+      "tags": []
+    },
+    "solana-balance-adapter-rx": {
+      "tags": []
+    },
     "solana-connection-adapter-angular": {
       "tags": []
     },

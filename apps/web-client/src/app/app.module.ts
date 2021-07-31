@@ -12,6 +12,7 @@ import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/conn
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
 import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
 import { accountServiceProvider } from '@nx-dapp/solana/account-adapter/angular';
+import { balanceServiceProvider } from '@nx-dapp/solana/balance-adapter/angular';
 import { connectionServiceProvider } from '@nx-dapp/solana/connection-adapter/angular';
 import { marketServiceProvider } from '@nx-dapp/solana/market-adapter/angular';
 import { walletServiceProvider } from '@nx-dapp/solana/wallet-adapter/angular';
@@ -56,6 +57,7 @@ import { AppComponent } from './app.component';
       getSolongWallet(),
     ]),
     accountServiceProvider(),
+    balanceServiceProvider(),
     connectionServiceProvider(),
     marketServiceProvider(),
   ],
