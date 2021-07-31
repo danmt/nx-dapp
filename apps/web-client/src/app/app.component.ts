@@ -98,6 +98,7 @@ export class AppComponent implements OnInit {
     this.accountService.getMintAccounts([
       new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
       NATIVE_MINT,
+      new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
     ]);
 
     this.accountService.mintAccounts$.subscribe((mintAccounts) => {
