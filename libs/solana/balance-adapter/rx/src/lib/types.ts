@@ -8,6 +8,7 @@ import {
   LoadMarketByMintAction,
   LoadMintAccountsAction,
   LoadMarketAccountsAction,
+  LoadMarketHelperAccountsAction,
 } from './actions';
 import {
   MintTokenAccount,
@@ -22,7 +23,8 @@ export type Action =
   | LoadBalancesAction
   | LoadMarketByMintAction
   | LoadMintAccountsAction
-  | LoadMarketAccountsAction;
+  | LoadMarketAccountsAction
+  | LoadMarketHelperAccountsAction;
 
 export interface BalanceState {
   balances: Balance[];
@@ -33,6 +35,8 @@ export interface IBalanceService {
   actions$: Observable<Action>;
 
   loadMarketAccounts(marketAccounts: ParsedAccountBase[]): void;
+
+  loadMarketHelperAccounts(marketHelperAccounts: ParsedAccountBase[]): void;
 
   loadMintAccounts(mintAccounts: MintTokenAccount[]): void;
 

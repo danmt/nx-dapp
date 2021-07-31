@@ -39,3 +39,9 @@ export class LoadMarketAccountsAction {
 
   constructor(public payload: ParsedAccountBase[]) {}
 }
+
+export class LoadMarketHelperAccountsAction {
+  type = 'loadMarketHelperAccounts';
+
+  constructor(public payload: ParsedAccountBase[]) {}
+}

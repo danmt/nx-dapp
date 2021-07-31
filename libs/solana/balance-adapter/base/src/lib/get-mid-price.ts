@@ -1,18 +1,24 @@
-import { Market, MARKETS, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
-import {
-  MintTokenAccount,
-  ParsedAccountBase,
-} from '@nx-dapp/solana/account-adapter/base';
-import { Connection } from '@solana/web3.js';
+import { ParsedAccountBase } from '@nx-dapp/solana/account-adapter/base';
+import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 
 export const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
+const bestBidOffer = (bidsBook: Orderbook, asksBook: Orderbook) => {
+  const bestBid = bidsBook.getL2(1);
+  const bestAsk = asksBook.getL2(1);
+
+  if (bestBid.length > 0 && bestAsk.length > 0) {
+    return (bestBid[0][0] + bestAsk[0][0]) / 2.0;
+  }
+
+  return 0;
+};
+
 export const getMidPrice = (
-  marketAddress?: string,
-  mintAddress?: string,
-  marketAccounts?: ParsedAccountBase[],
-  mintAccounts?: MintTokenAccount[],
-  connection?: Connection
+  marketAddress: string | undefined,
+  mintAddress: string,
+  marketAccounts: ParsedAccountBase[],
+  marketHelperAccounts: ParsedAccountBase[]
 ) => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
     (a) => a.address.toBase58() === mintAddress
@@ -38,12 +44,12 @@ export const getMidPrice = (
   const decodedMarket = marketAccount.info;
 
   const baseMintDecimals =
-    mintAccounts?.find(
+    marketHelperAccounts?.find(
       (account) =>
         account.pubkey.toBase58() === decodedMarket.baseMint.toBase58()
     )?.info.decimals || 0;
   const quoteMintDecimals =
-    mintAccounts?.find(
+    marketHelperAccounts?.find(
       (account) =>
         account.pubkey.toBase58() === decodedMarket.quoteMint.toBase58()
     )?.info.decimals || 0;
@@ -56,15 +62,19 @@ export const getMidPrice = (
     decodedMarket.programId
   );
 
-  /* const bids = cache.get(decodedMarket.bids)?.info;
-  const asks = cache.get(decodedMarket.asks)?.info;
+  const bids = marketHelperAccounts?.find(
+    (account) => account.pubkey.toBase58() === decodedMarket.bids.toBase58()
+  )?.info;
+  const asks = marketHelperAccounts?.find(
+    (account) => account.pubkey.toBase58() === decodedMarket.asks.toBase58()
+  )?.info;
 
   if (bids && asks) {
     const bidsBook = new Orderbook(market, bids.accountFlags, bids.slab);
     const asksBook = new Orderbook(market, asks.accountFlags, asks.slab);
 
-    return bbo(bidsBook, asksBook);
-  } */
+    return bestBidOffer(bidsBook, asksBook);
+  }
 
   return 0;
 };

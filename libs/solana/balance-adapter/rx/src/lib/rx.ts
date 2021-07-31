@@ -32,8 +32,10 @@ import {
 
 import {
   InitAction,
+  LoadBalancesAction,
   LoadMarketAccountsAction,
   LoadMarketByMintAction,
+  LoadMarketHelperAccountsAction,
   LoadMintAccountsAction,
   LoadUserAccountsAction,
 } from './actions';
@@ -57,6 +59,9 @@ export class BalanceService implements IBalanceService {
     this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+    this.actions$.pipe(
+      ofType<LoadMarketHelperAccountsAction>('loadMarketHelperAccounts')
+    ),
   ]).pipe(
     concatMap(
       ([
@@ -64,6 +69,7 @@ export class BalanceService implements IBalanceService {
         { payload: userAccounts },
         { payload: marketAccounts },
         { payload: marketByMint },
+        { payload: marketHelperAccounts },
       ]) =>
         from(mintAccounts).pipe(
           mergeMap((mintAccount) =>
@@ -83,11 +89,11 @@ export class BalanceService implements IBalanceService {
                 const marketAddress = marketByMint
                   .get(mintAccount.pubkey.toBase58())
                   ?.marketInfo.address.toBase58();
-                const balanceInUSD = getMidPrice(
+                const balanceUSD = getMidPrice(
                   marketAddress,
                   mintAccount.pubkey.toBase58(),
                   marketAccounts,
-                  mintAccounts
+                  marketHelperAccounts
                 );
 
                 return {
@@ -97,7 +103,8 @@ export class BalanceService implements IBalanceService {
                   ),
                   mintAccount,
                   balance,
-                  balanceInUSD,
+                  balanceUSD,
+                  hasBalance: balance > 0 && accounts.length > 0,
                 };
               })
             )
@@ -105,7 +112,7 @@ export class BalanceService implements IBalanceService {
           toArray()
         )
     ),
-    map(() => new InitAction())
+    map((balances) => new LoadBalancesAction(balances))
   );
 
   constructor() {
@@ -128,6 +135,12 @@ export class BalanceService implements IBalanceService {
 
   loadMarketAccounts(marketAccounts: ParsedAccountBase[]) {
     this._dispatcher.next(new LoadMarketAccountsAction(marketAccounts));
+  }
+
+  loadMarketHelperAccounts(marketHelperAccounts: ParsedAccountBase[]) {
+    this._dispatcher.next(
+      new LoadMarketHelperAccountsAction(marketHelperAccounts)
+    );
   }
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>) {
