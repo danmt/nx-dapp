@@ -45,7 +45,20 @@ import { init, selectEndpoint } from './app.actions';
         ></nx-dapp-connections-dropdown>
       </ng-container>
     </header>
-    <h1>First Dapp</h1>
+
+    <main>
+      <h1>First Dapp</h1>
+
+      <section>
+        <h2>Total in USD: {{ totalInUSD$ | async | currency }}</h2>
+
+        <ul>
+          <li *ngFor="let balance of balances$ | async">
+            {{ balance.tokenInUSD | currency }}
+          </li>
+        </ul>
+      </section>
+    </main>
   `,
 })
 export class AppComponent implements OnInit {
@@ -53,6 +66,8 @@ export class AppComponent implements OnInit {
   endpoint$ = this.store.select(getSelectedEndpoint);
   wallets = [getPhantomWallet(), getSolletWallet(), getSolongWallet()];
   isConnected$ = this.walletService.connected$;
+  balances$ = this.balanceService.balances$;
+  totalInUSD$ = this.balanceService.totalInUSD$;
 
   constructor(
     private store: Store,
