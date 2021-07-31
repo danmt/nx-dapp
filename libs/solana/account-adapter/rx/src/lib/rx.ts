@@ -1,8 +1,9 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
+  MintParser,
   TokenAccountParser,
-  wrapNativeToken,
+  wrapNativeAccount,
 } from '@nx-dapp/solana/account-adapter/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
@@ -83,7 +84,7 @@ export class AccountService implements IAccountService {
         map(
           (account) =>
             new LoadNativeAccountAction(
-              wrapNativeToken(walletPublicKey, account)
+              wrapNativeAccount(walletPublicKey, account)
             )
         )
       )
@@ -98,7 +99,9 @@ export class AccountService implements IAccountService {
   ]).pipe(
     map(
       ([{ payload: account }, { payload: walletPublicKey }]) =>
-        new LoadNativeAccountAction(wrapNativeToken(walletPublicKey, account))
+        new LoadNativeAccountAction(
+          TokenAccountParser(walletPublicKey, account)
+        )
     )
   );
 
@@ -143,7 +146,7 @@ export class AccountService implements IAccountService {
         mintKeys.map((mintKey) =>
           from(defer(() => connection.getAccountInfo(mintKey))).pipe(
             isNotNull,
-            map((account) => wrapNativeToken(mintKey, account))
+            map((account) => MintParser(mintKey, account))
           )
         )
       ).pipe(map((accounts) => new LoadMintAccountsAction(accounts)))

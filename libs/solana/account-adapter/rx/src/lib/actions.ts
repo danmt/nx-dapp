@@ -1,4 +1,7 @@
-import { TokenAccount } from '@nx-dapp/solana/account-adapter/base';
+import {
+  MintTokenAccount,
+  TokenAccount,
+} from '@nx-dapp/solana/account-adapter/base';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 
 export class InitAction {
@@ -61,5 +64,5 @@ export class GetMintAccountsAction {
 export class LoadMintAccountsAction {
   type = 'loadMintAccounts';
 
-  constructor(public payload: TokenAccount[]) {}
+  constructor(public payload: MintTokenAccount[]) {}
 }

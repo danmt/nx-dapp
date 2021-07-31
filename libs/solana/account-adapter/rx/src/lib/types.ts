@@ -1,4 +1,7 @@
-import { TokenAccount } from '@nx-dapp/solana/account-adapter/base';
+import {
+  MintTokenAccount,
+  TokenAccount,
+} from '@nx-dapp/solana/account-adapter/base';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import {
@@ -30,7 +33,7 @@ export interface AccountState {
   tokenAccounts: TokenAccount[];
   nativeAccount: TokenAccount | null;
   selectedMintAddresses: PublicKey[];
-  mintAccounts: TokenAccount[];
+  mintAccounts: MintTokenAccount[];
 }
 
 export interface IAccountService {
@@ -38,7 +41,7 @@ export interface IAccountService {
   actions$: Observable<Action>;
   userAccounts$: Observable<TokenAccount[]>;
   nativeAccount$: Observable<TokenAccount | null>;
-  mintAccounts$: Observable<TokenAccount[]>;
+  mintAccounts$: Observable<MintTokenAccount[]>;
 
   loadConnection(connection: Connection): void;
 
