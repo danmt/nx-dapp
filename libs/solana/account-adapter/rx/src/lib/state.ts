@@ -1,5 +1,8 @@
 import {
+  AccountChangedAction,
   GetMintAccountsAction,
+  LoadMarketAccountsAction,
+  LoadMarketHelperAccountsAction,
   LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
@@ -11,6 +14,8 @@ export const accountInitialState: AccountState = {
   nativeAccount: null,
   selectedMintAddresses: [],
   mintAccounts: [],
+  marketAccounts: [],
+  marketHelperAccounts: [],
 };
 
 export const reducer = (state: AccountState, action: Action) => {
@@ -35,7 +40,20 @@ export const reducer = (state: AccountState, action: Action) => {
     case 'accountChanged':
       return {
         ...state,
-        nativeAccount: (action as LoadNativeAccountAction).payload,
+        nativeAccount: (
+          action as LoadNativeAccountAction | AccountChangedAction
+        ).payload,
+      };
+    case 'loadMarketAccounts':
+      return {
+        ...state,
+        marketAccounts: (action as LoadMarketAccountsAction).payload,
+      };
+    case 'loadMarketHelperAccounts':
+      return {
+        ...state,
+        marketHelperAccounts: (action as LoadMarketHelperAccountsAction)
+          .payload,
       };
     default:
       return state;

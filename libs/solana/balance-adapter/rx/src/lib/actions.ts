@@ -1,5 +1,6 @@
 import {
   MintTokenAccount,
+  ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
 import { Balance } from '@nx-dapp/solana/balance-adapter/base';
@@ -31,4 +32,10 @@ export class LoadMarketByMintAction {
   type = 'loadMarketByMint';
 
   constructor(public payload: Map<string, SerumMarket>) {}
+}
+
+export class LoadMarketAccountsAction {
+  type = 'loadMarketAccounts';
+
+  constructor(public payload: ParsedAccountBase[]) {}
 }

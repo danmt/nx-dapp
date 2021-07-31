@@ -1,6 +1,7 @@
 import { u64 } from '@nx-dapp/solana/utils/u64';
 import { AccountLayout, MintInfo, MintLayout } from '@solana/spl-token';
 import { AccountInfo, PublicKey } from '@solana/web3.js';
+import { Market, MARKETS, Orderbook } from '@project-serum/serum';
 import { ParsedAccountBase, TokenAccount, TokenAccountInfo } from './types';
 
 const deserializeAccount = (data: Buffer): TokenAccountInfo => {
@@ -91,6 +92,44 @@ export const MintParser = (pubKey: PublicKey, info: AccountInfo<Buffer>) => {
       ...info,
     },
     info: data,
+  } as ParsedAccountBase;
+
+  return details;
+};
+
+const DEFAULT_DEX_ID = new PublicKey(
+  'EUqojwWA2rd19FZrzeBncJsm38Jm1hEhE3zsmX3bRc2o'
+);
+
+export const DexMarketParser = (
+  pubkey: PublicKey,
+  acc: AccountInfo<Buffer>
+) => {
+  const market = MARKETS.find((m) => m.address.equals(pubkey));
+  const decoded = Market.getLayout(market?.programId || DEFAULT_DEX_ID).decode(
+    acc.data
+  );
+
+  const details = {
+    pubkey,
+    account: {
+      ...acc,
+    },
+    info: decoded,
+  } as ParsedAccountBase;
+
+  return details;
+};
+
+export const OrderBookParser = (id: PublicKey, acc: AccountInfo<Buffer>) => {
+  const decoded = Orderbook.LAYOUT.decode(acc.data);
+
+  const details = {
+    pubkey: id,
+    account: {
+      ...acc,
+    },
+    info: decoded,
   } as ParsedAccountBase;
 
   return details;

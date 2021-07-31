@@ -1,10 +1,14 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
+  DexMarketParser,
+  getMultipleAccounts,
   MintParser,
+  OrderBookParser,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana/account-adapter/base';
+import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
@@ -26,6 +30,7 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
+  toArray,
 } from 'rxjs/operators';
 
 import {
@@ -33,6 +38,9 @@ import {
   GetMintAccountsAction,
   InitAction,
   LoadConnectionAction,
+  LoadMarketAccountsAction,
+  LoadMarketByMintAction,
+  LoadMarketHelperAccountsAction,
   LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
@@ -69,6 +77,14 @@ export class AccountService implements IAccountService {
   );
   mintAccounts$ = this.state$.pipe(
     map(({ mintAccounts }) => mintAccounts),
+    distinctUntilChanged()
+  );
+  marketAccounts$ = this.state$.pipe(
+    map(({ marketAccounts }) => marketAccounts),
+    distinctUntilChanged()
+  );
+  marketHelperAccounts$ = this.state$.pipe(
+    map(({ marketHelperAccounts }) => marketHelperAccounts),
     distinctUntilChanged()
   );
 
@@ -153,12 +169,127 @@ export class AccountService implements IAccountService {
     )
   );
 
+  private loadMarketAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+  ]).pipe(
+    switchMap(([{ payload: connection }, { payload: marketByMint }]) => {
+      const allMarkets = [...marketByMint.values()].map((market) =>
+        market.marketInfo.address.toBase58()
+      );
+
+      return from(
+        defer(() => getMultipleAccounts(connection, allMarkets, 'single'))
+      ).pipe(
+        mergeMap(({ array: marketAccounts }) =>
+          from(marketAccounts).pipe(
+            map((marketAccount) => {
+              const mintAddress = [...marketByMint.keys()].find((mint) =>
+                marketByMint.get(mint)
+              );
+
+              if (!mintAddress) {
+                return null;
+              }
+
+              const market = marketByMint.get(mintAddress);
+
+              if (!market) {
+                return null;
+              }
+
+              return DexMarketParser(market.marketInfo.address, marketAccount);
+            }),
+            isNotNull,
+            toArray(),
+            map((accounts) => new LoadMarketAccountsAction(accounts))
+          )
+        )
+      );
+    })
+  );
+
+  private loadMarketHelperAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
+  ]).pipe(
+    switchMap(
+      ([
+        { payload: connection },
+        { payload: marketByMint },
+        { payload: marketAccounts },
+      ]) =>
+        from(marketByMint.values()).pipe(
+          map((market) => market.marketInfo.address.toBase58()),
+          map((marketAddress) => {
+            const marketAccount = marketAccounts.find(
+              (account) => account.pubkey.toBase58() === marketAddress
+            );
+
+            if (!marketAccount) {
+              return [];
+            }
+
+            return [
+              {
+                address: marketAccount.info.baseMint.toBase58(),
+                parser: MintParser,
+              },
+              {
+                address: marketAccount.info.quoteMint.toBase58(),
+                parser: MintParser,
+              },
+              {
+                address: marketAccount.info.asks.toBase58(),
+                parser: OrderBookParser,
+              },
+              {
+                address: marketAccount.info.bids.toBase58(),
+                parser: OrderBookParser,
+              },
+            ];
+          }),
+          mergeMap((accounts) =>
+            from(
+              defer(() =>
+                getMultipleAccounts(
+                  connection,
+                  accounts.map(({ address }) => address),
+                  'single'
+                )
+              )
+            ).pipe(
+              map(
+                ({
+                  array: marketHelperAccounts,
+                  keys: marketHelperAddresses,
+                }) =>
+                  marketHelperAccounts.map((marketHelperAccount, index) =>
+                    accounts[index].parser(
+                      new PublicKey(marketHelperAddresses[index]),
+                      marketHelperAccount
+                    )
+                  )
+              )
+            )
+          )
+        )
+    ),
+    map(
+      (marketHelperAccounts) =>
+        new LoadMarketHelperAccountsAction(marketHelperAccounts)
+    )
+  );
+
   constructor() {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
       this.loadMintAccounts$,
+      this.loadMarketAccounts$,
+      this.loadMarketHelperAccounts$,
     ]);
   }
 
@@ -178,6 +309,10 @@ export class AccountService implements IAccountService {
 
   loadWalletConnected(connected: boolean) {
     this._dispatcher.next(new LoadWalletConnectedAction(connected));
+  }
+
+  loadMarketByMint(marketByMint: Map<string, SerumMarket>) {
+    this._dispatcher.next(new LoadMarketByMintAction(marketByMint));
   }
 
   changeAccount(account: AccountInfo<Buffer>) {

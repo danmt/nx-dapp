@@ -7,9 +7,11 @@ import {
   LoadUserAccountsAction,
   LoadMarketByMintAction,
   LoadMintAccountsAction,
+  LoadMarketAccountsAction,
 } from './actions';
 import {
   MintTokenAccount,
+  ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
 import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
@@ -19,7 +21,8 @@ export type Action =
   | LoadUserAccountsAction
   | LoadBalancesAction
   | LoadMarketByMintAction
-  | LoadMintAccountsAction;
+  | LoadMintAccountsAction
+  | LoadMarketAccountsAction;
 
 export interface BalanceState {
   balances: Balance[];
@@ -28,6 +31,8 @@ export interface BalanceState {
 export interface IBalanceService {
   state$: Observable<BalanceState>;
   actions$: Observable<Action>;
+
+  loadMarketAccounts(marketAccounts: ParsedAccountBase[]): void;
 
   loadMintAccounts(mintAccounts: MintTokenAccount[]): void;
 

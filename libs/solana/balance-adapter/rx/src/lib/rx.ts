@@ -1,9 +1,13 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
   MintTokenAccount,
+  ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
-import { fromLamports } from '@nx-dapp/solana/balance-adapter/base';
+import {
+  fromLamports,
+  getMidPrice,
+} from '@nx-dapp/solana/balance-adapter/base';
 import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 import {
   asyncScheduler,
@@ -28,6 +32,7 @@ import {
 
 import {
   InitAction,
+  LoadMarketAccountsAction,
   LoadMarketByMintAction,
   LoadMintAccountsAction,
   LoadUserAccountsAction,
@@ -50,12 +55,14 @@ export class BalanceService implements IBalanceService {
   private loadBalances$ = combineLatest([
     this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
     this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
   ]).pipe(
     concatMap(
       ([
         { payload: mintAccounts },
         { payload: userAccounts },
+        { payload: marketAccounts },
         { payload: marketByMint },
       ]) =>
         from(mintAccounts).pipe(
@@ -73,6 +80,15 @@ export class BalanceService implements IBalanceService {
                   0
                 );
                 const balance = fromLamports(balanceLamports, mintAccount.info);
+                const marketAddress = marketByMint
+                  .get(mintAccount.pubkey.toBase58())
+                  ?.marketInfo.address.toBase58();
+                const balanceInUSD = getMidPrice(
+                  marketAddress,
+                  mintAccount.pubkey.toBase58(),
+                  marketAccounts,
+                  mintAccounts
+                );
 
                 return {
                   balanceLamports,
@@ -81,8 +97,7 @@ export class BalanceService implements IBalanceService {
                   ),
                   mintAccount,
                   balance,
-                  // calcular balance en USD
-                  // calcular has balance
+                  balanceInUSD,
                 };
               })
             )
@@ -109,6 +124,10 @@ export class BalanceService implements IBalanceService {
 
   loadUserAccounts(userAccounts: TokenAccount[]) {
     this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
+  }
+
+  loadMarketAccounts(marketAccounts: ParsedAccountBase[]) {
+    this._dispatcher.next(new LoadMarketAccountsAction(marketAccounts));
   }
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>) {

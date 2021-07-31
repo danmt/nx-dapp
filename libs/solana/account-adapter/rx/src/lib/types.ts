@@ -1,7 +1,9 @@
 import {
   MintTokenAccount,
+  ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
+import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import {
@@ -10,6 +12,8 @@ import {
   GetMintAccountsAction,
   InitAction,
   LoadConnectionAction,
+  LoadMarketAccountsAction,
+  LoadMarketByMintAction,
   LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
@@ -27,13 +31,17 @@ export type Action =
   | ChangeAccountAction
   | AccountChangedAction
   | GetMintAccountsAction
-  | LoadMintAccountsAction;
+  | LoadMintAccountsAction
+  | LoadMarketByMintAction
+  | LoadMarketAccountsAction;
 
 export interface AccountState {
   tokenAccounts: TokenAccount[];
   nativeAccount: TokenAccount | null;
   selectedMintAddresses: PublicKey[];
   mintAccounts: MintTokenAccount[];
+  marketAccounts: ParsedAccountBase[];
+  marketHelperAccounts: ParsedAccountBase[];
 }
 
 export interface IAccountService {
@@ -42,12 +50,16 @@ export interface IAccountService {
   userAccounts$: Observable<TokenAccount[]>;
   nativeAccount$: Observable<TokenAccount | null>;
   mintAccounts$: Observable<MintTokenAccount[]>;
+  marketAccounts$: Observable<ParsedAccountBase[]>;
+  marketHelperAccounts$: Observable<ParsedAccountBase[]>;
 
   loadConnection(connection: Connection): void;
 
   loadWalletPublicKey(publicKey: PublicKey): void;
 
   loadWalletConnected(publicKey: boolean): void;
+
+  loadMarketByMint(marketByMint: Map<string, SerumMarket>): void;
 
   changeAccount(account: AccountInfo<Buffer>): void;
 
