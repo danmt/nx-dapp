@@ -4,7 +4,7 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
-import { createBalances } from '@nx-dapp/solana/balance-adapter/base';
+import { createBalance } from '@nx-dapp/solana/balance-adapter/base';
 import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
 import {
   asyncScheduler,
@@ -28,7 +28,8 @@ import {
   LoadBalancesAction,
   LoadMarketAccountsAction,
   LoadMarketByMintAction,
-  LoadMarketHelperAccountsAction,
+  LoadMarketIndicatorAccountsAction,
+  LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadUserAccountsAction,
 } from './actions';
@@ -61,7 +62,10 @@ export class BalanceService implements IBalanceService {
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
     this.actions$.pipe(
-      ofType<LoadMarketHelperAccountsAction>('loadMarketHelperAccounts')
+      ofType<LoadMarketMintAccountsAction>('loadMarketMintAccounts')
+    ),
+    this.actions$.pipe(
+      ofType<LoadMarketIndicatorAccountsAction>('loadMarketIndicatorAccounts')
     ),
   ]).pipe(
     map(
@@ -70,11 +74,12 @@ export class BalanceService implements IBalanceService {
         { payload: userAccounts },
         { payload: marketAccounts },
         { payload: marketByMint },
-        { payload: marketHelperAccounts },
+        { payload: marketMintAccounts },
+        { payload: marketIndicatorAccounts },
       ]) =>
         new LoadBalancesAction(
           mintAccounts.map((mintAccount) =>
-            createBalances(
+            createBalance(
               userAccounts.filter(
                 (userAccount) =>
                   userAccount.info.mint.toBase58() ===
@@ -83,7 +88,8 @@ export class BalanceService implements IBalanceService {
               mintAccount,
               marketByMint,
               marketAccounts,
-              marketHelperAccounts
+              marketMintAccounts,
+              marketIndicatorAccounts
             )
           )
         )
@@ -112,9 +118,13 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadMarketAccountsAction(marketAccounts));
   }
 
-  loadMarketHelperAccounts(marketHelperAccounts: ParsedAccountBase[]) {
+  loadMarketMintAccounts(marketMintAccounts: ParsedAccountBase[]) {
+    this._dispatcher.next(new LoadMarketMintAccountsAction(marketMintAccounts));
+  }
+
+  loadMarketIndicatorAccounts(marketIndicatorAccounts: ParsedAccountBase[]) {
     this._dispatcher.next(
-      new LoadMarketHelperAccountsAction(marketHelperAccounts)
+      new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
     );
   }
 

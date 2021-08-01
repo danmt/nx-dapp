@@ -1,14 +1,16 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
-  DexMarketParser,
-  getMultipleAccounts,
   MintParser,
-  OrderBookParser,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana/account-adapter/base';
-import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
+import {
+  getMarketIndicators,
+  getMarketMints,
+  getMarkets,
+  SerumMarket,
+} from '@nx-dapp/solana/market-adapter/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
@@ -30,7 +32,6 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
-  toArray,
 } from 'rxjs/operators';
 
 import {
@@ -40,7 +41,8 @@ import {
   LoadConnectionAction,
   LoadMarketAccountsAction,
   LoadMarketByMintAction,
-  LoadMarketHelperAccountsAction,
+  LoadMarketIndicatorAccountsAction,
+  LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
@@ -83,8 +85,12 @@ export class AccountService implements IAccountService {
     map(({ marketAccounts }) => marketAccounts),
     distinctUntilChanged()
   );
-  marketHelperAccounts$ = this.state$.pipe(
-    map(({ marketHelperAccounts }) => marketHelperAccounts),
+  marketMintAccounts$ = this.state$.pipe(
+    map(({ marketMintAccounts }) => marketMintAccounts),
+    distinctUntilChanged()
+  );
+  marketIndicatorAccounts$ = this.state$.pipe(
+    map(({ marketIndicatorAccounts }) => marketIndicatorAccounts),
     distinctUntilChanged()
   );
 
@@ -173,43 +179,14 @@ export class AccountService implements IAccountService {
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
   ]).pipe(
-    switchMap(([{ payload: connection }, { payload: marketByMint }]) => {
-      const allMarkets = [...marketByMint.values()].map((market) =>
-        market.marketInfo.address.toBase58()
-      );
-
-      return from(
-        defer(() => getMultipleAccounts(connection, allMarkets, 'single'))
-      ).pipe(
-        mergeMap(({ array: marketAccounts }) =>
-          from(marketAccounts).pipe(
-            map((marketAccount) => {
-              const mintAddress = [...marketByMint.keys()].find((mint) =>
-                marketByMint.get(mint)
-              );
-
-              if (!mintAddress) {
-                return null;
-              }
-
-              const market = marketByMint.get(mintAddress);
-
-              if (!market) {
-                return null;
-              }
-
-              return DexMarketParser(market.marketInfo.address, marketAccount);
-            }),
-            isNotNull,
-            toArray(),
-            map((accounts) => new LoadMarketAccountsAction(accounts))
-          )
-        )
-      );
-    })
+    switchMap(([{ payload: connection }, { payload: marketByMint }]) =>
+      getMarkets(marketByMint, connection).pipe(
+        map((marketAccounts) => new LoadMarketAccountsAction(marketAccounts))
+      )
+    )
   );
 
-  private loadMarketHelperAccounts$ = combineLatest([
+  private loadMarketMintAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
@@ -220,65 +197,32 @@ export class AccountService implements IAccountService {
         { payload: marketByMint },
         { payload: marketAccounts },
       ]) =>
-        from(marketByMint.values()).pipe(
-          map((market) => market.marketInfo.address.toBase58()),
-          map((marketAddress) => {
-            const marketAccount = marketAccounts.find(
-              (account) => account.pubkey.toBase58() === marketAddress
-            );
-
-            if (!marketAccount) {
-              return [];
-            }
-
-            return [
-              {
-                address: marketAccount.info.baseMint.toBase58(),
-                parser: MintParser,
-              },
-              {
-                address: marketAccount.info.quoteMint.toBase58(),
-                parser: MintParser,
-              },
-              {
-                address: marketAccount.info.asks.toBase58(),
-                parser: OrderBookParser,
-              },
-              {
-                address: marketAccount.info.bids.toBase58(),
-                parser: OrderBookParser,
-              },
-            ];
-          }),
-          mergeMap((accounts) =>
-            from(
-              defer(() =>
-                getMultipleAccounts(
-                  connection,
-                  accounts.map(({ address }) => address),
-                  'single'
-                )
-              )
-            ).pipe(
-              map(
-                ({
-                  array: marketHelperAccounts,
-                  keys: marketHelperAddresses,
-                }) =>
-                  marketHelperAccounts.map((marketHelperAccount, index) =>
-                    accounts[index].parser(
-                      new PublicKey(marketHelperAddresses[index]),
-                      marketHelperAccount
-                    )
-                  )
-              )
-            )
+        getMarketMints(marketByMint, connection, marketAccounts).pipe(
+          map(
+            (marketMintAccounts) =>
+              new LoadMarketMintAccountsAction(marketMintAccounts)
           )
         )
-    ),
-    map(
-      (marketHelperAccounts) =>
-        new LoadMarketHelperAccountsAction(marketHelperAccounts)
+    )
+  );
+
+  private loadMarketIndicatorAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
+  ]).pipe(
+    switchMap(
+      ([
+        { payload: connection },
+        { payload: marketByMint },
+        { payload: marketAccounts },
+      ]) =>
+        getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
+          map(
+            (marketIndicatorAccounts) =>
+              new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
+          )
+        )
     )
   );
 
@@ -289,7 +233,8 @@ export class AccountService implements IAccountService {
       this.accountChanged$,
       this.loadMintAccounts$,
       this.loadMarketAccounts$,
-      this.loadMarketHelperAccounts$,
+      this.loadMarketMintAccounts$,
+      this.loadMarketIndicatorAccounts$,
     ]);
   }
 

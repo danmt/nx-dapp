@@ -14,6 +14,7 @@ import {
   LoadConnectionAction,
   LoadMarketAccountsAction,
   LoadMarketByMintAction,
+  LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
@@ -33,7 +34,8 @@ export type Action =
   | GetMintAccountsAction
   | LoadMintAccountsAction
   | LoadMarketByMintAction
-  | LoadMarketAccountsAction;
+  | LoadMarketAccountsAction
+  | LoadMarketMintAccountsAction;
 
 export interface AccountState {
   tokenAccounts: TokenAccount[];
@@ -41,7 +43,8 @@ export interface AccountState {
   selectedMintAddresses: PublicKey[];
   mintAccounts: MintTokenAccount[];
   marketAccounts: ParsedAccountBase[];
-  marketHelperAccounts: ParsedAccountBase[];
+  marketMintAccounts: ParsedAccountBase[];
+  marketIndicatorAccounts: ParsedAccountBase[];
 }
 
 export interface IAccountService {
@@ -51,7 +54,8 @@ export interface IAccountService {
   nativeAccount$: Observable<TokenAccount | null>;
   mintAccounts$: Observable<MintTokenAccount[]>;
   marketAccounts$: Observable<ParsedAccountBase[]>;
-  marketHelperAccounts$: Observable<ParsedAccountBase[]>;
+  marketMintAccounts$: Observable<ParsedAccountBase[]>;
+  marketIndicatorAccounts$: Observable<ParsedAccountBase[]>;
 
   loadConnection(connection: Connection): void;
 

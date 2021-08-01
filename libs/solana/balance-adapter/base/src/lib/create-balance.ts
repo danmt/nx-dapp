@@ -32,7 +32,8 @@ const getMidPrice = (
   marketAddress: string | undefined,
   mintAddress: string,
   marketAccounts: ParsedAccountBase[],
-  marketHelperAccounts: ParsedAccountBase[]
+  marketMintAccounts: ParsedAccountBase[],
+  marketIndicatorAccount: ParsedAccountBase[]
 ) => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
     (a) => a.address.toBase58() === mintAddress
@@ -58,12 +59,12 @@ const getMidPrice = (
   const decodedMarket = marketAccount.info;
 
   const baseMintDecimals =
-    marketHelperAccounts?.find(
+    marketMintAccounts?.find(
       (account) =>
         account.pubkey.toBase58() === decodedMarket.baseMint.toBase58()
     )?.info.decimals || 0;
   const quoteMintDecimals =
-    marketHelperAccounts?.find(
+    marketMintAccounts?.find(
       (account) =>
         account.pubkey.toBase58() === decodedMarket.quoteMint.toBase58()
     )?.info.decimals || 0;
@@ -76,10 +77,10 @@ const getMidPrice = (
     decodedMarket.programId
   );
 
-  const bids = marketHelperAccounts?.find(
+  const bids = marketIndicatorAccount?.find(
     (account) => account.pubkey.toBase58() === decodedMarket.bids.toBase58()
   )?.info;
-  const asks = marketHelperAccounts?.find(
+  const asks = marketIndicatorAccount?.find(
     (account) => account.pubkey.toBase58() === decodedMarket.asks.toBase58()
   )?.info;
 
@@ -93,12 +94,13 @@ const getMidPrice = (
   return 0;
 };
 
-export const createBalances = (
+export const createBalance = (
   userAccounts: TokenAccount[],
   mintAccount: MintTokenAccount,
   marketByMint: Map<string, SerumMarket>,
   marketAccounts: ParsedAccountBase[],
-  marketHelperAccounts: ParsedAccountBase[]
+  marketMintAccounts: ParsedAccountBase[],
+  marketIndicatorAccounts: ParsedAccountBase[]
 ): Balance => {
   const lamports = userAccounts.reduce(
     (res, item) => (res += item.info.amount.toNumber()),
@@ -112,7 +114,8 @@ export const createBalances = (
     marketAddress,
     mintAccount.pubkey.toBase58(),
     marketAccounts,
-    marketHelperAccounts
+    marketMintAccounts,
+    marketIndicatorAccounts
   );
 
   return {

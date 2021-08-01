@@ -1,2 +1,2 @@
 export * from './lib/types';
-export * from './lib/create-balances';
+export * from './lib/create-balance';

@@ -81,8 +81,14 @@ export class LoadMarketAccountsAction {
   constructor(public payload: ParsedAccountBase[]) {}
 }
 
-export class LoadMarketHelperAccountsAction {
-  type = 'loadMarketHelperAccounts';
+export class LoadMarketMintAccountsAction {
+  type = 'loadMarketMintAccounts';
+
+  constructor(public payload: ParsedAccountBase[]) {}
+}
+
+export class LoadMarketIndicatorAccountsAction {
+  type = 'loadMarketIndicatorAccounts';
 
   constructor(public payload: ParsedAccountBase[]) {}
 }

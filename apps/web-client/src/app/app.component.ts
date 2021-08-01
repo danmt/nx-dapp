@@ -129,9 +129,13 @@ export class AppComponent implements OnInit {
       this.accountService.loadMarketByMint(marketByMint);
     });
 
-    this.accountService.marketHelperAccounts$.subscribe(
-      (marketHelperAccounts) =>
-        this.balanceService.loadMarketHelperAccounts(marketHelperAccounts)
+    this.accountService.marketMintAccounts$.subscribe((marketMintAccounts) =>
+      this.balanceService.loadMarketMintAccounts(marketMintAccounts)
+    );
+
+    this.accountService.marketIndicatorAccounts$.subscribe(
+      (marketIndicatorAccounts) =>
+        this.balanceService.loadMarketIndicatorAccounts(marketIndicatorAccounts)
     );
   }
 
