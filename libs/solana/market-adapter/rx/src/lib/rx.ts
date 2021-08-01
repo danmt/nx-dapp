@@ -1,6 +1,12 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { TokenAccount } from '@nx-dapp/solana/account-adapter/base';
 import {
+  getMarketIndicators,
+  getMarketMints,
+  getMarkets,
+} from '@nx-dapp/solana/market-adapter/base';
+import { Connection } from '@solana/web3.js';
+import {
   asyncScheduler,
   BehaviorSubject,
   merge,
@@ -9,18 +15,24 @@ import {
   combineLatest,
 } from 'rxjs';
 import {
+  concatMap,
   distinctUntilChanged,
   filter,
   map,
   observeOn,
   scan,
   shareReplay,
+  switchMap,
   takeUntil,
   withLatestFrom,
 } from 'rxjs/operators';
 
 import {
   InitAction,
+  LoadConnectionAction,
+  LoadMarketAccountsAction,
+  LoadMarketIndicatorAccountsAction,
+  LoadMarketMintAccountsAction,
   LoadMarketMintsAction,
   LoadNativeAccountAction,
   LoadUserAccountsAction,
@@ -41,6 +53,18 @@ export class MarketService implements IMarketService {
   );
   marketByMint$ = this.state$.pipe(
     map(({ marketByMint }) => marketByMint),
+    distinctUntilChanged()
+  );
+  marketAccounts$ = this.state$.pipe(
+    map(({ marketAccounts }) => marketAccounts),
+    distinctUntilChanged()
+  );
+  marketMintAccounts$ = this.state$.pipe(
+    map(({ marketMintAccounts }) => marketMintAccounts),
+    distinctUntilChanged()
+  );
+  marketIndicatorAccounts$ = this.state$.pipe(
+    map(({ marketIndicatorAccounts }) => marketIndicatorAccounts),
     distinctUntilChanged()
   );
 
@@ -68,8 +92,60 @@ export class MarketService implements IMarketService {
     map(({ newMints }) => new LoadMarketMintsAction(newMints))
   );
 
+  private loadMarketAccounts$ = this.actions$.pipe(
+    ofType<LoadConnectionAction>('loadConnection'),
+    switchMap(({ payload: connection }) =>
+      this.marketByMint$.pipe(
+        concatMap((marketByMint) =>
+          getMarkets(marketByMint, connection).pipe(
+            map(
+              (marketAccounts) => new LoadMarketAccountsAction(marketAccounts)
+            )
+          )
+        )
+      )
+    )
+  );
+
+  private loadMarketMintAccounts$ = this.actions$.pipe(
+    ofType<LoadConnectionAction>('loadConnection'),
+    switchMap(({ payload: connection }) =>
+      combineLatest([this.marketAccounts$, this.marketByMint$]).pipe(
+        concatMap(([marketAccounts, marketByMint]) =>
+          getMarketMints(marketByMint, connection, marketAccounts).pipe(
+            map(
+              (marketMintAccounts) =>
+                new LoadMarketMintAccountsAction(marketMintAccounts)
+            )
+          )
+        )
+      )
+    )
+  );
+
+  private loadMarketIndicatorAccounts$ = this.actions$.pipe(
+    ofType<LoadConnectionAction>('loadConnection'),
+    switchMap(({ payload: connection }) =>
+      combineLatest([this.marketAccounts$, this.marketByMint$]).pipe(
+        concatMap(([marketAccounts, marketByMint]) =>
+          getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
+            map(
+              (marketIndicatorAccounts) =>
+                new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
+            )
+          )
+        )
+      )
+    )
+  );
+
   constructor() {
-    this.runEffects([this.loadMarketMints$]);
+    this.runEffects([
+      this.loadMarketMints$,
+      this.loadMarketAccounts$,
+      this.loadMarketMintAccounts$,
+      this.loadMarketIndicatorAccounts$,
+    ]);
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -84,6 +160,10 @@ export class MarketService implements IMarketService {
 
   loadNativeAccount(nativeAccount: TokenAccount) {
     this._dispatcher.next(new LoadNativeAccountAction(nativeAccount));
+  }
+
+  loadConnection(connection: Connection) {
+    this._dispatcher.next(new LoadConnectionAction(connection));
   }
 
   destroy() {

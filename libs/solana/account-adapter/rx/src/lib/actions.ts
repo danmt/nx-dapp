@@ -1,10 +1,9 @@
 import {
   MintTokenAccount,
-  ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana/account-adapter/base';
-import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import { SerumMarket } from '@nx-dapp/solana/market-adapter/base';
+import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 
 export class InitAction {
   type = 'init';
@@ -73,22 +72,4 @@ export class LoadMarketByMintAction {
   type = 'loadMarketByMint';
 
   constructor(public payload: Map<string, SerumMarket>) {}
-}
-
-export class LoadMarketAccountsAction {
-  type = 'loadMarketAccounts';
-
-  constructor(public payload: ParsedAccountBase[]) {}
-}
-
-export class LoadMarketMintAccountsAction {
-  type = 'loadMarketMintAccounts';
-
-  constructor(public payload: ParsedAccountBase[]) {}
-}
-
-export class LoadMarketIndicatorAccountsAction {
-  type = 'loadMarketIndicatorAccounts';
-
-  constructor(public payload: ParsedAccountBase[]) {}
 }

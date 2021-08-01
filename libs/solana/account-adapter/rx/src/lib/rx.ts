@@ -5,12 +5,6 @@ import {
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana/account-adapter/base';
-import {
-  getMarketIndicators,
-  getMarketMints,
-  getMarkets,
-  SerumMarket,
-} from '@nx-dapp/solana/market-adapter/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
@@ -39,10 +33,6 @@ import {
   GetMintAccountsAction,
   InitAction,
   LoadConnectionAction,
-  LoadMarketAccountsAction,
-  LoadMarketByMintAction,
-  LoadMarketIndicatorAccountsAction,
-  LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
@@ -79,18 +69,6 @@ export class AccountService implements IAccountService {
   );
   mintAccounts$ = this.state$.pipe(
     map(({ mintAccounts }) => mintAccounts),
-    distinctUntilChanged()
-  );
-  marketAccounts$ = this.state$.pipe(
-    map(({ marketAccounts }) => marketAccounts),
-    distinctUntilChanged()
-  );
-  marketMintAccounts$ = this.state$.pipe(
-    map(({ marketMintAccounts }) => marketMintAccounts),
-    distinctUntilChanged()
-  );
-  marketIndicatorAccounts$ = this.state$.pipe(
-    map(({ marketIndicatorAccounts }) => marketIndicatorAccounts),
     distinctUntilChanged()
   );
 
@@ -175,66 +153,12 @@ export class AccountService implements IAccountService {
     )
   );
 
-  private loadMarketAccounts$ = combineLatest([
-    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
-  ]).pipe(
-    switchMap(([{ payload: connection }, { payload: marketByMint }]) =>
-      getMarkets(marketByMint, connection).pipe(
-        map((marketAccounts) => new LoadMarketAccountsAction(marketAccounts))
-      )
-    )
-  );
-
-  private loadMarketMintAccounts$ = combineLatest([
-    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
-    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-  ]).pipe(
-    switchMap(
-      ([
-        { payload: connection },
-        { payload: marketByMint },
-        { payload: marketAccounts },
-      ]) =>
-        getMarketMints(marketByMint, connection, marketAccounts).pipe(
-          map(
-            (marketMintAccounts) =>
-              new LoadMarketMintAccountsAction(marketMintAccounts)
-          )
-        )
-    )
-  );
-
-  private loadMarketIndicatorAccounts$ = combineLatest([
-    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
-    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-  ]).pipe(
-    switchMap(
-      ([
-        { payload: connection },
-        { payload: marketByMint },
-        { payload: marketAccounts },
-      ]) =>
-        getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
-          map(
-            (marketIndicatorAccounts) =>
-              new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
-          )
-        )
-    )
-  );
-
   constructor() {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
       this.loadMintAccounts$,
-      this.loadMarketAccounts$,
-      this.loadMarketMintAccounts$,
-      this.loadMarketIndicatorAccounts$,
     ]);
   }
 
@@ -254,10 +178,6 @@ export class AccountService implements IAccountService {
 
   loadWalletConnected(connected: boolean) {
     this._dispatcher.next(new LoadWalletConnectedAction(connected));
-  }
-
-  loadMarketByMint(marketByMint: Map<string, SerumMarket>) {
-    this._dispatcher.next(new LoadMarketByMintAction(marketByMint));
   }
 
   changeAccount(account: AccountInfo<Buffer>) {
