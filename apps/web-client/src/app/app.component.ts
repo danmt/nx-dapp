@@ -5,17 +5,27 @@ import {
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
-import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
-import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
-import { BALANCE_SERVICE } from '@nx-dapp/solana/balance-adapter/angular';
-import { IBalanceService } from '@nx-dapp/solana/balance-adapter/rx';
-import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
-import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
-import { MARKET_SERVICE } from '@nx-dapp/solana/market-adapter/angular';
-import { IMarketService } from '@nx-dapp/solana/market-adapter/rx';
-import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
+import {
+  ACCOUNT_SERVICE,
+  IAccountService,
+} from '@nx-dapp/solana/account-adapter/angular';
+import {
+  BALANCE_SERVICE,
+  IBalanceService,
+} from '@nx-dapp/solana/balance-adapter/angular';
+import {
+  CONNECTION_SERVICE,
+  IConnectionService,
+} from '@nx-dapp/solana/connection-adapter/angular';
+import {
+  MARKET_SERVICE,
+  IMarketService,
+} from '@nx-dapp/solana/market-adapter/angular';
+import {
+  WALLET_SERVICE,
+  IWalletService,
+} from '@nx-dapp/solana/wallet-adapter/angular';
 import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
-import { IWalletService } from '@nx-dapp/solana/wallet-adapter/rx';
 import {
   getPhantomWallet,
   getSolletWallet,
