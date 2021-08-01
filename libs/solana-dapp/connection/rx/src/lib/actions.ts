@@ -1,4 +1,5 @@
 import { Endpoint } from '@nx-dapp/solana-dapp/connection/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 import { AccountInfo, Connection } from '@solana/web3.js';
 
 export class InitAction {
@@ -51,4 +52,10 @@ export class SendConnectionAccountChangedAction {
 
 export class SendConnectionSlotChangedAction {
   type = 'sendConnectionSlotChanged';
+}
+
+export class LoadTokensAction {
+  type = 'loadTokens';
+
+  constructor(public payload: Map<string, TokenInfo>) {}
 }

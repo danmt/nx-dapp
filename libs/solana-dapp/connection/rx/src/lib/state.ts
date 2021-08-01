@@ -1,27 +1,25 @@
-import {
-  DEFAULT_ENDPOINT,
-  DEFAULT_SLIPPAGE,
-  ENDPOINTS,
-} from '@nx-dapp/solana-dapp/connection/base';
-import { Connection } from '@solana/web3.js';
+import { DEFAULT_SLIPPAGE } from '@nx-dapp/solana-dapp/connection/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 
 import {
   ConnectionAccountChangedAction,
   LoadConnectionAction,
   LoadEndpointAction,
   LoadSendConnectionAction,
+  LoadTokensAction,
   SelectEndpointAction,
 } from './actions';
 import { Action, ConnectionState } from './types';
 
 export const connectionInitialState: ConnectionState = {
-  selectedEndpoint: DEFAULT_ENDPOINT,
+  selectedEndpoint: null,
   slippage: DEFAULT_SLIPPAGE,
-  endpoints: ENDPOINTS,
+  endpoints: [],
   endpoint: null,
-  connection: new Connection(DEFAULT_ENDPOINT, 'recent'),
+  connection: null,
   connectionAccount: null,
-  sendConnection: new Connection(DEFAULT_ENDPOINT, 'recent'),
+  sendConnection: null,
+  tokens: new Map<string, TokenInfo>(),
 };
 
 export const reducer = (state: ConnectionState, action: Action) => {
@@ -50,6 +48,14 @@ export const reducer = (state: ConnectionState, action: Action) => {
       return {
         ...state,
         connectionAccount: (action as ConnectionAccountChangedAction).payload,
+      };
+    case 'loadTokens':
+      return {
+        ...state,
+        tokens: [...(action as LoadTokensAction).payload.values()].reduce(
+          (tokens, account) => tokens.set(account.address, account),
+          new Map(state.tokens)
+        ),
       };
     default:
       return state;

@@ -1,6 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { Endpoint } from '@nx-dapp/solana-dapp/connection/base';
+import { Endpoint, getTokens } from '@nx-dapp/solana-dapp/connection/base';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -16,6 +16,7 @@ import {
   observeOn,
   scan,
   shareReplay,
+  switchMap,
   takeUntil,
 } from 'rxjs/operators';
 
@@ -27,6 +28,7 @@ import {
   LoadEndpointAction,
   LoadEndpointsAction,
   LoadSendConnectionAction,
+  LoadTokensAction,
   SelectEndpointAction,
   SendConnectionAccountChangedAction,
   SendConnectionSlotChangedAction,
@@ -123,6 +125,15 @@ export class ConnectionService implements IConnectionService {
     )
   );
 
+  private loadTokens$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadEndpointAction>('loadEndpoint')),
+  ]).pipe(
+    switchMap(([, { payload: endpoint }]) =>
+      getTokens(endpoint).pipe(map((tokens) => new LoadTokensAction(tokens)))
+    )
+  );
+
   constructor(endpoints: Endpoint[], defaultEndpoint: string) {
     this.runEffects([
       this.connectionAccountChange$,
@@ -132,6 +143,7 @@ export class ConnectionService implements IConnectionService {
       this.loadEndpoint$,
       this.loadConnection$,
       this.loadSendConnection$,
+      this.loadTokens$,
     ]);
 
     this.loadEndpoints(endpoints);

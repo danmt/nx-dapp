@@ -78,10 +78,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(init());
 
-    this.connectionService.connection$.subscribe((connection) => {
-      this.accountService.loadConnection(connection);
-      this.marketService.loadConnection(connection);
-    });
+    this.connectionService.connection$
+      .pipe(isNotNull)
+      .subscribe((connection) => {
+        this.accountService.loadConnection(connection);
+        this.marketService.loadConnection(connection);
+      });
 
     this.walletService.publicKey$
       .pipe(isNotNull)

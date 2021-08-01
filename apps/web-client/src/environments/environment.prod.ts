@@ -61,28 +61,28 @@ export const environment = {
         pubkey: new PublicKey('TuLipcqtGVXP9XR62wM8WWCm6a9vhLs7T1uoWBk6FDs'),
       },
     ],
+    endpoints: [
+      {
+        name: 'mainnet-beta' as ENV,
+        endpoint: 'https://solana-api.projectserum.com/',
+        chainID: ChainID.MainnetBeta,
+      },
+      {
+        name: 'testnet' as ENV,
+        endpoint: clusterApiUrl('testnet'),
+        chainID: ChainID.Testnet,
+      },
+      {
+        name: 'devnet' as ENV,
+        endpoint: clusterApiUrl('devnet'),
+        chainID: ChainID.Devnet,
+      },
+      {
+        name: 'localnet' as ENV,
+        endpoint: 'http://127.0.0.1:8899',
+        chainID: ChainID.Devnet,
+      },
+    ],
+    defaultEndpoint: DEFAULT_ENDPOINT,
   },
-  endpoints: [
-    {
-      name: 'mainnet-beta' as ENV,
-      endpoint: 'https://solana-api.projectserum.com/',
-      chainID: ChainID.MainnetBeta,
-    },
-    {
-      name: 'testnet' as ENV,
-      endpoint: clusterApiUrl('testnet'),
-      chainID: ChainID.Testnet,
-    },
-    {
-      name: 'devnet' as ENV,
-      endpoint: clusterApiUrl('devnet'),
-      chainID: ChainID.Devnet,
-    },
-    {
-      name: 'localnet' as ENV,
-      endpoint: 'http://127.0.0.1:8899',
-      chainID: ChainID.Devnet,
-    },
-  ],
-  defaultEndpoint: DEFAULT_ENDPOINT,
 };
