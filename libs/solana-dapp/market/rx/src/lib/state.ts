@@ -1,6 +1,9 @@
-import { getMarketByMint, SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/base';
+import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+
 import {
   LoadMarketAccountsAction,
+  LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
   LoadMarketMintsAction,
@@ -10,9 +13,9 @@ import { Action, MarketState } from './types';
 export const marketInitialState: MarketState = {
   marketMints: [],
   marketByMint: new Map<string, SerumMarket>(),
-  marketAccounts: [],
-  marketMintAccounts: [],
-  marketIndicatorAccounts: [],
+  marketMintAccounts: new Map<string, ParsedAccountBase>(),
+  marketIndicatorAccounts: new Map<string, ParsedAccountBase>(),
+  marketAccounts: new Map<string, ParsedAccountBase>(),
 };
 
 export const reducer = (state: MarketState, action: Action) => {
@@ -21,25 +24,44 @@ export const reducer = (state: MarketState, action: Action) => {
       return {
         ...state,
         marketMints: (action as LoadMarketMintsAction).payload,
-        marketByMint: getMarketByMint([
-          ...new Set((action as LoadMarketMintsAction).payload).values(),
-        ]),
+      };
+    case 'loadMarketByMint':
+      return {
+        ...state,
+        marketByMint: (action as LoadMarketByMintAction).payload,
       };
     case 'loadMarketAccounts':
       return {
         ...state,
-        marketAccounts: (action as LoadMarketAccountsAction).payload,
+        marketAccounts: [
+          ...(action as LoadMarketAccountsAction).payload.values(),
+        ].reduce(
+          (marketAccounts, account) =>
+            marketAccounts.set(account.pubkey.toBase58(), account),
+          new Map(state.marketAccounts)
+        ),
       };
     case 'loadMarketMintAccounts':
       return {
         ...state,
-        marketMintAccounts: (action as LoadMarketMintAccountsAction).payload,
+        marketMintAccounts: [
+          ...(action as LoadMarketMintAccountsAction).payload.values(),
+        ].reduce(
+          (marketMintAccounts, account) =>
+            marketMintAccounts.set(account.pubkey.toBase58(), account),
+          new Map(state.marketMintAccounts)
+        ),
       };
     case 'loadMarketIndicatorAccounts':
       return {
         ...state,
-        marketIndicatorAccounts: (action as LoadMarketIndicatorAccountsAction)
-          .payload,
+        marketIndicatorAccounts: [
+          ...(action as LoadMarketIndicatorAccountsAction).payload.values(),
+        ].reduce(
+          (marketIndicatorAccounts, account) =>
+            marketIndicatorAccounts.set(account.pubkey.toBase58(), account),
+          new Map(state.marketIndicatorAccounts)
+        ),
       };
     default:
       return state;

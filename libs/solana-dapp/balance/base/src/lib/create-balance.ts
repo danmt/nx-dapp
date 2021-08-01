@@ -3,9 +3,10 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
+import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+
 import { Balance } from './types';
 
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
@@ -31,9 +32,9 @@ const fromLamports = (lamports: number, mint: MintInfo, rate = 1) => {
 const getMidPrice = (
   marketAddress: string | undefined,
   mintAddress: string,
-  marketAccounts: ParsedAccountBase[],
-  marketMintAccounts: ParsedAccountBase[],
-  marketIndicatorAccount: ParsedAccountBase[]
+  marketAccounts: Map<string, ParsedAccountBase>,
+  marketMintAccounts: Map<string, ParsedAccountBase>,
+  marketIndicatorAccounts: Map<string, ParsedAccountBase>
 ) => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
     (a) => a.address.toBase58() === mintAddress
@@ -47,10 +48,7 @@ const getMidPrice = (
     return 0.0;
   }
 
-  const marketAccount =
-    marketAccounts?.find(
-      (account) => account.pubkey.toBase58() === marketAddress
-    ) || null;
+  const marketAccount = marketAccounts.get(marketAddress);
 
   if (!marketAccount) {
     return 0.0;
@@ -59,15 +57,11 @@ const getMidPrice = (
   const decodedMarket = marketAccount.info;
 
   const baseMintDecimals =
-    marketMintAccounts?.find(
-      (account) =>
-        account.pubkey.toBase58() === decodedMarket.baseMint.toBase58()
-    )?.info.decimals || 0;
+    marketMintAccounts.get(decodedMarket.baseMint.toBase58())?.info.decimals ||
+    0;
   const quoteMintDecimals =
-    marketMintAccounts?.find(
-      (account) =>
-        account.pubkey.toBase58() === decodedMarket.quoteMint.toBase58()
-    )?.info.decimals || 0;
+    marketMintAccounts.get(decodedMarket.quoteMint.toBase58())?.info.decimals ||
+    0;
 
   const market = new Market(
     decodedMarket,
@@ -77,11 +71,11 @@ const getMidPrice = (
     decodedMarket.programId
   );
 
-  const bids = marketIndicatorAccount?.find(
-    (account) => account.pubkey.toBase58() === decodedMarket.bids.toBase58()
+  const bids = marketIndicatorAccounts?.get(
+    decodedMarket.bids.toBase58()
   )?.info;
-  const asks = marketIndicatorAccount?.find(
-    (account) => account.pubkey.toBase58() === decodedMarket.asks.toBase58()
+  const asks = marketIndicatorAccounts?.get(
+    decodedMarket.asks.toBase58()
   )?.info;
 
   if (bids && asks) {
@@ -98,9 +92,9 @@ export const createBalance = (
   userAccounts: TokenAccount[],
   mintAccount: MintTokenAccount,
   marketByMint: Map<string, SerumMarket>,
-  marketAccounts: ParsedAccountBase[],
-  marketMintAccounts: ParsedAccountBase[],
-  marketIndicatorAccounts: ParsedAccountBase[]
+  marketAccounts: Map<string, ParsedAccountBase>,
+  marketMintAccounts: Map<string, ParsedAccountBase>,
+  marketIndicatorAccounts: Map<string, ParsedAccountBase>
 ): Balance => {
   const lamports = userAccounts.reduce(
     (res, item) => (res += item.info.amount.toNumber()),

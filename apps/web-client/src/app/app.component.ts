@@ -56,7 +56,7 @@ import { init, selectEndpoint } from './app.actions';
 
         <ul>
           <li *ngFor="let balance of balances$ | async">
-            {{ balance.tokenInUSD | currency }}
+            {{ balance.tokenQuantity }} ({{ balance.tokenInUSD | currency }})
           </li>
         </ul>
       </section>

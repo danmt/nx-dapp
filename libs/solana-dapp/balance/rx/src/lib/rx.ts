@@ -114,15 +114,17 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
   }
 
-  loadMarketAccounts(marketAccounts: ParsedAccountBase[]) {
+  loadMarketAccounts(marketAccounts: Map<string, ParsedAccountBase>) {
     this._dispatcher.next(new LoadMarketAccountsAction(marketAccounts));
   }
 
-  loadMarketMintAccounts(marketMintAccounts: ParsedAccountBase[]) {
+  loadMarketMintAccounts(marketMintAccounts: Map<string, ParsedAccountBase>) {
     this._dispatcher.next(new LoadMarketMintAccountsAction(marketMintAccounts));
   }
 
-  loadMarketIndicatorAccounts(marketIndicatorAccounts: ParsedAccountBase[]) {
+  loadMarketIndicatorAccounts(
+    marketIndicatorAccounts: Map<string, ParsedAccountBase>
+  ) {
     this._dispatcher.next(
       new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
     );

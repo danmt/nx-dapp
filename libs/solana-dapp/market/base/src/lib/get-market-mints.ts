@@ -13,11 +13,10 @@ import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 const getMarketMintAccounts = (
   connection: Connection,
   market: SerumMarket,
-  marketAccounts: ParsedAccountBase[]
+  marketAccounts: Map<string, ParsedAccountBase>
 ): Observable<{ keys: string[]; array: AccountInfo<Buffer>[] } | null> => {
-  const marketAccount = marketAccounts.find(
-    (account) =>
-      account.pubkey.toBase58() === market.marketInfo.address.toBase58()
+  const marketAccount = marketAccounts.get(
+    market.marketInfo.address.toBase58()
   );
 
   if (!marketAccount) {
@@ -41,19 +40,28 @@ const getMarketMintAccounts = (
 export const getMarketMints = (
   marketByMint: Map<string, SerumMarket>,
   connection: Connection,
-  marketAccounts: ParsedAccountBase[]
-): Observable<ParsedAccountBase[]> =>
+  marketAccounts: Map<string, ParsedAccountBase>
+): Observable<Map<string, ParsedAccountBase>> =>
   from(marketByMint.values()).pipe(
     concatMap((market) =>
       getMarketMintAccounts(connection, market, marketAccounts).pipe(
         isNotNull,
         map(({ array: marketMintAccounts, keys: marketMintAddresses }) =>
-          marketMintAccounts.map((marketMintAccount, index) =>
-            MintParser(
-              new PublicKey(marketMintAddresses[index]),
-              marketMintAccount
+          marketMintAccounts
+            .map((marketMintAccount, index) =>
+              MintParser(
+                new PublicKey(marketMintAddresses[index]),
+                marketMintAccount
+              )
             )
-          )
+            .reduce(
+              (marketAccounts, marketAccount) =>
+                marketAccounts.set(
+                  marketAccount.pubkey.toBase58(),
+                  marketAccount
+                ),
+              new Map<string, ParsedAccountBase>()
+            )
         )
       )
     )

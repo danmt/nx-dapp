@@ -4,8 +4,8 @@ import {
   getMultipleAccounts,
   ParsedAccountBase,
 } from '@nx-dapp/solana-dapp/account/base';
-import { Connection } from '@solana/web3.js';
-import { defer, from } from 'rxjs';
+import { Connection, PublicKey } from '@solana/web3.js';
+import { defer, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SerumMarket } from './types';
@@ -13,7 +13,7 @@ import { SerumMarket } from './types';
 export const getMarkets = (
   marketByMint: Map<string, SerumMarket>,
   connection: Connection
-) =>
+): Observable<Map<string, ParsedAccountBase>> =>
   from(
     defer(() =>
       getMultipleAccounts(
@@ -26,9 +26,9 @@ export const getMarkets = (
     )
   ).pipe(
     isNotNull,
-    map(({ array: marketAccounts }) =>
+    map(({ array: marketAccounts, keys: marketAccountAddresses }) =>
       marketAccounts
-        .map((marketAccount) => {
+        .map((marketAccount, index) => {
           const mintAddress = [...marketByMint.keys()].find((mint) =>
             marketByMint.get(mint)
           );
@@ -37,14 +37,19 @@ export const getMarkets = (
             return null;
           }
 
-          const market = marketByMint.get(mintAddress);
+          const marketAddress = marketAccountAddresses[index];
 
-          if (!market) {
+          if (!marketAddress) {
             return null;
           }
 
-          return DexMarketParser(market.marketInfo.address, marketAccount);
+          return DexMarketParser(new PublicKey(marketAddress), marketAccount);
         })
         .filter((market): market is ParsedAccountBase => market !== null)
+        .reduce(
+          (marketAccounts, marketAccount) =>
+            marketAccounts.set(marketAccount.pubkey.toBase58(), marketAccount),
+          new Map<string, ParsedAccountBase>()
+        )
     )
   );

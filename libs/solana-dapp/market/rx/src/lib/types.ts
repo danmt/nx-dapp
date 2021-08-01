@@ -19,9 +19,9 @@ import {
 export interface MarketState {
   marketMints: string[];
   marketByMint: Map<string, SerumMarket>;
-  marketAccounts: ParsedAccountBase[];
-  marketMintAccounts: ParsedAccountBase[];
-  marketIndicatorAccounts: ParsedAccountBase[];
+  marketAccounts: Map<string, ParsedAccountBase>;
+  marketMintAccounts: Map<string, ParsedAccountBase>;
+  marketIndicatorAccounts: Map<string, ParsedAccountBase>;
 }
 
 export type Action =
@@ -37,9 +37,9 @@ export interface IMarketService {
   actions$: Observable<Action>;
   state$: Observable<MarketState>;
   marketByMint$: Observable<Map<string, SerumMarket>>;
-  marketAccounts$: Observable<ParsedAccountBase[]>;
-  marketMintAccounts$: Observable<ParsedAccountBase[]>;
-  marketIndicatorAccounts$: Observable<ParsedAccountBase[]>;
+  marketAccounts$: Observable<Map<string, ParsedAccountBase>>;
+  marketMintAccounts$: Observable<Map<string, ParsedAccountBase>>;
+  marketIndicatorAccounts$: Observable<Map<string, ParsedAccountBase>>;
 
   loadUserAccounts(userAccounts: TokenAccount[]): void;
 

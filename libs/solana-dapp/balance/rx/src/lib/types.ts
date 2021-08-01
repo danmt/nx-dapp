@@ -35,12 +35,14 @@ export interface IBalanceService {
   balances$: Observable<Balance[]>;
   totalInUSD$: Observable<number>;
 
-  loadMarketAccounts(marketAccounts: ParsedAccountBase[]): void;
+  loadMarketAccounts(marketAccounts: Map<string, ParsedAccountBase>): void;
 
-  loadMarketMintAccounts(marketMintAccounts: ParsedAccountBase[]): void;
+  loadMarketMintAccounts(
+    marketMintAccounts: Map<string, ParsedAccountBase>
+  ): void;
 
   loadMarketIndicatorAccounts(
-    marketIndicatorAccounts: ParsedAccountBase[]
+    marketIndicatorAccounts: Map<string, ParsedAccountBase>
   ): void;
 
   loadMintAccounts(mintAccounts: MintTokenAccount[]): void;

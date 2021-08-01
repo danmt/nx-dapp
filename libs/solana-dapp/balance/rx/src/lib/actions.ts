@@ -37,17 +37,17 @@ export class LoadMarketByMintAction {
 export class LoadMarketAccountsAction {
   type = 'loadMarketAccounts';
 
-  constructor(public payload: ParsedAccountBase[]) {}
+  constructor(public payload: Map<string, ParsedAccountBase>) {}
 }
 
 export class LoadMarketMintAccountsAction {
   type = 'loadMarketMintAccounts';
 
-  constructor(public payload: ParsedAccountBase[]) {}
+  constructor(public payload: Map<string, ParsedAccountBase>) {}
 }
 
 export class LoadMarketIndicatorAccountsAction {
   type = 'loadMarketIndicatorAccounts';
 
-  constructor(public payload: ParsedAccountBase[]) {}
+  constructor(public payload: Map<string, ParsedAccountBase>) {}
 }

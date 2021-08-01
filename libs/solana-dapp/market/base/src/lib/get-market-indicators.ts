@@ -13,11 +13,10 @@ import { SerumMarket } from './types';
 const getMarketIndicatorAccounts = (
   connection: Connection,
   market: SerumMarket,
-  marketAccounts: ParsedAccountBase[]
+  marketAccounts: Map<string, ParsedAccountBase>
 ): Observable<{ keys: string[]; array: AccountInfo<Buffer>[] } | null> => {
-  const marketAccount = marketAccounts.find(
-    (account) =>
-      account.pubkey.toBase58() === market.marketInfo.address.toBase58()
+  const marketAccount = marketAccounts.get(
+    market.marketInfo.address.toBase58()
   );
 
   if (!marketAccount) {
@@ -41,8 +40,8 @@ const getMarketIndicatorAccounts = (
 export const getMarketIndicators = (
   marketByMint: Map<string, SerumMarket>,
   connection: Connection,
-  marketAccounts: ParsedAccountBase[]
-): Observable<ParsedAccountBase[]> =>
+  marketAccounts: Map<string, ParsedAccountBase>
+): Observable<Map<string, ParsedAccountBase>> =>
   from([...marketByMint.values()]).pipe(
     concatMap((market) =>
       getMarketIndicatorAccounts(connection, market, marketAccounts).pipe(
@@ -52,12 +51,21 @@ export const getMarketIndicators = (
             array: marketIndicatorAccounts,
             keys: marketIndicatorAddresses,
           }) =>
-            marketIndicatorAccounts.map((marketIndicatorAccount, index) =>
-              OrderBookParser(
-                new PublicKey(marketIndicatorAddresses[index]),
-                marketIndicatorAccount
+            marketIndicatorAccounts
+              .map((marketIndicatorAccount, index) =>
+                OrderBookParser(
+                  new PublicKey(marketIndicatorAddresses[index]),
+                  marketIndicatorAccount
+                )
               )
-            )
+              .reduce(
+                (marketAccounts, marketAccount) =>
+                  marketAccounts.set(
+                    marketAccount.pubkey.toBase58(),
+                    marketAccount
+                  ),
+                new Map<string, ParsedAccountBase>()
+              )
         )
       )
     )

@@ -1,6 +1,7 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
 import {
+  getMarketByMint,
   getMarketIndicators,
   getMarketMints,
   getMarkets,
@@ -9,13 +10,12 @@ import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
+  combineLatest,
   merge,
   Observable,
   Subject,
-  combineLatest,
 } from 'rxjs';
 import {
-  concatMap,
   distinctUntilChanged,
   filter,
   map,
@@ -31,6 +31,7 @@ import {
   InitAction,
   LoadConnectionAction,
   LoadMarketAccountsAction,
+  LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
   LoadMarketMintsAction,
@@ -92,56 +93,69 @@ export class MarketService implements IMarketService {
     map(({ newMints }) => new LoadMarketMintsAction(newMints))
   );
 
-  private loadMarketAccounts$ = this.actions$.pipe(
-    ofType<LoadConnectionAction>('loadConnection'),
-    switchMap(({ payload: connection }) =>
-      this.marketByMint$.pipe(
-        concatMap((marketByMint) =>
-          getMarkets(marketByMint, connection).pipe(
-            map(
-              (marketAccounts) => new LoadMarketAccountsAction(marketAccounts)
-            )
-          )
-        )
+  private loadMarketByMint$ = this.actions$.pipe(
+    ofType<LoadMarketMintsAction>('loadMarketMints'),
+    map(
+      ({ payload: marketMints }) =>
+        new LoadMarketByMintAction(getMarketByMint(marketMints))
+    )
+  );
+
+  private loadMarketAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+  ]).pipe(
+    switchMap(([{ payload: connection }, { payload: marketByMint }]) =>
+      getMarkets(marketByMint, connection).pipe(
+        map((marketAccounts) => new LoadMarketAccountsAction(marketAccounts))
       )
     )
   );
 
-  private loadMarketMintAccounts$ = this.actions$.pipe(
-    ofType<LoadConnectionAction>('loadConnection'),
-    switchMap(({ payload: connection }) =>
-      combineLatest([this.marketAccounts$, this.marketByMint$]).pipe(
-        concatMap(([marketAccounts, marketByMint]) =>
-          getMarketMints(marketByMint, connection, marketAccounts).pipe(
-            map(
-              (marketMintAccounts) =>
-                new LoadMarketMintAccountsAction(marketMintAccounts)
-            )
+  private loadMarketMintAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
+    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+  ]).pipe(
+    switchMap(
+      ([
+        { payload: connection },
+        { payload: marketAccounts },
+        { payload: marketByMint },
+      ]) =>
+        getMarketMints(marketByMint, connection, marketAccounts).pipe(
+          map(
+            (marketMintAccounts) =>
+              new LoadMarketMintAccountsAction(marketMintAccounts)
           )
         )
-      )
     )
   );
 
-  private loadMarketIndicatorAccounts$ = this.actions$.pipe(
-    ofType<LoadConnectionAction>('loadConnection'),
-    switchMap(({ payload: connection }) =>
-      combineLatest([this.marketAccounts$, this.marketByMint$]).pipe(
-        concatMap(([marketAccounts, marketByMint]) =>
-          getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
-            map(
-              (marketIndicatorAccounts) =>
-                new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
-            )
+  private loadMarketIndicatorAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
+    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+  ]).pipe(
+    switchMap(
+      ([
+        { payload: connection },
+        { payload: marketAccounts },
+        { payload: marketByMint },
+      ]) =>
+        getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
+          map(
+            (marketIndicatorAccounts) =>
+              new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
           )
         )
-      )
     )
   );
 
   constructor() {
     this.runEffects([
       this.loadMarketMints$,
+      this.loadMarketByMint$,
       this.loadMarketAccounts$,
       this.loadMarketMintAccounts$,
       this.loadMarketIndicatorAccounts$,
