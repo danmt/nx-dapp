@@ -76,25 +76,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    /* this.accountService.state$.subscribe((state) =>
-      console.log('[ACCOUNT] - state', state)
-    );
-    this.accountService.actions$.subscribe((actions) =>
-      console.log('[ACCOUNT] - actions', actions)
-    ); */
-    this.marketService.state$.subscribe((state) =>
-      console.log('[MARKET] - state', state)
-    );
-    this.marketService.actions$.subscribe((actions) =>
-      console.log('[MARKET] - actions', actions)
-    );
-    /* this.balanceService.state$.subscribe((state) =>
-      console.log('[BALANCE] - state', state)
-    );
-    this.balanceService.actions$.subscribe((actions) =>
-      console.log('[BALANCE] - actions', actions)
-    ); */
-
     this.store.dispatch(init());
 
     this.connectionService.connection$.subscribe((connection) => {
