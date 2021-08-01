@@ -7,30 +7,22 @@ import {
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   ACCOUNT_SERVICE,
-  IAccountService,
-} from '@nx-dapp/solana/account-adapter/angular';
-import {
   BALANCE_SERVICE,
-  IBalanceService,
-} from '@nx-dapp/solana/balance-adapter/angular';
-import {
   CONNECTION_SERVICE,
+  IAccountService,
+  IBalanceService,
   IConnectionService,
-} from '@nx-dapp/solana/connection-adapter/angular';
-import {
-  MARKET_SERVICE,
   IMarketService,
-} from '@nx-dapp/solana/market-adapter/angular';
-import {
-  WALLET_SERVICE,
   IWalletService,
-} from '@nx-dapp/solana/wallet-adapter/angular';
-import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
+  MARKET_SERVICE,
+  WALLET_SERVICE,
+} from '@nx-dapp/solana-dapp/angular';
+import { WalletName } from '@nx-dapp/solana-dapp/wallet/base';
 import {
   getPhantomWallet,
   getSolletWallet,
   getSolongWallet,
-} from '@nx-dapp/solana/wallet-adapter/wallets';
+} from '@nx-dapp/solana-dapp/wallet/wallets';
 import { NATIVE_MINT } from '@solana/spl-token';
 import { PublicKey } from '@solana/web3.js';
 
@@ -89,6 +81,25 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    /* this.accountService.state$.subscribe((state) =>
+      console.log('[ACCOUNT] - state', state)
+    );
+    this.accountService.actions$.subscribe((actions) =>
+      console.log('[ACCOUNT] - actions', actions)
+    ); */
+    this.marketService.state$.subscribe((state) =>
+      console.log('[MARKET] - state', state)
+    );
+    this.marketService.actions$.subscribe((actions) =>
+      console.log('[MARKET] - actions', actions)
+    );
+    /* this.balanceService.state$.subscribe((state) =>
+      console.log('[BALANCE] - state', state)
+    );
+    this.balanceService.actions$.subscribe((actions) =>
+      console.log('[BALANCE] - actions', actions)
+    ); */
+
     this.store.dispatch(init());
 
     this.connectionService.connection$.subscribe((connection) => {
@@ -122,9 +133,16 @@ export class AppComponent implements OnInit {
       );
 
     this.accountService.getMintAccounts([
+      // SRM
       new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
+      // SOL
       NATIVE_MINT,
+      // USDC
       new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
+      // KIN
+      new PublicKey('kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'),
+      // RAY
+      new PublicKey('4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R'),
     ]);
 
     this.accountService.mintAccounts$.subscribe((mintAccounts) => {

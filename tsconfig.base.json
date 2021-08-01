@@ -36,63 +36,66 @@
       "@nx-dapp/shared/operators/of-type": [
         "libs/shared/operators/of-type/src/index.ts"
       ],
-      "@nx-dapp/solana/account-adapter/angular": [
-        "libs/solana/account-adapter/angular/src/index.ts"
+      "@nx-dapp/solana-dapp/account/angular": [
+        "libs/solana-dapp/account/angular/src/index.ts"
       ],
-      "@nx-dapp/solana/account-adapter/base": [
-        "libs/solana/account-adapter/base/src/index.ts"
+      "@nx-dapp/solana-dapp/balance/angular": [
+        "libs/solana-dapp/balance/angular/src/index.ts"
       ],
-      "@nx-dapp/solana/account-adapter/rx": [
-        "libs/solana/account-adapter/rx/src/index.ts"
+      "@nx-dapp/solana-dapp/connection/angular": [
+        "libs/solana-dapp/connection/angular/src/index.ts"
       ],
-      "@nx-dapp/solana/balance-adapter/angular": [
-        "libs/solana/balance-adapter/angular/src/index.ts"
+      "@nx-dapp/solana-dapp/market/angular": [
+        "libs/solana-dapp/market/angular/src/index.ts"
       ],
-      "@nx-dapp/solana/balance-adapter/base": [
-        "libs/solana/balance-adapter/base/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/angular": [
+        "libs/solana-dapp/wallet/angular/src/index.ts"
       ],
-      "@nx-dapp/solana/balance-adapter/rx": [
-        "libs/solana/balance-adapter/rx/src/index.ts"
+      "@nx-dapp/solana-dapp/account/base": [
+        "libs/solana-dapp/account/base/src/index.ts"
       ],
-      "@nx-dapp/solana/connection-adapter/angular": [
-        "libs/solana/connection-adapter/angular/src/index.ts"
+      "@nx-dapp/solana-dapp/account/rx": [
+        "libs/solana-dapp/account/rx/src/index.ts"
       ],
-      "@nx-dapp/solana/connection-adapter/base": [
-        "libs/solana/connection-adapter/base/src/index.ts"
+      "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],
+      "@nx-dapp/solana-dapp/balance/base": [
+        "libs/solana-dapp/balance/base/src/index.ts"
       ],
-      "@nx-dapp/solana/connection-adapter/rx": [
-        "libs/solana/connection-adapter/rx/src/index.ts"
+      "@nx-dapp/solana-dapp/balance/rx": [
+        "libs/solana-dapp/balance/rx/src/index.ts"
       ],
-      "@nx-dapp/solana/market-adapter/angular": [
-        "libs/solana/market-adapter/angular/src/index.ts"
+      "@nx-dapp/solana-dapp/connection/base": [
+        "libs/solana-dapp/connection/base/src/index.ts"
       ],
-      "@nx-dapp/solana/market-adapter/base": [
-        "libs/solana/market-adapter/base/src/index.ts"
+      "@nx-dapp/solana-dapp/connection/rx": [
+        "libs/solana-dapp/connection/rx/src/index.ts"
       ],
-      "@nx-dapp/solana/market-adapter/rx": [
-        "libs/solana/market-adapter/rx/src/index.ts"
+      "@nx-dapp/solana-dapp/market/base": [
+        "libs/solana-dapp/market/base/src/index.ts"
       ],
-      "@nx-dapp/solana/utils/u64": ["libs/solana/utils/u64/src/index.ts"],
-      "@nx-dapp/solana/wallet-adapter/adapters/phantom": [
-        "libs/solana/wallet-adapter/adapters/phantom/src/index.ts"
+      "@nx-dapp/solana-dapp/market/rx": [
+        "libs/solana-dapp/market/rx/src/index.ts"
       ],
-      "@nx-dapp/solana/wallet-adapter/adapters/sollet": [
-        "libs/solana/wallet-adapter/adapters/sollet/src/index.ts"
+      "@nx-dapp/solana-dapp/utils/u64": [
+        "libs/solana-dapp/utils/u64/src/index.ts"
       ],
-      "@nx-dapp/solana/wallet-adapter/adapters/solong": [
-        "libs/solana/wallet-adapter/adapters/solong/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/adapters/phantom": [
+        "libs/solana-dapp/wallet/adapters/phantom/src/index.ts"
       ],
-      "@nx-dapp/solana/wallet-adapter/angular": [
-        "libs/solana/wallet-adapter/angular/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/adapters/sollet": [
+        "libs/solana-dapp/wallet/adapters/sollet/src/index.ts"
       ],
-      "@nx-dapp/solana/wallet-adapter/base": [
-        "libs/solana/wallet-adapter/base/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/adapters/solong": [
+        "libs/solana-dapp/wallet/adapters/solong/src/index.ts"
       ],
-      "@nx-dapp/solana/wallet-adapter/rx": [
-        "libs/solana/wallet-adapter/rx/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/base": [
+        "libs/solana-dapp/wallet/base/src/index.ts"
       ],
-      "@nx-dapp/solana/wallet-adapter/wallets": [
-        "libs/solana/wallet-adapter/wallets/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/rx": [
+        "libs/solana-dapp/wallet/rx/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/wallet/wallets": [
+        "libs/solana-dapp/wallet/wallets/src/index.ts"
       ]
     }
   },
