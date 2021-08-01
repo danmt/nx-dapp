@@ -81,9 +81,10 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(init());
 
-    this.connectionService.connection$.subscribe((connection) =>
-      this.accountService.loadConnection(connection)
-    );
+    this.connectionService.connection$.subscribe((connection) => {
+      this.accountService.loadConnection(connection);
+      this.marketService.loadConnection(connection);
+    });
 
     this.walletService.publicKey$
       .pipe(isNotNull)
@@ -120,20 +121,19 @@ export class AppComponent implements OnInit {
       this.balanceService.loadMintAccounts(mintAccounts);
     });
 
-    this.accountService.marketAccounts$.subscribe((marketAccounts) => {
+    this.marketService.marketAccounts$.subscribe((marketAccounts) => {
       this.balanceService.loadMarketAccounts(marketAccounts);
     });
 
     this.marketService.marketByMint$.subscribe((marketByMint) => {
       this.balanceService.loadMarketByMint(marketByMint);
-      this.accountService.loadMarketByMint(marketByMint);
     });
 
-    this.accountService.marketMintAccounts$.subscribe((marketMintAccounts) =>
+    this.marketService.marketMintAccounts$.subscribe((marketMintAccounts) =>
       this.balanceService.loadMarketMintAccounts(marketMintAccounts)
     );
 
-    this.accountService.marketIndicatorAccounts$.subscribe(
+    this.marketService.marketIndicatorAccounts$.subscribe(
       (marketIndicatorAccounts) =>
         this.balanceService.loadMarketIndicatorAccounts(marketIndicatorAccounts)
     );
