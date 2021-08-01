@@ -1,20 +1,34 @@
+import { DEFAULT_ENDPOINT, ENV } from '@nx-dapp/solana-dapp/connection/base';
+import { DEFAULT_WALLET } from '@nx-dapp/solana-dapp/wallet/base';
 import {
   getPhantomWallet,
   getSolletWallet,
   getSolongWallet,
 } from '@nx-dapp/solana-dapp/wallet/wallets';
 import { NATIVE_MINT } from '@solana/spl-token';
-import { PublicKey } from '@solana/web3.js';
+import { ENV as ChainID } from '@solana/spl-token-registry';
+import { clusterApiUrl, PublicKey } from '@solana/web3.js';
 
 export const environment = {
   production: false,
   solanaDapp: {
-    isAccountEnabled: true,
-    isBalanceEnabled: true,
-    isConnectionEnabled: true,
-    isMarketEnabled: true,
-    isWalletEnabled: true,
-    wallets: [getPhantomWallet(), getSolletWallet(), getSolongWallet()],
+    accountConfig: {
+      isEnabled: true,
+    },
+    balanceConfig: {
+      isEnabled: true,
+    },
+    connectionConfig: {
+      isEnabled: true,
+    },
+    marketConfig: {
+      isEnabled: true,
+    },
+    walletConfig: {
+      isEnabled: true,
+      wallets: [getPhantomWallet(), getSolletWallet(), getSolongWallet()],
+      defaultWallet: DEFAULT_WALLET,
+    },
     mintTokens: [
       {
         label: 'Serum',
@@ -48,4 +62,27 @@ export const environment = {
       },
     ],
   },
+  endpoints: [
+    {
+      name: 'mainnet-beta' as ENV,
+      endpoint: 'https://solana-api.projectserum.com/',
+      chainID: ChainID.MainnetBeta,
+    },
+    {
+      name: 'testnet' as ENV,
+      endpoint: clusterApiUrl('testnet'),
+      chainID: ChainID.Testnet,
+    },
+    {
+      name: 'devnet' as ENV,
+      endpoint: clusterApiUrl('devnet'),
+      chainID: ChainID.Devnet,
+    },
+    {
+      name: 'localnet' as ENV,
+      endpoint: 'http://127.0.0.1:8899',
+      chainID: ChainID.Devnet,
+    },
+  ],
+  defaultEndpoint: DEFAULT_ENDPOINT,
 };

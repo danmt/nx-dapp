@@ -173,7 +173,7 @@ export class WalletService implements IWalletService {
     )
   );
 
-  constructor(wallets: Wallet[]) {
+  constructor(wallets: Wallet[], defaultWallet: WalletName) {
     this.runEffects([
       this.onReady$,
       this.onConnect$,
@@ -186,6 +186,7 @@ export class WalletService implements IWalletService {
     ]);
 
     this.loadWallets(wallets);
+    this.selectWallet(defaultWallet);
   }
 
   private runEffects(effects: Observable<Action>[]) {

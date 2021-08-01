@@ -4,28 +4,72 @@ import { accountServiceProvider } from '@nx-dapp/solana-dapp/account/angular';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
 import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
+import {
+  DEFAULT_ENDPOINT,
+  Endpoint,
+} from '@nx-dapp/solana-dapp/connection/base';
 import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
 import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
-import { Wallet } from '@nx-dapp/solana-dapp/wallet/base';
+import {
+  DEFAULT_WALLET,
+  Wallet,
+  WalletName,
+} from '@nx-dapp/solana-dapp/wallet/base';
+
+export interface SolanaDappAccountConfig {
+  isEnabled: boolean;
+}
+
+export interface SolanaDappBalanceConfig {
+  isEnabled: boolean;
+}
+
+export interface SolanaDappConnectionConfig {
+  isEnabled: boolean;
+}
+
+export interface SolanaDappMarketConfig {
+  isEnabled: boolean;
+}
+
+export interface SolanaDappWalletConfig {
+  isEnabled: boolean;
+  wallets: Wallet[];
+  defaultWallet: WalletName;
+}
 
 export interface SolanaDappConfig {
-  isAccountEnabled?: boolean;
-  isBalanceEnabled?: boolean;
-  isConnectionEnabled?: boolean;
-  isMarketEnabled?: boolean;
-  isWalletEnabled?: boolean;
-  wallets?: Wallet[];
+  accountConfig?: SolanaDappAccountConfig;
+  balanceConfig?: SolanaDappBalanceConfig;
+  connectionConfig?: SolanaDappConnectionConfig;
+  marketConfig?: SolanaDappMarketConfig;
+  walletConfig?: SolanaDappWalletConfig;
   mintTokens?: TokenDetails[];
+  endpoints?: Endpoint[];
+  defaultEndpoint?: string;
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
-  isAccountEnabled: true,
-  isBalanceEnabled: true,
-  isConnectionEnabled: true,
-  isMarketEnabled: true,
-  isWalletEnabled: true,
-  wallets: [],
+  accountConfig: {
+    isEnabled: true,
+  },
+  balanceConfig: {
+    isEnabled: true,
+  },
+  connectionConfig: {
+    isEnabled: true,
+  },
+  marketConfig: {
+    isEnabled: true,
+  },
+  walletConfig: {
+    isEnabled: true,
+    wallets: [],
+    defaultWallet: DEFAULT_WALLET,
+  },
   mintTokens: [],
+  endpoints: [],
+  defaultEndpoint: DEFAULT_ENDPOINT,
 };
 
 @NgModule({
@@ -41,24 +85,39 @@ export class SolanaDappModule {
       ...config,
     };
 
-    if (config.isAccountEnabled && config.mintTokens) {
+    if (config.accountConfig?.isEnabled && config.mintTokens) {
       providers.push(accountServiceProvider(config.mintTokens));
     }
 
-    if (config.isBalanceEnabled && config.mintTokens) {
+    if (config.balanceConfig?.isEnabled && config.mintTokens) {
       providers.push(balanceServiceProvider(config.mintTokens));
     }
 
-    if (config.isConnectionEnabled) {
-      providers.push(connectionServiceProvider());
+    if (
+      config.balanceConfig?.isEnabled &&
+      config.endpoints &&
+      config.defaultEndpoint
+    ) {
+      providers.push(
+        connectionServiceProvider(config.endpoints, config.defaultEndpoint)
+      );
     }
 
-    if (config.isMarketEnabled) {
+    if (config.marketConfig?.isEnabled) {
       providers.push(marketServiceProvider());
     }
 
-    if (config.isWalletEnabled && config.wallets) {
-      providers.push(walletServiceProvider(config.wallets));
+    if (
+      config.walletConfig?.isEnabled &&
+      config.walletConfig?.wallets &&
+      config.walletConfig?.defaultWallet
+    ) {
+      providers.push(
+        walletServiceProvider(
+          config.walletConfig?.wallets,
+          config.walletConfig?.defaultWallet
+        )
+      );
     }
 
     return {
