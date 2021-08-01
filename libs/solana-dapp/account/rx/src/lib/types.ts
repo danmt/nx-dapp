@@ -8,11 +8,11 @@ import { Observable } from 'rxjs';
 import {
   AccountChangedAction,
   ChangeAccountAction,
-  GetMintAccountsAction,
   InitAction,
   LoadConnectionAction,
   LoadMarketByMintAction,
   LoadMintAccountsAction,
+  LoadMintTokensAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
@@ -28,14 +28,14 @@ export type Action =
   | LoadNativeAccountAction
   | ChangeAccountAction
   | AccountChangedAction
-  | GetMintAccountsAction
   | LoadMintAccountsAction
-  | LoadMarketByMintAction;
+  | LoadMarketByMintAction
+  | LoadMintTokensAction;
 
 export interface AccountState {
   tokenAccounts: TokenAccount[];
   nativeAccount: TokenAccount | null;
-  selectedMintAddresses: PublicKey[];
+  mintTokensAddresses: PublicKey[];
   mintAccounts: MintTokenAccount[];
 }
 
@@ -54,5 +54,5 @@ export interface IAccountService {
 
   changeAccount(account: AccountInfo<Buffer>): void;
 
-  getMintAccounts(publicKeys: PublicKey[]): void;
+  loadMintTokens(publicKeys: PublicKey[]): void;
 }

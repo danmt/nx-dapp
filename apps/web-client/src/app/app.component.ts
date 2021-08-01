@@ -18,13 +18,6 @@ import {
   WALLET_SERVICE,
 } from '@nx-dapp/solana-dapp/angular';
 import { WalletName } from '@nx-dapp/solana-dapp/wallet/base';
-import {
-  getPhantomWallet,
-  getSolletWallet,
-  getSolongWallet,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
-import { NATIVE_MINT } from '@solana/spl-token';
-import { PublicKey } from '@solana/web3.js';
 
 import { init, selectEndpoint } from './app.actions';
 
@@ -33,7 +26,7 @@ import { init, selectEndpoint } from './app.actions';
   template: `
     <header>
       <nx-dapp-wallets-dropdown
-        [wallets]="wallets"
+        [wallets]="wallets$ | async"
         [isConnected]="isConnected$ | async"
         (changeWallet)="onChangeWallet($event)"
         (connectWallet)="onConnectWallet()"
@@ -56,7 +49,9 @@ import { init, selectEndpoint } from './app.actions';
 
         <ul>
           <li *ngFor="let balance of balances$ | async">
-            {{ balance.tokenQuantity }} ({{ balance.tokenInUSD | currency }})
+            {{ balance.tokenName }}: {{ balance.tokenQuantity }} ({{
+              balance.tokenInUSD | currency
+            }})
           </li>
         </ul>
       </section>
@@ -66,7 +61,7 @@ import { init, selectEndpoint } from './app.actions';
 export class AppComponent implements OnInit {
   endpoints$ = this.store.select(getAllEndpoints);
   endpoint$ = this.store.select(getSelectedEndpoint);
-  wallets = [getPhantomWallet(), getSolletWallet(), getSolongWallet()];
+  wallets$ = this.walletService.wallets$;
   isConnected$ = this.walletService.connected$;
   balances$ = this.balanceService.balances$;
   totalInUSD$ = this.balanceService.totalInUSD$;
@@ -132,30 +127,17 @@ export class AppComponent implements OnInit {
         this.marketService.loadNativeAccount(nativeAccount)
       );
 
-    this.accountService.getMintAccounts([
-      // SRM
-      new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
-      // SOL
-      NATIVE_MINT,
-      // USDC
-      new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
-      // KIN
-      new PublicKey('kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'),
-      // RAY
-      new PublicKey('4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R'),
-    ]);
+    this.accountService.mintAccounts$.subscribe((mintAccounts) =>
+      this.balanceService.loadMintAccounts(mintAccounts)
+    );
 
-    this.accountService.mintAccounts$.subscribe((mintAccounts) => {
-      this.balanceService.loadMintAccounts(mintAccounts);
-    });
+    this.marketService.marketAccounts$.subscribe((marketAccounts) =>
+      this.balanceService.loadMarketAccounts(marketAccounts)
+    );
 
-    this.marketService.marketAccounts$.subscribe((marketAccounts) => {
-      this.balanceService.loadMarketAccounts(marketAccounts);
-    });
-
-    this.marketService.marketByMint$.subscribe((marketByMint) => {
-      this.balanceService.loadMarketByMint(marketByMint);
-    });
+    this.marketService.marketByMint$.subscribe((marketByMint) =>
+      this.balanceService.loadMarketByMint(marketByMint)
+    );
 
     this.marketService.marketMintAccounts$.subscribe((marketMintAccounts) =>
       this.balanceService.loadMarketMintAccounts(marketMintAccounts)

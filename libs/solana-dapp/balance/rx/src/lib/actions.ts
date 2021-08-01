@@ -3,7 +3,7 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { Balance } from '@nx-dapp/solana-dapp/balance/base';
+import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 
 export class InitAction {
@@ -14,6 +14,12 @@ export class LoadUserAccountsAction {
   type = 'loadUserAccounts';
 
   constructor(public payload: TokenAccount[]) {}
+}
+
+export class LoadMintTokensAction {
+  type = 'loadMintTokens';
+
+  constructor(public payload: TokenDetails[]) {}
 }
 
 export class LoadMintAccountsAction {

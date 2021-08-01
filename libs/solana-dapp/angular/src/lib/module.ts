@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { accountServiceProvider } from '@nx-dapp/solana-dapp/account/angular';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
+import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
 import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
 import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
@@ -14,6 +15,7 @@ export interface SolanaDappConfig {
   isMarketEnabled?: boolean;
   isWalletEnabled?: boolean;
   wallets?: Wallet[];
+  mintTokens?: TokenDetails[];
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
@@ -23,6 +25,7 @@ export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
   isMarketEnabled: true,
   isWalletEnabled: true,
   wallets: [],
+  mintTokens: [],
 };
 
 @NgModule({
@@ -38,12 +41,12 @@ export class SolanaDappModule {
       ...config,
     };
 
-    if (config.isAccountEnabled) {
-      providers.push(accountServiceProvider());
+    if (config.isAccountEnabled && config.mintTokens) {
+      providers.push(accountServiceProvider(config.mintTokens));
     }
 
-    if (config.isBalanceEnabled) {
-      providers.push(balanceServiceProvider());
+    if (config.isBalanceEnabled && config.mintTokens) {
+      providers.push(balanceServiceProvider(config.mintTokens));
     }
 
     if (config.isConnectionEnabled) {

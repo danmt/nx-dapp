@@ -5,6 +5,7 @@ import {
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
+import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
@@ -30,10 +31,10 @@ import {
 
 import {
   ChangeAccountAction,
-  GetMintAccountsAction,
   InitAction,
   LoadConnectionAction,
   LoadMintAccountsAction,
+  LoadMintTokensAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
@@ -139,7 +140,7 @@ export class AccountService implements IAccountService {
 
   private loadMintAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<GetMintAccountsAction>('getMintAccounts')),
+    this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
   ]).pipe(
     mergeMap(([{ payload: connection }, { payload: mintKeys }]) =>
       combineLatest(
@@ -153,13 +154,15 @@ export class AccountService implements IAccountService {
     )
   );
 
-  constructor() {
+  constructor(mintTokens: TokenDetails[]) {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
       this.loadMintAccounts$,
     ]);
+
+    this.loadMintTokens(mintTokens.map(({ pubkey }) => pubkey));
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -184,8 +187,8 @@ export class AccountService implements IAccountService {
     this._dispatcher.next(new ChangeAccountAction(account));
   }
 
-  getMintAccounts(publicKeys: PublicKey[]) {
-    this._dispatcher.next(new GetMintAccountsAction(publicKeys));
+  loadMintTokens(publicKeys: PublicKey[]) {
+    this._dispatcher.next(new LoadMintTokensAction(publicKeys));
   }
 
   destroy() {

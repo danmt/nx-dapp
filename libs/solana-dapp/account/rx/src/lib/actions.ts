@@ -56,8 +56,8 @@ export class AccountChangedAction {
   constructor(public payload: TokenAccount) {}
 }
 
-export class GetMintAccountsAction {
-  type = 'getMintAccounts';
+export class LoadMintTokensAction {
+  type = 'loadMintTokens';
 
   constructor(public payload: PublicKey[]) {}
 }

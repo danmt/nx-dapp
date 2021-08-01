@@ -44,7 +44,7 @@ import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana-dapp/wallet/base';
 })
 export class WalletsDropdownComponent {
   @Input() wallet: Wallet | null = null;
-  @Input() wallets: Wallet[] = [];
+  @Input() wallets: Wallet[] | null = null;
   @Input() isConnected: boolean | null = null;
   walletControl = new FormControl(
     this.wallet ? this.wallet.name : DEFAULT_WALLET

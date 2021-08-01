@@ -4,7 +4,7 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { createBalance } from '@nx-dapp/solana-dapp/balance/base';
+import { createBalance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 import {
   asyncScheduler,
@@ -31,6 +31,7 @@ import {
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
+  LoadMintTokensAction,
   LoadUserAccountsAction,
 } from './actions';
 import { balanceInitialState, reducer } from './state';
@@ -57,47 +58,70 @@ export class BalanceService implements IBalanceService {
   );
 
   private loadBalances$ = combineLatest([
-    this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
-    this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
-    this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
-    this.actions$.pipe(
-      ofType<LoadMarketMintAccountsAction>('loadMarketMintAccounts')
-    ),
-    this.actions$.pipe(
-      ofType<LoadMarketIndicatorAccountsAction>('loadMarketIndicatorAccounts')
-    ),
+    combineLatest([
+      this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
+      this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
+      this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+      this.actions$.pipe(
+        ofType<LoadMarketAccountsAction>('loadMarketAccounts')
+      ),
+    ]),
+    combineLatest([
+      this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+      this.actions$.pipe(
+        ofType<LoadMarketMintAccountsAction>('loadMarketMintAccounts')
+      ),
+      this.actions$.pipe(
+        ofType<LoadMarketIndicatorAccountsAction>('loadMarketIndicatorAccounts')
+      ),
+    ]),
   ]).pipe(
     map(
       ([
-        { payload: mintAccounts },
-        { payload: userAccounts },
-        { payload: marketAccounts },
-        { payload: marketByMint },
-        { payload: marketMintAccounts },
-        { payload: marketIndicatorAccounts },
+        [
+          { payload: mintTokens },
+          { payload: mintAccounts },
+          { payload: userAccounts },
+          { payload: marketAccounts },
+        ],
+        [
+          { payload: marketByMint },
+          { payload: marketMintAccounts },
+          { payload: marketIndicatorAccounts },
+        ],
       ]) =>
         new LoadBalancesAction(
-          mintAccounts.map((mintAccount) =>
-            createBalance(
-              userAccounts.filter(
-                (userAccount) =>
-                  userAccount.info.mint.toBase58() ===
-                  mintAccount.pubkey.toBase58()
-              ),
-              mintAccount,
-              marketByMint,
-              marketAccounts,
-              marketMintAccounts,
-              marketIndicatorAccounts
+          mintAccounts
+            .filter((mintAccount) =>
+              mintTokens.some(
+                ({ address }) => address === mintAccount.pubkey.toBase58()
+              )
             )
-          )
+            .map((mintAccount) =>
+              createBalance(
+                userAccounts.filter(
+                  (userAccount) =>
+                    userAccount.info.mint.toBase58() ===
+                    mintAccount.pubkey.toBase58()
+                ),
+                mintTokens.find(
+                  (token) => token.address === mintAccount.pubkey.toBase58()
+                ) as TokenDetails,
+                mintAccount,
+                marketByMint,
+                marketAccounts,
+                marketMintAccounts,
+                marketIndicatorAccounts
+              )
+            )
         )
     )
   );
 
-  constructor() {
+  constructor(mintTokens: TokenDetails[]) {
     this.runEffects([this.loadBalances$]);
+
+    this.loadMintTokens(mintTokens);
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -132,6 +156,10 @@ export class BalanceService implements IBalanceService {
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>) {
     this._dispatcher.next(new LoadMarketByMintAction(marketByMint));
+  }
+
+  loadMintTokens(mintTokens: TokenDetails[]) {
+    this._dispatcher.next(new LoadMintTokensAction(mintTokens));
   }
 
   destroy() {

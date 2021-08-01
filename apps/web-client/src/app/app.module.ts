@@ -11,15 +11,11 @@ import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/co
 import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
 import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
-import {
-  getPhantomWallet,
-  getSolletWallet,
-  getSolongWallet,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
+import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
-import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -44,9 +40,7 @@ import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot(),
-    SolanaDappModule.forRoot({
-      wallets: [getPhantomWallet(), getSolletWallet(), getSolongWallet()],
-    }),
+    SolanaDappModule.forRoot(environment.solanaDapp),
   ],
   bootstrap: [AppComponent],
 })

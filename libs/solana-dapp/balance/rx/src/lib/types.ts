@@ -1,4 +1,4 @@
-import { Balance } from '@nx-dapp/solana-dapp/balance/base';
+import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { Observable } from 'rxjs';
 
 import {
@@ -8,6 +8,7 @@ import {
   LoadMarketByMintAction,
   LoadMintAccountsAction,
   LoadMarketAccountsAction,
+  LoadMintTokensAction,
 } from './actions';
 import {
   MintTokenAccount,
@@ -21,12 +22,14 @@ export type Action =
   | LoadUserAccountsAction
   | LoadBalancesAction
   | LoadMarketByMintAction
+  | LoadMintTokensAction
   | LoadMintAccountsAction
   | LoadMarketAccountsAction;
 
 export interface BalanceState {
   balances: Balance[];
   totalInUSD: number;
+  mintTokens: TokenDetails[];
 }
 
 export interface IBalanceService {
@@ -46,6 +49,8 @@ export interface IBalanceService {
   ): void;
 
   loadMintAccounts(mintAccounts: MintTokenAccount[]): void;
+
+  loadMintTokens(mintTokens: TokenDetails[]): void;
 
   loadUserAccounts(userAccounts: TokenAccount[]): void;
 
