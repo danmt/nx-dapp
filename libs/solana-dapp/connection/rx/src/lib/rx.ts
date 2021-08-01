@@ -1,6 +1,11 @@
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { Endpoint } from '@nx-dapp/solana-dapp/connection/base';
+import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
+  combineLatest,
   merge,
   Observable,
   Subject,
@@ -18,6 +23,10 @@ import {
   ConnectionAccountChangedAction,
   ConnectionSlotChangedAction,
   InitAction,
+  LoadConnectionAction,
+  LoadEndpointAction,
+  LoadEndpointsAction,
+  LoadSendConnectionAction,
   SelectEndpointAction,
   SendConnectionAccountChangedAction,
   SendConnectionSlotChangedAction,
@@ -66,33 +75,67 @@ export class ConnectionService implements IConnectionService {
     distinctUntilChanged()
   );
 
-  private onConnectionAccountChange$ = this.connection$.pipe(
+  private connectionAccountChange$ = this.connection$.pipe(
     fromAccountChangeEvent,
     map((account) => new ConnectionAccountChangedAction(account))
   );
 
-  private onConnectionSlotChange$ = this.connection$.pipe(
+  private connectionSlotChange$ = this.connection$.pipe(
     fromSlotChangeEvent,
     map(() => new ConnectionSlotChangedAction())
   );
 
-  private onSendConnectionAccountChange$ = this.sendConnection$.pipe(
+  private sendConnectionAccountChange$ = this.sendConnection$.pipe(
     fromAccountChangeEvent,
     map(() => new SendConnectionAccountChangedAction())
   );
 
-  private onSendConnectionSlotChange$ = this.sendConnection$.pipe(
+  private sendConnectionSlotChange$ = this.sendConnection$.pipe(
     fromSlotChangeEvent,
     map(() => new SendConnectionSlotChangedAction())
   );
 
-  constructor() {
+  private loadEndpoint$ = combineLatest([
+    this.actions$.pipe(ofType<SelectEndpointAction>('selectEndpoint')),
+    this.actions$.pipe(ofType<LoadEndpointsAction>('loadEndpoints')),
+  ]).pipe(
+    map(
+      ([{ payload: selectedEndpoint }, { payload: endpoints }]) =>
+        endpoints.find(({ endpoint }) => selectedEndpoint === endpoint) || null
+    ),
+    isNotNull,
+    map((endpoint) => new LoadEndpointAction(endpoint))
+  );
+
+  private loadConnection$ = this.actions$.pipe(
+    ofType<LoadEndpointAction>('loadEndpoint'),
+    map(
+      ({ payload: { endpoint } }) =>
+        new LoadConnectionAction(new Connection(endpoint, 'recent'))
+    )
+  );
+
+  private loadSendConnection$ = this.actions$.pipe(
+    ofType<LoadEndpointAction>('loadEndpoint'),
+    map(
+      ({ payload: { endpoint } }) =>
+        new LoadSendConnectionAction(new Connection(endpoint, 'recent'))
+    )
+  );
+
+  constructor(endpoints: Endpoint[], defaultEndpoint: string) {
     this.runEffects([
-      this.onConnectionAccountChange$,
-      this.onConnectionSlotChange$,
-      this.onSendConnectionAccountChange$,
-      this.onSendConnectionSlotChange$,
+      this.connectionAccountChange$,
+      this.connectionSlotChange$,
+      this.sendConnectionAccountChange$,
+      this.sendConnectionSlotChange$,
+      this.loadEndpoint$,
+      this.loadConnection$,
+      this.loadSendConnection$,
     ]);
+
+    this.loadEndpoints(endpoints);
+    this.selectEndpoint(defaultEndpoint);
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -101,6 +144,9 @@ export class ConnectionService implements IConnectionService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
+  loadEndpoints(endpoints: Endpoint[]) {
+    this._dispatcher.next(new LoadEndpointsAction(endpoints));
+  }
 
   selectEndpoint(endpointId: string) {
     this._dispatcher.next(new SelectEndpointAction(endpointId));

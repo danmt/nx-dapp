@@ -7,6 +7,9 @@ import { Connection } from '@solana/web3.js';
 
 import {
   ConnectionAccountChangedAction,
+  LoadConnectionAction,
+  LoadEndpointAction,
+  LoadSendConnectionAction,
   SelectEndpointAction,
 } from './actions';
 import { Action, ConnectionState } from './types';
@@ -24,16 +27,24 @@ export const connectionInitialState: ConnectionState = {
 export const reducer = (state: ConnectionState, action: Action) => {
   switch (action.type) {
     case 'selectEndpoint':
-      const endpointId = (action as SelectEndpointAction).payload;
-      const { endpoint } =
-        state.endpoints.find(({ name }) => name === endpointId) ||
-        state.endpoints[0];
-
       return {
         ...state,
-        endpoint: endpoint,
-        connection: new Connection(endpoint, 'recent'),
-        sendConnection: new Connection(endpoint, 'recent'),
+        selectedEndpoint: (action as SelectEndpointAction).payload,
+      };
+    case 'loadEndpoint':
+      return {
+        ...state,
+        endpoint: (action as LoadEndpointAction).payload,
+      };
+    case 'loadConnection':
+      return {
+        ...state,
+        connection: (action as LoadConnectionAction).payload,
+      };
+    case 'loadSendConnection':
+      return {
+        ...state,
+        sendConnection: (action as LoadSendConnectionAction).payload,
       };
     case 'connectionAccountChanged':
       return {
