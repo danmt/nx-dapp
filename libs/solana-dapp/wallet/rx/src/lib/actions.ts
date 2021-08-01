@@ -23,14 +23,14 @@ export class LoadWalletsAction {
   constructor(public payload: Wallet[]) {}
 }
 
-export class ChangeWalletAction {
-  type = 'changeWallet';
+export class SelectWalletAction {
+  type = 'selectWallet';
 
   constructor(public payload: WalletName) {}
 }
 
-export class WalletChangedAction {
-  type = 'walletChanged';
+export class WalletSelectedAction {
+  type = 'walletSelected';
 
   constructor(public payload: Wallet) {}
 }
