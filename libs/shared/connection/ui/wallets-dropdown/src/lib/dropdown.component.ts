@@ -49,7 +49,7 @@ export class WalletsDropdownComponent {
   walletControl = new FormControl(
     this.wallet ? this.wallet.name : DEFAULT_WALLET
   );
-  @Output() changeWallet = this.walletControl.valueChanges;
+  @Output() selectWallet = this.walletControl.valueChanges;
   @Output() connectWallet = new EventEmitter();
   @Output() disconnectWallet = new EventEmitter();
 

@@ -12,9 +12,10 @@ import {
 import { Action, ConnectionState } from './types';
 
 export const connectionInitialState: ConnectionState = {
-  endpoint: DEFAULT_ENDPOINT,
+  selectedEndpoint: DEFAULT_ENDPOINT,
   slippage: DEFAULT_SLIPPAGE,
   endpoints: ENDPOINTS,
+  endpoint: null,
   connection: new Connection(DEFAULT_ENDPOINT, 'recent'),
   connectionAccount: null,
   sendConnection: new Connection(DEFAULT_ENDPOINT, 'recent'),

@@ -28,7 +28,7 @@ import { init, selectEndpoint } from './app.actions';
       <nx-dapp-wallets-dropdown
         [wallets]="wallets$ | async"
         [isConnected]="isConnected$ | async"
-        (changeWallet)="onChangeWallet($event)"
+        (selectWallet)="onSelectWallet($event)"
         (connectWallet)="onConnectWallet()"
         (disconnectWallet)="onDisconnectWallet()"
       ></nx-dapp-wallets-dropdown>
@@ -133,11 +133,11 @@ export class AppComponent implements OnInit {
   onSelectEndpoint(endpointId: string) {
     this.store.dispatch(selectEndpoint({ selectedId: endpointId }));
 
-    this.connectionService.setEndpoint(endpointId);
+    this.connectionService.selectEndpoint(endpointId);
   }
 
-  onChangeWallet(walletName: WalletName) {
-    this.walletService.changeWallet(walletName);
+  onSelectWallet(walletName: WalletName) {
+    this.walletService.selectWallet(walletName);
   }
 
   onConnectWallet() {

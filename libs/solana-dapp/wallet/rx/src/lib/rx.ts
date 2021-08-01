@@ -36,7 +36,6 @@ import {
 } from 'rxjs/operators';
 
 import {
-  ChangeWalletAction,
   ConnectAction,
   ConnectWalletAction,
   DisconnectAction,
@@ -44,13 +43,14 @@ import {
   InitAction,
   LoadWalletsAction,
   ReadyAction,
+  SelectWalletAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
   TransactionsSignedAction,
-  WalletChangedAction,
   WalletConnectedAction,
   WalletDisconnectedAction,
+  WalletSelectedAction,
 } from './actions';
 import { fromAdapterEvent } from './operators';
 import { reducer, walletInitialState } from './state';
@@ -109,7 +109,7 @@ export class WalletService implements IWalletService {
     .pipe(mapTo(new DisconnectAction()));
   onError$ = this.adapter$.pipe(fromAdapterEvent('error'));
 
-  private connectWallet$ = this.actions$.pipe(
+  private walletConnected$ = this.actions$.pipe(
     ofType<ConnectWalletAction>('connectWallet'),
     withLatestFrom(this.state$),
     filter(([, { connected, disconnecting }]) => !connected && !disconnecting),
@@ -118,7 +118,7 @@ export class WalletService implements IWalletService {
     )
   );
 
-  private disconnectWallet$ = this.actions$.pipe(
+  private walletDisconnected$ = this.actions$.pipe(
     ofType<ConnectWalletAction>('disconnectWallet'),
     withLatestFrom(this.state$),
     filter(([, { connected, connecting }]) => connected && !connecting),
@@ -129,11 +129,11 @@ export class WalletService implements IWalletService {
     )
   );
 
-  private changeWallet$ = this.actions$.pipe(
-    ofType<ChangeWalletAction>('changeWallet'),
+  private walletSelected$ = this.actions$.pipe(
+    ofType<SelectWalletAction>('selectWallet'),
     withLatestFrom(this.state$),
     filter(
-      ([{ payload: walletName }, { wallet }]) => walletName === wallet?.name
+      ([{ payload: walletName }, { wallet }]) => walletName !== wallet?.name
     ),
     switchMap(([action, state]) =>
       of(action).pipe(
@@ -146,12 +146,12 @@ export class WalletService implements IWalletService {
             null
         ),
         isNotNull,
-        map((wallet) => new WalletChangedAction(wallet))
+        map((wallet) => new WalletSelectedAction(wallet))
       )
     )
   );
 
-  private signTransaction$ = this.actions$.pipe(
+  private transactionSigned$ = this.actions$.pipe(
     ofType<SignTransactionAction>('signTransaction'),
     withLatestFrom(this.state$),
     filter(([, { signing }]) => signing),
@@ -162,7 +162,7 @@ export class WalletService implements IWalletService {
     )
   );
 
-  private signTransactions$ = this.actions$.pipe(
+  private transactionsSigned$ = this.actions$.pipe(
     ofType<SignTransactionsAction>('signTransactions'),
     withLatestFrom(this.state$),
     filter(([, { signing }]) => signing),
@@ -178,11 +178,11 @@ export class WalletService implements IWalletService {
       this.onReady$,
       this.onConnect$,
       this.onDisconnect$,
-      this.connectWallet$,
-      this.disconnectWallet$,
-      this.changeWallet$,
-      this.signTransaction$,
-      this.signTransactions$,
+      this.walletConnected$,
+      this.walletDisconnected$,
+      this.walletSelected$,
+      this.transactionSigned$,
+      this.transactionsSigned$,
     ]);
 
     this.loadWallets(wallets);
@@ -244,8 +244,8 @@ export class WalletService implements IWalletService {
     this._dispatcher.next(new LoadWalletsAction(wallets));
   }
 
-  changeWallet(walletName: WalletName) {
-    this._dispatcher.next(new ChangeWalletAction(walletName));
+  selectWallet(walletName: WalletName) {
+    this._dispatcher.next(new SelectWalletAction(walletName));
   }
 
   connect() {

@@ -7,7 +7,6 @@ import { PublicKey, Transaction } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
 import {
-  ChangeWalletAction,
   ConnectAction,
   ConnectWalletAction,
   DisconnectAction,
@@ -15,11 +14,12 @@ import {
   InitAction,
   LoadWalletsAction,
   ReadyAction,
+  SelectWalletAction,
   SignTransactionAction,
   TransactionSignedAction,
-  WalletChangedAction,
   WalletConnectedAction,
   WalletDisconnectedAction,
+  WalletSelectedAction,
 } from './actions';
 
 export interface WalletState {
@@ -43,14 +43,14 @@ export type Action =
   | DisconnectAction
   | ReadyAction
   | LoadWalletsAction
-  | ChangeWalletAction
-  | WalletChangedAction
   | ConnectWalletAction
   | WalletConnectedAction
   | DisconnectWalletAction
   | WalletDisconnectedAction
   | SignTransactionAction
-  | TransactionSignedAction;
+  | TransactionSignedAction
+  | SelectWalletAction
+  | WalletSelectedAction;
 
 export interface IWalletService {
   actions$: Observable<Action>;
@@ -68,9 +68,14 @@ export interface IWalletService {
   onError$: Observable<unknown>; // TODO: Enhance error handling
 
   loadWallets(wallets: Wallet[]): void;
-  changeWallet(wallet: WalletName): void;
+
+  selectWallet(wallet: WalletName): void;
+
   connect(): void;
+
   disconnect(): void;
+
   signTransaction(transaction: Transaction): void;
+
   signAllTransactions(transactions: Transaction[]): void;
 }

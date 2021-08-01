@@ -41,20 +41,16 @@ export class ConnectionService implements IConnectionService {
     map(({ endpoints }) => endpoints),
     distinctUntilChanged()
   );
+  selectedEndpoint$ = this.state$.pipe(
+    map(({ selectedEndpoint }) => selectedEndpoint),
+    distinctUntilChanged()
+  );
   endpoint$ = this.state$.pipe(
     map(({ endpoint }) => endpoint),
     distinctUntilChanged()
   );
-  chain$ = this.state$.pipe(
-    map(
-      ({ endpoints, endpoint: selectedEndpoint }) =>
-        endpoints.find(({ endpoint }) => selectedEndpoint === endpoint) ||
-        endpoints[0]
-    ),
-    distinctUntilChanged()
-  );
-  env$ = this.chain$.pipe(
-    map(({ name }) => name),
+  env$ = this.endpoint$.pipe(
+    map((endpoint) => endpoint?.name || null),
     distinctUntilChanged()
   );
   connection$ = this.state$.pipe(
@@ -105,7 +101,8 @@ export class ConnectionService implements IConnectionService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  setEndpoint(endpointId: string) {
+
+  selectEndpoint(endpointId: string) {
     this._dispatcher.next(new SelectEndpointAction(endpointId));
   }
 

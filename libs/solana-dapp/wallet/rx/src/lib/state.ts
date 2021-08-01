@@ -1,13 +1,11 @@
-import { DEFAULT_WALLET } from '@nx-dapp/solana-dapp/wallet/base';
-
 import {
-  ChangeWalletAction,
   LoadWalletsAction,
+  SelectWalletAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
   TransactionsSignedAction,
-  WalletChangedAction,
+  WalletSelectedAction,
 } from './actions';
 import { Action, WalletState } from './types';
 
@@ -18,7 +16,7 @@ export const walletInitialState: WalletState = {
   disconnecting: false,
   autoApprove: false,
   ready: false,
-  selectedWallet: DEFAULT_WALLET,
+  selectedWallet: null,
   wallets: [],
   wallet: null,
   adapter: null,
@@ -48,10 +46,10 @@ export const reducer = (state: WalletState, action: Action) => {
         ready: adapter?.ready || false,
       };
     }
-    case 'changeWallet': {
+    case 'selectWallet':
       return {
         ...state,
-        selectedWallet: (action as ChangeWalletAction).payload,
+        selectedWallet: (action as SelectWalletAction).payload,
         wallet: null,
         adapter: null,
         ready: false,
@@ -61,26 +59,24 @@ export const reducer = (state: WalletState, action: Action) => {
         connecting: false,
         disconnecting: false,
       };
-    }
-    case 'walletChanged': {
-      const adapter = (action as WalletChangedAction).payload.adapter();
+    case 'walletSelected': {
+      const adapter = (action as WalletSelectedAction).payload.adapter();
 
       return {
         ...state,
-        wallet: (action as WalletChangedAction).payload,
+        wallet: (action as WalletSelectedAction).payload,
         adapter,
         ready: adapter?.ready || false,
         publicKey: adapter?.publicKey || null,
         autoApprove: adapter?.autoApprove || false,
       };
     }
-    case 'connectWallet': {
+    case 'connectWallet':
       return {
         ...state,
         connecting: true,
       };
-    }
-    case 'walletConnected': {
+    case 'walletConnected':
       return {
         ...state,
         connecting: false,
@@ -88,14 +84,12 @@ export const reducer = (state: WalletState, action: Action) => {
         publicKey: state.adapter?.publicKey || null,
         autoApprove: state.adapter?.autoApprove || false,
       };
-    }
-    case 'disconnectWallet': {
+    case 'disconnectWallet':
       return {
         ...state,
         disconnecting: true,
       };
-    }
-    case 'walletDisconnected': {
+    case 'walletDisconnected':
       return {
         ...state,
         disconnecting: false,
@@ -103,8 +97,7 @@ export const reducer = (state: WalletState, action: Action) => {
         publicKey: null,
         autoApprove: false,
       };
-    }
-    case 'signTransaction': {
+    case 'signTransaction':
       return {
         ...state,
         signing: true,
@@ -113,7 +106,6 @@ export const reducer = (state: WalletState, action: Action) => {
           (action as SignTransactionAction).payload,
         ],
       };
-    }
     case 'transactionSigned': {
       const transactions = state.transactions.filter(
         (transaction) =>
@@ -126,7 +118,7 @@ export const reducer = (state: WalletState, action: Action) => {
         signing: transactions.length > 0,
       };
     }
-    case 'signTransactions': {
+    case 'signTransactions':
       return {
         ...state,
         signing: true,
@@ -135,7 +127,6 @@ export const reducer = (state: WalletState, action: Action) => {
           ...(action as SignTransactionsAction).payload,
         ],
       };
-    }
     case 'transactionsSigned': {
       const signedTransactions = (action as TransactionsSignedAction).payload;
       const transactions = state.transactions.filter((transaction) =>

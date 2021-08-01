@@ -20,7 +20,8 @@ export type Action =
   | SendConnectionSlotChangedAction;
 
 export interface ConnectionState {
-  endpoint: string;
+  selectedEndpoint: string;
+  endpoint: Endpoint | null;
   endpoints: Endpoint[];
   slippage: number;
   connection: Connection;
@@ -32,12 +33,12 @@ export interface IConnectionService {
   actions$: Observable<Action>;
   state$: Observable<ConnectionState>;
   endpoints$: Observable<Endpoint[]>;
-  endpoint$: Observable<string>;
-  chain$: Observable<Endpoint>;
-  env$: Observable<ENV>;
+  selectedEndpoint$: Observable<string>;
+  endpoint$: Observable<Endpoint | null>;
+  env$: Observable<ENV | null>;
   connection$: Observable<Connection>;
   connectionAccount$: Observable<AccountInfo<Buffer> | null>;
   sendConnection$: Observable<Connection>;
 
-  setEndpoint(endpointId: string): void;
+  selectEndpoint(endpointId: string): void;
 }
