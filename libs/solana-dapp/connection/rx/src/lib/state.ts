@@ -5,7 +5,10 @@ import {
 } from '@nx-dapp/solana-dapp/connection/base';
 import { Connection } from '@solana/web3.js';
 
-import { SelectEndpointAction } from './actions';
+import {
+  ConnectionAccountChangedAction,
+  SelectEndpointAction,
+} from './actions';
 import { Action, ConnectionState } from './types';
 
 export const connectionInitialState: ConnectionState = {
@@ -13,6 +16,7 @@ export const connectionInitialState: ConnectionState = {
   slippage: DEFAULT_SLIPPAGE,
   endpoints: ENDPOINTS,
   connection: new Connection(DEFAULT_ENDPOINT, 'recent'),
+  connectionAccount: null,
   sendConnection: new Connection(DEFAULT_ENDPOINT, 'recent'),
 };
 
@@ -29,6 +33,11 @@ export const reducer = (state: ConnectionState, action: Action) => {
         endpoint: endpoint,
         connection: new Connection(endpoint, 'recent'),
         sendConnection: new Connection(endpoint, 'recent'),
+      };
+    case 'connectionAccountChanged':
+      return {
+        ...state,
+        connectionAccount: (action as ConnectionAccountChangedAction).payload,
       };
     default:
       return state;

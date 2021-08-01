@@ -1,12 +1,33 @@
-import { BehaviorSubject, merge } from 'rxjs';
-import { distinctUntilChanged, map, scan, shareReplay } from 'rxjs/operators';
+import {
+  asyncScheduler,
+  BehaviorSubject,
+  merge,
+  Observable,
+  Subject,
+} from 'rxjs';
+import {
+  distinctUntilChanged,
+  map,
+  observeOn,
+  scan,
+  shareReplay,
+  takeUntil,
+} from 'rxjs/operators';
 
-import { InitAction, SelectEndpointAction } from './actions';
+import {
+  ConnectionAccountChangedAction,
+  ConnectionSlotChangedAction,
+  InitAction,
+  SelectEndpointAction,
+  SendConnectionAccountChangedAction,
+  SendConnectionSlotChangedAction,
+} from './actions';
 import { fromAccountChangeEvent, fromSlotChangeEvent } from './operators';
 import { connectionInitialState, reducer } from './state';
 import { Action, IConnectionService } from './types';
 
 export class ConnectionService implements IConnectionService {
+  private readonly _destroy = new Subject();
   private readonly _dispatcher = new BehaviorSubject<Action>(new InitAction());
   actions$ = this._dispatcher.asObservable();
   state$ = this._dispatcher.pipe(
@@ -40,27 +61,56 @@ export class ConnectionService implements IConnectionService {
     map(({ connection }) => connection),
     distinctUntilChanged()
   );
+  connectionAccount$ = this.state$.pipe(
+    map(({ connectionAccount }) => connectionAccount),
+    distinctUntilChanged()
+  );
   sendConnection$ = this.state$.pipe(
     map(({ sendConnection }) => sendConnection),
     distinctUntilChanged()
   );
-  onConnectionAccountChange$ = this.connection$.pipe(fromAccountChangeEvent);
-  onConnectionSlotChange$ = this.connection$.pipe(fromSlotChangeEvent);
-  onSendConnectionAccountChange$ = this.sendConnection$.pipe(
-    fromAccountChangeEvent
+
+  private onConnectionAccountChange$ = this.connection$.pipe(
+    fromAccountChangeEvent,
+    map((account) => new ConnectionAccountChangedAction(account))
   );
-  onSendConnectionSlotChange$ = this.sendConnection$.pipe(fromSlotChangeEvent);
+
+  private onConnectionSlotChange$ = this.connection$.pipe(
+    fromSlotChangeEvent,
+    map(() => new ConnectionSlotChangedAction())
+  );
+
+  private onSendConnectionAccountChange$ = this.sendConnection$.pipe(
+    fromAccountChangeEvent,
+    map(() => new SendConnectionAccountChangedAction())
+  );
+
+  private onSendConnectionSlotChange$ = this.sendConnection$.pipe(
+    fromSlotChangeEvent,
+    map(() => new SendConnectionSlotChangedAction())
+  );
 
   constructor() {
-    merge([
+    this.runEffects([
       this.onConnectionAccountChange$,
       this.onConnectionSlotChange$,
       this.onSendConnectionAccountChange$,
       this.onSendConnectionSlotChange$,
-    ]).subscribe();
+    ]);
+  }
+
+  private runEffects(effects: Observable<Action>[]) {
+    merge(...effects)
+      .pipe(takeUntil(this._destroy), observeOn(asyncScheduler))
+      .subscribe((action) => this._dispatcher.next(action));
   }
 
   setEndpoint(endpointId: string) {
     this._dispatcher.next(new SelectEndpointAction(endpointId));
+  }
+
+  destroy() {
+    this._destroy.next();
+    this._destroy.complete();
   }
 }

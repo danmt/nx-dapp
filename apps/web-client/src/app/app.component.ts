@@ -93,9 +93,9 @@ export class AppComponent implements OnInit {
       this.accountService.loadWalletConnected(connected)
     );
 
-    this.connectionService.onConnectionAccountChange$.subscribe((account) =>
-      this.accountService.changeAccount(account)
-    );
+    this.connectionService.connectionAccount$
+      .pipe(isNotNull)
+      .subscribe((account) => this.accountService.changeAccount(account));
 
     this.accountService.userAccounts$.subscribe((userAccounts) => {
       this.marketService.loadUserAccounts(userAccounts);
