@@ -1,21 +1,25 @@
-import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { Observable } from 'rxjs';
-
-import {
-  InitAction,
-  LoadBalancesAction,
-  LoadUserAccountsAction,
-  LoadMarketByMintAction,
-  LoadMintAccountsAction,
-  LoadMarketAccountsAction,
-  LoadMintTokensAction,
-} from './actions';
 import {
   MintTokenAccount,
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
+import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
+import { Observable } from 'rxjs';
+
+import {
+  InitAction,
+  LoadBalancesAction,
+  LoadMarketAccountsAction,
+  LoadMarketByMintAction,
+  LoadMarketIndicatorAccountsAction,
+  LoadMarketMintAccountsAction,
+  LoadMintAccountsAction,
+  LoadMintTokensAction,
+  LoadTokensAction,
+  LoadUserAccountsAction,
+} from './actions';
 
 export type Action =
   | InitAction
@@ -24,7 +28,10 @@ export type Action =
   | LoadMarketByMintAction
   | LoadMintTokensAction
   | LoadMintAccountsAction
-  | LoadMarketAccountsAction;
+  | LoadMarketAccountsAction
+  | LoadMarketIndicatorAccountsAction
+  | LoadMarketMintAccountsAction
+  | LoadTokensAction;
 
 export interface BalanceState {
   balances: Balance[];
@@ -55,4 +62,6 @@ export interface IBalanceService {
   loadUserAccounts(userAccounts: TokenAccount[]): void;
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>): void;
+
+  loadTokens(tokens: Map<string, TokenInfo>): void;
 }

@@ -48,11 +48,19 @@ import { init, selectEndpoint } from './app.actions';
         <h2>Total in USD: {{ totalInUSD$ | async | currency }}</h2>
 
         <ul>
-          <li *ngFor="let balance of balances$ | async">
-            {{ balance.tokenName }}: {{ balance.tokenQuantity }} ({{
-              balance.tokenInUSD | currency
-            }})
-          </li>
+          <ng-container *ngFor="let balance of balances$ | async">
+            <li *ngIf="balance.hasBalance" class="flex p-2 mb-1 items-center">
+              <figure class="block w-6 h-6 mr-2">
+                <img class="w-full h-full" [src]="balance.tokenLogo" />
+              </figure>
+              <div>
+                {{ balance.tokenName }} ({{ balance.tokenSymbol }}):
+                {{ balance.tokenQuantity }} ({{
+                  balance.tokenInUSD | currency
+                }})
+              </div>
+            </li>
+          </ng-container>
         </ul>
       </section>
     </main>
@@ -98,6 +106,10 @@ export class AppComponent implements OnInit {
     this.connectionService.connectionAccount$
       .pipe(isNotNull)
       .subscribe((account) => this.accountService.changeAccount(account));
+
+    this.connectionService.tokens$.subscribe((tokens) =>
+      this.balanceService.loadTokens(tokens)
+    );
 
     this.accountService.userAccounts$.subscribe((userAccounts) => {
       this.marketService.loadUserAccounts(userAccounts);

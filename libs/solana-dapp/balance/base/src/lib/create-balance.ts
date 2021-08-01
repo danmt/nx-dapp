@@ -6,6 +6,7 @@ import {
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
+import { TokenInfo } from '@solana/spl-token-registry';
 
 import { Balance, TokenDetails } from './types';
 
@@ -90,7 +91,8 @@ const getMidPrice = (
 
 export const createBalance = (
   userAccounts: TokenAccount[],
-  mintToken: TokenDetails,
+  mintToken: TokenDetails | null,
+  tokenInfo: TokenInfo | null,
   mintAccount: MintTokenAccount,
   marketByMint: Map<string, SerumMarket>,
   marketAccounts: Map<string, ParsedAccountBase>,
@@ -115,7 +117,9 @@ export const createBalance = (
 
   return {
     mintAddress: mintAccount.pubkey.toBase58(),
-    tokenName: mintToken.label,
+    tokenName: mintToken?.label || null,
+    tokenSymbol: tokenInfo?.symbol || null,
+    tokenLogo: tokenInfo?.logoURI || null,
     lamports,
     accounts: userAccounts.sort((a, b) =>
       b.info.amount.sub(a.info.amount).toNumber()

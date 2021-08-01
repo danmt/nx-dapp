@@ -51,6 +51,7 @@ export interface IConnectionService {
   connection$: Observable<Connection | null>;
   connectionAccount$: Observable<AccountInfo<Buffer> | null>;
   sendConnection$: Observable<Connection | null>;
+  tokens$: Observable<Map<string, TokenInfo>>;
 
   loadEndpoints(endpoints: Endpoint[]): void;
 

@@ -2,7 +2,9 @@ import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/base';
 import { PublicKey } from '@solana/web3.js';
 
 export interface Balance {
-  tokenName: string;
+  tokenName: string | null;
+  tokenSymbol: string | null;
+  tokenLogo: string | null;
   mintAddress: string;
   lamports: number;
   tokenQuantity: number;

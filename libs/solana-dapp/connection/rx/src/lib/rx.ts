@@ -76,6 +76,10 @@ export class ConnectionService implements IConnectionService {
     map(({ sendConnection }) => sendConnection),
     distinctUntilChanged()
   );
+  tokens$ = this.state$.pipe(
+    map(({ tokens }) => tokens),
+    distinctUntilChanged()
+  );
 
   private connectionAccountChange$ = this.connection$.pipe(
     fromAccountChangeEvent,

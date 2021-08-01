@@ -5,6 +5,7 @@ import {
 } from '@nx-dapp/solana-dapp/account/base';
 import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 
 export class InitAction {
   type = 'init';
@@ -56,4 +57,10 @@ export class LoadMarketIndicatorAccountsAction {
   type = 'loadMarketIndicatorAccounts';
 
   constructor(public payload: Map<string, ParsedAccountBase>) {}
+}
+
+export class LoadTokensAction {
+  type = 'loadTokens';
+
+  constructor(public payload: Map<string, TokenInfo>) {}
 }

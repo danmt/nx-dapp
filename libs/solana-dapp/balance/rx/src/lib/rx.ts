@@ -32,10 +32,12 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
+  LoadTokensAction,
   LoadUserAccountsAction,
 } from './actions';
 import { balanceInitialState, reducer } from './state';
 import { Action, IBalanceService } from './types';
+import { TokenInfo } from '@solana/spl-token-registry';
 
 export class BalanceService implements IBalanceService {
   private readonly _destroy = new Subject();
@@ -49,7 +51,7 @@ export class BalanceService implements IBalanceService {
     })
   );
   balances$ = this.state$.pipe(
-    map(({ balances }) => balances),
+    map(({ balances }) => balances.sort((a, b) => b.tokenInUSD - a.tokenInUSD)),
     distinctUntilChanged()
   );
   totalInUSD$ = this.state$.pipe(
@@ -59,7 +61,10 @@ export class BalanceService implements IBalanceService {
 
   private loadBalances$ = combineLatest([
     combineLatest([
+      this.actions$.pipe(ofType<LoadTokensAction>('loadTokens')),
       this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
+    ]),
+    combineLatest([
       this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
       this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
       this.actions$.pipe(
@@ -78,8 +83,8 @@ export class BalanceService implements IBalanceService {
   ]).pipe(
     map(
       ([
+        [{ payload: tokens }, { payload: mintTokens }],
         [
-          { payload: mintTokens },
           { payload: mintAccounts },
           { payload: userAccounts },
           { payload: marketAccounts },
@@ -106,7 +111,8 @@ export class BalanceService implements IBalanceService {
                 ),
                 mintTokens.find(
                   (token) => token.address === mintAccount.pubkey.toBase58()
-                ) as TokenDetails,
+                ) || null,
+                tokens.get(mintAccount.pubkey.toBase58()) || null,
                 mintAccount,
                 marketByMint,
                 marketAccounts,
@@ -160,6 +166,10 @@ export class BalanceService implements IBalanceService {
 
   loadMintTokens(mintTokens: TokenDetails[]) {
     this._dispatcher.next(new LoadMintTokensAction(mintTokens));
+  }
+
+  loadTokens(tokens: Map<string, TokenInfo>) {
+    this._dispatcher.next(new LoadTokensAction(tokens));
   }
 
   destroy() {
