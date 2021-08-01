@@ -5,18 +5,19 @@ import {
   getSelected as getSelectedEndpoint,
 } from '@nx-dapp/shared/connection/data-access/endpoints';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
-import { ACCOUNT_SERVICE } from '@nx-dapp/solana/account-adapter/angular';
-import { IAccountService } from '@nx-dapp/solana/account-adapter/rx';
-import { CONNECTION_SERVICE } from '@nx-dapp/solana/connection-adapter/angular';
-import { IConnectionService } from '@nx-dapp/solana/connection-adapter/rx';
-import { WALLET_SERVICE } from '@nx-dapp/solana/wallet-adapter/angular';
-import { WalletName } from '@nx-dapp/solana/wallet-adapter/base';
-import { IWalletService } from '@nx-dapp/solana/wallet-adapter/rx';
 import {
-  getPhantomWallet,
-  getSolletWallet,
-  getSolongWallet,
-} from '@nx-dapp/solana/wallet-adapter/wallets';
+  ACCOUNT_SERVICE,
+  BALANCE_SERVICE,
+  CONNECTION_SERVICE,
+  IAccountService,
+  IBalanceService,
+  IConnectionService,
+  IMarketService,
+  IWalletService,
+  MARKET_SERVICE,
+  WALLET_SERVICE,
+} from '@nx-dapp/solana-dapp/angular';
+import { WalletName } from '@nx-dapp/solana-dapp/wallet/base';
 
 import { init, selectEndpoint } from './app.actions';
 
@@ -25,9 +26,9 @@ import { init, selectEndpoint } from './app.actions';
   template: `
     <header>
       <nx-dapp-wallets-dropdown
-        [wallets]="wallets"
+        [wallets]="wallets$ | async"
         [isConnected]="isConnected$ | async"
-        (changeWallet)="onChangeWallet($event)"
+        (selectWallet)="onSelectWallet($event)"
         (connectWallet)="onConnectWallet()"
         (disconnectWallet)="onDisconnectWallet()"
       ></nx-dapp-wallets-dropdown>
@@ -39,28 +40,58 @@ import { init, selectEndpoint } from './app.actions';
         ></nx-dapp-connections-dropdown>
       </ng-container>
     </header>
-    <h1>First Dapp</h1>
+
+    <main>
+      <h1>First Dapp</h1>
+
+      <section>
+        <h2>Total in USD: {{ totalInUSD$ | async | currency }}</h2>
+
+        <ul>
+          <ng-container *ngFor="let balance of balances$ | async">
+            <li *ngIf="balance.hasBalance" class="flex p-2 mb-1 items-center">
+              <figure class="block w-6 h-6 mr-2">
+                <img class="w-full h-full" [src]="balance.tokenLogo" />
+              </figure>
+              <div>
+                {{ balance.tokenName }} ({{ balance.tokenSymbol }}):
+                {{ balance.tokenQuantity }} ({{
+                  balance.tokenInUSD | currency
+                }})
+              </div>
+            </li>
+          </ng-container>
+        </ul>
+      </section>
+    </main>
   `,
 })
 export class AppComponent implements OnInit {
   endpoints$ = this.store.select(getAllEndpoints);
   endpoint$ = this.store.select(getSelectedEndpoint);
-  wallets = [getPhantomWallet(), getSolletWallet(), getSolongWallet()];
+  wallets$ = this.walletService.wallets$;
   isConnected$ = this.walletService.connected$;
+  balances$ = this.balanceService.balances$;
+  totalInUSD$ = this.balanceService.totalInUSD$;
 
   constructor(
     private store: Store,
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
     @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
-    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService
+    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService,
+    @Inject(MARKET_SERVICE) private marketService: IMarketService,
+    @Inject(BALANCE_SERVICE) private balanceService: IBalanceService
   ) {}
 
   ngOnInit() {
     this.store.dispatch(init());
 
-    this.connectionService.connection$.subscribe((connection) =>
-      this.accountService.loadConnection(connection)
-    );
+    this.connectionService.connection$
+      .pipe(isNotNull)
+      .subscribe((connection) => {
+        this.accountService.loadConnection(connection);
+        this.marketService.loadConnection(connection);
+      });
 
     this.walletService.publicKey$
       .pipe(isNotNull)
@@ -72,19 +103,55 @@ export class AppComponent implements OnInit {
       this.accountService.loadWalletConnected(connected)
     );
 
-    this.connectionService.onConnectionAccountChange$.subscribe((account) =>
-      this.accountService.changeAccount(account)
+    this.connectionService.connectionAccount$
+      .pipe(isNotNull)
+      .subscribe((account) => this.accountService.changeAccount(account));
+
+    this.connectionService.tokens$.subscribe((tokens) =>
+      this.balanceService.loadTokens(tokens)
+    );
+
+    this.accountService.userAccounts$.subscribe((userAccounts) => {
+      this.marketService.loadUserAccounts(userAccounts);
+      this.balanceService.loadUserAccounts(userAccounts);
+    });
+
+    this.accountService.nativeAccount$
+      .pipe(isNotNull)
+      .subscribe((nativeAccount) =>
+        this.marketService.loadNativeAccount(nativeAccount)
+      );
+
+    this.accountService.mintAccounts$.subscribe((mintAccounts) =>
+      this.balanceService.loadMintAccounts(mintAccounts)
+    );
+
+    this.marketService.marketAccounts$.subscribe((marketAccounts) =>
+      this.balanceService.loadMarketAccounts(marketAccounts)
+    );
+
+    this.marketService.marketByMint$.subscribe((marketByMint) =>
+      this.balanceService.loadMarketByMint(marketByMint)
+    );
+
+    this.marketService.marketMintAccounts$.subscribe((marketMintAccounts) =>
+      this.balanceService.loadMarketMintAccounts(marketMintAccounts)
+    );
+
+    this.marketService.marketIndicatorAccounts$.subscribe(
+      (marketIndicatorAccounts) =>
+        this.balanceService.loadMarketIndicatorAccounts(marketIndicatorAccounts)
     );
   }
 
   onSelectEndpoint(endpointId: string) {
     this.store.dispatch(selectEndpoint({ selectedId: endpointId }));
 
-    this.connectionService.setEndpoint(endpointId);
+    this.connectionService.selectEndpoint(endpointId);
   }
 
-  onChangeWallet(walletName: WalletName) {
-    this.walletService.changeWallet(walletName);
+  onSelectWallet(walletName: WalletName) {
+    this.walletService.selectWallet(walletName);
   }
 
   onConnectWallet() {

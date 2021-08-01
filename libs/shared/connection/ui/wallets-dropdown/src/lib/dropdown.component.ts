@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana/wallet-adapter/base';
+import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana-dapp/wallet/base';
 
 @Component({
   selector: 'nx-dapp-wallets-dropdown',
@@ -44,12 +44,12 @@ import { DEFAULT_WALLET, Wallet } from '@nx-dapp/solana/wallet-adapter/base';
 })
 export class WalletsDropdownComponent {
   @Input() wallet: Wallet | null = null;
-  @Input() wallets: Wallet[] = [];
+  @Input() wallets: Wallet[] | null = null;
   @Input() isConnected: boolean | null = null;
   walletControl = new FormControl(
     this.wallet ? this.wallet.name : DEFAULT_WALLET
   );
-  @Output() changeWallet = this.walletControl.valueChanges;
+  @Output() selectWallet = this.walletControl.valueChanges;
   @Output() connectWallet = new EventEmitter();
   @Output() disconnectWallet = new EventEmitter();
 

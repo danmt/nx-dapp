@@ -6,19 +6,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { accountServiceProvider } from '@nx-dapp/solana/account-adapter/angular';
-import { connectionServiceProvider } from '@nx-dapp/solana/connection-adapter/angular';
 import { ConnectionsModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connection/data-access/connections';
 import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connection/data-access/endpoints';
 import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
 import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
-import { walletServiceProvider } from '@nx-dapp/solana/wallet-adapter/angular';
-import {
-  getPhantomWallet,
-  getSolletWallet,
-  getSolongWallet,
-} from '@nx-dapp/solana/wallet-adapter/wallets';
+import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -47,15 +40,7 @@ import { AppComponent } from './app.component';
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot(),
-  ],
-  providers: [
-    walletServiceProvider([
-      getPhantomWallet(),
-      getSolletWallet(),
-      getSolongWallet(),
-    ]),
-    accountServiceProvider(),
-    connectionServiceProvider(),
+    SolanaDappModule.forRoot(environment.solanaDapp),
   ],
   bootstrap: [AppComponent],
 })

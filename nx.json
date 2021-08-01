@@ -48,43 +48,67 @@
     "shared-operators-of-type": {
       "tags": []
     },
-    "solana-account-adapter-angular": {
+    "solana-dapp-account-angular": {
       "tags": []
     },
-    "solana-account-adapter-base": {
+    "solana-dapp-account-base": {
       "tags": []
     },
-    "solana-account-adapter-rx": {
+    "solana-dapp-account-rx": {
       "tags": []
     },
-    "solana-connection-adapter-angular": {
+    "solana-dapp-angular": {
       "tags": []
     },
-    "solana-connection-adapter-base": {
+    "solana-dapp-balance-angular": {
       "tags": []
     },
-    "solana-connection-adapter-rx": {
+    "solana-dapp-balance-base": {
       "tags": []
     },
-    "solana-wallet-adapter-adapters-phantom": {
+    "solana-dapp-balance-rx": {
       "tags": []
     },
-    "solana-wallet-adapter-adapters-sollet": {
+    "solana-dapp-connection-angular": {
       "tags": []
     },
-    "solana-wallet-adapter-adapters-solong": {
+    "solana-dapp-connection-base": {
       "tags": []
     },
-    "solana-wallet-adapter-angular": {
+    "solana-dapp-connection-rx": {
       "tags": []
     },
-    "solana-wallet-adapter-base": {
+    "solana-dapp-market-angular": {
       "tags": []
     },
-    "solana-wallet-adapter-rx": {
+    "solana-dapp-market-base": {
       "tags": []
     },
-    "solana-wallet-adapter-wallets": {
+    "solana-dapp-market-rx": {
+      "tags": []
+    },
+    "solana-dapp-utils-u64": {
+      "tags": []
+    },
+    "solana-dapp-wallet-adapters-phantom": {
+      "tags": []
+    },
+    "solana-dapp-wallet-adapters-sollet": {
+      "tags": []
+    },
+    "solana-dapp-wallet-adapters-solong": {
+      "tags": []
+    },
+    "solana-dapp-wallet-angular": {
+      "tags": []
+    },
+    "solana-dapp-wallet-base": {
+      "tags": []
+    },
+    "solana-dapp-wallet-rx": {
+      "tags": []
+    },
+    "solana-dapp-wallet-wallets": {
       "tags": []
     },
     "web-client": {
