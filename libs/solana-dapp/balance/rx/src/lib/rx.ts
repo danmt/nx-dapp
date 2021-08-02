@@ -4,7 +4,7 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { createBalance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
+import { getBalances, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import {
@@ -22,6 +22,7 @@ import {
   observeOn,
   scan,
   shareReplay,
+  switchMap,
   takeUntil,
 } from 'rxjs/operators';
 
@@ -91,9 +92,9 @@ export class BalanceService implements IBalanceService {
     ),
   ]).pipe(
     filter(([, , , { payload: walletConnected }]) => walletConnected),
-    map(
+    switchMap(
       ([
-        [{ payload: tokens }, { payload: mintTokens }],
+        [{ payload: networkTokens }, { payload: mintTokens }],
         [{ payload: mintAccounts }, { payload: tokenAccounts }],
         [
           { payload: marketAccounts },
@@ -102,32 +103,16 @@ export class BalanceService implements IBalanceService {
           { payload: marketIndicatorAccounts },
         ],
       ]) =>
-        new LoadBalancesAction(
-          [...mintAccounts.values()]
-            .filter((mintAccount) =>
-              mintTokens.some(
-                ({ address }) => address === mintAccount.pubkey.toBase58()
-              )
-            )
-            .map((mintAccount) =>
-              createBalance(
-                [...tokenAccounts.values()].filter(
-                  (tokenAccount) =>
-                    tokenAccount.info.mint.toBase58() ===
-                    mintAccount.pubkey.toBase58()
-                ),
-                mintTokens.find(
-                  (token) => token.address === mintAccount.pubkey.toBase58()
-                ) || null,
-                tokens.get(mintAccount.pubkey.toBase58()) || null,
-                mintAccount,
-                marketByMint,
-                marketAccounts,
-                marketMintAccounts,
-                marketIndicatorAccounts
-              )
-            )
-        )
+        getBalances(
+          mintAccounts,
+          tokenAccounts,
+          mintTokens,
+          networkTokens,
+          marketByMint,
+          marketAccounts,
+          marketMintAccounts,
+          marketIndicatorAccounts
+        ).pipe(map((balances) => new LoadBalancesAction(balances)))
     )
   );
 

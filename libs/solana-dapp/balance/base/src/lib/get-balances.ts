@@ -7,6 +7,8 @@ import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
 import { TokenInfo } from '@solana/spl-token-registry';
+import { from, Observable } from 'rxjs';
+import { filter, map, toArray } from 'rxjs/operators';
 
 import { Balance, TokenDetails } from './types';
 
@@ -72,12 +74,8 @@ const getMidPrice = (
     decodedMarket.programId
   );
 
-  const bids = marketIndicatorAccounts?.get(
-    decodedMarket.bids.toBase58()
-  )?.info;
-  const asks = marketIndicatorAccounts?.get(
-    decodedMarket.asks.toBase58()
-  )?.info;
+  const bids = marketIndicatorAccounts.get(decodedMarket.bids.toBase58())?.info;
+  const asks = marketIndicatorAccounts.get(decodedMarket.asks.toBase58())?.info;
 
   if (bids && asks) {
     const bidsBook = new Orderbook(market, bids.accountFlags, bids.slab);
@@ -89,17 +87,26 @@ const getMidPrice = (
   return 0;
 };
 
-export const createBalance = (
-  userAccounts: TokenAccount[],
-  mintToken: TokenDetails | null,
-  tokenInfo: TokenInfo | null,
+const createBalance = (
+  tokenAccounts: Map<string, TokenAccount>,
+  mintTokens: TokenDetails[],
+  networkTokens: Map<string, TokenInfo>,
   mintAccount: MintTokenAccount,
   marketByMint: Map<string, SerumMarket>,
   marketAccounts: Map<string, ParsedAccountBase>,
   marketMintAccounts: Map<string, ParsedAccountBase>,
   marketIndicatorAccounts: Map<string, ParsedAccountBase>
 ): Balance => {
-  const lamports = userAccounts.reduce(
+  const filteredTokenAccounts = [...tokenAccounts.values()].filter(
+    (tokenAccount) =>
+      tokenAccount.info.mint.toBase58() === mintAccount.pubkey.toBase58()
+  );
+  const networkToken = networkTokens.get(mintAccount.pubkey.toBase58()) || null;
+  const mintToken =
+    mintTokens.find(
+      (token) => token.address === mintAccount.pubkey.toBase58()
+    ) || null;
+  const lamports = filteredTokenAccounts.reduce(
     (res, item) => (res += item.info.amount.toNumber()),
     0
   );
@@ -118,15 +125,46 @@ export const createBalance = (
   return {
     mintAddress: mintAccount.pubkey.toBase58(),
     tokenName: mintToken?.label || null,
-    tokenSymbol: tokenInfo?.symbol || null,
-    tokenLogo: tokenInfo?.logoURI || null,
+    tokenSymbol: networkToken?.symbol || null,
+    tokenLogo: networkToken?.logoURI || null,
     lamports,
-    accounts: userAccounts.sort((a, b) =>
+    accounts: filteredTokenAccounts.sort((a, b) =>
       b.info.amount.sub(a.info.amount).toNumber()
     ),
     tokenQuantity,
     tokenPrice,
     tokenInUSD: tokenQuantity * tokenPrice,
-    hasBalance: tokenQuantity > 0 && userAccounts.length > 0,
+    hasBalance: tokenQuantity > 0 && filteredTokenAccounts.length > 0,
   };
 };
+
+export const getBalances = (
+  mintAccounts: Map<string, MintTokenAccount>,
+  tokenAccounts: Map<string, TokenAccount>,
+  mintTokens: TokenDetails[],
+  networkTokens: Map<string, TokenInfo>,
+  marketByMint: Map<string, SerumMarket>,
+  marketAccounts: Map<string, ParsedAccountBase>,
+  marketMintAccounts: Map<string, ParsedAccountBase>,
+  marketIndicatorAccounts: Map<string, ParsedAccountBase>
+): Observable<Balance[]> =>
+  from(mintAccounts.values()).pipe(
+    filter((mintAccount) =>
+      mintTokens.some(
+        ({ address }) => address === mintAccount.pubkey.toBase58()
+      )
+    ),
+    map((mintAccount) =>
+      createBalance(
+        tokenAccounts,
+        mintTokens,
+        networkTokens,
+        mintAccount,
+        marketByMint,
+        marketAccounts,
+        marketMintAccounts,
+        marketIndicatorAccounts
+      )
+    ),
+    toArray()
+  );
