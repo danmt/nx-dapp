@@ -1,4 +1,7 @@
-import { DEFAULT_NETWORK, ENV } from '@nx-dapp/solana-dapp/connection/base';
+import {
+  DEFAULT_NETWORK,
+  NETWORKS,
+} from '@nx-dapp/solana-dapp/connection/base';
 import { DEFAULT_WALLET } from '@nx-dapp/solana-dapp/wallet/base';
 import {
   getPhantomWallet,
@@ -6,8 +9,7 @@ import {
   getSolongWallet,
 } from '@nx-dapp/solana-dapp/wallet/wallets';
 import { NATIVE_MINT } from '@solana/spl-token';
-import { ENV as ChainID } from '@solana/spl-token-registry';
-import { clusterApiUrl, PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
 
 export const environment = {
   production: false,
@@ -61,28 +63,7 @@ export const environment = {
         pubkey: new PublicKey('TuLipcqtGVXP9XR62wM8WWCm6a9vhLs7T1uoWBk6FDs'),
       },
     ],
-    networks: [
-      {
-        name: 'mainnet-beta' as ENV,
-        url: 'https://solana-api.projectserum.com/',
-        chainID: ChainID.MainnetBeta,
-      },
-      {
-        name: 'testnet' as ENV,
-        url: clusterApiUrl('testnet'),
-        chainID: ChainID.Testnet,
-      },
-      {
-        name: 'devnet' as ENV,
-        url: clusterApiUrl('devnet'),
-        chainID: ChainID.Devnet,
-      },
-      {
-        name: 'localnet' as ENV,
-        url: 'http://127.0.0.1:8899',
-        chainID: ChainID.Devnet,
-      },
-    ],
+    networks: NETWORKS,
     defaultNetwork: DEFAULT_NETWORK,
   },
 };

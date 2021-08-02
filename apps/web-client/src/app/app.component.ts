@@ -83,6 +83,18 @@ export class AppComponent implements OnInit {
         this.marketService.loadConnection(connection);
       });
 
+    this.connectionService.connectionAccount$
+      .pipe(isNotNull)
+      .subscribe((account) => this.accountService.changeAccount(account));
+
+    this.connectionService.networkTokens$.subscribe((networkTokens) =>
+      this.balanceService.loadNetworkTokens(networkTokens)
+    );
+
+    this.connectionService.network$
+      .pipe(isNotNull)
+      .subscribe((network) => this.walletService.loadNetwork(network));
+
     this.walletService.publicKey$
       .pipe(isNotNull)
       .subscribe((publicKey) =>
@@ -94,14 +106,6 @@ export class AppComponent implements OnInit {
       this.balanceService.loadWalletConnected(connected);
       this.marketService.loadWalletConnected(connected);
     });
-
-    this.connectionService.connectionAccount$
-      .pipe(isNotNull)
-      .subscribe((account) => this.accountService.changeAccount(account));
-
-    this.connectionService.networkTokens$.subscribe((networkTokens) =>
-      this.balanceService.loadNetworkTokens(networkTokens)
-    );
 
     this.accountService.tokenAccounts$.subscribe((tokenAccounts) => {
       this.marketService.loadTokenAccounts(tokenAccounts);

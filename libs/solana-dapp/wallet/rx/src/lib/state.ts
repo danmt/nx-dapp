@@ -90,6 +90,7 @@ export const reducer = (state: WalletState, action: Action) => {
         disconnecting: true,
       };
     case 'walletDisconnected':
+    case 'walletNetworkChanged':
       return {
         ...state,
         disconnecting: false,

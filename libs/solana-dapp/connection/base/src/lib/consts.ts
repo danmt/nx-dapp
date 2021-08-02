@@ -18,12 +18,7 @@ export const NETWORKS: Network[] = [
     url: clusterApiUrl('devnet'),
     chainID: ChainID.Devnet,
   },
-  {
-    name: 'localnet' as ENV,
-    url: 'http://127.0.0.1:8899',
-    chainID: ChainID.Devnet,
-  },
 ];
 
-export const DEFAULT_NETWORK = 'devnet';
+export const DEFAULT_NETWORK = 'mainnet-beta';
 export const DEFAULT_SLIPPAGE = 0.25;
