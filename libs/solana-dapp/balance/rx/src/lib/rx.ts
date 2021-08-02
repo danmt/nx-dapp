@@ -185,8 +185,8 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadTokensAction(tokens));
   }
 
-  loadWalletConnected(connected: boolean) {
-    this._dispatcher.next(new LoadWalletConnectedAction(connected));
+  loadWalletConnected(walletConnected: boolean) {
+    this._dispatcher.next(new LoadWalletConnectedAction(walletConnected));
   }
 
   destroy() {

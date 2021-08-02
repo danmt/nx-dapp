@@ -69,5 +69,5 @@ export interface IBalanceService {
 
   loadTokens(tokens: Map<string, TokenInfo>): void;
 
-  loadWalletConnected(connected: boolean): void;
+  loadWalletConnected(walletConnected: boolean): void;
 }
