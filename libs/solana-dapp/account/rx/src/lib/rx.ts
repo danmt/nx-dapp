@@ -6,7 +6,7 @@ import {
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
 import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { MintLayout, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -162,6 +162,10 @@ export class AccountService implements IAccountService {
         mergeMap((mintKey) =>
           from(defer(() => connection.getAccountInfo(mintKey))).pipe(
             isNotNull,
+            // Mint account can be empty (specially in localnet, devnet and testnet)
+            // In order to prevent errors from throwing, just filter the
+            // accounts based on its length
+            filter(({ data }) => data.length === MintLayout.span),
             map((account) => MintParser(mintKey, account))
           )
         ),
