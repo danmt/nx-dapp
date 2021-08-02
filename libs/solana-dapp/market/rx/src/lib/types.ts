@@ -13,7 +13,6 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
-  LoadMarketMintsAction,
   LoadNativeAccountAction,
   LoadUserAccountsAction,
   LoadWalletConnectedAction,
@@ -21,7 +20,6 @@ import {
 } from './actions';
 
 export interface MarketState {
-  marketMints: string[];
   marketByMint: Map<string, SerumMarket>;
   marketAccounts: Map<string, ParsedAccountBase>;
   marketMintAccounts: Map<string, ParsedAccountBase>;
@@ -32,7 +30,6 @@ export type Action =
   | InitAction
   | LoadUserAccountsAction
   | LoadNativeAccountAction
-  | LoadMarketMintsAction
   | LoadMarketAccountsAction
   | LoadMarketMintAccountsAction
   | LoadMarketIndicatorAccountsAction

@@ -21,12 +21,6 @@ export class LoadNativeAccountAction {
   constructor(public payload: TokenAccount) {}
 }
 
-export class LoadMarketMintsAction {
-  type = 'loadMarketMints';
-
-  constructor(public payload: string[]) {}
-}
-
 export class LoadMarketByMintAction {
   type = 'loadMarketByMint';
 

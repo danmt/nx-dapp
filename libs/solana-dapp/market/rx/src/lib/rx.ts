@@ -24,7 +24,6 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
-  withLatestFrom,
 } from 'rxjs/operators';
 
 import {
@@ -34,7 +33,6 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
-  LoadMarketMintsAction,
   LoadNativeAccountAction,
   LoadUserAccountsAction,
   LoadWalletConnectedAction,
@@ -71,7 +69,7 @@ export class MarketService implements IMarketService {
     distinctUntilChanged()
   );
 
-  private loadMarketMints$ = combineLatest([
+  private loadMarketByMint$ = combineLatest([
     this.actions$.pipe(ofType<LoadNativeAccountAction>('loadNativeAccount')),
     this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
     this.actions$.pipe(
@@ -79,31 +77,13 @@ export class MarketService implements IMarketService {
     ),
   ]).pipe(
     filter(([, , { payload: walletConnected }]) => walletConnected),
-    withLatestFrom(this.state$),
     map(
-      ([
-        [{ payload: nativeAccount }, { payload: userAccounts }],
-        { marketMints },
-      ]) => {
-        const mints = [...userAccounts, nativeAccount].map((a) =>
-          a.info.mint.toBase58()
-        );
-        const newMints = [...new Set([...marketMints, ...mints]).values()];
-
-        return { marketMints, newMints };
-      }
-    ),
-    filter(
-      ({ marketMints, newMints }) => marketMints.length !== newMints.length
-    ),
-    map(({ newMints }) => new LoadMarketMintsAction(newMints))
-  );
-
-  private loadMarketByMint$ = this.actions$.pipe(
-    ofType<LoadMarketMintsAction>('loadMarketMints'),
-    map(
-      ({ payload: marketMints }) =>
-        new LoadMarketByMintAction(getMarketByMint(marketMints))
+      ([{ payload: nativeAccount }, { payload: userAccounts }]) =>
+        new LoadMarketByMintAction(
+          getMarketByMint(
+            [...userAccounts, nativeAccount].map((a) => a.info.mint.toBase58())
+          )
+        )
     )
   );
 
@@ -178,7 +158,6 @@ export class MarketService implements IMarketService {
 
   constructor() {
     this.runEffects([
-      this.loadMarketMints$,
       this.loadMarketByMint$,
       this.loadMarketAccounts$,
       this.loadMarketMintAccounts$,
