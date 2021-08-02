@@ -102,6 +102,7 @@ export class AppComponent implements OnInit {
     this.walletService.connected$.subscribe((connected) => {
       this.accountService.loadWalletConnected(connected);
       this.balanceService.loadWalletConnected(connected);
+      this.marketService.loadWalletConnected(connected);
     });
 
     this.connectionService.connectionAccount$
