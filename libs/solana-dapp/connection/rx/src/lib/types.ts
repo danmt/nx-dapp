@@ -1,4 +1,4 @@
-import { Endpoint, ENV } from '@nx-dapp/solana-dapp/connection/base';
+import { Network, ENV } from '@nx-dapp/solana-dapp/connection/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { AccountInfo, Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
@@ -7,53 +7,53 @@ import {
   ConnectionAccountChangedAction,
   ConnectionSlotChangedAction,
   InitAction,
-  LoadTokensAction,
-  SelectEndpointAction,
+  LoadNetworkTokensAction,
+  SelectNetworkAction,
   SendConnectionAccountChangedAction,
   SendConnectionSlotChangedAction,
   LoadConnectionAction,
-  LoadEndpointAction,
-  LoadEndpointsAction,
+  LoadNetworkAction,
+  LoadNetworksAction,
   LoadSendConnectionAction,
 } from './actions';
 
 export type Action =
   | InitAction
-  | SelectEndpointAction
+  | SelectNetworkAction
   | ConnectionAccountChangedAction
   | ConnectionSlotChangedAction
   | SendConnectionAccountChangedAction
   | SendConnectionSlotChangedAction
-  | LoadTokensAction
+  | LoadNetworkTokensAction
   | LoadConnectionAction
-  | LoadEndpointAction
-  | LoadEndpointsAction
+  | LoadNetworkAction
+  | LoadNetworksAction
   | LoadSendConnectionAction;
 
 export interface ConnectionState {
-  selectedEndpoint: string | null;
-  endpoint: Endpoint | null;
-  endpoints: Endpoint[];
+  selectedNetwork: string | null;
+  networks: Network[];
+  network: Network | null;
   slippage: number;
   connection: Connection | null;
   connectionAccount: AccountInfo<Buffer> | null;
   sendConnection: Connection | null;
-  tokens: Map<string, TokenInfo>;
+  networkTokens: Map<string, TokenInfo>;
 }
 
 export interface IConnectionService {
   actions$: Observable<Action>;
   state$: Observable<ConnectionState>;
-  endpoints$: Observable<Endpoint[]>;
-  selectedEndpoint$: Observable<string | null>;
-  endpoint$: Observable<Endpoint | null>;
+  networks$: Observable<Network[]>;
+  selectedNetwork$: Observable<string | null>;
+  network$: Observable<Network | null>;
   env$: Observable<ENV | null>;
   connection$: Observable<Connection | null>;
   connectionAccount$: Observable<AccountInfo<Buffer> | null>;
   sendConnection$: Observable<Connection | null>;
-  tokens$: Observable<Map<string, TokenInfo>>;
+  networkTokens$: Observable<Map<string, TokenInfo>>;
 
-  loadEndpoints(endpoints: Endpoint[]): void;
+  loadNetworks(networks: Network[]): void;
 
-  selectEndpoint(endpointId: string): void;
+  selectNetwork(networkId: string): void;
 }

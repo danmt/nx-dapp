@@ -1,29 +1,29 @@
 import { ENV as ChainID } from '@solana/spl-token-registry';
 import { clusterApiUrl } from '@solana/web3.js';
-import { Endpoint, ENV } from './types';
+import { Network, ENV } from './types';
 
-export const ENDPOINTS: Endpoint[] = [
+export const NETWORKS: Network[] = [
   {
     name: 'mainnet-beta' as ENV,
-    endpoint: 'https://solana-api.projectserum.com/',
+    url: 'https://solana-api.projectserum.com/',
     chainID: ChainID.MainnetBeta,
   },
   {
     name: 'testnet' as ENV,
-    endpoint: clusterApiUrl('testnet'),
+    url: clusterApiUrl('testnet'),
     chainID: ChainID.Testnet,
   },
   {
     name: 'devnet' as ENV,
-    endpoint: clusterApiUrl('devnet'),
+    url: clusterApiUrl('devnet'),
     chainID: ChainID.Devnet,
   },
   {
     name: 'localnet' as ENV,
-    endpoint: 'http://127.0.0.1:8899',
+    url: 'http://127.0.0.1:8899',
     chainID: ChainID.Devnet,
   },
 ];
 
-export const DEFAULT_ENDPOINT = ENDPOINTS[0].endpoint;
+export const DEFAULT_NETWORK = 'devnet';
 export const DEFAULT_SLIPPAGE = 0.25;

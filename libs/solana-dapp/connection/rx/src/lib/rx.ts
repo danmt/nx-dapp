@@ -1,6 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { Endpoint, getTokens } from '@nx-dapp/solana-dapp/connection/base';
+import { Network, getTokens } from '@nx-dapp/solana-dapp/connection/base';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -18,6 +18,7 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 
 import {
@@ -25,11 +26,11 @@ import {
   ConnectionSlotChangedAction,
   InitAction,
   LoadConnectionAction,
-  LoadEndpointAction,
-  LoadEndpointsAction,
+  LoadNetworkAction,
+  LoadNetworksAction,
   LoadSendConnectionAction,
-  LoadTokensAction,
-  SelectEndpointAction,
+  LoadNetworkTokensAction,
+  SelectNetworkAction,
   SendConnectionAccountChangedAction,
   SendConnectionSlotChangedAction,
 } from './actions';
@@ -48,20 +49,20 @@ export class ConnectionService implements IConnectionService {
       bufferSize: 1,
     })
   );
-  endpoints$ = this.state$.pipe(
-    map(({ endpoints }) => endpoints),
+  networks$ = this.state$.pipe(
+    map(({ networks }) => networks),
     distinctUntilChanged()
   );
-  selectedEndpoint$ = this.state$.pipe(
-    map(({ selectedEndpoint }) => selectedEndpoint),
+  selectedNetwork$ = this.state$.pipe(
+    map(({ selectedNetwork }) => selectedNetwork),
     distinctUntilChanged()
   );
-  endpoint$ = this.state$.pipe(
-    map(({ endpoint }) => endpoint),
+  network$ = this.state$.pipe(
+    map(({ network }) => network),
     distinctUntilChanged()
   );
-  env$ = this.endpoint$.pipe(
-    map((endpoint) => endpoint?.name || null),
+  env$ = this.network$.pipe(
+    map((network) => network?.name || null),
     distinctUntilChanged()
   );
   connection$ = this.state$.pipe(
@@ -76,8 +77,8 @@ export class ConnectionService implements IConnectionService {
     map(({ sendConnection }) => sendConnection),
     distinctUntilChanged()
   );
-  tokens$ = this.state$.pipe(
-    map(({ tokens }) => tokens),
+  networkTokens$ = this.state$.pipe(
+    map(({ networkTokens }) => networkTokens),
     distinctUntilChanged()
   );
 
@@ -101,57 +102,61 @@ export class ConnectionService implements IConnectionService {
     map(() => new SendConnectionSlotChangedAction())
   );
 
-  private loadEndpoint$ = combineLatest([
-    this.actions$.pipe(ofType<SelectEndpointAction>('selectEndpoint')),
-    this.actions$.pipe(ofType<LoadEndpointsAction>('loadEndpoints')),
+  private loadNetwork$ = combineLatest([
+    this.actions$.pipe(ofType<SelectNetworkAction>('selectNetwork')),
+    this.actions$.pipe(ofType<LoadNetworksAction>('loadNetworks')),
   ]).pipe(
     map(
-      ([{ payload: selectedEndpoint }, { payload: endpoints }]) =>
-        endpoints.find(({ endpoint }) => selectedEndpoint === endpoint) || null
+      ([{ payload: selectedNetwork }, { payload: networks }]) =>
+        networks.find(({ name }) => selectedNetwork === name) || null
     ),
     isNotNull,
-    map((endpoint) => new LoadEndpointAction(endpoint))
+    map((network) => new LoadNetworkAction(network))
   );
 
   private loadConnection$ = this.actions$.pipe(
-    ofType<LoadEndpointAction>('loadEndpoint'),
+    ofType<LoadNetworkAction>('loadNetwork'),
     map(
-      ({ payload: { endpoint } }) =>
-        new LoadConnectionAction(new Connection(endpoint, 'recent'))
+      ({ payload: { url } }) =>
+        new LoadConnectionAction(new Connection(url, 'recent'))
     )
   );
 
   private loadSendConnection$ = this.actions$.pipe(
-    ofType<LoadEndpointAction>('loadEndpoint'),
+    ofType<LoadNetworkAction>('loadNetwork'),
     map(
-      ({ payload: { endpoint } }) =>
-        new LoadSendConnectionAction(new Connection(endpoint, 'recent'))
+      ({ payload: { url } }) =>
+        new LoadSendConnectionAction(new Connection(url, 'recent'))
     )
   );
 
   private loadTokens$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadEndpointAction>('loadEndpoint')),
+    this.actions$.pipe(ofType<LoadNetworkAction>('loadNetwork')),
   ]).pipe(
-    switchMap(([, { payload: endpoint }]) =>
-      getTokens(endpoint).pipe(map((tokens) => new LoadTokensAction(tokens)))
+    switchMap(([, { payload: network }]) =>
+      getTokens(network).pipe(
+        map((tokens) => new LoadNetworkTokensAction(tokens))
+      )
     )
   );
 
-  constructor(endpoints: Endpoint[], defaultEndpoint: string) {
+  constructor(networks: Network[], defaultNetwork: string) {
     this.runEffects([
-      this.connectionAccountChange$,
+      /* this.connectionAccountChange$,
       this.connectionSlotChange$,
       this.sendConnectionAccountChange$,
-      this.sendConnectionSlotChange$,
-      this.loadEndpoint$,
+      this.sendConnectionSlotChange$, */
+      this.loadNetwork$,
       this.loadConnection$,
       this.loadSendConnection$,
       this.loadTokens$,
     ]);
 
-    this.loadEndpoints(endpoints);
-    this.selectEndpoint(defaultEndpoint);
+    setTimeout(() => {
+      this.selectNetwork(defaultNetwork);
+      this.loadNetworks(networks);
+    });
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -160,12 +165,12 @@ export class ConnectionService implements IConnectionService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  loadEndpoints(endpoints: Endpoint[]) {
-    this._dispatcher.next(new LoadEndpointsAction(endpoints));
+  loadNetworks(networks: Network[]) {
+    this._dispatcher.next(new LoadNetworksAction(networks));
   }
 
-  selectEndpoint(endpointId: string) {
-    this._dispatcher.next(new SelectEndpointAction(endpointId));
+  selectNetwork(networkId: string) {
+    this._dispatcher.next(new SelectNetworkAction(networkId));
   }
 
   destroy() {

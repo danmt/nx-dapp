@@ -1,9 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import {
-  getAllEndpoints,
-  getSelected as getSelectedEndpoint,
-} from '@nx-dapp/shared/connection/data-access/endpoints';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   ACCOUNT_SERVICE,
@@ -19,8 +14,6 @@ import {
 } from '@nx-dapp/solana-dapp/angular';
 import { WalletName } from '@nx-dapp/solana-dapp/wallet/base';
 
-import { init, selectEndpoint } from './app.actions';
-
 @Component({
   selector: 'nx-dapp-root',
   template: `
@@ -32,11 +25,11 @@ import { init, selectEndpoint } from './app.actions';
         (connectWallet)="onConnectWallet()"
         (disconnectWallet)="onDisconnectWallet()"
       ></nx-dapp-wallets-dropdown>
-      <ng-container *ngIf="endpoints$ | async as endpoints">
+      <ng-container *ngIf="networks$ | async as networks">
         <nx-dapp-connections-dropdown
-          [endpoints]="endpoints"
-          [endpoint]="endpoint$ | async"
-          (selectEndpoint)="onSelectEndpoint($event)"
+          [networks]="networks"
+          [network]="network$ | async"
+          (selectNetwork)="onSelectNetwork($event)"
         ></nx-dapp-connections-dropdown>
       </ng-container>
     </header>
@@ -67,15 +60,14 @@ import { init, selectEndpoint } from './app.actions';
   `,
 })
 export class AppComponent implements OnInit {
-  endpoints$ = this.store.select(getAllEndpoints);
-  endpoint$ = this.store.select(getSelectedEndpoint);
+  networks$ = this.connectionService.networks$;
+  network$ = this.connectionService.network$;
   wallets$ = this.walletService.wallets$;
   isConnected$ = this.walletService.connected$;
   balances$ = this.balanceService.balances$;
   totalInUSD$ = this.balanceService.totalInUSD$;
 
   constructor(
-    private store: Store,
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
     @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
     @Inject(ACCOUNT_SERVICE) private accountService: IAccountService,
@@ -84,8 +76,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(init());
-
     this.connectionService.connection$
       .pipe(isNotNull)
       .subscribe((connection) => {
@@ -109,8 +99,8 @@ export class AppComponent implements OnInit {
       .pipe(isNotNull)
       .subscribe((account) => this.accountService.changeAccount(account));
 
-    this.connectionService.tokens$.subscribe((tokens) =>
-      this.balanceService.loadTokens(tokens)
+    this.connectionService.networkTokens$.subscribe((networkTokens) =>
+      this.balanceService.loadNetworkTokens(networkTokens)
     );
 
     this.accountService.userAccounts$.subscribe((userAccounts) => {
@@ -146,10 +136,8 @@ export class AppComponent implements OnInit {
     );
   }
 
-  onSelectEndpoint(endpointId: string) {
-    this.store.dispatch(selectEndpoint({ selectedId: endpointId }));
-
-    this.connectionService.selectEndpoint(endpointId);
+  onSelectNetwork(networkId: string) {
+    this.connectionService.selectNetwork(networkId);
   }
 
   onSelectWallet(walletName: WalletName) {

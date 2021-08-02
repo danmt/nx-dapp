@@ -33,7 +33,7 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
-  LoadTokensAction,
+  LoadNetworkTokensAction,
   LoadUserAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
@@ -65,7 +65,7 @@ export class BalanceService implements IBalanceService {
   private loadBalances$ = combineLatest([
     // Useful data
     combineLatest([
-      this.actions$.pipe(ofType<LoadTokensAction>('loadTokens')),
+      this.actions$.pipe(ofType<LoadNetworkTokensAction>('loadNetworkTokens')),
       this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
     ]),
     // User data
@@ -181,8 +181,8 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadMintTokensAction(mintTokens));
   }
 
-  loadTokens(tokens: Map<string, TokenInfo>) {
-    this._dispatcher.next(new LoadTokensAction(tokens));
+  loadNetworkTokens(networkTokens: Map<string, TokenInfo>) {
+    this._dispatcher.next(new LoadNetworkTokensAction(networkTokens));
   }
 
   loadWalletConnected(walletConnected: boolean) {

@@ -1,4 +1,4 @@
-import { DEFAULT_ENDPOINT, ENV } from '@nx-dapp/solana-dapp/connection/base';
+import { DEFAULT_NETWORK, ENV } from '@nx-dapp/solana-dapp/connection/base';
 import { DEFAULT_WALLET } from '@nx-dapp/solana-dapp/wallet/base';
 import {
   getPhantomWallet,
@@ -61,28 +61,28 @@ export const environment = {
         pubkey: new PublicKey('TuLipcqtGVXP9XR62wM8WWCm6a9vhLs7T1uoWBk6FDs'),
       },
     ],
-    endpoints: [
+    networks: [
       {
         name: 'mainnet-beta' as ENV,
-        endpoint: 'https://solana-api.projectserum.com/',
+        url: 'https://solana-api.projectserum.com/',
         chainID: ChainID.MainnetBeta,
       },
       {
         name: 'testnet' as ENV,
-        endpoint: clusterApiUrl('testnet'),
+        url: clusterApiUrl('testnet'),
         chainID: ChainID.Testnet,
       },
       {
         name: 'devnet' as ENV,
-        endpoint: clusterApiUrl('devnet'),
+        url: clusterApiUrl('devnet'),
         chainID: ChainID.Devnet,
       },
       {
         name: 'localnet' as ENV,
-        endpoint: 'http://127.0.0.1:8899',
+        url: 'http://127.0.0.1:8899',
         chainID: ChainID.Devnet,
       },
     ],
-    defaultEndpoint: DEFAULT_ENDPOINT,
+    defaultNetwork: DEFAULT_NETWORK,
   },
 };

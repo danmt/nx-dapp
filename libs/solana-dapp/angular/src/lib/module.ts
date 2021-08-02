@@ -4,10 +4,7 @@ import { accountServiceProvider } from '@nx-dapp/solana-dapp/account/angular';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
 import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
-import {
-  DEFAULT_ENDPOINT,
-  Endpoint,
-} from '@nx-dapp/solana-dapp/connection/base';
+import { DEFAULT_NETWORK, Network } from '@nx-dapp/solana-dapp/connection/base';
 import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
 import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
 import {
@@ -45,8 +42,8 @@ export interface SolanaDappConfig {
   marketConfig?: SolanaDappMarketConfig;
   walletConfig?: SolanaDappWalletConfig;
   mintTokens?: TokenDetails[];
-  endpoints?: Endpoint[];
-  defaultEndpoint?: string;
+  networks?: Network[];
+  defaultNetwork?: string;
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
@@ -68,8 +65,8 @@ export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
     defaultWallet: DEFAULT_WALLET,
   },
   mintTokens: [],
-  endpoints: [],
-  defaultEndpoint: DEFAULT_ENDPOINT,
+  networks: [],
+  defaultNetwork: DEFAULT_NETWORK,
 };
 
 @NgModule({
@@ -95,11 +92,11 @@ export class SolanaDappModule {
 
     if (
       config.balanceConfig?.isEnabled &&
-      config.endpoints &&
-      config.defaultEndpoint
+      config.networks &&
+      config.defaultNetwork
     ) {
       providers.push(
-        connectionServiceProvider(config.endpoints, config.defaultEndpoint)
+        connectionServiceProvider(config.networks, config.defaultNetwork)
       );
     }
 

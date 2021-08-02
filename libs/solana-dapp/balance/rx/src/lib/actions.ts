@@ -59,8 +59,8 @@ export class LoadMarketIndicatorAccountsAction {
   constructor(public payload: Map<string, ParsedAccountBase>) {}
 }
 
-export class LoadTokensAction {
-  type = 'loadTokens';
+export class LoadNetworkTokensAction {
+  type = 'loadNetworkTokens';
 
   constructor(public payload: Map<string, TokenInfo>) {}
 }

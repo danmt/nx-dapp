@@ -1,4 +1,4 @@
-import { Endpoint } from '@nx-dapp/solana-dapp/connection/base';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { AccountInfo, Connection } from '@solana/web3.js';
 
@@ -6,22 +6,22 @@ export class InitAction {
   type = 'init';
 }
 
-export class SelectEndpointAction {
-  type = 'selectEndpoint';
+export class SelectNetworkAction {
+  type = 'selectNetwork';
 
   constructor(public payload: string) {}
 }
 
-export class LoadEndpointAction {
-  type = 'loadEndpoint';
+export class LoadNetworkAction {
+  type = 'loadNetwork';
 
-  constructor(public payload: Endpoint) {}
+  constructor(public payload: Network) {}
 }
 
-export class LoadEndpointsAction {
-  type = 'loadEndpoints';
+export class LoadNetworksAction {
+  type = 'loadNetworks';
 
-  constructor(public payload: Endpoint[]) {}
+  constructor(public payload: Network[]) {}
 }
 
 export class LoadConnectionAction {
@@ -54,8 +54,8 @@ export class SendConnectionSlotChangedAction {
   type = 'sendConnectionSlotChanged';
 }
 
-export class LoadTokensAction {
-  type = 'loadTokens';
+export class LoadNetworkTokensAction {
+  type = 'loadNetworkTokens';
 
   constructor(public payload: Map<string, TokenInfo>) {}
 }

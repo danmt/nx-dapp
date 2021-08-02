@@ -17,7 +17,7 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
-  LoadTokensAction,
+  LoadNetworkTokensAction,
   LoadUserAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
@@ -33,7 +33,7 @@ export type Action =
   | LoadMarketAccountsAction
   | LoadMarketIndicatorAccountsAction
   | LoadMarketMintAccountsAction
-  | LoadTokensAction
+  | LoadNetworkTokensAction
   | LoadWalletConnectedAction
   | ResetAction;
 
@@ -67,7 +67,7 @@ export interface IBalanceService {
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>): void;
 
-  loadTokens(tokens: Map<string, TokenInfo>): void;
+  loadNetworkTokens(networkTokens: Map<string, TokenInfo>): void;
 
   loadWalletConnected(walletConnected: boolean): void;
 }

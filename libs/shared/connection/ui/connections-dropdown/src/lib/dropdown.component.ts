@@ -5,16 +5,16 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Endpoint } from '@nx-dapp/shared/connection/data-access/endpoints';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 
 @Component({
   selector: 'nx-dapp-connections-dropdown',
   template: `
     <mat-form-field appearance="fill">
       <mat-label>Environment</mat-label>
-      <mat-select [formControl]="endpointControl">
-        <mat-option *ngFor="let endpoint of endpoints" [value]="endpoint.id">
-          {{ endpoint.id }}
+      <mat-select [formControl]="networkControl">
+        <mat-option *ngFor="let network of networks" [value]="network.name">
+          {{ network.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -23,11 +23,11 @@ import { Endpoint } from '@nx-dapp/shared/connection/data-access/endpoints';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectionsDropdownComponent {
-  private readonly _defaultEndpoint = 'mainnet-beta';
-  @Input() endpoint: Endpoint | null = null;
-  @Input() endpoints: Endpoint[] = [];
-  endpointControl = new FormControl(
-    this.endpoint ? this.endpoint.id : this._defaultEndpoint
+  private readonly _defaultNetwork = 'mainnet-beta';
+  @Input() network: Network | null = null;
+  @Input() networks: Network[] = [];
+  networkControl = new FormControl(
+    this.network ? this.network.name : this._defaultNetwork
   );
-  @Output() selectEndpoint = this.endpointControl.valueChanges;
+  @Output() selectNetwork = this.networkControl.valueChanges;
 }
