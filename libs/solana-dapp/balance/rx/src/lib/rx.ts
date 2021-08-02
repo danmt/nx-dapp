@@ -60,18 +60,21 @@ export class BalanceService implements IBalanceService {
   );
 
   private loadBalances$ = combineLatest([
+    // Useful data
     combineLatest([
       this.actions$.pipe(ofType<LoadTokensAction>('loadTokens')),
       this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
     ]),
+    // User data
     combineLatest([
       this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
       this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+    ]),
+    // Market
+    combineLatest([
       this.actions$.pipe(
         ofType<LoadMarketAccountsAction>('loadMarketAccounts')
       ),
-    ]),
-    combineLatest([
       this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
       this.actions$.pipe(
         ofType<LoadMarketMintAccountsAction>('loadMarketMintAccounts')
@@ -84,12 +87,9 @@ export class BalanceService implements IBalanceService {
     map(
       ([
         [{ payload: tokens }, { payload: mintTokens }],
+        [{ payload: mintAccounts }, { payload: userAccounts }],
         [
-          { payload: mintAccounts },
-          { payload: userAccounts },
           { payload: marketAccounts },
-        ],
-        [
           { payload: marketByMint },
           { payload: marketMintAccounts },
           { payload: marketIndicatorAccounts },
