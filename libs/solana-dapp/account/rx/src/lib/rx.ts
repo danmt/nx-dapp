@@ -1,14 +1,13 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
-  MintParser,
-  MintTokenAccount,
+  getMintAccounts,
   TokenAccount,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
 import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { MintLayout, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -24,13 +23,11 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  mergeMap,
   observeOn,
   scan,
   shareReplay,
   switchMap,
   takeUntil,
-  toArray,
 } from 'rxjs/operators';
 
 import {
@@ -155,28 +152,8 @@ export class AccountService implements IAccountService {
     this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
   ]).pipe(
     switchMap(([{ payload: connection }, { payload: mintKeys }]) =>
-      from(mintKeys).pipe(
-        mergeMap((mintKey) =>
-          from(defer(() => connection.getAccountInfo(mintKey))).pipe(
-            isNotNull,
-            // Mint account can be empty (specially in localnet, devnet and testnet)
-            // In order to prevent errors from throwing, just filter the
-            // accounts based on its length
-            filter(({ data }) => data.length === MintLayout.span),
-            map((account) => MintParser(mintKey, account))
-          )
-        ),
-        toArray(),
-        map(
-          (accounts) =>
-            new LoadMintAccountsAction(
-              accounts.reduce(
-                (mintAccounts, account) =>
-                  mintAccounts.set(account.pubkey.toBase58(), account),
-                new Map<string, MintTokenAccount>()
-              )
-            )
-        )
+      getMintAccounts(connection, mintKeys).pipe(
+        map((mintAccounts) => new LoadMintAccountsAction(mintAccounts))
       )
     )
   );
