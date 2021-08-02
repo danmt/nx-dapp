@@ -16,6 +16,7 @@ import {
 } from 'rxjs';
 import {
   distinctUntilChanged,
+  filter,
   map,
   observeOn,
   scan,
@@ -34,6 +35,8 @@ import {
   LoadMintTokensAction,
   LoadTokensAction,
   LoadUserAccountsAction,
+  LoadWalletConnectedAction,
+  ResetAction,
 } from './actions';
 import { balanceInitialState, reducer } from './state';
 import { Action, IBalanceService } from './types';
@@ -124,8 +127,14 @@ export class BalanceService implements IBalanceService {
     )
   );
 
+  private reset$ = this.actions$.pipe(
+    ofType<LoadWalletConnectedAction>('loadWalletConnected'),
+    filter(({ payload: connected }) => !connected),
+    map(() => new ResetAction())
+  );
+
   constructor(mintTokens: TokenDetails[]) {
-    this.runEffects([this.loadBalances$]);
+    this.runEffects([this.loadBalances$, this.reset$]);
 
     this.loadMintTokens(mintTokens);
   }
@@ -170,6 +179,10 @@ export class BalanceService implements IBalanceService {
 
   loadTokens(tokens: Map<string, TokenInfo>) {
     this._dispatcher.next(new LoadTokensAction(tokens));
+  }
+
+  loadWalletConnected(connected: boolean) {
+    this._dispatcher.next(new LoadWalletConnectedAction(connected));
   }
 
   destroy() {

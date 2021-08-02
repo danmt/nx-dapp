@@ -23,6 +23,12 @@ export const reducer = (state: BalanceState, action: Action) => {
           0
         ),
       };
+    case 'reset':
+      return {
+        ...state,
+        balances: [],
+        totalInUSD: 0,
+      };
     default:
       return state;
   }
