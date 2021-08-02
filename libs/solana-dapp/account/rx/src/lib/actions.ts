@@ -73,3 +73,7 @@ export class LoadMarketByMintAction {
 
   constructor(public payload: Map<string, SerumMarket>) {}
 }
+
+export class ResetAction {
+  type = 'reset';
+}

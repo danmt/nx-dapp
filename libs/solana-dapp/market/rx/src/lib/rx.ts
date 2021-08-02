@@ -24,7 +24,6 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
-  withLatestFrom,
 } from 'rxjs/operators';
 
 import {
@@ -34,9 +33,10 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
-  LoadMarketMintsAction,
   LoadNativeAccountAction,
   LoadUserAccountsAction,
+  LoadWalletConnectedAction,
+  ResetAction,
 } from './actions';
 import { marketInitialState, reducer } from './state';
 import { Action, IMarketService } from './types';
@@ -69,42 +69,32 @@ export class MarketService implements IMarketService {
     distinctUntilChanged()
   );
 
-  private loadMarketMints$ = combineLatest([
+  private loadMarketByMint$ = combineLatest([
     this.actions$.pipe(ofType<LoadNativeAccountAction>('loadNativeAccount')),
     this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
-    withLatestFrom(this.state$),
+    filter(([, , { payload: walletConnected }]) => walletConnected),
     map(
-      ([
-        [{ payload: nativeAccount }, { payload: userAccounts }],
-        { marketMints },
-      ]) => {
-        const mints = [...userAccounts, nativeAccount].map((a) =>
-          a.info.mint.toBase58()
-        );
-        const newMints = [...new Set([...marketMints, ...mints]).values()];
-
-        return { marketMints, newMints };
-      }
-    ),
-    filter(
-      ({ marketMints, newMints }) => marketMints.length !== newMints.length
-    ),
-    map(({ newMints }) => new LoadMarketMintsAction(newMints))
-  );
-
-  private loadMarketByMint$ = this.actions$.pipe(
-    ofType<LoadMarketMintsAction>('loadMarketMints'),
-    map(
-      ({ payload: marketMints }) =>
-        new LoadMarketByMintAction(getMarketByMint(marketMints))
+      ([{ payload: nativeAccount }, { payload: userAccounts }]) =>
+        new LoadMarketByMintAction(
+          getMarketByMint(
+            [...userAccounts, nativeAccount].map((a) => a.info.mint.toBase58())
+          )
+        )
     )
   );
 
   private loadMarketAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: marketByMint }]) =>
       getMarkets(marketByMint, connection).pipe(
         map((marketAccounts) => new LoadMarketAccountsAction(marketAccounts))
@@ -116,7 +106,11 @@ export class MarketService implements IMarketService {
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , , { payload: walletConnected }]) => walletConnected),
     switchMap(
       ([
         { payload: connection },
@@ -136,7 +130,11 @@ export class MarketService implements IMarketService {
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , , { payload: walletConnected }]) => walletConnected),
     switchMap(
       ([
         { payload: connection },
@@ -152,13 +150,19 @@ export class MarketService implements IMarketService {
     )
   );
 
+  private reset$ = this.actions$.pipe(
+    ofType<LoadWalletConnectedAction>('loadWalletConnected'),
+    filter(({ payload: connected }) => !connected),
+    map(() => new ResetAction())
+  );
+
   constructor() {
     this.runEffects([
-      this.loadMarketMints$,
       this.loadMarketByMint$,
       this.loadMarketAccounts$,
       this.loadMarketMintAccounts$,
       this.loadMarketIndicatorAccounts$,
+      this.reset$,
     ]);
   }
 
@@ -178,6 +182,10 @@ export class MarketService implements IMarketService {
 
   loadConnection(connection: Connection) {
     this._dispatcher.next(new LoadConnectionAction(connection));
+  }
+
+  loadWalletConnected(walletConnected: boolean) {
+    this._dispatcher.next(new LoadWalletConnectedAction(walletConnected));
   }
 
   destroy() {

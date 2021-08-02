@@ -64,3 +64,13 @@ export class LoadTokensAction {
 
   constructor(public payload: Map<string, TokenInfo>) {}
 }
+
+export class LoadWalletConnectedAction {
+  type = 'loadWalletConnected';
+
+  constructor(public payload: boolean) {}
+}
+
+export class ResetAction {
+  type = 'reset';
+}

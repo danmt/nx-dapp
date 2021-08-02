@@ -20,6 +20,7 @@ import {
 } from 'rxjs';
 import {
   distinctUntilChanged,
+  filter,
   map,
   mergeMap,
   observeOn,
@@ -39,6 +40,7 @@ import {
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   LoadWalletPublicKeyAction,
+  ResetAction,
 } from './actions';
 import { accountInitialState, reducer } from './state';
 import { Action, IAccountService } from './types';
@@ -78,7 +80,11 @@ export class AccountService implements IAccountService {
     this.actions$.pipe(
       ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
     ),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
       from(defer(() => connection.getAccountInfo(walletPublicKey))).pipe(
         isNotNull,
@@ -97,7 +103,11 @@ export class AccountService implements IAccountService {
     this.actions$.pipe(
       ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
     ),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , { payload: walletConnected }]) => walletConnected),
     map(
       ([{ payload: account }, { payload: walletPublicKey }]) =>
         new LoadNativeAccountAction(
@@ -111,7 +121,11 @@ export class AccountService implements IAccountService {
     this.actions$.pipe(
       ofType<LoadWalletPublicKeyAction>('loadWalletPublicKey')
     ),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
       from(
         defer(() =>
@@ -154,12 +168,19 @@ export class AccountService implements IAccountService {
     )
   );
 
+  private reset$ = this.actions$.pipe(
+    ofType<LoadWalletConnectedAction>('loadWalletConnected'),
+    filter(({ payload: walletConnected }) => !walletConnected),
+    map(() => new ResetAction())
+  );
+
   constructor(mintTokens: TokenDetails[]) {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
       this.loadMintAccounts$,
+      this.reset$,
     ]);
 
     this.loadMintTokens(mintTokens.map(({ pubkey }) => pubkey));
@@ -175,12 +196,12 @@ export class AccountService implements IAccountService {
     this._dispatcher.next(new LoadConnectionAction(connection));
   }
 
-  loadWalletPublicKey(publicKey: PublicKey) {
-    this._dispatcher.next(new LoadWalletPublicKeyAction(publicKey));
+  loadWalletPublicKey(walletPublicKey: PublicKey) {
+    this._dispatcher.next(new LoadWalletPublicKeyAction(walletPublicKey));
   }
 
-  loadWalletConnected(connected: boolean) {
-    this._dispatcher.next(new LoadWalletConnectedAction(connected));
+  loadWalletConnected(walletConnected: boolean) {
+    this._dispatcher.next(new LoadWalletConnectedAction(walletConnected));
   }
 
   changeAccount(account: AccountInfo<Buffer>) {

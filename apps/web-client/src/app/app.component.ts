@@ -99,9 +99,11 @@ export class AppComponent implements OnInit {
         this.accountService.loadWalletPublicKey(publicKey)
       );
 
-    this.walletService.connected$.subscribe((connected) =>
-      this.accountService.loadWalletConnected(connected)
-    );
+    this.walletService.connected$.subscribe((connected) => {
+      this.accountService.loadWalletConnected(connected);
+      this.balanceService.loadWalletConnected(connected);
+      this.marketService.loadWalletConnected(connected);
+    });
 
     this.connectionService.connectionAccount$
       .pipe(isNotNull)

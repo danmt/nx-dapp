@@ -6,12 +6,10 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
-  LoadMarketMintsAction,
 } from './actions';
 import { Action, MarketState } from './types';
 
 export const marketInitialState: MarketState = {
-  marketMints: [],
   marketByMint: new Map<string, SerumMarket>(),
   marketMintAccounts: new Map<string, ParsedAccountBase>(),
   marketIndicatorAccounts: new Map<string, ParsedAccountBase>(),
@@ -20,11 +18,6 @@ export const marketInitialState: MarketState = {
 
 export const reducer = (state: MarketState, action: Action) => {
   switch (action.type) {
-    case 'loadMarketMints':
-      return {
-        ...state,
-        marketMints: (action as LoadMarketMintsAction).payload,
-      };
     case 'loadMarketByMint':
       return {
         ...state,
@@ -62,6 +55,14 @@ export const reducer = (state: MarketState, action: Action) => {
             marketIndicatorAccounts.set(account.pubkey.toBase58(), account),
           new Map(state.marketIndicatorAccounts)
         ),
+      };
+    case 'reset':
+      return {
+        ...state,
+        marketByMint: new Map<string, SerumMarket>(),
+        marketMintAccounts: new Map<string, ParsedAccountBase>(),
+        marketIndicatorAccounts: new Map<string, ParsedAccountBase>(),
+        marketAccounts: new Map<string, ParsedAccountBase>(),
       };
     default:
       return state;
