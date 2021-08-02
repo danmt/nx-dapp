@@ -196,12 +196,12 @@ export class AccountService implements IAccountService {
     this._dispatcher.next(new LoadConnectionAction(connection));
   }
 
-  loadWalletPublicKey(publicKey: PublicKey) {
-    this._dispatcher.next(new LoadWalletPublicKeyAction(publicKey));
+  loadWalletPublicKey(walletPublicKey: PublicKey) {
+    this._dispatcher.next(new LoadWalletPublicKeyAction(walletPublicKey));
   }
 
-  loadWalletConnected(connected: boolean) {
-    this._dispatcher.next(new LoadWalletConnectedAction(connected));
+  loadWalletConnected(walletConnected: boolean) {
+    this._dispatcher.next(new LoadWalletConnectedAction(walletConnected));
   }
 
   changeAccount(account: AccountInfo<Buffer>) {

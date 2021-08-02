@@ -50,9 +50,9 @@ export interface IAccountService {
 
   loadConnection(connection: Connection): void;
 
-  loadWalletPublicKey(publicKey: PublicKey): void;
+  loadWalletPublicKey(walletPublicKey: PublicKey): void;
 
-  loadWalletConnected(publicKey: boolean): void;
+  loadWalletConnected(walletConnected: boolean): void;
 
   changeAccount(account: AccountInfo<Buffer>): void;
 
