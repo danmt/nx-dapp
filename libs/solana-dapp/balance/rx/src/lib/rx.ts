@@ -86,7 +86,11 @@ export class BalanceService implements IBalanceService {
         ofType<LoadMarketIndicatorAccountsAction>('loadMarketIndicatorAccounts')
       ),
     ]),
+    this.actions$.pipe(
+      ofType<LoadWalletConnectedAction>('loadWalletConnected')
+    ),
   ]).pipe(
+    filter(([, , , { payload: walletConnected }]) => walletConnected),
     map(
       ([
         [{ payload: tokens }, { payload: mintTokens }],
