@@ -63,6 +63,15 @@ export const reducer = (state: MarketState, action: Action) => {
           new Map(state.marketIndicatorAccounts)
         ),
       };
+    case 'reset':
+      return {
+        ...state,
+        marketMints: [],
+        marketByMint: new Map<string, SerumMarket>(),
+        marketMintAccounts: new Map<string, ParsedAccountBase>(),
+        marketIndicatorAccounts: new Map<string, ParsedAccountBase>(),
+        marketAccounts: new Map<string, ParsedAccountBase>(),
+      };
     default:
       return state;
   }

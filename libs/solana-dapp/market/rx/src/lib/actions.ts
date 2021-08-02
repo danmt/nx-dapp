@@ -56,3 +56,13 @@ export class LoadConnectionAction {
 
   constructor(public payload: Connection) {}
 }
+
+export class LoadWalletConnectedAction {
+  type = 'loadWalletConnected';
+
+  constructor(public payload: boolean) {}
+}
+
+export class ResetAction {
+  type = 'reset';
+}

@@ -8,12 +8,16 @@ import { Observable } from 'rxjs';
 
 import {
   InitAction,
+  LoadConnectionAction,
   LoadMarketAccountsAction,
+  LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
   LoadMarketMintsAction,
   LoadNativeAccountAction,
   LoadUserAccountsAction,
+  LoadWalletConnectedAction,
+  ResetAction,
 } from './actions';
 
 export interface MarketState {
@@ -31,7 +35,11 @@ export type Action =
   | LoadMarketMintsAction
   | LoadMarketAccountsAction
   | LoadMarketMintAccountsAction
-  | LoadMarketIndicatorAccountsAction;
+  | LoadMarketIndicatorAccountsAction
+  | LoadConnectionAction
+  | LoadMarketByMintAction
+  | ResetAction
+  | LoadWalletConnectedAction;
 
 export interface IMarketService {
   actions$: Observable<Action>;
@@ -46,4 +54,6 @@ export interface IMarketService {
   loadNativeAccount(nativeAccount: TokenAccount): void;
 
   loadConnection(connection: Connection): void;
+
+  loadWalletConnected(walletConnected: boolean): void;
 }
