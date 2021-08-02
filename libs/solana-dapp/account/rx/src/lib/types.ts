@@ -17,6 +17,7 @@ import {
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   LoadWalletPublicKeyAction,
+  ResetAction,
 } from './actions';
 
 export type Action =
@@ -30,7 +31,8 @@ export type Action =
   | AccountChangedAction
   | LoadMintAccountsAction
   | LoadMarketByMintAction
-  | LoadMintTokensAction;
+  | LoadMintTokensAction
+  | ResetAction;
 
 export interface AccountState {
   tokenAccounts: TokenAccount[];

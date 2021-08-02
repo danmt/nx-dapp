@@ -40,6 +40,12 @@ export const reducer = (state: AccountState, action: Action) => {
           action as LoadNativeAccountAction | AccountChangedAction
         ).payload,
       };
+    case 'reset':
+      return {
+        ...state,
+        nativeAccount: null,
+        tokenAccounts: [],
+      };
     default:
       return state;
   }
