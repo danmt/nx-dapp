@@ -26,35 +26,18 @@ export const reducer = (state: MarketState, action: Action) => {
     case 'loadMarketAccounts':
       return {
         ...state,
-        marketAccounts: [
-          ...(action as LoadMarketAccountsAction).payload.values(),
-        ].reduce(
-          (marketAccounts, account) =>
-            marketAccounts.set(account.pubkey.toBase58(), account),
-          new Map(state.marketAccounts)
-        ),
+        marketAccounts: (action as LoadMarketAccountsAction).payload,
       };
     case 'loadMarketMintAccounts':
       return {
         ...state,
-        marketMintAccounts: [
-          ...(action as LoadMarketMintAccountsAction).payload.values(),
-        ].reduce(
-          (marketMintAccounts, account) =>
-            marketMintAccounts.set(account.pubkey.toBase58(), account),
-          new Map(state.marketMintAccounts)
-        ),
+        marketMintAccounts: (action as LoadMarketMintAccountsAction).payload,
       };
     case 'loadMarketIndicatorAccounts':
       return {
         ...state,
-        marketIndicatorAccounts: [
-          ...(action as LoadMarketIndicatorAccountsAction).payload.values(),
-        ].reduce(
-          (marketIndicatorAccounts, account) =>
-            marketIndicatorAccounts.set(account.pubkey.toBase58(), account),
-          new Map(state.marketIndicatorAccounts)
-        ),
+        marketIndicatorAccounts: (action as LoadMarketIndicatorAccountsAction)
+          .payload,
       };
     case 'reset':
       return {

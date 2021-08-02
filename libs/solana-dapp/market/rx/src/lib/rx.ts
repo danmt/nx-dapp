@@ -1,13 +1,10 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
 import {
-  ParsedAccountBase,
-  TokenAccount,
-} from '@nx-dapp/solana-dapp/account/base';
-import {
+  getMarketAccounts,
   getMarketByMint,
-  getMarketIndicators,
-  getMarketMints,
-  getMarkets,
+  getMarketIndicatorAccounts,
+  getMarketMintAccounts,
 } from '@nx-dapp/solana-dapp/market/base';
 import { Connection } from '@solana/web3.js';
 import {
@@ -73,20 +70,15 @@ export class MarketService implements IMarketService {
   );
 
   private loadMarketByMint$ = combineLatest([
-    this.actions$.pipe(ofType<LoadNativeAccountAction>('loadNativeAccount')),
     this.actions$.pipe(ofType<LoadTokenAccountsAction>('loadTokenAccounts')),
     this.actions$.pipe(
       ofType<LoadWalletConnectedAction>('loadWalletConnected')
     ),
   ]).pipe(
-    filter(([, , { payload: walletConnected }]) => walletConnected),
+    filter(([, { payload: walletConnected }]) => walletConnected),
     map(
-      ([, { payload: tokenAccounts }]) =>
-        new LoadMarketByMintAction(
-          getMarketByMint(
-            [...tokenAccounts.values()].map((a) => a.info.mint.toBase58())
-          )
-        )
+      ([{ payload: tokenAccounts }]) =>
+        new LoadMarketByMintAction(getMarketByMint(tokenAccounts))
     )
   );
 
@@ -99,7 +91,7 @@ export class MarketService implements IMarketService {
   ]).pipe(
     filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: marketByMint }]) =>
-      getMarkets(marketByMint, connection).pipe(
+      getMarketAccounts(marketByMint, connection).pipe(
         map((marketAccounts) => new LoadMarketAccountsAction(marketAccounts))
       )
     )
@@ -108,66 +100,36 @@ export class MarketService implements IMarketService {
   private loadMarketMintAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
     this.actions$.pipe(
       ofType<LoadWalletConnectedAction>('loadWalletConnected')
     ),
   ]).pipe(
-    filter(([, , , { payload: walletConnected }]) => walletConnected),
-    switchMap(
-      ([
-        { payload: connection },
-        { payload: marketAccounts },
-        { payload: marketByMint },
-      ]) =>
-        getMarketMints(marketByMint, connection, marketAccounts).pipe(
-          map(
-            (marketMintAccounts) =>
-              new LoadMarketMintAccountsAction(
-                marketMintAccounts.reduce(
-                  (marketMintAccounts, marketMintAccount) =>
-                    marketMintAccounts.set(
-                      marketMintAccount.pubkey.toBase58(),
-                      marketMintAccount
-                    ),
-                  new Map<string, ParsedAccountBase>()
-                )
-              )
-          )
+    filter(([, , { payload: walletConnected }]) => walletConnected),
+    switchMap(([{ payload: connection }, { payload: marketAccounts }]) =>
+      getMarketMintAccounts(connection, marketAccounts).pipe(
+        map(
+          (marketMintAccounts) =>
+            new LoadMarketMintAccountsAction(marketMintAccounts)
         )
+      )
     )
   );
 
   private loadMarketIndicatorAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-    this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
     this.actions$.pipe(
       ofType<LoadWalletConnectedAction>('loadWalletConnected')
     ),
   ]).pipe(
-    filter(([, , , { payload: walletConnected }]) => walletConnected),
-    switchMap(
-      ([
-        { payload: connection },
-        { payload: marketAccounts },
-        { payload: marketByMint },
-      ]) =>
-        getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
-          map(
-            (marketIndicatorAccounts) =>
-              new LoadMarketIndicatorAccountsAction(
-                marketIndicatorAccounts.reduce(
-                  (marketAccounts, marketAccount) =>
-                    marketAccounts.set(
-                      marketAccount.pubkey.toBase58(),
-                      marketAccount
-                    ),
-                  new Map<string, ParsedAccountBase>()
-                )
-              )
-          )
+    filter(([, , { payload: walletConnected }]) => walletConnected),
+    switchMap(([{ payload: connection }, { payload: marketAccounts }]) =>
+      getMarketIndicatorAccounts(connection, marketAccounts).pipe(
+        map(
+          (marketIndicatorAccounts) =>
+            new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
         )
+      )
     )
   );
 
