@@ -2,12 +2,11 @@ import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
   getMintAccounts,
-  TokenAccount,
+  getTokenAccounts,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
 import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -121,28 +120,8 @@ export class AccountService implements IAccountService {
   ]).pipe(
     filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
-      from(
-        defer(() =>
-          connection.getTokenAccountsByOwner(walletPublicKey, {
-            programId: TOKEN_PROGRAM_ID,
-          })
-        )
-      ).pipe(
-        map(
-          (accounts) =>
-            new LoadTokenAccountsAction(
-              accounts.value
-                .filter(({ account }) => account.data.length > 0)
-                .map(({ account, pubkey }) =>
-                  TokenAccountParser(new PublicKey(pubkey.toBase58()), account)
-                )
-                .reduce(
-                  (tokenAccounts, account) =>
-                    tokenAccounts.set(account.pubkey.toBase58(), account),
-                  new Map<string, TokenAccount>()
-                )
-            )
-        )
+      getTokenAccounts(connection, walletPublicKey).pipe(
+        map((tokenAccounts) => new LoadTokenAccountsAction(tokenAccounts))
       )
     )
   );
