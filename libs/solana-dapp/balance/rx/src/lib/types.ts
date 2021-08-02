@@ -63,7 +63,7 @@ export interface IBalanceService {
 
   loadMintTokens(mintTokens: TokenDetails[]): void;
 
-  loadUserAccounts(userAccounts: TokenAccount[]): void;
+  loadUserAccounts(userAccounts: Map<string, TokenAccount>): void;
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>): void;
 

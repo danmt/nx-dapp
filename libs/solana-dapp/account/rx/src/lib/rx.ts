@@ -69,7 +69,9 @@ export class AccountService implements IAccountService {
     this.tokenAccounts$,
     this.nativeAccount$.pipe(isNotNull),
   ]).pipe(
-    map(([tokenAccounts, nativeAccount]) => [...tokenAccounts, nativeAccount])
+    map(([tokenAccounts, nativeAccount]) =>
+      tokenAccounts.set(nativeAccount.pubkey.toBase58(), nativeAccount)
+    )
   );
   mintAccounts$ = this.state$.pipe(
     map(({ mintAccounts }) => mintAccounts),
@@ -135,20 +137,17 @@ export class AccountService implements IAccountService {
           })
         )
       ).pipe(
-        map(
-          (accounts) =>
-            new LoadTokenAccountsAction({
-              tokenAccounts: accounts.value
-                .filter((info) => info.account.data.length > 0)
-                .map((info) =>
-                  TokenAccountParser(
-                    new PublicKey(info.pubkey.toBase58()),
-                    info.account
-                  )
-                ),
-              walletPublicKey,
-            })
-        )
+        map((accounts) => {
+          const tokenAccounts = accounts.value
+            .filter((info) => info.account.data.length > 0)
+            .map((info) =>
+              TokenAccountParser(
+                new PublicKey(info.pubkey.toBase58()),
+                info.account
+              )
+            );
+          return new LoadTokenAccountsAction(tokenAccounts);
+        })
       )
     )
   );

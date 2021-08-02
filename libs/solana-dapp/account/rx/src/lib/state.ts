@@ -1,4 +1,7 @@
-import { MintTokenAccount } from '@nx-dapp/solana-dapp/account/base';
+import {
+  MintTokenAccount,
+  TokenAccount,
+} from '@nx-dapp/solana-dapp/account/base';
 import {
   AccountChangedAction,
   LoadMintAccountsAction,
@@ -9,7 +12,7 @@ import {
 import { AccountState, Action } from './types';
 
 export const accountInitialState: AccountState = {
-  tokenAccounts: [],
+  tokenAccounts: new Map<string, TokenAccount>(),
   nativeAccount: null,
   mintTokensAddresses: [],
   mintAccounts: new Map<string, MintTokenAccount>(),
@@ -25,19 +28,20 @@ export const reducer = (state: AccountState, action: Action) => {
     case 'loadMintAccounts':
       return {
         ...state,
-        mintAccounts: [
-          ...(action as LoadMintAccountsAction).payload.values(),
-        ].reduce(
+        mintAccounts: (action as LoadMintAccountsAction).payload.reduce(
           (mintAccounts, account) =>
             mintAccounts.set(account.pubkey.toBase58(), account),
-          new Map(state.mintAccounts)
+          new Map<string, MintTokenAccount>()
         ),
       };
     case 'loadTokenAccounts':
       return {
         ...state,
-        tokenAccounts: (action as LoadTokenAccountsAction).payload
-          .tokenAccounts,
+        tokenAccounts: (action as LoadTokenAccountsAction).payload.reduce(
+          (tokenAccounts, account) =>
+            tokenAccounts.set(account.pubkey.toBase58(), account),
+          new Map<string, TokenAccount>()
+        ),
       };
     case 'loadNativeAccount':
     case 'accountChanged':
@@ -51,7 +55,7 @@ export const reducer = (state: AccountState, action: Action) => {
       return {
         ...state,
         nativeAccount: null,
-        tokenAccounts: [],
+        tokenAccounts: new Map<string, TokenAccount>(),
       };
     default:
       return state;

@@ -12,7 +12,7 @@ export class InitAction {
 export class LoadUserAccountsAction {
   type = 'loadUserAccounts';
 
-  constructor(public payload: TokenAccount[]) {}
+  constructor(public payload: Map<string, TokenAccount>) {}
 }
 
 export class LoadNativeAccountAction {

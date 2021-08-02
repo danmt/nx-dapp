@@ -81,7 +81,9 @@ export class MarketService implements IMarketService {
       ([{ payload: nativeAccount }, { payload: userAccounts }]) =>
         new LoadMarketByMintAction(
           getMarketByMint(
-            [...userAccounts, nativeAccount].map((a) => a.info.mint.toBase58())
+            [...userAccounts.values(), nativeAccount].map((a) =>
+              a.info.mint.toBase58()
+            )
           )
         )
     )
@@ -172,7 +174,7 @@ export class MarketService implements IMarketService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  loadUserAccounts(userAccounts: TokenAccount[]) {
+  loadUserAccounts(userAccounts: Map<string, TokenAccount>) {
     this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
   }
 

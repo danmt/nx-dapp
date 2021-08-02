@@ -46,7 +46,7 @@ export interface IMarketService {
   marketMintAccounts$: Observable<Map<string, ParsedAccountBase>>;
   marketIndicatorAccounts$: Observable<Map<string, ParsedAccountBase>>;
 
-  loadUserAccounts(userAccounts: TokenAccount[]): void;
+  loadUserAccounts(userAccounts: Map<string, TokenAccount>): void;
 
   loadNativeAccount(nativeAccount: TokenAccount): void;
 

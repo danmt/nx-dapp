@@ -30,12 +30,7 @@ export class LoadWalletConnectedAction {
 export class LoadTokenAccountsAction {
   type = 'loadTokenAccounts';
 
-  constructor(
-    public payload: {
-      tokenAccounts: TokenAccount[];
-      walletPublicKey: PublicKey;
-    }
-  ) {}
+  constructor(public payload: TokenAccount[]) {}
 }
 
 export class LoadNativeAccountAction {

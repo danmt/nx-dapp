@@ -111,7 +111,7 @@ export class BalanceService implements IBalanceService {
             )
             .map((mintAccount) =>
               createBalance(
-                userAccounts.filter(
+                [...userAccounts.values()].filter(
                   (userAccount) =>
                     userAccount.info.mint.toBase58() ===
                     mintAccount.pubkey.toBase58()
@@ -153,7 +153,7 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadMintAccountsAction(mintAccounts));
   }
 
-  loadUserAccounts(userAccounts: TokenAccount[]) {
+  loadUserAccounts(userAccounts: Map<string, TokenAccount>) {
     this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
   }
 

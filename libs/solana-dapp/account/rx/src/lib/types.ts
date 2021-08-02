@@ -35,7 +35,7 @@ export type Action =
   | ResetAction;
 
 export interface AccountState {
-  tokenAccounts: TokenAccount[];
+  tokenAccounts: Map<string, TokenAccount>;
   nativeAccount: TokenAccount | null;
   mintTokensAddresses: PublicKey[];
   mintAccounts: Map<string, MintTokenAccount>;
@@ -44,7 +44,8 @@ export interface AccountState {
 export interface IAccountService {
   state$: Observable<AccountState>;
   actions$: Observable<Action>;
-  userAccounts$: Observable<TokenAccount[]>;
+  tokenAccounts$: Observable<Map<string, TokenAccount>>;
+  userAccounts$: Observable<Map<string, TokenAccount>>;
   nativeAccount$: Observable<TokenAccount | null>;
   mintAccounts$: Observable<Map<string, MintTokenAccount>>;
 
