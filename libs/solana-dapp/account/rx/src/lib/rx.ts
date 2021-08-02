@@ -28,6 +28,7 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
+  toArray,
 } from 'rxjs/operators';
 
 import {
@@ -156,15 +157,17 @@ export class AccountService implements IAccountService {
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
   ]).pipe(
-    mergeMap(([{ payload: connection }, { payload: mintKeys }]) =>
-      combineLatest(
-        mintKeys.map((mintKey) =>
+    switchMap(([{ payload: connection }, { payload: mintKeys }]) =>
+      from(mintKeys).pipe(
+        mergeMap((mintKey) =>
           from(defer(() => connection.getAccountInfo(mintKey))).pipe(
             isNotNull,
             map((account) => MintParser(mintKey, account))
           )
-        )
-      ).pipe(map((accounts) => new LoadMintAccountsAction(accounts)))
+        ),
+        toArray(),
+        map((accounts) => new LoadMintAccountsAction(accounts))
+      )
     )
   );
 

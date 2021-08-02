@@ -26,7 +26,7 @@ export class LoadMintTokensAction {
 export class LoadMintAccountsAction {
   type = 'loadMintAccounts';
 
-  constructor(public payload: MintTokenAccount[]) {}
+  constructor(public payload: Map<string, MintTokenAccount>) {}
 }
 
 export class LoadBalancesAction {

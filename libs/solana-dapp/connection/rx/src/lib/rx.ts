@@ -1,6 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { Network, getTokens } from '@nx-dapp/solana-dapp/connection/base';
+import { getTokens, Network } from '@nx-dapp/solana-dapp/connection/base';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -18,7 +18,6 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
-  tap,
 } from 'rxjs/operators';
 
 import {
@@ -28,8 +27,8 @@ import {
   LoadConnectionAction,
   LoadNetworkAction,
   LoadNetworksAction,
-  LoadSendConnectionAction,
   LoadNetworkTokensAction,
+  LoadSendConnectionAction,
   SelectNetworkAction,
   SendConnectionAccountChangedAction,
   SendConnectionSlotChangedAction,
@@ -143,10 +142,10 @@ export class ConnectionService implements IConnectionService {
 
   constructor(networks: Network[], defaultNetwork: string) {
     this.runEffects([
-      /* this.connectionAccountChange$,
+      this.connectionAccountChange$,
       this.connectionSlotChange$,
       this.sendConnectionAccountChange$,
-      this.sendConnectionSlotChange$, */
+      this.sendConnectionSlotChange$,
       this.loadNetwork$,
       this.loadConnection$,
       this.loadSendConnection$,

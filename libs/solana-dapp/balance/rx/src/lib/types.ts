@@ -59,7 +59,7 @@ export interface IBalanceService {
     marketIndicatorAccounts: Map<string, ParsedAccountBase>
   ): void;
 
-  loadMintAccounts(mintAccounts: MintTokenAccount[]): void;
+  loadMintAccounts(mintAccounts: Map<string, MintTokenAccount>): void;
 
   loadMintTokens(mintTokens: TokenDetails[]): void;
 

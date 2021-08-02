@@ -103,7 +103,7 @@ export class BalanceService implements IBalanceService {
         ],
       ]) =>
         new LoadBalancesAction(
-          mintAccounts
+          [...mintAccounts.values()]
             .filter((mintAccount) =>
               mintTokens.some(
                 ({ address }) => address === mintAccount.pubkey.toBase58()
@@ -149,7 +149,7 @@ export class BalanceService implements IBalanceService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  loadMintAccounts(mintAccounts: MintTokenAccount[]) {
+  loadMintAccounts(mintAccounts: Map<string, MintTokenAccount>) {
     this._dispatcher.next(new LoadMintAccountsAction(mintAccounts));
   }
 

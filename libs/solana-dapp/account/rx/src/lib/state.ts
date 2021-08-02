@@ -1,3 +1,4 @@
+import { MintTokenAccount } from '@nx-dapp/solana-dapp/account/base';
 import {
   AccountChangedAction,
   LoadMintAccountsAction,
@@ -11,7 +12,7 @@ export const accountInitialState: AccountState = {
   tokenAccounts: [],
   nativeAccount: null,
   mintTokensAddresses: [],
-  mintAccounts: [],
+  mintAccounts: new Map<string, MintTokenAccount>(),
 };
 
 export const reducer = (state: AccountState, action: Action) => {
@@ -24,7 +25,13 @@ export const reducer = (state: AccountState, action: Action) => {
     case 'loadMintAccounts':
       return {
         ...state,
-        mintAccounts: (action as LoadMintAccountsAction).payload,
+        mintAccounts: [
+          ...(action as LoadMintAccountsAction).payload.values(),
+        ].reduce(
+          (mintAccounts, account) =>
+            mintAccounts.set(account.pubkey.toBase58(), account),
+          new Map(state.mintAccounts)
+        ),
       };
     case 'loadTokenAccounts':
       return {
