@@ -14,7 +14,7 @@ import {
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
   LoadNativeAccountAction,
-  LoadUserAccountsAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
 } from './actions';
@@ -28,7 +28,7 @@ export interface MarketState {
 
 export type Action =
   | InitAction
-  | LoadUserAccountsAction
+  | LoadTokenAccountsAction
   | LoadNativeAccountAction
   | LoadMarketAccountsAction
   | LoadMarketMintAccountsAction
@@ -46,7 +46,7 @@ export interface IMarketService {
   marketMintAccounts$: Observable<Map<string, ParsedAccountBase>>;
   marketIndicatorAccounts$: Observable<Map<string, ParsedAccountBase>>;
 
-  loadUserAccounts(userAccounts: Map<string, TokenAccount>): void;
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>): void;
 
   loadNativeAccount(nativeAccount: TokenAccount): void;
 

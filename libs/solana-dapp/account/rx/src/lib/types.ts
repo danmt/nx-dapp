@@ -45,7 +45,6 @@ export interface IAccountService {
   state$: Observable<AccountState>;
   actions$: Observable<Action>;
   tokenAccounts$: Observable<Map<string, TokenAccount>>;
-  userAccounts$: Observable<Map<string, TokenAccount>>;
   nativeAccount$: Observable<TokenAccount | null>;
   mintAccounts$: Observable<Map<string, MintTokenAccount>>;
 

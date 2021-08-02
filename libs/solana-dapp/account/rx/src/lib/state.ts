@@ -28,7 +28,9 @@ export const reducer = (state: AccountState, action: Action) => {
     case 'loadMintAccounts':
       return {
         ...state,
-        mintAccounts: (action as LoadMintAccountsAction).payload.reduce(
+        mintAccounts: [
+          ...(action as LoadMintAccountsAction).payload.values(),
+        ].reduce(
           (mintAccounts, account) =>
             mintAccounts.set(account.pubkey.toBase58(), account),
           new Map<string, MintTokenAccount>()
@@ -37,11 +39,16 @@ export const reducer = (state: AccountState, action: Action) => {
     case 'loadTokenAccounts':
       return {
         ...state,
-        tokenAccounts: (action as LoadTokenAccountsAction).payload.reduce(
-          (tokenAccounts, account) =>
-            tokenAccounts.set(account.pubkey.toBase58(), account),
-          new Map<string, TokenAccount>()
-        ),
+        tokenAccounts: [
+          ...(action as LoadTokenAccountsAction).payload.values(),
+          state.nativeAccount,
+        ]
+          .filter((token): token is TokenAccount => token !== null)
+          .reduce(
+            (tokenAccounts, account) =>
+              tokenAccounts.set(account.pubkey.toBase58(), account),
+            new Map<string, TokenAccount>()
+          ),
       };
     case 'loadNativeAccount':
     case 'accountChanged':
@@ -50,6 +57,14 @@ export const reducer = (state: AccountState, action: Action) => {
         nativeAccount: (
           action as LoadNativeAccountAction | AccountChangedAction
         ).payload,
+        tokenAccounts: [
+          ...state.tokenAccounts.values(),
+          (action as LoadNativeAccountAction | AccountChangedAction).payload,
+        ].reduce(
+          (tokenAccounts, account) =>
+            tokenAccounts.set(account.pubkey.toBase58(), account),
+          new Map<string, TokenAccount>()
+        ),
       };
     case 'reset':
       return {

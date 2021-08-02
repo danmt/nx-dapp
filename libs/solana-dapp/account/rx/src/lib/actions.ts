@@ -30,7 +30,7 @@ export class LoadWalletConnectedAction {
 export class LoadTokenAccountsAction {
   type = 'loadTokenAccounts';
 
-  constructor(public payload: TokenAccount[]) {}
+  constructor(public payload: Map<string, TokenAccount>) {}
 }
 
 export class LoadNativeAccountAction {
@@ -60,7 +60,7 @@ export class LoadMintTokensAction {
 export class LoadMintAccountsAction {
   type = 'loadMintAccounts';
 
-  constructor(public payload: MintTokenAccount[]) {}
+  constructor(public payload: Map<string, MintTokenAccount>) {}
 }
 
 export class LoadMarketByMintAction {

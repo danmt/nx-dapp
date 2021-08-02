@@ -9,8 +9,8 @@ export class InitAction {
   type = 'init';
 }
 
-export class LoadUserAccountsAction {
-  type = 'loadUserAccounts';
+export class LoadTokenAccountsAction {
+  type = 'loadTokenAccounts';
 
   constructor(public payload: Map<string, TokenAccount>) {}
 }

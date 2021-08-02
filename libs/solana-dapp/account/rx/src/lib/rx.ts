@@ -2,6 +2,8 @@ import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
   MintParser,
+  MintTokenAccount,
+  TokenAccount,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
@@ -64,14 +66,6 @@ export class AccountService implements IAccountService {
   nativeAccount$ = this.state$.pipe(
     map(({ nativeAccount }) => nativeAccount),
     distinctUntilChanged()
-  );
-  userAccounts$ = combineLatest([
-    this.tokenAccounts$,
-    this.nativeAccount$.pipe(isNotNull),
-  ]).pipe(
-    map(([tokenAccounts, nativeAccount]) =>
-      tokenAccounts.set(nativeAccount.pubkey.toBase58(), nativeAccount)
-    )
   );
   mintAccounts$ = this.state$.pipe(
     map(({ mintAccounts }) => mintAccounts),
@@ -137,17 +131,21 @@ export class AccountService implements IAccountService {
           })
         )
       ).pipe(
-        map((accounts) => {
-          const tokenAccounts = accounts.value
-            .filter((info) => info.account.data.length > 0)
-            .map((info) =>
-              TokenAccountParser(
-                new PublicKey(info.pubkey.toBase58()),
-                info.account
-              )
-            );
-          return new LoadTokenAccountsAction(tokenAccounts);
-        })
+        map(
+          (accounts) =>
+            new LoadTokenAccountsAction(
+              accounts.value
+                .filter(({ account }) => account.data.length > 0)
+                .map(({ account, pubkey }) =>
+                  TokenAccountParser(new PublicKey(pubkey.toBase58()), account)
+                )
+                .reduce(
+                  (tokenAccounts, account) =>
+                    tokenAccounts.set(account.pubkey.toBase58(), account),
+                  new Map<string, TokenAccount>()
+                )
+            )
+        )
       )
     )
   );
@@ -169,7 +167,16 @@ export class AccountService implements IAccountService {
           )
         ),
         toArray(),
-        map((accounts) => new LoadMintAccountsAction(accounts))
+        map(
+          (accounts) =>
+            new LoadMintAccountsAction(
+              accounts.reduce(
+                (mintAccounts, account) =>
+                  mintAccounts.set(account.pubkey.toBase58(), account),
+                new Map<string, MintTokenAccount>()
+              )
+            )
+        )
       )
     )
   );

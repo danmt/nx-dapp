@@ -1,5 +1,8 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
+import {
+  ParsedAccountBase,
+  TokenAccount,
+} from '@nx-dapp/solana-dapp/account/base';
 import {
   getMarketByMint,
   getMarketIndicators,
@@ -34,7 +37,7 @@ import {
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
   LoadNativeAccountAction,
-  LoadUserAccountsAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
 } from './actions';
@@ -71,19 +74,17 @@ export class MarketService implements IMarketService {
 
   private loadMarketByMint$ = combineLatest([
     this.actions$.pipe(ofType<LoadNativeAccountAction>('loadNativeAccount')),
-    this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+    this.actions$.pipe(ofType<LoadTokenAccountsAction>('loadTokenAccounts')),
     this.actions$.pipe(
       ofType<LoadWalletConnectedAction>('loadWalletConnected')
     ),
   ]).pipe(
     filter(([, , { payload: walletConnected }]) => walletConnected),
     map(
-      ([{ payload: nativeAccount }, { payload: userAccounts }]) =>
+      ([, { payload: tokenAccounts }]) =>
         new LoadMarketByMintAction(
           getMarketByMint(
-            [...userAccounts.values(), nativeAccount].map((a) =>
-              a.info.mint.toBase58()
-            )
+            [...tokenAccounts.values()].map((a) => a.info.mint.toBase58())
           )
         )
     )
@@ -122,7 +123,16 @@ export class MarketService implements IMarketService {
         getMarketMints(marketByMint, connection, marketAccounts).pipe(
           map(
             (marketMintAccounts) =>
-              new LoadMarketMintAccountsAction(marketMintAccounts)
+              new LoadMarketMintAccountsAction(
+                marketMintAccounts.reduce(
+                  (marketMintAccounts, marketMintAccount) =>
+                    marketMintAccounts.set(
+                      marketMintAccount.pubkey.toBase58(),
+                      marketMintAccount
+                    ),
+                  new Map<string, ParsedAccountBase>()
+                )
+              )
           )
         )
     )
@@ -146,7 +156,16 @@ export class MarketService implements IMarketService {
         getMarketIndicators(marketByMint, connection, marketAccounts).pipe(
           map(
             (marketIndicatorAccounts) =>
-              new LoadMarketIndicatorAccountsAction(marketIndicatorAccounts)
+              new LoadMarketIndicatorAccountsAction(
+                marketIndicatorAccounts.reduce(
+                  (marketAccounts, marketAccount) =>
+                    marketAccounts.set(
+                      marketAccount.pubkey.toBase58(),
+                      marketAccount
+                    ),
+                  new Map<string, ParsedAccountBase>()
+                )
+              )
           )
         )
     )
@@ -174,8 +193,8 @@ export class MarketService implements IMarketService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  loadUserAccounts(userAccounts: Map<string, TokenAccount>) {
-    this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>) {
+    this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts));
   }
 
   loadNativeAccount(nativeAccount: TokenAccount) {

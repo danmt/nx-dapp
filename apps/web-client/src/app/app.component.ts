@@ -103,9 +103,9 @@ export class AppComponent implements OnInit {
       this.balanceService.loadNetworkTokens(networkTokens)
     );
 
-    this.accountService.userAccounts$.subscribe((userAccounts) => {
-      this.marketService.loadUserAccounts(userAccounts);
-      this.balanceService.loadUserAccounts(userAccounts);
+    this.accountService.tokenAccounts$.subscribe((tokenAccounts) => {
+      this.marketService.loadTokenAccounts(tokenAccounts);
+      this.balanceService.loadTokenAccounts(tokenAccounts);
     });
 
     this.accountService.nativeAccount$

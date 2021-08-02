@@ -6,6 +6,7 @@ import {
 } from '@nx-dapp/solana-dapp/account/base';
 import { createBalance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -34,13 +35,12 @@ import {
   LoadMintAccountsAction,
   LoadMintTokensAction,
   LoadNetworkTokensAction,
-  LoadUserAccountsAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
 } from './actions';
 import { balanceInitialState, reducer } from './state';
 import { Action, IBalanceService } from './types';
-import { TokenInfo } from '@solana/spl-token-registry';
 
 export class BalanceService implements IBalanceService {
   private readonly _destroy = new Subject();
@@ -71,7 +71,7 @@ export class BalanceService implements IBalanceService {
     // User data
     combineLatest([
       this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
-      this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+      this.actions$.pipe(ofType<LoadTokenAccountsAction>('loadTokenAccounts')),
     ]),
     // Market
     combineLatest([
@@ -94,7 +94,7 @@ export class BalanceService implements IBalanceService {
     map(
       ([
         [{ payload: tokens }, { payload: mintTokens }],
-        [{ payload: mintAccounts }, { payload: userAccounts }],
+        [{ payload: mintAccounts }, { payload: tokenAccounts }],
         [
           { payload: marketAccounts },
           { payload: marketByMint },
@@ -111,9 +111,9 @@ export class BalanceService implements IBalanceService {
             )
             .map((mintAccount) =>
               createBalance(
-                [...userAccounts.values()].filter(
-                  (userAccount) =>
-                    userAccount.info.mint.toBase58() ===
+                [...tokenAccounts.values()].filter(
+                  (tokenAccount) =>
+                    tokenAccount.info.mint.toBase58() ===
                     mintAccount.pubkey.toBase58()
                 ),
                 mintTokens.find(
@@ -153,8 +153,8 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadMintAccountsAction(mintAccounts));
   }
 
-  loadUserAccounts(userAccounts: Map<string, TokenAccount>) {
-    this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>) {
+    this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts));
   }
 
   loadMarketAccounts(marketAccounts: Map<string, ParsedAccountBase>) {

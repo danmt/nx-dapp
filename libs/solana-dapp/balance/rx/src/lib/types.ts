@@ -18,14 +18,14 @@ import {
   LoadMintAccountsAction,
   LoadMintTokensAction,
   LoadNetworkTokensAction,
-  LoadUserAccountsAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
 } from './actions';
 
 export type Action =
   | InitAction
-  | LoadUserAccountsAction
+  | LoadTokenAccountsAction
   | LoadBalancesAction
   | LoadMarketByMintAction
   | LoadMintTokensAction
@@ -63,7 +63,7 @@ export interface IBalanceService {
 
   loadMintTokens(mintTokens: TokenDetails[]): void;
 
-  loadUserAccounts(userAccounts: Map<string, TokenAccount>): void;
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>): void;
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>): void;
 
