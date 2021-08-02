@@ -45,6 +45,6 @@ export const getMarketIndicatorAccounts = (
         marketIndicatorAccounts.set(account.pubkey.toBase58(), account)
       );
 
-      return marketIndicatorAccounts;
+      return new Map(marketIndicatorAccounts);
     }, new Map<string, ParsedAccountBase>())
   );

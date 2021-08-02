@@ -41,6 +41,6 @@ export const getMarketMintAccounts = (
         marketMintAccounts.set(account.pubkey.toBase58(), account)
       );
 
-      return marketMintAccounts;
+      return new Map(marketMintAccounts);
     }, new Map<string, ParsedAccountBase>())
   );
