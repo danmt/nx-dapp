@@ -5,7 +5,10 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DEFAULT_NETWORK, Network } from '@nx-dapp/solana-dapp/connection/base';
+import {
+  DEFAULT_NETWORK,
+  Network,
+} from '@nx-dapp/solana-dapp/connection/angular';
 
 @Component({
   selector: 'nx-dapp-connections-dropdown',

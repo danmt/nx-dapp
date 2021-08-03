@@ -2,9 +2,9 @@ import {
   MintTokenAccount,
   ParsedAccountBase,
   TokenAccount,
-} from '@nx-dapp/solana-dapp/account/base';
-import { Balance } from '@nx-dapp/solana-dapp/balance/base';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+} from '@nx-dapp/solana-dapp/account/types';
+import { Balance } from '@nx-dapp/solana-dapp/balance/types';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/types';
 import { TokenInfo } from '@solana/spl-token-registry';
 
 export class InitAction {

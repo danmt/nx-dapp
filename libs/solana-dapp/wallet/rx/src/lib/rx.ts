@@ -1,14 +1,21 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
+import { getNativeAccount } from '@nx-dapp/solana-dapp/account/utils/get-native-account';
+import { getTokenAccounts } from '@nx-dapp/solana-dapp/account/utils/get-token-accounts';
+import { TokenAccountParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
+import { Network } from '@nx-dapp/solana-dapp/connection/types';
+import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import {
-  Wallet,
-  WalletName,
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
-} from '@nx-dapp/solana-dapp/wallet/base';
-import { Transaction } from '@solana/web3.js';
+} from '@nx-dapp/solana-dapp/wallet/utils/errors';
+import {
+  AccountInfo,
+  Connection,
+  PublicKey,
+  Transaction,
+} from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -37,14 +44,19 @@ import {
 } from 'rxjs/operators';
 
 import {
+  ChangeAccountAction,
   ConnectAction,
   ConnectWalletAction,
   DisconnectAction,
   DisconnectWalletAction,
   InitAction,
+  LoadConnectionAction,
+  LoadNativeAccountAction,
   LoadNetworkAction,
+  LoadTokenAccountsAction,
   LoadWalletsAction,
   ReadyAction,
+  ResetAction,
   SelectWalletAction,
   SignTransactionAction,
   SignTransactionsAction,
@@ -99,6 +111,10 @@ export class WalletService implements IWalletService {
   );
   publicKey$ = this.state$.pipe(
     map(({ publicKey }) => publicKey),
+    distinctUntilChanged()
+  );
+  tokenAccounts$ = this.state$.pipe(
+    map(({ tokenAccounts }) => tokenAccounts),
     distinctUntilChanged()
   );
   onReady$ = this.adapter$
@@ -187,6 +203,49 @@ export class WalletService implements IWalletService {
     )
   );
 
+  private loadNativeAccount$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<WalletConnectedAction>('walletConnected')),
+  ]).pipe(
+    withLatestFrom(this.state$),
+    filter(([, { publicKey }]) => publicKey !== null),
+    switchMap(([[{ payload: connection }], { publicKey }]) =>
+      getNativeAccount(connection, publicKey as PublicKey).pipe(
+        map((account) => new LoadNativeAccountAction(account))
+      )
+    )
+  );
+
+  private accountChanged$ = this.actions$.pipe(
+    ofType<ChangeAccountAction>('changeAccount'),
+    withLatestFrom(this.state$),
+    filter(([, { publicKey }]) => publicKey !== null),
+    map(
+      ([{ payload: account }, { publicKey }]) =>
+        new LoadNativeAccountAction(
+          TokenAccountParser(publicKey as PublicKey, account)
+        )
+    )
+  );
+
+  private loadTokenAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<WalletConnectedAction>('walletConnected')),
+  ]).pipe(
+    withLatestFrom(this.state$),
+    filter(([, { publicKey }]) => publicKey !== null),
+    switchMap(([[{ payload: connection }], { publicKey }]) =>
+      getTokenAccounts(connection, publicKey as PublicKey).pipe(
+        map((tokenAccounts) => new LoadTokenAccountsAction(tokenAccounts))
+      )
+    )
+  );
+
+  private reset$ = this.actions$.pipe(
+    ofType<WalletDisconnectedAction>('walletDisconnected'),
+    map(() => new ResetAction())
+  );
+
   constructor(wallets: Wallet[], defaultWallet: WalletName) {
     this.runEffects([
       this.onReady$,
@@ -198,6 +257,10 @@ export class WalletService implements IWalletService {
       this.transactionSigned$,
       this.transactionsSigned$,
       this.walletNetworkChanged$,
+      this.loadTokenAccounts$,
+      this.loadNativeAccount$,
+      this.accountChanged$,
+      this.reset$,
     ]);
 
     setTimeout(() => {
@@ -284,6 +347,14 @@ export class WalletService implements IWalletService {
 
   loadNetwork(network: Network) {
     this._dispatcher.next(new LoadNetworkAction(network));
+  }
+
+  changeAccount(account: AccountInfo<Buffer>) {
+    this._dispatcher.next(new ChangeAccountAction(account));
+  }
+
+  loadConnection(connection: Connection) {
+    this._dispatcher.next(new LoadConnectionAction(connection));
   }
 
   destroy() {

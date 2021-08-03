@@ -1,6 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
-import { ConnectionService } from '@nx-dapp/solana-dapp/connection/rx';
+import { ConnectionService, Network } from '@nx-dapp/solana-dapp/connection/rx';
 
 export const CONNECTION_SERVICE = new InjectionToken<ConnectionService>(
   'connection-service'

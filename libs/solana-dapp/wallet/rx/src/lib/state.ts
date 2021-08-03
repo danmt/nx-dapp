@@ -1,4 +1,9 @@
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
+
 import {
+  AccountChangedAction,
+  LoadNativeAccountAction,
+  LoadTokenAccountsAction,
   LoadWalletsAction,
   SelectWalletAction,
   SignTransactionAction,
@@ -22,6 +27,8 @@ export const walletInitialState: WalletState = {
   adapter: null,
   signing: false,
   transactions: [],
+  nativeAccount: null,
+  tokenAccounts: new Map<string, TokenAccount>(),
 };
 
 export const reducer = (state: WalletState, action: Action) => {
@@ -142,6 +149,41 @@ export const reducer = (state: WalletState, action: Action) => {
         signing: transactions.length > 0,
       };
     }
+    case 'loadTokenAccounts': {
+      const tokenAccounts = (action as LoadTokenAccountsAction).payload;
+      const nativeAccount = state.nativeAccount;
+
+      if (nativeAccount) {
+        tokenAccounts.set(nativeAccount.pubkey.toBase58(), nativeAccount);
+      }
+
+      return {
+        ...state,
+        tokenAccounts: new Map(tokenAccounts),
+      };
+    }
+    case 'loadNativeAccount':
+    case 'accountChanged': {
+      const nativeAccount = (
+        action as LoadNativeAccountAction | AccountChangedAction
+      ).payload;
+      const tokenAccounts = state.tokenAccounts.set(
+        nativeAccount.pubkey.toBase58(),
+        nativeAccount
+      );
+
+      return {
+        ...state,
+        nativeAccount,
+        tokenAccounts: new Map(tokenAccounts),
+      };
+    }
+    case 'reset':
+      return {
+        ...state,
+        nativeAccount: null,
+        tokenAccounts: new Map<string, TokenAccount>(),
+      };
     default:
       return state;
   }

@@ -1,18 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
-  ACCOUNT_SERVICE,
   BALANCE_SERVICE,
   CONNECTION_SERVICE,
-  IAccountService,
   IBalanceService,
   IConnectionService,
   IMarketService,
   IWalletService,
   MARKET_SERVICE,
   WALLET_SERVICE,
+  WalletName,
 } from '@nx-dapp/solana-dapp/angular';
-import { WalletName } from '@nx-dapp/solana-dapp/wallet/base';
 
 @Component({
   selector: 'nx-dapp-root',
@@ -70,7 +68,6 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
     @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
-    @Inject(ACCOUNT_SERVICE) private accountService: IAccountService,
     @Inject(MARKET_SERVICE) private marketService: IMarketService,
     @Inject(BALANCE_SERVICE) private balanceService: IBalanceService
   ) {}
@@ -78,30 +75,21 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.connectionService.connection$
       .pipe(isNotNull)
-      .subscribe((connection) =>
-        this.accountService.loadConnection(connection)
-      );
+      .subscribe((connection) => this.walletService.loadConnection(connection));
 
     this.connectionService.connectionAccount$
       .pipe(isNotNull)
-      .subscribe((account) => this.accountService.changeAccount(account));
+      .subscribe((account) => this.walletService.changeAccount(account));
 
     this.connectionService.network$
       .pipe(isNotNull)
       .subscribe((network) => this.walletService.loadNetwork(network));
 
-    this.walletService.publicKey$
-      .pipe(isNotNull)
-      .subscribe((publicKey) =>
-        this.accountService.loadWalletPublicKey(publicKey)
-      );
-
     this.walletService.connected$.subscribe((connected) => {
-      this.accountService.loadWalletConnected(connected);
       this.balanceService.loadWalletConnected(connected);
     });
 
-    this.accountService.tokenAccounts$.subscribe((tokenAccounts) => {
+    this.walletService.tokenAccounts$.subscribe((tokenAccounts) => {
       this.marketService.loadTokenAccounts(tokenAccounts);
       this.balanceService.loadTokenAccounts(tokenAccounts);
     });

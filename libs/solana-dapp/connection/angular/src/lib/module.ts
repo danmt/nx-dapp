@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
+import { Network } from '@nx-dapp/solana-dapp/connection/rx';
 
 import { connectionServiceProvider } from './provider';
 

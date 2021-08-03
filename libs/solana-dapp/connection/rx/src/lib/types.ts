@@ -1,5 +1,4 @@
-import { Network, ENV } from '@nx-dapp/solana-dapp/connection/base';
-import { TokenInfo } from '@solana/spl-token-registry';
+import { ENV, Network } from '@nx-dapp/solana-dapp/connection/types';
 import { AccountInfo, Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
@@ -7,13 +6,13 @@ import {
   ConnectionAccountChangedAction,
   ConnectionSlotChangedAction,
   InitAction,
-  SelectNetworkAction,
-  SendConnectionAccountChangedAction,
-  SendConnectionSlotChangedAction,
   LoadConnectionAction,
   LoadNetworkAction,
   LoadNetworksAction,
   LoadSendConnectionAction,
+  SelectNetworkAction,
+  SendConnectionAccountChangedAction,
+  SendConnectionSlotChangedAction,
 } from './actions';
 
 export type Action =

@@ -1,6 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { getTokens, Network } from '@nx-dapp/solana-dapp/connection/base';
+import { Network } from '@nx-dapp/solana-dapp/connection/types';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -16,7 +16,6 @@ import {
   observeOn,
   scan,
   shareReplay,
-  switchMap,
   takeUntil,
 } from 'rxjs/operators';
 
