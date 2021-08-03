@@ -73,11 +73,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.walletService.state$.subscribe((state) => console.log('state', state));
-    this.walletService.actions$.subscribe((actions) =>
-      console.log('actions', actions)
-    );
-
     this.connectionService.connection$
       .pipe(isNotNull)
       .subscribe((connection) => this.walletService.loadConnection(connection));
