@@ -1,10 +1,10 @@
-import { TokenAccount } from '@nx-dapp/solana-dapp/account';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import {
+  Network,
+  TokenAccount,
   Wallet,
   WalletAdapter,
   WalletName,
-} from '@nx-dapp/solana-dapp/wallet/base';
+} from '@nx-dapp/solana-dapp/wallet/wallets';
 import {
   AccountInfo,
   Connection,
@@ -19,18 +19,18 @@ import {
   DisconnectAction,
   DisconnectWalletAction,
   InitAction,
+  LoadNetworkAction,
   LoadWalletsAction,
   ReadyAction,
   SelectWalletAction,
   SignTransactionAction,
+  SignTransactionsAction,
   TransactionSignedAction,
+  TransactionsSignedAction,
   WalletConnectedAction,
   WalletDisconnectedAction,
-  WalletSelectedAction,
-  LoadNetworkAction,
-  SignTransactionsAction,
-  TransactionsSignedAction,
   WalletNetworkChangedAction,
+  WalletSelectedAction,
 } from './actions';
 
 export interface WalletState {

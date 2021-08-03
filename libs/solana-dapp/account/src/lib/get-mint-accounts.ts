@@ -1,10 +1,11 @@
-import { MintParser, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
-import { TokenDetails } from '@nx-dapp/solana-dapp/types';
-
+import { MintTokenAccount } from '@nx-dapp/solana-dapp/types/account';
+import { TokenDetails } from '@nx-dapp/solana-dapp/types/market';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map, reduce } from 'rxjs/operators';
+
 import { getMultipleAccounts } from './get-multiple-accounts';
+import { MintParser } from './serializer';
 
 const getAccounts = (
   connection: Connection,

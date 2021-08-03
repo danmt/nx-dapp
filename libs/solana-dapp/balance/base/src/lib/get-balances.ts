@@ -1,16 +1,16 @@
 import {
   MintTokenAccount,
   ParsedAccountBase,
+  SerumMarket,
   TokenAccount,
+  TokenDetails,
 } from '@nx-dapp/solana-dapp/account';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types';
+import { Balance } from '@nx-dapp/solana-dapp/types/balance';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { from, Observable } from 'rxjs';
 import { map, toArray } from 'rxjs/operators';
-
-import { Balance } from './types';
 
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 

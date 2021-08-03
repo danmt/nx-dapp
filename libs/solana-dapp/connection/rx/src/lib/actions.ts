@@ -1,5 +1,4 @@
 import { Network } from '@nx-dapp/solana-dapp/connection/base';
-import { TokenInfo } from '@solana/spl-token-registry';
 import { AccountInfo, Connection } from '@solana/web3.js';
 
 export class InitAction {

@@ -1,28 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
-import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
 import {
+  connectionServiceProvider,
   DEFAULT_NETWORK,
   Network,
   NETWORKS,
-} from '@nx-dapp/solana-dapp/connection/base';
-import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
-import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
+} from '@nx-dapp/solana-dapp/connection/angular';
+import {
+  DEFAULT_MARKET_NETWORK,
+  marketServiceProvider,
+  TokenDetails,
+} from '@nx-dapp/solana-dapp/market/angular';
 import {
   DEFAULT_WALLET,
-  Wallet,
-  WalletName,
-} from '@nx-dapp/solana-dapp/wallet/base';
-import { DEFAULT_MARKET_NETWORK } from '@nx-dapp/solana-dapp/market/base';
-import {
   getPhantomWallet,
   getSolletWallet,
   getSolongWallet,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
-import { PublicKey } from '@solana/web3.js';
+  Wallet,
+  WalletName,
+  walletServiceProvider,
+} from '@nx-dapp/solana-dapp/wallet/angular';
 import { NATIVE_MINT } from '@solana/spl-token';
-import { TokenDetails } from '@nx-dapp/solana-dapp/types';
+import { PublicKey } from '@solana/web3.js';
 
 export interface SolanaDappBalanceConfig {
   isEnabled: boolean;

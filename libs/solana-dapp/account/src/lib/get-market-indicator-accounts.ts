@@ -1,12 +1,10 @@
-import {
-  OrderBookParser,
-  ParsedAccountBase,
-} from '@nx-dapp/solana-dapp/account';
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/types/account';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { from, Observable } from 'rxjs';
 import { map, mergeMap, reduce } from 'rxjs/operators';
 
 import { getMultipleAccounts } from './get-multiple-accounts';
+import { OrderBookParser } from './serializer';
 
 const getAccounts = (
   connection: Connection,

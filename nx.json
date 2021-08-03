@@ -81,7 +81,19 @@
     "solana-dapp-market-rx": {
       "tags": []
     },
-    "solana-dapp-types": {
+    "solana-dapp-types-account": {
+      "tags": []
+    },
+    "solana-dapp-types-balance": {
+      "tags": []
+    },
+    "solana-dapp-types-connection": {
+      "tags": []
+    },
+    "solana-dapp-types-market": {
+      "tags": []
+    },
+    "solana-dapp-types-wallet": {
       "tags": []
     },
     "solana-dapp-utils-u64": {

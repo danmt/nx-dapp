@@ -1,7 +1,10 @@
 import { InjectionToken } from '@angular/core';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
-import { IMarketService, MarketService } from '@nx-dapp/solana-dapp/market/rx';
-import { TokenDetails } from '@nx-dapp/solana-dapp/types';
+import {
+  IMarketService,
+  MarketService,
+  Network,
+  TokenDetails,
+} from '@nx-dapp/solana-dapp/market/rx';
 
 export const MARKET_SERVICE = new InjectionToken<IMarketService>(
   'market-service'

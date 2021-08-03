@@ -1,16 +1,15 @@
-import { PublicKey, Transaction } from '@solana/web3.js';
-import EventEmitter from 'eventemitter3';
-
 import {
   pollUntilReady,
+  WalletAccountError,
   WalletAdapter,
   WalletAdapterEvents,
-  WalletAccountError,
   WalletNotConnectedError,
   WalletNotFoundError,
   WalletPublicKeyError,
   WalletSignatureError,
 } from '@nx-dapp/solana-dapp/wallet/base';
+import { PublicKey, Transaction } from '@solana/web3.js';
+import EventEmitter from 'eventemitter3';
 
 interface SolongProvider {
   currentAccount?: string | null;

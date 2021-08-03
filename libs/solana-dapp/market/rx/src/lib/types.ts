@@ -1,9 +1,10 @@
 import {
   MintTokenAccount,
   ParsedAccountBase,
+  SerumMarket,
   TokenAccount,
-} from '@nx-dapp/solana-dapp/account';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types';
+  TokenDetails,
+} from '@nx-dapp/solana-dapp/market/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';

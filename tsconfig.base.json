@@ -65,7 +65,21 @@
       "@nx-dapp/solana-dapp/market/rx": [
         "libs/solana-dapp/market/rx/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/types": ["libs/solana-dapp/types/src/index.ts"],
+      "@nx-dapp/solana-dapp/types/account": [
+        "libs/solana-dapp/types/account/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/types/balance": [
+        "libs/solana-dapp/types/balance/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/types/connection": [
+        "libs/solana-dapp/types/connection/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/types/market": [
+        "libs/solana-dapp/types/market/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/types/wallet": [
+        "libs/solana-dapp/types/wallet/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/utils/u64": [
         "libs/solana-dapp/utils/u64/src/index.ts"
       ],

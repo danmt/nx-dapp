@@ -9,8 +9,8 @@ import {
   IWalletService,
   MARKET_SERVICE,
   WALLET_SERVICE,
+  WalletName,
 } from '@nx-dapp/solana-dapp/angular';
-import { WalletName } from '@nx-dapp/solana-dapp/wallet/base';
 
 @Component({
   selector: 'nx-dapp-root',

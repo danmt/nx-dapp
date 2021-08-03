@@ -1,12 +1,13 @@
 import {
   MintTokenAccount,
+  Network,
   ParsedAccountBase,
+  SerumMarket,
   TokenAccount,
-} from '@nx-dapp/solana-dapp/account';
+  TokenDetails,
+} from '@nx-dapp/solana-dapp/market/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types';
 
 export class InitAction {
   type = 'init';

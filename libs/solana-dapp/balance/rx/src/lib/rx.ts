@@ -1,11 +1,12 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
+  getBalances,
   MintTokenAccount,
   ParsedAccountBase,
+  SerumMarket,
   TokenAccount,
-} from '@nx-dapp/solana-dapp/account';
-import { getBalances } from '@nx-dapp/solana-dapp/balance/base';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types';
+  TokenDetails,
+} from '@nx-dapp/solana-dapp/balance/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import {
   asyncScheduler,

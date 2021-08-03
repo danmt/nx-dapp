@@ -1,12 +1,12 @@
 import {
-  WalletAdapter,
-  WalletAdapterEvents,
-  WalletAdapterNetwork,
   WalletConnectionError,
   WalletNotConnectedError,
   WalletSignatureError,
   WalletWindowBlockedError,
   WalletWindowClosedError,
+  WalletAdapter,
+  WalletAdapterEvents,
+  WalletAdapterNetwork,
 } from '@nx-dapp/solana-dapp/wallet/base';
 import Wallet from '@project-serum/sol-wallet-adapter';
 import { PublicKey, Transaction } from '@solana/web3.js';

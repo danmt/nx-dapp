@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'solana-dapp-types',
-  preset: '../../../jest.preset.js',
+  displayName: 'solana-dapp-types-connection',
+  preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../coverage/libs/solana-dapp/types',
+  coverageDirectory: '../../../../coverage/libs/solana-dapp/types/connection',
 };

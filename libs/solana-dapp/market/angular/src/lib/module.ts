@@ -1,6 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
-import { TokenDetails } from '@nx-dapp/solana-dapp/types';
+import { Network, TokenDetails } from '@nx-dapp/solana-dapp/market/rx';
 
 import { marketServiceProvider } from './provider';
 

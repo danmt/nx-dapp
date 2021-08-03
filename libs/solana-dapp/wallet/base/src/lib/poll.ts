@@ -1,4 +1,4 @@
-import { WalletAdapter } from './types';
+import { WalletAdapter } from '@nx-dapp/solana-dapp/types/wallet';
 
 export function poll(
   callback: () => boolean | Promise<boolean>,

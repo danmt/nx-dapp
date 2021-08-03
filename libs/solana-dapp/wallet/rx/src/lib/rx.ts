@@ -1,14 +1,16 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { TokenAccountParser } from '@nx-dapp/solana-dapp/account';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import {
+  getNativeAccount,
+  getTokenAccounts,
+  Network,
+  TokenAccountParser,
   Wallet,
   WalletName,
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
-} from '@nx-dapp/solana-dapp/wallet/base';
+} from '@nx-dapp/solana-dapp/wallet/wallets';
 import {
   AccountInfo,
   Connection,
@@ -69,10 +71,6 @@ import {
 import { fromAdapterEvent } from './operators';
 import { reducer, walletInitialState } from './state';
 import { Action, IWalletService, WalletState } from './types';
-import {
-  getNativeAccount,
-  getTokenAccounts,
-} from '@nx-dapp/solana-dapp/account';
 
 export class WalletService implements IWalletService {
   private readonly _destroy = new Subject();

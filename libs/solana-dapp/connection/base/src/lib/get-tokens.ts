@@ -1,8 +1,7 @@
+import { Network } from '@nx-dapp/solana-dapp/types/connection';
 import { TokenInfo, TokenListProvider } from '@solana/spl-token-registry';
 import { defer, from } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { Network } from './types';
 
 export const getTokens = (network: Network) => {
   return from(

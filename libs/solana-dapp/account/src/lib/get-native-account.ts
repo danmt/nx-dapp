@@ -1,5 +1,5 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
-import { TokenAccount } from '@nx-dapp/solana-dapp/account';
+import { TokenAccount } from '@nx-dapp/solana-dapp/types/account';
 import { u64 } from '@nx-dapp/solana-dapp/utils/u64';
 import { NATIVE_MINT } from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';

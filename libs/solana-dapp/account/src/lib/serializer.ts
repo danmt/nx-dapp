@@ -1,8 +1,12 @@
+import {
+  ParsedAccountBase,
+  TokenAccount,
+  TokenAccountInfo,
+} from '@nx-dapp/solana-dapp/types/account';
 import { u64 } from '@nx-dapp/solana-dapp/utils/u64';
+import { Market, MARKETS, Orderbook } from '@project-serum/serum';
 import { AccountLayout, MintInfo, MintLayout } from '@solana/spl-token';
 import { AccountInfo, PublicKey } from '@solana/web3.js';
-import { Market, MARKETS, Orderbook } from '@project-serum/serum';
-import { ParsedAccountBase, TokenAccount, TokenAccountInfo } from './types';
 
 const deserializeAccount = (data: Buffer): TokenAccountInfo => {
   const accountInfo = AccountLayout.decode(data);

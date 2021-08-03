@@ -1,12 +1,10 @@
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/types/account';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { defer, from, Observable } from 'rxjs';
 import { map, reduce } from 'rxjs/operators';
 
-import {
-  TokenAccountParser,
-  ParsedAccountBase,
-} from '@nx-dapp/solana-dapp/account';
+import { TokenAccountParser } from './serializer';
 
 const getAccounts = (
   connection: Connection,

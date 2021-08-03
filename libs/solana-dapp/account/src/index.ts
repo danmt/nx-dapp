@@ -6,4 +6,5 @@ export * from './lib/get-multiple-accounts';
 export * from './lib/get-native-account';
 export * from './lib/get-token-accounts';
 export * from './lib/serializer';
-export * from './lib/types';
+export * from '@nx-dapp/solana-dapp/types/account';
+export * from '@nx-dapp/solana-dapp/types/market';

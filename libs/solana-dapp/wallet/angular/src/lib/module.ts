@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/base';
+import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/rx';
 
 import { walletServiceProvider } from './provider';
 
