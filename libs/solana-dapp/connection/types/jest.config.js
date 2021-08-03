@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'solana-dapp-types-wallet',
+  displayName: 'solana-dapp-connection-types',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/solana-dapp/types/wallet',
+  coverageDirectory: '../../../../coverage/libs/solana-dapp/connection/types',
 };

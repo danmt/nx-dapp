@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'solana-dapp-types-account',
+  displayName: 'solana-dapp-account-types',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/solana-dapp/types/account',
+  coverageDirectory: '../../../../coverage/libs/solana-dapp/account/types',
 };

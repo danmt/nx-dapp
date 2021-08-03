@@ -1,5 +1,5 @@
 import { TokenAccountParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/types/account';
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { defer, from, Observable } from 'rxjs';

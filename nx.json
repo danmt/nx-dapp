@@ -48,6 +48,9 @@
     "shared-operators-of-type": {
       "tags": []
     },
+    "solana-dapp-account-types": {
+      "tags": []
+    },
     "solana-dapp-account-utils-get-market-accounts": {
       "tags": []
     },
@@ -84,6 +87,9 @@
     "solana-dapp-balance-rx": {
       "tags": []
     },
+    "solana-dapp-balance-types": {
+      "tags": []
+    },
     "solana-dapp-connection-angular": {
       "tags": []
     },
@@ -91,6 +97,9 @@
       "tags": []
     },
     "solana-dapp-connection-rx": {
+      "tags": []
+    },
+    "solana-dapp-connection-types": {
       "tags": []
     },
     "solana-dapp-market-angular": {
@@ -102,19 +111,7 @@
     "solana-dapp-market-rx": {
       "tags": []
     },
-    "solana-dapp-types-account": {
-      "tags": []
-    },
-    "solana-dapp-types-balance": {
-      "tags": []
-    },
-    "solana-dapp-types-connection": {
-      "tags": []
-    },
-    "solana-dapp-types-market": {
-      "tags": []
-    },
-    "solana-dapp-types-wallet": {
+    "solana-dapp-market-types": {
       "tags": []
     },
     "solana-dapp-utils-u64": {
@@ -136,6 +133,9 @@
       "tags": []
     },
     "solana-dapp-wallet-rx": {
+      "tags": []
+    },
+    "solana-dapp-wallet-types": {
       "tags": []
     },
     "solana-dapp-wallet-wallets": {

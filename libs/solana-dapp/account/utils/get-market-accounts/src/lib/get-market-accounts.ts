@@ -1,7 +1,7 @@
 import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
 import { DexMarketParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/types/account';
-import { SerumMarket } from '@nx-dapp/solana-dapp/types/market';
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
+import { SerumMarket } from '@nx-dapp/solana-dapp/market/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

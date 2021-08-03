@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'solana-dapp-types-balance',
+  displayName: 'solana-dapp-balance-types',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/solana-dapp/types/balance',
+  coverageDirectory: '../../../../coverage/libs/solana-dapp/balance/types',
 };

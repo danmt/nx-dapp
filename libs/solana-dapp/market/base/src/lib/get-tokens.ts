@@ -1,4 +1,4 @@
-import { Network } from '@nx-dapp/solana-dapp/types/connection';
+import { Network } from '@nx-dapp/solana-dapp/connection/types';
 import { TokenInfo, TokenListProvider } from '@solana/spl-token-registry';
 import { defer, from } from 'rxjs';
 import { map } from 'rxjs/operators';

@@ -1,4 +1,4 @@
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/types/account';
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
 
 export interface Balance {
   tokenName: string | null;

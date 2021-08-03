@@ -1,4 +1,4 @@
-import { ENV, Network } from '@nx-dapp/solana-dapp/types/connection';
+import { ENV, Network } from '@nx-dapp/solana-dapp/connection/types';
 import { ENV as ChainID } from '@solana/spl-token-registry';
 import { clusterApiUrl } from '@solana/web3.js';
 

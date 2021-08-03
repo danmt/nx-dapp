@@ -2,7 +2,7 @@ import {
   ParsedAccountBase,
   TokenAccount,
   TokenAccountInfo,
-} from '@nx-dapp/solana-dapp/types/account';
+} from '@nx-dapp/solana-dapp/account/types';
 import { u64 } from '@nx-dapp/solana-dapp/utils/u64';
 import { Market, MARKETS, Orderbook } from '@project-serum/serum';
 import { AccountLayout, MintInfo, MintLayout } from '@solana/spl-token';
