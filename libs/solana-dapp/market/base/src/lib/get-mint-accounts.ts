@@ -4,22 +4,19 @@ import {
   MintTokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { defer, from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, reduce } from 'rxjs/operators';
+
 import { TokenDetails } from './types';
 
 const getAccounts = (
   connection: Connection,
   mintTokens: TokenDetails[]
 ): Observable<MintTokenAccount[]> =>
-  from(
-    defer(() =>
-      getMultipleAccounts(
-        connection,
-        mintTokens.map((mintToken) => mintToken.pubkey.toBase58()),
-        'single'
-      )
-    )
+  getMultipleAccounts(
+    connection,
+    mintTokens.map((mintToken) => mintToken.pubkey.toBase58()),
+    'single'
   ).pipe(
     map(({ array: mintAccounts, keys: mintAddresses }) =>
       mintAccounts.map((mintAccount, index) =>

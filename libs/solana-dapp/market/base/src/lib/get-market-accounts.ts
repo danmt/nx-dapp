@@ -4,7 +4,7 @@ import {
   ParsedAccountBase,
 } from '@nx-dapp/solana-dapp/account/base';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { defer, from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SerumMarket } from './types';
@@ -13,16 +13,12 @@ export const getMarketAccounts = (
   marketByMint: Map<string, SerumMarket>,
   connection: Connection
 ): Observable<Map<string, ParsedAccountBase>> =>
-  from(
-    defer(() =>
-      getMultipleAccounts(
-        connection,
-        [...marketByMint.values()].map((market) =>
-          market.marketInfo.address.toBase58()
-        ),
-        'single'
-      )
-    )
+  getMultipleAccounts(
+    connection,
+    [...marketByMint.values()].map((market) =>
+      market.marketInfo.address.toBase58()
+    ),
+    'single'
   ).pipe(
     map(({ array: marketAccounts, keys: marketAccountAddresses }) =>
       marketAccounts

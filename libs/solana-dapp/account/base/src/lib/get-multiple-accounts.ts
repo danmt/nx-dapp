@@ -1,4 +1,6 @@
 import { AccountInfo } from '@solana/web3.js';
+import { defer, from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 function chunks<T>(array: T[], size: number): T[][] {
   return Array.apply<number, T[], T[][]>(
@@ -30,35 +32,40 @@ const getMultipleAccountsCore = async (
   throw new Error();
 };
 
-export const getMultipleAccounts = async (
+export const getMultipleAccounts = (
   connection: any,
   keys: string[],
   commitment: string
-) => {
-  const result = await Promise.all(
-    chunks(keys, 99).map((chunk) =>
-      getMultipleAccountsCore(connection, chunk, commitment)
+): Observable<{ keys: string[]; array: AccountInfo<Buffer>[] }> =>
+  from(
+    defer(() =>
+      Promise.all(
+        chunks(keys, 99).map((chunk) =>
+          getMultipleAccountsCore(connection, chunk, commitment)
+        )
+      )
     )
+  ).pipe(
+    map((result) => ({
+      array: result
+        .map(
+          (a) =>
+            a.array
+              .map((acc) => {
+                if (!acc) {
+                  return undefined;
+                }
+
+                const { data, ...rest } = acc;
+                const obj = {
+                  ...rest,
+                  data: Buffer.from(data[0], 'base64'),
+                } as AccountInfo<Buffer>;
+                return obj;
+              })
+              .filter((_) => _) as AccountInfo<Buffer>[]
+        )
+        .reduce((flatten, list) => [...flatten, ...list], []),
+      keys,
+    }))
   );
-
-  const array = result
-    .map(
-      (a) =>
-        a.array
-          .map((acc) => {
-            if (!acc) {
-              return undefined;
-            }
-
-            const { data, ...rest } = acc;
-            const obj = {
-              ...rest,
-              data: Buffer.from(data[0], 'base64'),
-            } as AccountInfo<Buffer>;
-            return obj;
-          })
-          .filter((_) => _) as AccountInfo<Buffer>[]
-    )
-    .reduce((flatten, list) => [...flatten, ...list], []);
-  return { keys, array };
-};
