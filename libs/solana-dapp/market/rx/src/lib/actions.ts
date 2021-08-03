@@ -4,7 +4,9 @@ import {
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
 import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 
 export class InitAction {
   type = 'init';
@@ -56,4 +58,16 @@ export class LoadMintAccountsAction {
   type = 'loadMintAccounts';
 
   constructor(public payload: Map<string, MintTokenAccount>) {}
+}
+
+export class LoadNetworkAction {
+  type = 'loadNetwork';
+
+  constructor(public payload: Network) {}
+}
+
+export class LoadNetworkTokensAction {
+  type = 'loadNetworkTokens';
+
+  constructor(public payload: Map<string, TokenInfo>) {}
 }

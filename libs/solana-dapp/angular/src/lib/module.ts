@@ -12,6 +12,7 @@ import {
   Wallet,
   WalletName,
 } from '@nx-dapp/solana-dapp/wallet/base';
+import { DEFAULT_MARKET_NETWORK } from '@nx-dapp/solana-dapp/market/base';
 
 export interface SolanaDappAccountConfig {
   isEnabled: boolean;
@@ -44,6 +45,7 @@ export interface SolanaDappConfig {
   mintTokens?: TokenDetails[];
   networks?: Network[];
   defaultNetwork?: string;
+  marketNetwork?: Network;
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
@@ -67,6 +69,7 @@ export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
   mintTokens: [],
   networks: [],
   defaultNetwork: DEFAULT_NETWORK,
+  marketNetwork: DEFAULT_MARKET_NETWORK,
 };
 
 @NgModule({
@@ -100,8 +103,14 @@ export class SolanaDappModule {
       );
     }
 
-    if (config.marketConfig?.isEnabled && config.mintTokens) {
-      providers.push(marketServiceProvider(config.mintTokens));
+    if (
+      config.marketConfig?.isEnabled &&
+      config.marketNetwork &&
+      config.mintTokens
+    ) {
+      providers.push(
+        marketServiceProvider(config.marketNetwork, config.mintTokens)
+      );
     }
 
     if (
@@ -111,8 +120,8 @@ export class SolanaDappModule {
     ) {
       providers.push(
         walletServiceProvider(
-          config.walletConfig?.wallets,
-          config.walletConfig?.defaultWallet
+          config.walletConfig.wallets,
+          config.walletConfig.defaultWallet
         )
       );
     }

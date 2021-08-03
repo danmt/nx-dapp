@@ -27,7 +27,6 @@ import {
   LoadConnectionAction,
   LoadNetworkAction,
   LoadNetworksAction,
-  LoadNetworkTokensAction,
   LoadSendConnectionAction,
   SelectNetworkAction,
   SendConnectionAccountChangedAction,
@@ -74,10 +73,6 @@ export class ConnectionService implements IConnectionService {
   );
   sendConnection$ = this.state$.pipe(
     map(({ sendConnection }) => sendConnection),
-    distinctUntilChanged()
-  );
-  networkTokens$ = this.state$.pipe(
-    map(({ networkTokens }) => networkTokens),
     distinctUntilChanged()
   );
 
@@ -129,17 +124,6 @@ export class ConnectionService implements IConnectionService {
     )
   );
 
-  private loadTokens$ = combineLatest([
-    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadNetworkAction>('loadNetwork')),
-  ]).pipe(
-    switchMap(([, { payload: network }]) =>
-      getTokens(network).pipe(
-        map((tokens) => new LoadNetworkTokensAction(tokens))
-      )
-    )
-  );
-
   constructor(networks: Network[], defaultNetwork: string) {
     this.runEffects([
       this.connectionAccountChange$,
@@ -149,7 +133,6 @@ export class ConnectionService implements IConnectionService {
       this.loadNetwork$,
       this.loadConnection$,
       this.loadSendConnection$,
-      this.loadTokens$,
     ]);
 
     setTimeout(() => {

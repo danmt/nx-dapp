@@ -1,5 +1,4 @@
 import { DEFAULT_SLIPPAGE } from '@nx-dapp/solana-dapp/connection/base';
-import { TokenInfo } from '@solana/spl-token-registry';
 
 import {
   ConnectionAccountChangedAction,
@@ -7,7 +6,6 @@ import {
   LoadNetworkAction,
   LoadNetworksAction,
   LoadSendConnectionAction,
-  LoadNetworkTokensAction,
   SelectNetworkAction,
 } from './actions';
 import { Action, ConnectionState } from './types';
@@ -20,7 +18,6 @@ export const connectionInitialState: ConnectionState = {
   connection: null,
   connectionAccount: null,
   sendConnection: null,
-  networkTokens: new Map<string, TokenInfo>(),
 };
 
 export const reducer = (state: ConnectionState, action: Action) => {
@@ -54,16 +51,6 @@ export const reducer = (state: ConnectionState, action: Action) => {
       return {
         ...state,
         connectionAccount: (action as ConnectionAccountChangedAction).payload,
-      };
-    case 'loadNetworkTokens':
-      return {
-        ...state,
-        networkTokens: [
-          ...(action as LoadNetworkTokensAction).payload.values(),
-        ].reduce(
-          (tokens, account) => tokens.set(account.address, account),
-          new Map(state.networkTokens)
-        ),
       };
     default:
       return state;

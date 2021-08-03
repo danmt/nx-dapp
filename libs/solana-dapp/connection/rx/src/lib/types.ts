@@ -7,7 +7,6 @@ import {
   ConnectionAccountChangedAction,
   ConnectionSlotChangedAction,
   InitAction,
-  LoadNetworkTokensAction,
   SelectNetworkAction,
   SendConnectionAccountChangedAction,
   SendConnectionSlotChangedAction,
@@ -24,7 +23,6 @@ export type Action =
   | ConnectionSlotChangedAction
   | SendConnectionAccountChangedAction
   | SendConnectionSlotChangedAction
-  | LoadNetworkTokensAction
   | LoadConnectionAction
   | LoadNetworkAction
   | LoadNetworksAction
@@ -38,7 +36,6 @@ export interface ConnectionState {
   connection: Connection | null;
   connectionAccount: AccountInfo<Buffer> | null;
   sendConnection: Connection | null;
-  networkTokens: Map<string, TokenInfo>;
 }
 
 export interface IConnectionService {
@@ -51,7 +48,6 @@ export interface IConnectionService {
   connection$: Observable<Connection | null>;
   connectionAccount$: Observable<AccountInfo<Buffer> | null>;
   sendConnection$: Observable<Connection | null>;
-  networkTokens$: Observable<Map<string, TokenInfo>>;
 
   loadNetworks(networks: Network[]): void;
 

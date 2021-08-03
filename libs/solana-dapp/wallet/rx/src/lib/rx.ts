@@ -200,8 +200,10 @@ export class WalletService implements IWalletService {
       this.walletNetworkChanged$,
     ]);
 
-    this.loadWallets(wallets);
-    this.selectWallet(defaultWallet);
+    setTimeout(() => {
+      this.loadWallets(wallets);
+      this.selectWallet(defaultWallet);
+    });
   }
 
   private runEffects(effects: Observable<Action>[]) {

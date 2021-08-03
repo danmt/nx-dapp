@@ -78,18 +78,13 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.connectionService.connection$
       .pipe(isNotNull)
-      .subscribe((connection) => {
-        this.accountService.loadConnection(connection);
-        this.marketService.loadConnection(connection);
-      });
+      .subscribe((connection) =>
+        this.accountService.loadConnection(connection)
+      );
 
     this.connectionService.connectionAccount$
       .pipe(isNotNull)
       .subscribe((account) => this.accountService.changeAccount(account));
-
-    this.connectionService.networkTokens$.subscribe((networkTokens) =>
-      this.balanceService.loadNetworkTokens(networkTokens)
-    );
 
     this.connectionService.network$
       .pipe(isNotNull)
@@ -110,6 +105,10 @@ export class AppComponent implements OnInit {
       this.marketService.loadTokenAccounts(tokenAccounts);
       this.balanceService.loadTokenAccounts(tokenAccounts);
     });
+
+    this.marketService.networkTokens$.subscribe((networkTokens) =>
+      this.balanceService.loadNetworkTokens(networkTokens)
+    );
 
     this.marketService.mintTokens$.subscribe((mintTokens) =>
       this.balanceService.loadMintTokens(mintTokens)

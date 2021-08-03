@@ -3,6 +3,7 @@ import {
   ParsedAccountBase,
 } from '@nx-dapp/solana-dapp/account/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 
 import {
   LoadMarketAccountsAction,
@@ -11,6 +12,7 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
+  LoadNetworkTokensAction,
 } from './actions';
 import { Action, MarketState } from './types';
 
@@ -21,6 +23,7 @@ export const marketInitialState: MarketState = {
   marketMintAccounts: new Map<string, ParsedAccountBase>(),
   marketIndicatorAccounts: new Map<string, ParsedAccountBase>(),
   marketAccounts: new Map<string, ParsedAccountBase>(),
+  networkTokens: new Map<string, TokenInfo>(),
 };
 
 export const reducer = (state: MarketState, action: Action) => {
@@ -28,7 +31,7 @@ export const reducer = (state: MarketState, action: Action) => {
     case 'loadMintTokens':
       return {
         ...state,
-        mintTokensAddresses: (action as LoadMintTokensAction).payload,
+        mintTokens: (action as LoadMintTokensAction).payload,
       };
     case 'loadMintAccounts':
       return {
@@ -55,6 +58,11 @@ export const reducer = (state: MarketState, action: Action) => {
         ...state,
         marketIndicatorAccounts: (action as LoadMarketIndicatorAccountsAction)
           .payload,
+      };
+    case 'loadNetworkTokens':
+      return {
+        ...state,
+        networkTokens: (action as LoadNetworkTokensAction).payload,
       };
     case 'reset':
       return {

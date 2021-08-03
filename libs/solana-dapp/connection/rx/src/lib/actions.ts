@@ -53,9 +53,3 @@ export class SendConnectionAccountChangedAction {
 export class SendConnectionSlotChangedAction {
   type = 'sendConnectionSlotChanged';
 }
-
-export class LoadNetworkTokensAction {
-  type = 'loadNetworkTokens';
-
-  constructor(public payload: Map<string, TokenInfo>) {}
-}

@@ -1,11 +1,13 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import {
   getMarketAccounts,
   getMarketByMint,
   getMarketIndicatorAccounts,
   getMarketMintAccounts,
   getMintAccounts,
+  getTokens,
   TokenDetails,
 } from '@nx-dapp/solana-dapp/market/base';
 import { Connection } from '@solana/web3.js';
@@ -36,6 +38,8 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
+  LoadNetworkAction,
+  LoadNetworkTokensAction,
   LoadTokenAccountsAction,
 } from './actions';
 import { marketInitialState, reducer } from './state';
@@ -74,6 +78,10 @@ export class MarketService implements IMarketService {
   );
   marketIndicatorAccounts$ = this.state$.pipe(
     map(({ marketIndicatorAccounts }) => marketIndicatorAccounts),
+    distinctUntilChanged()
+  );
+  networkTokens$ = this.state$.pipe(
+    map(({ networkTokens }) => networkTokens),
     distinctUntilChanged()
   );
 
@@ -135,16 +143,32 @@ export class MarketService implements IMarketService {
     )
   );
 
-  constructor(mintTokens: TokenDetails[]) {
+  private loadNetworkTokens$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadNetworkAction>('loadNetwork')),
+  ]).pipe(
+    switchMap(([, { payload: network }]) =>
+      getTokens(network).pipe(
+        map((tokens) => new LoadNetworkTokensAction(tokens))
+      )
+    )
+  );
+
+  constructor(network: Network, mintTokens: TokenDetails[]) {
     this.runEffects([
       this.loadMarketByMint$,
       this.loadMarketAccounts$,
       this.loadMarketMintAccounts$,
       this.loadMarketIndicatorAccounts$,
       this.loadMintAccounts$,
+      this.loadNetworkTokens$,
     ]);
 
-    this.loadMintTokens(mintTokens);
+    setTimeout(() => {
+      this.loadMintTokens(mintTokens);
+      this.loadConnection(new Connection(network.url, 'recent'));
+      this.loadNetwork(network);
+    });
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -163,6 +187,10 @@ export class MarketService implements IMarketService {
 
   loadMintTokens(mintTokens: TokenDetails[]) {
     this._dispatcher.next(new LoadMintTokensAction(mintTokens));
+  }
+
+  loadNetwork(network: Network) {
+    this._dispatcher.next(new LoadNetworkAction(network));
   }
 
   destroy() {

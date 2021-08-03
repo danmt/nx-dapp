@@ -4,6 +4,7 @@ import {
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
 import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
@@ -17,6 +18,8 @@ import {
   LoadMintAccountsAction,
   LoadMintTokensAction,
   LoadTokenAccountsAction,
+  LoadNetworkAction,
+  LoadNetworkTokensAction,
 } from './actions';
 
 export interface MarketState {
@@ -26,6 +29,7 @@ export interface MarketState {
   marketAccounts: Map<string, ParsedAccountBase>;
   marketMintAccounts: Map<string, ParsedAccountBase>;
   marketIndicatorAccounts: Map<string, ParsedAccountBase>;
+  networkTokens: Map<string, TokenInfo>;
 }
 
 export type Action =
@@ -37,7 +41,9 @@ export type Action =
   | LoadConnectionAction
   | LoadMarketByMintAction
   | LoadMintTokensAction
-  | LoadMintAccountsAction;
+  | LoadMintAccountsAction
+  | LoadNetworkAction
+  | LoadNetworkTokensAction;
 
 export interface IMarketService {
   actions$: Observable<Action>;
@@ -48,6 +54,7 @@ export interface IMarketService {
   marketAccounts$: Observable<Map<string, ParsedAccountBase>>;
   marketMintAccounts$: Observable<Map<string, ParsedAccountBase>>;
   marketIndicatorAccounts$: Observable<Map<string, ParsedAccountBase>>;
+  networkTokens$: Observable<Map<string, TokenInfo>>;
 
   loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>): void;
 
