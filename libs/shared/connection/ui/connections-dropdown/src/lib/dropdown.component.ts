@@ -5,7 +5,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
+import { DEFAULT_NETWORK, Network } from '@nx-dapp/solana-dapp/connection/base';
 
 @Component({
   selector: 'nx-dapp-connections-dropdown',
@@ -23,11 +23,11 @@ import { Network } from '@nx-dapp/solana-dapp/connection/base';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectionsDropdownComponent {
-  private readonly _defaultNetwork = 'mainnet-beta';
-  @Input() network: Network | null = null;
+  private readonly _defaultNetwork = DEFAULT_NETWORK;
+  @Input() set network(value: Network | null) {
+    this.networkControl.setValue(value ? value.name : this._defaultNetwork);
+  }
   @Input() networks: Network[] = [];
-  networkControl = new FormControl(
-    this.network ? this.network.name : this._defaultNetwork
-  );
+  networkControl = new FormControl('');
   @Output() selectNetwork = this.networkControl.valueChanges;
 }
