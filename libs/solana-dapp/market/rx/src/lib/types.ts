@@ -13,10 +13,7 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
-  LoadNativeAccountAction,
   LoadTokenAccountsAction,
-  LoadWalletConnectedAction,
-  ResetAction,
 } from './actions';
 
 export interface MarketState {
@@ -29,14 +26,11 @@ export interface MarketState {
 export type Action =
   | InitAction
   | LoadTokenAccountsAction
-  | LoadNativeAccountAction
   | LoadMarketAccountsAction
   | LoadMarketMintAccountsAction
   | LoadMarketIndicatorAccountsAction
   | LoadConnectionAction
-  | LoadMarketByMintAction
-  | ResetAction
-  | LoadWalletConnectedAction;
+  | LoadMarketByMintAction;
 
 export interface IMarketService {
   actions$: Observable<Action>;
@@ -48,9 +42,5 @@ export interface IMarketService {
 
   loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>): void;
 
-  loadNativeAccount(nativeAccount: TokenAccount): void;
-
   loadConnection(connection: Connection): void;
-
-  loadWalletConnected(walletConnected: boolean): void;
 }

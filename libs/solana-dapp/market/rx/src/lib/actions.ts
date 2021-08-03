@@ -15,12 +15,6 @@ export class LoadTokenAccountsAction {
   constructor(public payload: Map<string, TokenAccount>) {}
 }
 
-export class LoadNativeAccountAction {
-  type = 'loadNativeAccount';
-
-  constructor(public payload: TokenAccount) {}
-}
-
 export class LoadMarketByMintAction {
   type = 'loadMarketByMint';
 
@@ -49,14 +43,4 @@ export class LoadConnectionAction {
   type = 'loadConnection';
 
   constructor(public payload: Connection) {}
-}
-
-export class LoadWalletConnectedAction {
-  type = 'loadWalletConnected';
-
-  constructor(public payload: boolean) {}
-}
-
-export class ResetAction {
-  type = 'reset';
 }

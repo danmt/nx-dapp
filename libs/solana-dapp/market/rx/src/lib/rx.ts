@@ -17,7 +17,6 @@ import {
 } from 'rxjs';
 import {
   distinctUntilChanged,
-  filter,
   map,
   observeOn,
   scan,
@@ -33,10 +32,7 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
-  LoadNativeAccountAction,
   LoadTokenAccountsAction,
-  LoadWalletConnectedAction,
-  ResetAction,
 } from './actions';
 import { marketInitialState, reducer } from './state';
 import { Action, IMarketService } from './types';
@@ -69,15 +65,10 @@ export class MarketService implements IMarketService {
     distinctUntilChanged()
   );
 
-  private loadMarketByMint$ = combineLatest([
-    this.actions$.pipe(ofType<LoadTokenAccountsAction>('loadTokenAccounts')),
-    this.actions$.pipe(
-      ofType<LoadWalletConnectedAction>('loadWalletConnected')
-    ),
-  ]).pipe(
-    filter(([, { payload: walletConnected }]) => walletConnected),
+  private loadMarketByMint$ = this.actions$.pipe(
+    ofType<LoadTokenAccountsAction>('loadTokenAccounts'),
     map(
-      ([{ payload: tokenAccounts }]) =>
+      ({ payload: tokenAccounts }) =>
         new LoadMarketByMintAction(getMarketByMint(tokenAccounts))
     )
   );
@@ -85,11 +76,7 @@ export class MarketService implements IMarketService {
   private loadMarketAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketByMintAction>('loadMarketByMint')),
-    this.actions$.pipe(
-      ofType<LoadWalletConnectedAction>('loadWalletConnected')
-    ),
   ]).pipe(
-    filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: marketByMint }]) =>
       getMarketAccounts(marketByMint, connection).pipe(
         map((marketAccounts) => new LoadMarketAccountsAction(marketAccounts))
@@ -100,11 +87,7 @@ export class MarketService implements IMarketService {
   private loadMarketMintAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-    this.actions$.pipe(
-      ofType<LoadWalletConnectedAction>('loadWalletConnected')
-    ),
   ]).pipe(
-    filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: marketAccounts }]) =>
       getMarketMintAccounts(connection, marketAccounts).pipe(
         map(
@@ -118,11 +101,7 @@ export class MarketService implements IMarketService {
   private loadMarketIndicatorAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<LoadMarketAccountsAction>('loadMarketAccounts')),
-    this.actions$.pipe(
-      ofType<LoadWalletConnectedAction>('loadWalletConnected')
-    ),
   ]).pipe(
-    filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: marketAccounts }]) =>
       getMarketIndicatorAccounts(connection, marketAccounts).pipe(
         map(
@@ -133,19 +112,12 @@ export class MarketService implements IMarketService {
     )
   );
 
-  private reset$ = this.actions$.pipe(
-    ofType<LoadWalletConnectedAction>('loadWalletConnected'),
-    filter(({ payload: connected }) => !connected),
-    map(() => new ResetAction())
-  );
-
   constructor() {
     this.runEffects([
       this.loadMarketByMint$,
       this.loadMarketAccounts$,
       this.loadMarketMintAccounts$,
       this.loadMarketIndicatorAccounts$,
-      this.reset$,
     ]);
   }
 
@@ -155,20 +127,12 @@ export class MarketService implements IMarketService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>) {
-    this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts));
-  }
-
-  loadNativeAccount(nativeAccount: TokenAccount) {
-    this._dispatcher.next(new LoadNativeAccountAction(nativeAccount));
-  }
-
   loadConnection(connection: Connection) {
     this._dispatcher.next(new LoadConnectionAction(connection));
   }
 
-  loadWalletConnected(walletConnected: boolean) {
-    this._dispatcher.next(new LoadWalletConnectedAction(walletConnected));
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>) {
+    this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts));
   }
 
   destroy() {
