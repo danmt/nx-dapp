@@ -1,4 +1,4 @@
-import { TokenAccount } from '@nx-dapp/solana-dapp/wallet/wallets';
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
 
 import {
   AccountChangedAction,

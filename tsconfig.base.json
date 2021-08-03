@@ -67,20 +67,17 @@
       "@nx-dapp/solana-dapp/balance/angular": [
         "libs/solana-dapp/balance/angular/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/balance/base": [
-        "libs/solana-dapp/balance/base/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/balance/rx": [
         "libs/solana-dapp/balance/rx/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/balance/types": [
         "libs/solana-dapp/balance/types/src/index.ts"
       ],
+      "@nx-dapp/solana-dapp/balance/utils/get-balances": [
+        "libs/solana-dapp/balance/utils/get-balances/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/connection/angular": [
         "libs/solana-dapp/connection/angular/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/connection/base": [
-        "libs/solana-dapp/connection/base/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/connection/rx": [
         "libs/solana-dapp/connection/rx/src/index.ts"
@@ -91,14 +88,17 @@
       "@nx-dapp/solana-dapp/market/angular": [
         "libs/solana-dapp/market/angular/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/market/base": [
-        "libs/solana-dapp/market/base/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/market/rx": [
         "libs/solana-dapp/market/rx/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/market/types": [
         "libs/solana-dapp/market/types/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/market/utils/get-market-by-mint": [
+        "libs/solana-dapp/market/utils/get-market-by-mint/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/market/utils/get-tokens": [
+        "libs/solana-dapp/market/utils/get-tokens/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/utils/u64": [
         "libs/solana-dapp/utils/u64/src/index.ts"
@@ -115,17 +115,20 @@
       "@nx-dapp/solana-dapp/wallet/angular": [
         "libs/solana-dapp/wallet/angular/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/wallet/base": [
-        "libs/solana-dapp/wallet/base/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/wallet/rx": [
         "libs/solana-dapp/wallet/rx/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/wallet/types": [
         "libs/solana-dapp/wallet/types/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/wallet/wallets": [
-        "libs/solana-dapp/wallet/wallets/src/index.ts"
+      "@nx-dapp/solana-dapp/wallet/utils/errors": [
+        "libs/solana-dapp/wallet/utils/errors/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/wallet/utils/poll": [
+        "libs/solana-dapp/wallet/utils/poll/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/wallet/utils/wallets": [
+        "libs/solana-dapp/wallet/utils/wallets/src/index.ts"
       ]
     }
   },

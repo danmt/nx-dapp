@@ -1,16 +1,15 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { getNativeAccount } from '@nx-dapp/solana-dapp/account/utils/get-native-account';
+import { getTokenAccounts } from '@nx-dapp/solana-dapp/account/utils/get-token-accounts';
+import { TokenAccountParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
+import { Network } from '@nx-dapp/solana-dapp/connection/types';
+import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import {
-  getNativeAccount,
-  getTokenAccounts,
-  Network,
-  TokenAccountParser,
-  Wallet,
-  WalletName,
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
+} from '@nx-dapp/solana-dapp/wallet/utils/errors';
 import {
   AccountInfo,
   Connection,

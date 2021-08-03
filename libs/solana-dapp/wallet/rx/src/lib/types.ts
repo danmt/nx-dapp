@@ -1,10 +1,10 @@
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
+import { Network } from '@nx-dapp/solana-dapp/connection/types';
 import {
-  Network,
-  TokenAccount,
   Wallet,
   WalletAdapter,
   WalletName,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
+} from '@nx-dapp/solana-dapp/wallet/types';
 import {
   AccountInfo,
   Connection,

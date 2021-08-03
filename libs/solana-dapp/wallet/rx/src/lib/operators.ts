@@ -2,7 +2,7 @@ import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   WalletAdapter,
   WalletAdapterEvents,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
+} from '@nx-dapp/solana-dapp/wallet/types';
 import { fromEventPattern, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 

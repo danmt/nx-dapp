@@ -1,13 +1,15 @@
 import {
+  WalletAdapter,
+  WalletAdapterEvents,
+  WalletAdapterNetwork,
+} from '@nx-dapp/solana-dapp/wallet/types';
+import {
   WalletConnectionError,
   WalletNotConnectedError,
   WalletSignatureError,
   WalletWindowBlockedError,
   WalletWindowClosedError,
-  WalletAdapter,
-  WalletAdapterEvents,
-  WalletAdapterNetwork,
-} from '@nx-dapp/solana-dapp/wallet/base';
+} from '@nx-dapp/solana-dapp/wallet/utils/errors';
 import Wallet from '@project-serum/sol-wallet-adapter';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';

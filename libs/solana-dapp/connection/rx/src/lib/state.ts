@@ -1,5 +1,3 @@
-import { DEFAULT_SLIPPAGE } from '@nx-dapp/solana-dapp/connection/base';
-
 import {
   ConnectionAccountChangedAction,
   LoadConnectionAction,
@@ -8,6 +6,7 @@ import {
   LoadSendConnectionAction,
   SelectNetworkAction,
 } from './actions';
+import { DEFAULT_SLIPPAGE } from './consts';
 import { Action, ConnectionState } from './types';
 
 export const connectionInitialState: ConnectionState = {

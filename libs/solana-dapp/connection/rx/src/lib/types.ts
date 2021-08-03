@@ -1,4 +1,4 @@
-import { ENV, Network } from '@nx-dapp/solana-dapp/connection/base';
+import { ENV, Network } from '@nx-dapp/solana-dapp/connection/types';
 import { AccountInfo, Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 

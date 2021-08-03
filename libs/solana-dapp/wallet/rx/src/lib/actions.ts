@@ -1,9 +1,6 @@
-import {
-  Network,
-  TokenAccount,
-  Wallet,
-  WalletName,
-} from '@nx-dapp/solana-dapp/wallet/wallets';
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
+import { Network } from '@nx-dapp/solana-dapp/connection/types';
+import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import { AccountInfo, Connection, Transaction } from '@solana/web3.js';
 
 export class InitAction {

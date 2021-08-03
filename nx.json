@@ -81,19 +81,16 @@
     "solana-dapp-balance-angular": {
       "tags": []
     },
-    "solana-dapp-balance-base": {
-      "tags": []
-    },
     "solana-dapp-balance-rx": {
       "tags": []
     },
     "solana-dapp-balance-types": {
       "tags": []
     },
-    "solana-dapp-connection-angular": {
+    "solana-dapp-balance-utils-get-balances": {
       "tags": []
     },
-    "solana-dapp-connection-base": {
+    "solana-dapp-connection-angular": {
       "tags": []
     },
     "solana-dapp-connection-rx": {
@@ -105,13 +102,16 @@
     "solana-dapp-market-angular": {
       "tags": []
     },
-    "solana-dapp-market-base": {
-      "tags": []
-    },
     "solana-dapp-market-rx": {
       "tags": []
     },
     "solana-dapp-market-types": {
+      "tags": []
+    },
+    "solana-dapp-market-utils-get-market-by-mint": {
+      "tags": []
+    },
+    "solana-dapp-market-utils-get-tokens": {
       "tags": []
     },
     "solana-dapp-utils-u64": {
@@ -129,16 +129,19 @@
     "solana-dapp-wallet-angular": {
       "tags": []
     },
-    "solana-dapp-wallet-base": {
-      "tags": []
-    },
     "solana-dapp-wallet-rx": {
       "tags": []
     },
     "solana-dapp-wallet-types": {
       "tags": []
     },
-    "solana-dapp-wallet-wallets": {
+    "solana-dapp-wallet-utils-errors": {
+      "tags": []
+    },
+    "solana-dapp-wallet-utils-poll": {
+      "tags": []
+    },
+    "solana-dapp-wallet-utils-wallets": {
       "tags": []
     },
     "web-client": {

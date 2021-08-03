@@ -1,13 +1,15 @@
 import {
-  pollUntilReady,
-  WalletAccountError,
   WalletAdapter,
   WalletAdapterEvents,
+} from '@nx-dapp/solana-dapp/wallet/types';
+import {
+  WalletAccountError,
   WalletNotConnectedError,
   WalletNotFoundError,
   WalletPublicKeyError,
   WalletSignatureError,
-} from '@nx-dapp/solana-dapp/wallet/base';
+} from '@nx-dapp/solana-dapp/wallet/utils/errors';
+import { pollUntilReady } from '@nx-dapp/solana-dapp/wallet/utils/poll';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
