@@ -1,24 +1,21 @@
 import {
+  MintTokenAccount,
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 
 export class InitAction {
   type = 'init';
 }
 
-export class LoadUserAccountsAction {
-  type = 'loadUserAccounts';
+export class LoadTokenAccountsAction {
+  type = 'loadTokenAccounts';
 
-  constructor(public payload: TokenAccount[]) {}
-}
-
-export class LoadNativeAccountAction {
-  type = 'loadNativeAccount';
-
-  constructor(public payload: TokenAccount) {}
+  constructor(public payload: Map<string, TokenAccount>) {}
 }
 
 export class LoadMarketByMintAction {
@@ -51,12 +48,26 @@ export class LoadConnectionAction {
   constructor(public payload: Connection) {}
 }
 
-export class LoadWalletConnectedAction {
-  type = 'loadWalletConnected';
+export class LoadMintTokensAction {
+  type = 'loadMintTokens';
 
-  constructor(public payload: boolean) {}
+  constructor(public payload: TokenDetails[]) {}
 }
 
-export class ResetAction {
-  type = 'reset';
+export class LoadMintAccountsAction {
+  type = 'loadMintAccounts';
+
+  constructor(public payload: Map<string, MintTokenAccount>) {}
+}
+
+export class LoadNetworkAction {
+  type = 'loadNetwork';
+
+  constructor(public payload: Network) {}
+}
+
+export class LoadNetworkTokensAction {
+  type = 'loadNetworkTokens';
+
+  constructor(public payload: Map<string, TokenInfo>) {}
 }

@@ -4,8 +4,9 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { createBalance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { getBalances } from '@nx-dapp/solana-dapp/balance/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+import { TokenInfo } from '@solana/spl-token-registry';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -21,6 +22,7 @@ import {
   observeOn,
   scan,
   shareReplay,
+  switchMap,
   takeUntil,
 } from 'rxjs/operators';
 
@@ -33,14 +35,13 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
-  LoadTokensAction,
-  LoadUserAccountsAction,
+  LoadNetworkTokensAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
 } from './actions';
 import { balanceInitialState, reducer } from './state';
 import { Action, IBalanceService } from './types';
-import { TokenInfo } from '@solana/spl-token-registry';
 
 export class BalanceService implements IBalanceService {
   private readonly _destroy = new Subject();
@@ -65,13 +66,13 @@ export class BalanceService implements IBalanceService {
   private loadBalances$ = combineLatest([
     // Useful data
     combineLatest([
-      this.actions$.pipe(ofType<LoadTokensAction>('loadTokens')),
+      this.actions$.pipe(ofType<LoadNetworkTokensAction>('loadNetworkTokens')),
       this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
     ]),
     // User data
     combineLatest([
       this.actions$.pipe(ofType<LoadMintAccountsAction>('loadMintAccounts')),
-      this.actions$.pipe(ofType<LoadUserAccountsAction>('loadUserAccounts')),
+      this.actions$.pipe(ofType<LoadTokenAccountsAction>('loadTokenAccounts')),
     ]),
     // Market
     combineLatest([
@@ -91,10 +92,10 @@ export class BalanceService implements IBalanceService {
     ),
   ]).pipe(
     filter(([, , , { payload: walletConnected }]) => walletConnected),
-    map(
+    switchMap(
       ([
-        [{ payload: tokens }, { payload: mintTokens }],
-        [{ payload: mintAccounts }, { payload: userAccounts }],
+        [{ payload: networkTokens }, { payload: mintTokens }],
+        [{ payload: mintAccounts }, { payload: tokenAccounts }],
         [
           { payload: marketAccounts },
           { payload: marketByMint },
@@ -102,32 +103,16 @@ export class BalanceService implements IBalanceService {
           { payload: marketIndicatorAccounts },
         ],
       ]) =>
-        new LoadBalancesAction(
-          mintAccounts
-            .filter((mintAccount) =>
-              mintTokens.some(
-                ({ address }) => address === mintAccount.pubkey.toBase58()
-              )
-            )
-            .map((mintAccount) =>
-              createBalance(
-                userAccounts.filter(
-                  (userAccount) =>
-                    userAccount.info.mint.toBase58() ===
-                    mintAccount.pubkey.toBase58()
-                ),
-                mintTokens.find(
-                  (token) => token.address === mintAccount.pubkey.toBase58()
-                ) || null,
-                tokens.get(mintAccount.pubkey.toBase58()) || null,
-                mintAccount,
-                marketByMint,
-                marketAccounts,
-                marketMintAccounts,
-                marketIndicatorAccounts
-              )
-            )
-        )
+        getBalances(
+          mintAccounts,
+          tokenAccounts,
+          mintTokens,
+          networkTokens,
+          marketByMint,
+          marketAccounts,
+          marketMintAccounts,
+          marketIndicatorAccounts
+        ).pipe(map((balances) => new LoadBalancesAction(balances)))
     )
   );
 
@@ -137,10 +122,8 @@ export class BalanceService implements IBalanceService {
     map(() => new ResetAction())
   );
 
-  constructor(mintTokens: TokenDetails[]) {
+  constructor() {
     this.runEffects([this.loadBalances$, this.reset$]);
-
-    this.loadMintTokens(mintTokens);
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -149,12 +132,12 @@ export class BalanceService implements IBalanceService {
       .subscribe((action) => this._dispatcher.next(action));
   }
 
-  loadMintAccounts(mintAccounts: MintTokenAccount[]) {
+  loadMintAccounts(mintAccounts: Map<string, MintTokenAccount>) {
     this._dispatcher.next(new LoadMintAccountsAction(mintAccounts));
   }
 
-  loadUserAccounts(userAccounts: TokenAccount[]) {
-    this._dispatcher.next(new LoadUserAccountsAction(userAccounts));
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>) {
+    this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts));
   }
 
   loadMarketAccounts(marketAccounts: Map<string, ParsedAccountBase>) {
@@ -181,8 +164,8 @@ export class BalanceService implements IBalanceService {
     this._dispatcher.next(new LoadMintTokensAction(mintTokens));
   }
 
-  loadTokens(tokens: Map<string, TokenInfo>) {
-    this._dispatcher.next(new LoadTokensAction(tokens));
+  loadNetworkTokens(networkTokens: Map<string, TokenInfo>) {
+    this._dispatcher.next(new LoadNetworkTokensAction(networkTokens));
   }
 
   loadWalletConnected(walletConnected: boolean) {

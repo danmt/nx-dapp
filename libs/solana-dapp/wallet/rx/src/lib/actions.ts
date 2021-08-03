@@ -1,5 +1,6 @@
 import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/base';
 import { Transaction } from '@solana/web3.js';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 
 export class InitAction {
   type = 'init';
@@ -73,4 +74,14 @@ export class TransactionsSignedAction {
   type = 'transactionsSigned';
 
   constructor(public payload: Transaction[]) {}
+}
+
+export class LoadNetworkAction {
+  type = 'loadNetwork';
+
+  constructor(public payload: Network) {}
+}
+
+export class WalletNetworkChangedAction {
+  type = 'walletNetworkChanged';
 }

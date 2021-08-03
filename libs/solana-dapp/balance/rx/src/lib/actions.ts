@@ -3,18 +3,18 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { Balance } from '@nx-dapp/solana-dapp/balance/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 
 export class InitAction {
   type = 'init';
 }
 
-export class LoadUserAccountsAction {
-  type = 'loadUserAccounts';
+export class LoadTokenAccountsAction {
+  type = 'loadTokenAccounts';
 
-  constructor(public payload: TokenAccount[]) {}
+  constructor(public payload: Map<string, TokenAccount>) {}
 }
 
 export class LoadMintTokensAction {
@@ -26,7 +26,7 @@ export class LoadMintTokensAction {
 export class LoadMintAccountsAction {
   type = 'loadMintAccounts';
 
-  constructor(public payload: MintTokenAccount[]) {}
+  constructor(public payload: Map<string, MintTokenAccount>) {}
 }
 
 export class LoadBalancesAction {
@@ -59,8 +59,8 @@ export class LoadMarketIndicatorAccountsAction {
   constructor(public payload: Map<string, ParsedAccountBase>) {}
 }
 
-export class LoadTokensAction {
-  type = 'loadTokens';
+export class LoadNetworkTokensAction {
+  type = 'loadNetworkTokens';
 
   constructor(public payload: Map<string, TokenInfo>) {}
 }

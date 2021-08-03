@@ -1,12 +1,10 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
-  MintParser,
+  getTokenAccounts,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -22,7 +20,6 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  mergeMap,
   observeOn,
   scan,
   shareReplay,
@@ -34,8 +31,6 @@ import {
   ChangeAccountAction,
   InitAction,
   LoadConnectionAction,
-  LoadMintAccountsAction,
-  LoadMintTokensAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
@@ -58,20 +53,6 @@ export class AccountService implements IAccountService {
   );
   tokenAccounts$ = this.state$.pipe(
     map(({ tokenAccounts }) => tokenAccounts),
-    distinctUntilChanged()
-  );
-  nativeAccount$ = this.state$.pipe(
-    map(({ nativeAccount }) => nativeAccount),
-    distinctUntilChanged()
-  );
-  userAccounts$ = combineLatest([
-    this.tokenAccounts$,
-    this.nativeAccount$.pipe(isNotNull),
-  ]).pipe(
-    map(([tokenAccounts, nativeAccount]) => [...tokenAccounts, nativeAccount])
-  );
-  mintAccounts$ = this.state$.pipe(
-    map(({ mintAccounts }) => mintAccounts),
     distinctUntilChanged()
   );
 
@@ -127,44 +108,9 @@ export class AccountService implements IAccountService {
   ]).pipe(
     filter(([, , { payload: walletConnected }]) => walletConnected),
     switchMap(([{ payload: connection }, { payload: walletPublicKey }]) =>
-      from(
-        defer(() =>
-          connection.getTokenAccountsByOwner(walletPublicKey, {
-            programId: TOKEN_PROGRAM_ID,
-          })
-        )
-      ).pipe(
-        map(
-          (accounts) =>
-            new LoadTokenAccountsAction({
-              tokenAccounts: accounts.value
-                .filter((info) => info.account.data.length > 0)
-                .map((info) =>
-                  TokenAccountParser(
-                    new PublicKey(info.pubkey.toBase58()),
-                    info.account
-                  )
-                ),
-              walletPublicKey,
-            })
-        )
+      getTokenAccounts(connection, walletPublicKey).pipe(
+        map((tokenAccounts) => new LoadTokenAccountsAction(tokenAccounts))
       )
-    )
-  );
-
-  private loadMintAccounts$ = combineLatest([
-    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
-  ]).pipe(
-    mergeMap(([{ payload: connection }, { payload: mintKeys }]) =>
-      combineLatest(
-        mintKeys.map((mintKey) =>
-          from(defer(() => connection.getAccountInfo(mintKey))).pipe(
-            isNotNull,
-            map((account) => MintParser(mintKey, account))
-          )
-        )
-      ).pipe(map((accounts) => new LoadMintAccountsAction(accounts)))
     )
   );
 
@@ -174,16 +120,13 @@ export class AccountService implements IAccountService {
     map(() => new ResetAction())
   );
 
-  constructor(mintTokens: TokenDetails[]) {
+  constructor() {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
-      this.loadMintAccounts$,
       this.reset$,
     ]);
-
-    this.loadMintTokens(mintTokens.map(({ pubkey }) => pubkey));
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -206,10 +149,6 @@ export class AccountService implements IAccountService {
 
   changeAccount(account: AccountInfo<Buffer>) {
     this._dispatcher.next(new ChangeAccountAction(account));
-  }
-
-  loadMintTokens(publicKeys: PublicKey[]) {
-    this._dispatcher.next(new LoadMintTokensAction(publicKeys));
   }
 
   destroy() {

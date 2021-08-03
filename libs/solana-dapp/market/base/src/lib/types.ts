@@ -1,4 +1,5 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js';
+
 export interface MarketInfo {
   address: PublicKey;
   programId: PublicKey;
@@ -24,4 +25,10 @@ export interface SerumMarket {
   };
 
   midPrice?: (mint?: PublicKey) => number;
+}
+
+export interface TokenDetails {
+  pubkey: PublicKey;
+  address: string;
+  label: string;
 }

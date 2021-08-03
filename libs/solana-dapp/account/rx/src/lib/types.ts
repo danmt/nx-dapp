@@ -1,7 +1,4 @@
-import {
-  MintTokenAccount,
-  TokenAccount,
-} from '@nx-dapp/solana-dapp/account/base';
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
@@ -11,8 +8,6 @@ import {
   InitAction,
   LoadConnectionAction,
   LoadMarketByMintAction,
-  LoadMintAccountsAction,
-  LoadMintTokensAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
@@ -29,24 +24,18 @@ export type Action =
   | LoadNativeAccountAction
   | ChangeAccountAction
   | AccountChangedAction
-  | LoadMintAccountsAction
   | LoadMarketByMintAction
-  | LoadMintTokensAction
   | ResetAction;
 
 export interface AccountState {
-  tokenAccounts: TokenAccount[];
+  tokenAccounts: Map<string, TokenAccount>;
   nativeAccount: TokenAccount | null;
-  mintTokensAddresses: PublicKey[];
-  mintAccounts: MintTokenAccount[];
 }
 
 export interface IAccountService {
   state$: Observable<AccountState>;
   actions$: Observable<Action>;
-  userAccounts$: Observable<TokenAccount[]>;
-  nativeAccount$: Observable<TokenAccount | null>;
-  mintAccounts$: Observable<MintTokenAccount[]>;
+  tokenAccounts$: Observable<Map<string, TokenAccount>>;
 
   loadConnection(connection: Connection): void;
 
@@ -55,6 +44,4 @@ export interface IAccountService {
   loadWalletConnected(walletConnected: boolean): void;
 
   changeAccount(account: AccountInfo<Buffer>): void;
-
-  loadMintTokens(publicKeys: PublicKey[]): void;
 }

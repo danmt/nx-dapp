@@ -3,8 +3,8 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { Balance, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { Balance } from '@nx-dapp/solana-dapp/balance/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { Observable } from 'rxjs';
 
@@ -17,15 +17,15 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
-  LoadTokensAction,
-  LoadUserAccountsAction,
+  LoadNetworkTokensAction,
+  LoadTokenAccountsAction,
   LoadWalletConnectedAction,
   ResetAction,
 } from './actions';
 
 export type Action =
   | InitAction
-  | LoadUserAccountsAction
+  | LoadTokenAccountsAction
   | LoadBalancesAction
   | LoadMarketByMintAction
   | LoadMintTokensAction
@@ -33,14 +33,13 @@ export type Action =
   | LoadMarketAccountsAction
   | LoadMarketIndicatorAccountsAction
   | LoadMarketMintAccountsAction
-  | LoadTokensAction
+  | LoadNetworkTokensAction
   | LoadWalletConnectedAction
   | ResetAction;
 
 export interface BalanceState {
   balances: Balance[];
   totalInUSD: number;
-  mintTokens: TokenDetails[];
 }
 
 export interface IBalanceService {
@@ -59,15 +58,15 @@ export interface IBalanceService {
     marketIndicatorAccounts: Map<string, ParsedAccountBase>
   ): void;
 
-  loadMintAccounts(mintAccounts: MintTokenAccount[]): void;
+  loadMintAccounts(mintAccounts: Map<string, MintTokenAccount>): void;
 
-  loadMintTokens(mintTokens: TokenDetails[]): void;
-
-  loadUserAccounts(userAccounts: TokenAccount[]): void;
+  loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>): void;
 
   loadMarketByMint(marketByMint: Map<string, SerumMarket>): void;
 
-  loadTokens(tokens: Map<string, TokenInfo>): void;
+  loadNetworkTokens(networkTokens: Map<string, TokenInfo>): void;
 
   loadWalletConnected(walletConnected: boolean): void;
+
+  loadMintTokens(mintTokens: TokenDetails[]): void;
 }

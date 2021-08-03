@@ -40,7 +40,7 @@ import { AppComponent } from './app.component';
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot(),
-    SolanaDappModule.forRoot(environment.solanaDapp),
+    SolanaDappModule.forRoot(),
   ],
   bootstrap: [AppComponent],
 })

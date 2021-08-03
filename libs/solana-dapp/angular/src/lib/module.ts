@@ -2,19 +2,28 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { accountServiceProvider } from '@nx-dapp/solana-dapp/account/angular';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
-import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
 import {
-  DEFAULT_ENDPOINT,
-  Endpoint,
+  DEFAULT_NETWORK,
+  Network,
+  NETWORKS,
 } from '@nx-dapp/solana-dapp/connection/base';
 import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
+import { TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
 import {
   DEFAULT_WALLET,
   Wallet,
   WalletName,
 } from '@nx-dapp/solana-dapp/wallet/base';
+import { DEFAULT_MARKET_NETWORK } from '@nx-dapp/solana-dapp/market/base';
+import {
+  getPhantomWallet,
+  getSolletWallet,
+  getSolongWallet,
+} from '@nx-dapp/solana-dapp/wallet/wallets';
+import { PublicKey } from '@solana/web3.js';
+import { NATIVE_MINT } from '@solana/spl-token';
 
 export interface SolanaDappAccountConfig {
   isEnabled: boolean;
@@ -45,8 +54,9 @@ export interface SolanaDappConfig {
   marketConfig?: SolanaDappMarketConfig;
   walletConfig?: SolanaDappWalletConfig;
   mintTokens?: TokenDetails[];
-  endpoints?: Endpoint[];
-  defaultEndpoint?: string;
+  networks?: Network[];
+  defaultNetwork?: string;
+  marketNetwork?: Network;
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
@@ -64,12 +74,44 @@ export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
   },
   walletConfig: {
     isEnabled: true,
-    wallets: [],
+    wallets: [getPhantomWallet(), getSolletWallet(), getSolongWallet()],
     defaultWallet: DEFAULT_WALLET,
   },
-  mintTokens: [],
-  endpoints: [],
-  defaultEndpoint: DEFAULT_ENDPOINT,
+  mintTokens: [
+    {
+      label: 'Serum',
+      address: 'SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt',
+      pubkey: new PublicKey('SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt'),
+    },
+    {
+      label: 'Solana',
+      address: NATIVE_MINT.toBase58(),
+      pubkey: NATIVE_MINT,
+    },
+    {
+      label: 'Kin',
+      address: 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6',
+      pubkey: new PublicKey('kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'),
+    },
+    {
+      label: 'USDC',
+      address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+      pubkey: new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
+    },
+    {
+      label: 'Raydium',
+      address: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+      pubkey: new PublicKey('4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R'),
+    },
+    {
+      label: 'Solfarm',
+      address: 'TuLipcqtGVXP9XR62wM8WWCm6a9vhLs7T1uoWBk6FDs',
+      pubkey: new PublicKey('TuLipcqtGVXP9XR62wM8WWCm6a9vhLs7T1uoWBk6FDs'),
+    },
+  ],
+  networks: NETWORKS,
+  defaultNetwork: DEFAULT_NETWORK,
+  marketNetwork: DEFAULT_MARKET_NETWORK,
 };
 
 @NgModule({
@@ -77,7 +119,7 @@ export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
 })
 export class SolanaDappModule {
   static forRoot(
-    config = SOLANA_DAPP_DEFAULT_CONFIG
+    config?: SolanaDappConfig
   ): ModuleWithProviders<SolanaDappModule> {
     const providers = [];
     config = {
@@ -85,26 +127,32 @@ export class SolanaDappModule {
       ...config,
     };
 
-    if (config.accountConfig?.isEnabled && config.mintTokens) {
-      providers.push(accountServiceProvider(config.mintTokens));
+    if (config.accountConfig?.isEnabled) {
+      providers.push(accountServiceProvider());
     }
 
     if (config.balanceConfig?.isEnabled && config.mintTokens) {
-      providers.push(balanceServiceProvider(config.mintTokens));
+      providers.push(balanceServiceProvider());
     }
 
     if (
       config.balanceConfig?.isEnabled &&
-      config.endpoints &&
-      config.defaultEndpoint
+      config.networks &&
+      config.defaultNetwork
     ) {
       providers.push(
-        connectionServiceProvider(config.endpoints, config.defaultEndpoint)
+        connectionServiceProvider(config.networks, config.defaultNetwork)
       );
     }
 
-    if (config.marketConfig?.isEnabled) {
-      providers.push(marketServiceProvider());
+    if (
+      config.marketConfig?.isEnabled &&
+      config.marketNetwork &&
+      config.mintTokens
+    ) {
+      providers.push(
+        marketServiceProvider(config.marketNetwork, config.mintTokens)
+      );
     }
 
     if (
@@ -114,8 +162,8 @@ export class SolanaDappModule {
     ) {
       providers.push(
         walletServiceProvider(
-          config.walletConfig?.wallets,
-          config.walletConfig?.defaultWallet
+          config.walletConfig.wallets,
+          config.walletConfig.defaultWallet
         )
       );
     }

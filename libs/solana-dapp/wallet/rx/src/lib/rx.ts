@@ -1,5 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import {
   Wallet,
   WalletName,
@@ -41,6 +42,7 @@ import {
   DisconnectAction,
   DisconnectWalletAction,
   InitAction,
+  LoadNetworkAction,
   LoadWalletsAction,
   ReadyAction,
   SelectWalletAction,
@@ -50,6 +52,7 @@ import {
   TransactionsSignedAction,
   WalletConnectedAction,
   WalletDisconnectedAction,
+  WalletNetworkChangedAction,
   WalletSelectedAction,
 } from './actions';
 import { fromAdapterEvent } from './operators';
@@ -173,6 +176,17 @@ export class WalletService implements IWalletService {
     )
   );
 
+  private walletNetworkChanged$ = this.actions$.pipe(
+    ofType<LoadNetworkAction>('loadNetwork'),
+    withLatestFrom(this.state$),
+    filter(([, { connected, connecting }]) => connected && !connecting),
+    exhaustMap(([, state]) =>
+      this.handleDisconnect(state).pipe(
+        map(() => new WalletNetworkChangedAction())
+      )
+    )
+  );
+
   constructor(wallets: Wallet[], defaultWallet: WalletName) {
     this.runEffects([
       this.onReady$,
@@ -183,10 +197,13 @@ export class WalletService implements IWalletService {
       this.walletSelected$,
       this.transactionSigned$,
       this.transactionsSigned$,
+      this.walletNetworkChanged$,
     ]);
 
-    this.loadWallets(wallets);
-    this.selectWallet(defaultWallet);
+    setTimeout(() => {
+      this.loadWallets(wallets);
+      this.selectWallet(defaultWallet);
+    });
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -263,6 +280,10 @@ export class WalletService implements IWalletService {
 
   signAllTransactions(transactions: Transaction[]) {
     this._dispatcher.next(new SignTransactionsAction(transactions));
+  }
+
+  loadNetwork(network: Network) {
+    this._dispatcher.next(new LoadNetworkAction(network));
   }
 
   destroy() {

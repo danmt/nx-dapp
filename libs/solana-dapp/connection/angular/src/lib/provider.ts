@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { Endpoint } from '@nx-dapp/solana-dapp/connection/base';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import { ConnectionService } from '@nx-dapp/solana-dapp/connection/rx';
 
 export const CONNECTION_SERVICE = new InjectionToken<ConnectionService>(
@@ -7,9 +7,9 @@ export const CONNECTION_SERVICE = new InjectionToken<ConnectionService>(
 );
 
 export const connectionServiceProvider = (
-  endpoints: Endpoint[],
-  defaultEndpoint: string
+  networks: Network[],
+  defaultNetwork: string
 ) => ({
   provide: CONNECTION_SERVICE,
-  useFactory: () => new ConnectionService(endpoints, defaultEndpoint),
+  useFactory: () => new ConnectionService(networks, defaultNetwork),
 });

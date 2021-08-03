@@ -13,9 +13,3 @@ export interface Balance {
   hasBalance: boolean;
   accounts: ParsedAccountBase[];
 }
-
-export interface TokenDetails {
-  pubkey: PublicKey;
-  address: string;
-  label: string;
-}

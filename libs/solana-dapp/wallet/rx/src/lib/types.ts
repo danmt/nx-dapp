@@ -1,3 +1,4 @@
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import {
   Wallet,
   WalletAdapter,
@@ -20,6 +21,10 @@ import {
   WalletConnectedAction,
   WalletDisconnectedAction,
   WalletSelectedAction,
+  LoadNetworkAction,
+  SignTransactionsAction,
+  TransactionsSignedAction,
+  WalletNetworkChangedAction,
 } from './actions';
 
 export interface WalletState {
@@ -50,7 +55,11 @@ export type Action =
   | SignTransactionAction
   | TransactionSignedAction
   | SelectWalletAction
-  | WalletSelectedAction;
+  | WalletSelectedAction
+  | LoadNetworkAction
+  | SignTransactionsAction
+  | TransactionsSignedAction
+  | WalletNetworkChangedAction;
 
 export interface IWalletService {
   actions$: Observable<Action>;
@@ -78,4 +87,6 @@ export interface IWalletService {
   signTransaction(transaction: Transaction): void;
 
   signAllTransactions(transactions: Transaction[]): void;
+
+  loadNetwork(network: Network): void;
 }
