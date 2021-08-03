@@ -1,8 +1,4 @@
 import {
-  IAccountService,
-  ACCOUNT_SERVICE,
-} from '@nx-dapp/solana-dapp/account/angular';
-import {
   IBalanceService,
   BALANCE_SERVICE,
 } from '@nx-dapp/solana-dapp/balance/angular';
@@ -20,8 +16,6 @@ import {
 } from '@nx-dapp/solana-dapp/wallet/angular';
 
 export {
-  IAccountService,
-  ACCOUNT_SERVICE,
   IBalanceService,
   BALANCE_SERVICE,
   IConnectionService,

@@ -2,11 +2,11 @@ import {
   MintTokenAccount,
   ParsedAccountBase,
   TokenAccount,
-} from '@nx-dapp/solana-dapp/account/base';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+} from '@nx-dapp/solana-dapp/account';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
 import { Network } from '@nx-dapp/solana-dapp/connection/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types';
 
 export class InitAction {
   type = 'init';

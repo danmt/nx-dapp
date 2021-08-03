@@ -1,4 +1,4 @@
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/base';
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account';
 import { PublicKey } from '@solana/web3.js';
 
 export interface Balance {

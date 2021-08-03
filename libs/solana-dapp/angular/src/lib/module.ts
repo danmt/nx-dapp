@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { accountServiceProvider } from '@nx-dapp/solana-dapp/account/angular';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
 import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
 import {
@@ -9,7 +8,6 @@ import {
   NETWORKS,
 } from '@nx-dapp/solana-dapp/connection/base';
 import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
-import { TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
 import {
   DEFAULT_WALLET,
@@ -24,10 +22,7 @@ import {
 } from '@nx-dapp/solana-dapp/wallet/wallets';
 import { PublicKey } from '@solana/web3.js';
 import { NATIVE_MINT } from '@solana/spl-token';
-
-export interface SolanaDappAccountConfig {
-  isEnabled: boolean;
-}
+import { TokenDetails } from '@nx-dapp/solana-dapp/types';
 
 export interface SolanaDappBalanceConfig {
   isEnabled: boolean;
@@ -48,7 +43,6 @@ export interface SolanaDappWalletConfig {
 }
 
 export interface SolanaDappConfig {
-  accountConfig?: SolanaDappAccountConfig;
   balanceConfig?: SolanaDappBalanceConfig;
   connectionConfig?: SolanaDappConnectionConfig;
   marketConfig?: SolanaDappMarketConfig;
@@ -60,9 +54,6 @@ export interface SolanaDappConfig {
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
-  accountConfig: {
-    isEnabled: true,
-  },
   balanceConfig: {
     isEnabled: true,
   },
@@ -126,10 +117,6 @@ export class SolanaDappModule {
       ...SOLANA_DAPP_DEFAULT_CONFIG,
       ...config,
     };
-
-    if (config.accountConfig?.isEnabled) {
-      providers.push(accountServiceProvider());
-    }
 
     if (config.balanceConfig?.isEnabled && config.mintTokens) {
       providers.push(balanceServiceProvider());

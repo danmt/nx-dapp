@@ -1,15 +1,14 @@
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
-import { Network } from '@nx-dapp/solana-dapp/connection/base';
+import { TokenAccount } from '@nx-dapp/solana-dapp/account';
 import {
   getMarketAccounts,
-  getMarketByMint,
   getMarketIndicatorAccounts,
   getMarketMintAccounts,
   getMintAccounts,
-  getTokens,
-  TokenDetails,
-} from '@nx-dapp/solana-dapp/market/base';
+} from '@nx-dapp/solana-dapp/account';
+import { Network } from '@nx-dapp/solana-dapp/connection/base';
+import { getMarketByMint, getTokens } from '@nx-dapp/solana-dapp/market/base';
+import { TokenDetails } from '@nx-dapp/solana-dapp/types';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,

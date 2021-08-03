@@ -172,68 +172,22 @@
         }
       }
     },
-    "solana-dapp-account-angular": {
-      "projectType": "library",
-      "root": "libs/solana-dapp/account/angular",
-      "sourceRoot": "libs/solana-dapp/account/angular/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/account/angular"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/angular/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/angular/src/**/*.ts",
-              "libs/solana-dapp/account/angular/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "solana-dapp-account-base": {
-      "root": "libs/solana-dapp/account/base",
-      "sourceRoot": "libs/solana-dapp/account/base/src",
+    "solana-dapp-account": {
+      "root": "libs/solana-dapp/account",
+      "sourceRoot": "libs/solana-dapp/account/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/solana-dapp/account/base/**/*.ts"]
+            "lintFilePatterns": ["libs/solana-dapp/account/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/account/base"],
+          "outputs": ["coverage/libs/solana-dapp/account"],
           "options": {
-            "jestConfig": "libs/solana-dapp/account/base/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-rx": {
-      "root": "libs/solana-dapp/account/rx",
-      "sourceRoot": "libs/solana-dapp/account/rx/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/solana-dapp/account/rx/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/account/rx"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/rx/jest.config.js",
+            "jestConfig": "libs/solana-dapp/account/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -460,6 +414,27 @@
           "outputs": ["coverage/libs/solana-dapp/market/rx"],
           "options": {
             "jestConfig": "libs/solana-dapp/market/rx/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "solana-dapp-types": {
+      "root": "libs/solana-dapp/types",
+      "sourceRoot": "libs/solana-dapp/types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana-dapp/types/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/types"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/types/jest.config.js",
             "passWithNoTests": true
           }
         }

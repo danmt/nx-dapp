@@ -2,8 +2,8 @@ import {
   MintTokenAccount,
   ParsedAccountBase,
   TokenAccount,
-} from '@nx-dapp/solana-dapp/account/base';
-import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
+} from '@nx-dapp/solana-dapp/account';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
@@ -17,9 +17,9 @@ import {
   LoadMarketMintAccountsAction,
   LoadMintAccountsAction,
   LoadMintTokensAction,
-  LoadTokenAccountsAction,
   LoadNetworkAction,
   LoadNetworkTokensAction,
+  LoadTokenAccountsAction,
 } from './actions';
 
 export interface MarketState {

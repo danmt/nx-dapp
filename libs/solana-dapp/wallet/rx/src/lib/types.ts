@@ -1,10 +1,16 @@
+import { TokenAccount } from '@nx-dapp/solana-dapp/account';
 import { Network } from '@nx-dapp/solana-dapp/connection/base';
 import {
   Wallet,
   WalletAdapter,
   WalletName,
 } from '@nx-dapp/solana-dapp/wallet/base';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import {
+  AccountInfo,
+  Connection,
+  PublicKey,
+  Transaction,
+} from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
 import {
@@ -40,6 +46,8 @@ export interface WalletState {
   adapter: WalletAdapter | null;
   signing: boolean;
   transactions: Transaction[];
+  tokenAccounts: Map<string, TokenAccount>;
+  nativeAccount: TokenAccount | null;
 }
 
 export type Action =
@@ -75,6 +83,7 @@ export interface IWalletService {
   onConnect$: Observable<ConnectAction>;
   onDisconnect$: Observable<DisconnectAction>;
   onError$: Observable<unknown>; // TODO: Enhance error handling
+  tokenAccounts$: Observable<Map<string, TokenAccount>>;
 
   loadWallets(wallets: Wallet[]): void;
 
@@ -89,4 +98,8 @@ export interface IWalletService {
   signAllTransactions(transactions: Transaction[]): void;
 
   loadNetwork(network: Network): void;
+
+  changeAccount(account: AccountInfo<Buffer>): void;
+
+  loadConnection(connection: Connection): void;
 }
