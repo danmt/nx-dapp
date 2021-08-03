@@ -1,8 +1,5 @@
-import {
-  MarketInfo,
-  MintTokenAccount,
-  SerumMarket,
-} from '@nx-dapp/solana-dapp/account';
+import { MintTokenAccount } from '@nx-dapp/solana-dapp/types/account';
+import { MarketInfo, SerumMarket } from '@nx-dapp/solana-dapp/types/market';
 import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';
 
 const getMarketByAddress = (address: string) => {

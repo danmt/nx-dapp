@@ -1,10 +1,9 @@
 import {
   MintTokenAccount,
   ParsedAccountBase,
-  SerumMarket,
   TokenAccount,
-  TokenDetails,
-} from '@nx-dapp/solana-dapp/account';
+} from '@nx-dapp/solana-dapp/types/account';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/types/market';
 import { Balance } from '@nx-dapp/solana-dapp/types/balance';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
