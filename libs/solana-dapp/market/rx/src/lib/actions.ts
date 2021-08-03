@@ -1,8 +1,9 @@
 import {
+  MintTokenAccount,
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { Connection } from '@solana/web3.js';
 
 export class InitAction {
@@ -43,4 +44,16 @@ export class LoadConnectionAction {
   type = 'loadConnection';
 
   constructor(public payload: Connection) {}
+}
+
+export class LoadMintTokensAction {
+  type = 'loadMintTokens';
+
+  constructor(public payload: TokenDetails[]) {}
+}
+
+export class LoadMintAccountsAction {
+  type = 'loadMintAccounts';
+
+  constructor(public payload: Map<string, MintTokenAccount>) {}
 }

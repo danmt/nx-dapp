@@ -4,8 +4,8 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { getBalances, TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { getBalances } from '@nx-dapp/solana-dapp/balance/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { TokenInfo } from '@solana/spl-token-registry';
 import {
   asyncScheduler,
@@ -24,6 +24,7 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 
 import {
@@ -122,10 +123,8 @@ export class BalanceService implements IBalanceService {
     map(() => new ResetAction())
   );
 
-  constructor(mintTokens: TokenDetails[]) {
+  constructor() {
     this.runEffects([this.loadBalances$, this.reset$]);
-
-    this.loadMintTokens(mintTokens);
   }
 
   private runEffects(effects: Observable<Action>[]) {

@@ -1,7 +1,4 @@
-import {
-  MintTokenAccount,
-  TokenAccount,
-} from '@nx-dapp/solana-dapp/account/base';
+import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
 import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 
@@ -49,18 +46,6 @@ export class AccountChangedAction {
   type = 'accountChanged';
 
   constructor(public payload: TokenAccount) {}
-}
-
-export class LoadMintTokensAction {
-  type = 'loadMintTokens';
-
-  constructor(public payload: PublicKey[]) {}
-}
-
-export class LoadMintAccountsAction {
-  type = 'loadMintAccounts';
-
-  constructor(public payload: Map<string, MintTokenAccount>) {}
 }
 
 export class LoadMarketByMintAction {

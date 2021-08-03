@@ -111,7 +111,11 @@ export class AppComponent implements OnInit {
       this.balanceService.loadTokenAccounts(tokenAccounts);
     });
 
-    this.accountService.mintAccounts$.subscribe((mintAccounts) =>
+    this.marketService.mintTokens$.subscribe((mintTokens) =>
+      this.balanceService.loadMintTokens(mintTokens)
+    );
+
+    this.marketService.mintAccounts$.subscribe((mintAccounts) =>
       this.balanceService.loadMintAccounts(mintAccounts)
     );
 

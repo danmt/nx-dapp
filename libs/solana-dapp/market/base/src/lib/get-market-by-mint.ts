@@ -1,4 +1,4 @@
-import { TokenAccount } from '@nx-dapp/solana-dapp/account/base';
+import { MintTokenAccount } from '@nx-dapp/solana-dapp/account/base';
 import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';
 
 import { MarketInfo, SerumMarket } from './types';
@@ -24,11 +24,13 @@ const getMarketByAddress = (address: string) => {
   };
 };
 
-export const getMarketByMint = (tokenAccounts: Map<string, TokenAccount>) => {
+export const getMarketByMint = (
+  mintAccounts: Map<string, MintTokenAccount>
+) => {
   const mintAddresses = [
     ...new Set(
-      [...tokenAccounts.values()].map((tokenAccount) =>
-        tokenAccount.info.mint.toBase58()
+      [...mintAccounts.values()].map((mintAccount) =>
+        mintAccount.pubkey.toBase58()
       )
     ).values(),
   ];

@@ -5,6 +5,8 @@ import {
   getMarketByMint,
   getMarketIndicatorAccounts,
   getMarketMintAccounts,
+  getMintAccounts,
+  TokenDetails,
 } from '@nx-dapp/solana-dapp/market/base';
 import { Connection } from '@solana/web3.js';
 import {
@@ -32,6 +34,8 @@ import {
   LoadMarketByMintAction,
   LoadMarketIndicatorAccountsAction,
   LoadMarketMintAccountsAction,
+  LoadMintAccountsAction,
+  LoadMintTokensAction,
   LoadTokenAccountsAction,
 } from './actions';
 import { marketInitialState, reducer } from './state';
@@ -47,6 +51,14 @@ export class MarketService implements IMarketService {
       refCount: false,
       bufferSize: 1,
     })
+  );
+  mintTokens$ = this.state$.pipe(
+    map(({ mintTokens }) => mintTokens),
+    distinctUntilChanged()
+  );
+  mintAccounts$ = this.state$.pipe(
+    map(({ mintAccounts }) => mintAccounts),
+    distinctUntilChanged()
   );
   marketByMint$ = this.state$.pipe(
     map(({ marketByMint }) => marketByMint),
@@ -66,10 +78,10 @@ export class MarketService implements IMarketService {
   );
 
   private loadMarketByMint$ = this.actions$.pipe(
-    ofType<LoadTokenAccountsAction>('loadTokenAccounts'),
+    ofType<LoadMintAccountsAction>('loadMintAccounts'),
     map(
-      ({ payload: tokenAccounts }) =>
-        new LoadMarketByMintAction(getMarketByMint(tokenAccounts))
+      ({ payload: mintAccounts }) =>
+        new LoadMarketByMintAction(getMarketByMint(mintAccounts))
     )
   );
 
@@ -112,13 +124,27 @@ export class MarketService implements IMarketService {
     )
   );
 
-  constructor() {
+  private loadMintAccounts$ = combineLatest([
+    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
+    this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
+  ]).pipe(
+    switchMap(([{ payload: connection }, { payload: mintKeys }]) =>
+      getMintAccounts(connection, mintKeys).pipe(
+        map((mintAccounts) => new LoadMintAccountsAction(mintAccounts))
+      )
+    )
+  );
+
+  constructor(mintTokens: TokenDetails[]) {
     this.runEffects([
       this.loadMarketByMint$,
       this.loadMarketAccounts$,
       this.loadMarketMintAccounts$,
       this.loadMarketIndicatorAccounts$,
+      this.loadMintAccounts$,
     ]);
+
+    this.loadMintTokens(mintTokens);
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -133,6 +159,10 @@ export class MarketService implements IMarketService {
 
   loadTokenAccounts(tokenAccounts: Map<string, TokenAccount>) {
     this._dispatcher.next(new LoadTokenAccountsAction(tokenAccounts));
+  }
+
+  loadMintTokens(mintTokens: TokenDetails[]) {
+    this._dispatcher.next(new LoadMintTokensAction(mintTokens));
   }
 
   destroy() {

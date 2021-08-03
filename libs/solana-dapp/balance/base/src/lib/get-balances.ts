@@ -3,14 +3,14 @@ import {
   ParsedAccountBase,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/base';
+import { SerumMarket, TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { MintInfo } from '@solana/spl-token';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { from, Observable } from 'rxjs';
-import { filter, map, toArray } from 'rxjs/operators';
+import { map, toArray } from 'rxjs/operators';
 
-import { Balance, TokenDetails } from './types';
+import { Balance } from './types';
 
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
@@ -149,11 +149,6 @@ export const getBalances = (
   marketIndicatorAccounts: Map<string, ParsedAccountBase>
 ): Observable<Balance[]> =>
   from(mintAccounts.values()).pipe(
-    filter((mintAccount) =>
-      mintTokens.some(
-        ({ address }) => address === mintAccount.pubkey.toBase58()
-      )
-    ),
     map((mintAccount) =>
       createBalance(
         tokenAccounts,

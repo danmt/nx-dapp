@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { accountServiceProvider } from '@nx-dapp/solana-dapp/account/angular';
 import { balanceServiceProvider } from '@nx-dapp/solana-dapp/balance/angular';
-import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { connectionServiceProvider } from '@nx-dapp/solana-dapp/connection/angular';
 import { DEFAULT_NETWORK, Network } from '@nx-dapp/solana-dapp/connection/base';
 import { marketServiceProvider } from '@nx-dapp/solana-dapp/market/angular';
+import { TokenDetails } from '@nx-dapp/solana-dapp/market/base';
 import { walletServiceProvider } from '@nx-dapp/solana-dapp/wallet/angular';
 import {
   DEFAULT_WALLET,
@@ -82,12 +82,12 @@ export class SolanaDappModule {
       ...config,
     };
 
-    if (config.accountConfig?.isEnabled && config.mintTokens) {
-      providers.push(accountServiceProvider(config.mintTokens));
+    if (config.accountConfig?.isEnabled) {
+      providers.push(accountServiceProvider());
     }
 
     if (config.balanceConfig?.isEnabled && config.mintTokens) {
-      providers.push(balanceServiceProvider(config.mintTokens));
+      providers.push(balanceServiceProvider());
     }
 
     if (
@@ -100,8 +100,8 @@ export class SolanaDappModule {
       );
     }
 
-    if (config.marketConfig?.isEnabled) {
-      providers.push(marketServiceProvider());
+    if (config.marketConfig?.isEnabled && config.mintTokens) {
+      providers.push(marketServiceProvider(config.mintTokens));
     }
 
     if (

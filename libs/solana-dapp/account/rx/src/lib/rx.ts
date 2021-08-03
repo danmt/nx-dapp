@@ -1,12 +1,10 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import {
-  getMintAccounts,
   getTokenAccounts,
   TokenAccountParser,
   wrapNativeAccount,
 } from '@nx-dapp/solana-dapp/account/base';
-import { TokenDetails } from '@nx-dapp/solana-dapp/balance/base';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -33,8 +31,6 @@ import {
   ChangeAccountAction,
   InitAction,
   LoadConnectionAction,
-  LoadMintAccountsAction,
-  LoadMintTokensAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletConnectedAction,
@@ -57,14 +53,6 @@ export class AccountService implements IAccountService {
   );
   tokenAccounts$ = this.state$.pipe(
     map(({ tokenAccounts }) => tokenAccounts),
-    distinctUntilChanged()
-  );
-  nativeAccount$ = this.state$.pipe(
-    map(({ nativeAccount }) => nativeAccount),
-    distinctUntilChanged()
-  );
-  mintAccounts$ = this.state$.pipe(
-    map(({ mintAccounts }) => mintAccounts),
     distinctUntilChanged()
   );
 
@@ -126,33 +114,19 @@ export class AccountService implements IAccountService {
     )
   );
 
-  private loadMintAccounts$ = combineLatest([
-    this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
-    this.actions$.pipe(ofType<LoadMintTokensAction>('loadMintTokens')),
-  ]).pipe(
-    switchMap(([{ payload: connection }, { payload: mintKeys }]) =>
-      getMintAccounts(connection, mintKeys).pipe(
-        map((mintAccounts) => new LoadMintAccountsAction(mintAccounts))
-      )
-    )
-  );
-
   private reset$ = this.actions$.pipe(
     ofType<LoadWalletConnectedAction>('loadWalletConnected'),
     filter(({ payload: walletConnected }) => !walletConnected),
     map(() => new ResetAction())
   );
 
-  constructor(mintTokens: TokenDetails[]) {
+  constructor() {
     this.runEffects([
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
       this.accountChanged$,
-      this.loadMintAccounts$,
       this.reset$,
     ]);
-
-    this.loadMintTokens(mintTokens.map(({ pubkey }) => pubkey));
   }
 
   private runEffects(effects: Observable<Action>[]) {
@@ -175,10 +149,6 @@ export class AccountService implements IAccountService {
 
   changeAccount(account: AccountInfo<Buffer>) {
     this._dispatcher.next(new ChangeAccountAction(account));
-  }
-
-  loadMintTokens(publicKeys: PublicKey[]) {
-    this._dispatcher.next(new LoadMintTokensAction(publicKeys));
   }
 
   destroy() {
