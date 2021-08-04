@@ -2,13 +2,13 @@ import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
 import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
 import { MintParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, mergeMap, reduce } from 'rxjs/operators';
 
 const getMarketMintAccount = (
   connection: Connection,
   marketAccount: ParsedAccountBase
-) =>
+): Observable<ParsedAccountBase> =>
   getMultipleAccounts(
     connection,
     [
@@ -17,9 +17,14 @@ const getMarketMintAccount = (
     ],
     'single'
   ).pipe(
-    map(({ array: marketMintAccounts, keys: marketMintAddresses }) =>
-      marketMintAccounts.map((marketMintAccount, index) =>
-        MintParser(new PublicKey(marketMintAddresses[index]), marketMintAccount)
+    mergeMap(({ array: marketMintAccounts, keys: marketMintAddresses }) =>
+      from(marketMintAccounts).pipe(
+        map((marketMintAccount, index) =>
+          MintParser(
+            new PublicKey(marketMintAddresses[index]),
+            marketMintAccount
+          )
+        )
       )
     )
   );
@@ -28,20 +33,14 @@ export const getMarketMintAccounts = (
   connection: Connection,
   marketAccounts: ParsedAccountBase[]
 ): Observable<ParsedAccountBase[]> =>
-  forkJoin(
-    marketAccounts.map((marketAccount) =>
+  from(marketAccounts).pipe(
+    mergeMap((marketAccount) =>
       getMarketMintAccount(connection, marketAccount)
-    )
-  ).pipe(
-    map((marketMintAccountsList) => [
-      ...marketMintAccountsList
-        .reduce((marketMintAccounts, accounts) => {
-          accounts.forEach((account) => {
-            marketMintAccounts.set(account.pubkey.toBase58(), account);
-          });
-
-          return new Map<string, ParsedAccountBase>(marketMintAccounts);
-        }, new Map<string, ParsedAccountBase>())
-        .values(),
-    ])
+    ),
+    reduce(
+      (marketMintAccounts, account) =>
+        new Map(marketMintAccounts.set(account.pubkey.toBase58(), account)),
+      new Map<string, ParsedAccountBase>()
+    ),
+    map((marketMintAccounts) => [...marketMintAccounts.values()])
   );

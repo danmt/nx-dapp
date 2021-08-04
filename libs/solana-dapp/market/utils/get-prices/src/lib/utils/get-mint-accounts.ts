@@ -8,13 +8,17 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+const getMintAddresses = (userAccounts: TokenAccount[]) => [
+  ...new Set(userAccounts.map(({ info }) => info.mint.toBase58())).values(),
+];
+
 export const getMintAccounts = (
   connection: Connection,
   userAccounts: TokenAccount[]
 ): Observable<ParsedAccountBase[]> =>
   getMultipleAccounts(
     connection,
-    [...new Set(userAccounts.map(({ info }) => info.mint.toBase58())).values()],
+    getMintAddresses(userAccounts),
     'recent'
   ).pipe(
     map(({ array: mintAccounts, keys }) =>
