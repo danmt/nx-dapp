@@ -42,21 +42,24 @@ const getMarketAddresses = (mintAccounts: ParsedAccountBase[]): string[] =>
     .map((market) => market.address);
 
 export const getMarketAccounts = (
-  connection: Connection,
+  walletConnection: Connection,
+  marketConnection: Connection,
   walletPublicKey: string
 ): Observable<{
   mintAccounts: ParsedAccountBase[];
   marketAccounts: ParsedAccountBase[];
 }> =>
   forkJoin([
-    getNativeAccount(connection, new PublicKey(walletPublicKey)),
-    getTokenAccounts(connection, new PublicKey(walletPublicKey)),
+    getNativeAccount(walletConnection, new PublicKey(walletPublicKey)),
+    getTokenAccounts(walletConnection, new PublicKey(walletPublicKey)),
   ]).pipe(
     map(([nativeAccount, tokenAccounts]) => [nativeAccount, ...tokenAccounts]),
-    concatMap((userAccounts) => getMintAccounts(connection, userAccounts)),
+    concatMap((userAccounts) =>
+      getMintAccounts(walletConnection, userAccounts)
+    ),
     concatMap((mintAccounts) =>
       getMultipleAccounts(
-        connection,
+        marketConnection,
         getMarketAddresses(mintAccounts),
         'single'
       ).pipe(
