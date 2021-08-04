@@ -10,3 +10,9 @@ export interface Market {
   programId: string;
   deprecated: boolean;
 }
+
+export interface GetPricesConfig {
+  walletPublicKey: string;
+  rpcEndpoint: string;
+  marketEndpoint: string;
+}
