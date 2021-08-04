@@ -1,3 +1,4 @@
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   MintTokenAccount,
   ParsedAccountBase,
@@ -10,9 +11,17 @@ import {
   TokenAccountParser,
 } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { MintInfo, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { defer, forkJoin, from, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
+import {
+  combineLatest,
+  defer,
+  forkJoin,
+  from,
+  fromEventPattern,
+  Observable,
+  of,
+} from 'rxjs';
+import { map, mergeMap, startWith } from 'rxjs/operators';
 
 export interface Balance {
   address: string;
@@ -29,7 +38,7 @@ const fromLamports = (lamports: number, mint: MintInfo, rate = 1) => {
 };
 
 const createBalance = (
-  tokenAccounts: TokenAccount[],
+  tokenAccounts: ParsedAccountBase[],
   mintAccount: MintTokenAccount
 ): Balance => {
   const accounts = tokenAccounts.filter(
@@ -66,29 +75,86 @@ const getTokenAccounts = (
     )
   );
 
-const getMintAccounts = (
+const mapBalances =
+  (connection: Connection) => (source: Observable<TokenAccount[]>) =>
+    source.pipe(
+      mergeMap((tokenAccounts) =>
+        getMultipleAccounts(
+          connection,
+          [
+            ...new Set(
+              tokenAccounts.map(({ info }) => info.mint.toBase58())
+            ).values(),
+          ],
+          'recent'
+        ).pipe(
+          map(({ array: mintAccounts, keys }) =>
+            mintAccounts.map((account, index) =>
+              createBalance(
+                tokenAccounts,
+                MintParser(new PublicKey(keys[index]), account)
+              )
+            )
+          )
+        )
+      )
+    );
+
+const fromAccountChangeEvent = (
+  connection: Connection,
+  account: TokenAccount
+) =>
+  fromEventPattern<AccountInfo<Buffer>>(
+    (addHandler) => connection.onAccountChange(account.pubkey, addHandler),
+    (removeHandler, id) =>
+      connection.removeAccountChangeListener(id).then(removeHandler)
+  ).pipe(isNotNull);
+
+const mapTokenAccount =
+  (tokenAccount: TokenAccount) => (source: Observable<AccountInfo<Buffer>>) =>
+    source.pipe(
+      map((account) => TokenAccountParser(tokenAccount.pubkey, account)),
+      startWith(tokenAccount)
+    );
+
+const mapNativeAccount =
+  (connection: Connection, nativeAccount: TokenAccount) =>
+  (source: Observable<AccountInfo<Buffer>>) =>
+    source.pipe(
+      mergeMap(() => getNativeAccount(connection, nativeAccount.pubkey)),
+      startWith(nativeAccount)
+    );
+
+const fromTokenAccountChangeEvent = (
   connection: Connection,
   tokenAccounts: TokenAccount[]
-): Observable<ParsedAccountBase[]> =>
-  from(
-    defer(() =>
-      getMultipleAccounts(
-        connection,
-        [
-          ...new Set(
-            tokenAccounts.map(({ info }) => info.mint.toBase58())
-          ).values(),
-        ],
-        'recent'
-      )
-    )
-  ).pipe(
-    map(({ array: mintAccounts, keys }) =>
-      mintAccounts.map((account, index) =>
-        MintParser(new PublicKey(keys[index]), account)
-      )
+) =>
+  tokenAccounts.map((tokenAccount) =>
+    fromAccountChangeEvent(connection, tokenAccount).pipe(
+      mapTokenAccount(tokenAccount)
     )
   );
+
+const fromNativeAccountChangeEvent = (
+  connection: Connection,
+  nativeAccount: TokenAccount
+) => {
+  return fromAccountChangeEvent(connection, nativeAccount).pipe(
+    mapNativeAccount(connection, nativeAccount)
+  );
+};
+
+const observeUserAccounts =
+  (connection: Connection) =>
+  (source: Observable<[TokenAccount, TokenAccount[]]>) =>
+    source.pipe(
+      mergeMap(([nativeAccount, tokenAccounts]) =>
+        combineLatest([
+          ...fromTokenAccountChangeEvent(connection, tokenAccounts),
+          fromNativeAccountChangeEvent(connection, nativeAccount),
+        ])
+      )
+    );
 
 export const getBalances = (
   rpcEndpoint: string,
@@ -99,21 +165,7 @@ export const getBalances = (
       forkJoin([
         getNativeAccount(connection, new PublicKey(walletPublicKey)),
         getTokenAccounts(connection, new PublicKey(walletPublicKey)),
-      ]).pipe(
-        map(([nativeAccount, tokenAccounts]) => [
-          nativeAccount,
-          ...tokenAccounts,
-        ]),
-        mergeMap((tokenAccounts) =>
-          getMintAccounts(connection, tokenAccounts).pipe(
-            map((mintAccounts) =>
-              mintAccounts.map((account) =>
-                createBalance(tokenAccounts, account)
-              )
-            )
-          )
-        )
-      )
+      ]).pipe(observeUserAccounts(connection), mapBalances(connection))
     )
   );
 };
