@@ -3,11 +3,13 @@ import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-mult
 import { DexMarketParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 
 import { Market } from '../types';
 import { getMintAccounts } from './get-mint-accounts';
+import { getNativeAccount } from './get-native-account';
+import { getTokenAccounts } from './get-token-accounts';
 
 const getMarket = (mintAddress: string) => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
@@ -41,12 +43,17 @@ const getMarketAddresses = (mintAccounts: ParsedAccountBase[]): string[] =>
 
 export const getMarketAccounts = (
   connection: Connection,
-  userAccounts: ParsedAccountBase[]
+  walletPublicKey: string
 ): Observable<{
   mintAccounts: ParsedAccountBase[];
   marketAccounts: ParsedAccountBase[];
 }> =>
-  getMintAccounts(connection, userAccounts).pipe(
+  forkJoin([
+    getNativeAccount(connection, new PublicKey(walletPublicKey)),
+    getTokenAccounts(connection, new PublicKey(walletPublicKey)),
+  ]).pipe(
+    map(([nativeAccount, tokenAccounts]) => [nativeAccount, ...tokenAccounts]),
+    concatMap((userAccounts) => getMintAccounts(connection, userAccounts)),
     concatMap((mintAccounts) =>
       getMultipleAccounts(
         connection,

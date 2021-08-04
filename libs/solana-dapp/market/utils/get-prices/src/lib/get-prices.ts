@@ -1,4 +1,3 @@
-import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
 import { Connection } from '@solana/web3.js';
 import { forkJoin, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -9,11 +8,11 @@ import { getMarketIndicatorAccounts } from './utils/get-market-indicator-account
 
 export const getPrices = (
   rpcEndpoint: string,
-  userAccounts: TokenAccount[]
+  walletPublicKey: string
 ): Observable<TokenPrice[]> =>
   of(new Connection(rpcEndpoint, 'recent')).pipe(
     switchMap((connection) =>
-      getMarketAccounts(connection, userAccounts).pipe(
+      getMarketAccounts(connection, walletPublicKey).pipe(
         switchMap(({ marketAccounts, mintAccounts }) =>
           forkJoin([
             getMarketMintAccounts(connection, marketAccounts),
