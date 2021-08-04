@@ -100,6 +100,9 @@
       "@nx-dapp/solana-dapp/market/utils/get-market-by-mint": [
         "libs/solana-dapp/market/utils/get-market-by-mint/src/index.ts"
       ],
+      "@nx-dapp/solana-dapp/market/utils/get-prices": [
+        "libs/solana-dapp/market/utils/get-prices/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/market/utils/get-tokens": [
         "libs/solana-dapp/market/utils/get-tokens/src/index.ts"
       ],

@@ -114,6 +114,9 @@
     "solana-dapp-market-utils-get-market-by-mint": {
       "tags": []
     },
+    "solana-dapp-market-utils-get-prices": {
+      "tags": []
+    },
     "solana-dapp-market-utils-get-tokens": {
       "tags": []
     },

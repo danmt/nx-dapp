@@ -690,6 +690,29 @@
         }
       }
     },
+    "solana-dapp-market-utils-get-prices": {
+      "root": "libs/solana-dapp/market/utils/get-prices",
+      "sourceRoot": "libs/solana-dapp/market/utils/get-prices/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/solana-dapp/market/utils/get-prices/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/market/utils/get-prices"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/market/utils/get-prices/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-dapp-market-utils-get-tokens": {
       "root": "libs/solana-dapp/market/utils/get-tokens",
       "sourceRoot": "libs/solana-dapp/market/utils/get-tokens/src",
