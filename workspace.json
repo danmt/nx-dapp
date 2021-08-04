@@ -866,6 +866,29 @@
         }
       }
     },
+    "solana-dapp-wallet-utils-get-balances": {
+      "root": "libs/solana-dapp/wallet/utils/get-balances",
+      "sourceRoot": "libs/solana-dapp/wallet/utils/get-balances/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/solana-dapp/wallet/utils/get-balances/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/wallet/utils/get-balances"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/wallet/utils/get-balances/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-dapp-wallet-utils-poll": {
       "root": "libs/solana-dapp/wallet/utils/poll",
       "sourceRoot": "libs/solana-dapp/wallet/utils/poll/src",

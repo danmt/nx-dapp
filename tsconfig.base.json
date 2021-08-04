@@ -124,6 +124,9 @@
       "@nx-dapp/solana-dapp/wallet/utils/errors": [
         "libs/solana-dapp/wallet/utils/errors/src/index.ts"
       ],
+      "@nx-dapp/solana-dapp/wallet/utils/get-balances": [
+        "libs/solana-dapp/wallet/utils/get-balances/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/wallet/utils/poll": [
         "libs/solana-dapp/wallet/utils/poll/src/index.ts"
       ],

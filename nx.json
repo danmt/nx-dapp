@@ -138,6 +138,9 @@
     "solana-dapp-wallet-utils-errors": {
       "tags": []
     },
+    "solana-dapp-wallet-utils-get-balances": {
+      "tags": []
+    },
     "solana-dapp-wallet-utils-poll": {
       "tags": []
     },
