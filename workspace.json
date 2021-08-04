@@ -193,6 +193,31 @@
         }
       }
     },
+    "solana-dapp-account-utils-from-account-change": {
+      "root": "libs/solana-dapp/account/utils/from-account-change",
+      "sourceRoot": "libs/solana-dapp/account/utils/from-account-change/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/solana-dapp/account/utils/from-account-change/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/solana-dapp/account/utils/from-account-change"
+          ],
+          "options": {
+            "jestConfig": "libs/solana-dapp/account/utils/from-account-change/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-dapp-account-utils-get-market-accounts": {
       "root": "libs/solana-dapp/account/utils/get-market-accounts",
       "sourceRoot": "libs/solana-dapp/account/utils/get-market-accounts/src",
@@ -861,6 +886,29 @@
           "outputs": ["coverage/libs/solana-dapp/wallet/utils/errors"],
           "options": {
             "jestConfig": "libs/solana-dapp/wallet/utils/errors/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "solana-dapp-wallet-utils-get-balances": {
+      "root": "libs/solana-dapp/wallet/utils/get-balances",
+      "sourceRoot": "libs/solana-dapp/wallet/utils/get-balances/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/solana-dapp/wallet/utils/get-balances/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/wallet/utils/get-balances"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/wallet/utils/get-balances/jest.config.js",
             "passWithNoTests": true
           }
         }

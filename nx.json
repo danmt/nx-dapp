@@ -51,6 +51,9 @@
     "solana-dapp-account-types": {
       "tags": []
     },
+    "solana-dapp-account-utils-from-account-change": {
+      "tags": []
+    },
     "solana-dapp-account-utils-get-market-accounts": {
       "tags": []
     },
@@ -136,6 +139,9 @@
       "tags": []
     },
     "solana-dapp-wallet-utils-errors": {
+      "tags": []
+    },
+    "solana-dapp-wallet-utils-get-balances": {
       "tags": []
     },
     "solana-dapp-wallet-utils-poll": {
