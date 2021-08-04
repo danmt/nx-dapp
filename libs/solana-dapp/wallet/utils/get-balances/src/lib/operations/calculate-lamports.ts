@@ -1,0 +1,8 @@
+import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
+
+export const calculateLamports = (accounts: ParsedAccountBase[]) => {
+  return accounts.reduce(
+    (res, account) => (res += account.info.amount.toNumber()),
+    0
+  );
+};

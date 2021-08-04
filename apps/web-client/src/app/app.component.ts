@@ -11,6 +11,9 @@ import {
   WALLET_SERVICE,
   WalletName,
 } from '@nx-dapp/solana-dapp/angular';
+import { getBalances } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
+import { combineLatest, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-root',
@@ -73,6 +76,21 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    combineLatest([
+      this.connectionService.network$,
+      this.walletService.publicKey$,
+    ])
+      .pipe(
+        switchMap(([network, walletPublicKey]) => {
+          if (!network || !walletPublicKey) {
+            return of([]);
+          }
+
+          return getBalances(network.url, walletPublicKey.toBase58());
+        })
+      )
+      .subscribe((balances) => console.log(balances));
+
     this.connectionService.connection$
       .pipe(isNotNull)
       .subscribe((connection) => this.walletService.loadConnection(connection));

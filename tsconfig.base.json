@@ -39,6 +39,9 @@
       "@nx-dapp/solana-dapp/account/types": [
         "libs/solana-dapp/account/types/src/index.ts"
       ],
+      "@nx-dapp/solana-dapp/account/utils/from-account-change": [
+        "libs/solana-dapp/account/utils/from-account-change/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/account/utils/get-market-accounts": [
         "libs/solana-dapp/account/utils/get-market-accounts/src/index.ts"
       ],
