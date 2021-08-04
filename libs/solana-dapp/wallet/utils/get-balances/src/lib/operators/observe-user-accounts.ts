@@ -7,6 +7,24 @@ import { concatMap, map, startWith, switchMap } from 'rxjs/operators';
 
 import { getNativeAccount } from '../utils';
 
+const fromNativeAccountChangeEvent = (
+  connection: Connection,
+  nativeAccount: TokenAccount
+) =>
+  fromAccountChangeEvent(connection, nativeAccount.pubkey).pipe(
+    concatMap(() => getNativeAccount(connection, nativeAccount.pubkey)),
+    startWith(nativeAccount)
+  );
+
+const fromTokenAccountChangeEvent = (
+  connection: Connection,
+  tokenAccount: TokenAccount
+) =>
+  fromAccountChangeEvent(connection, tokenAccount.pubkey).pipe(
+    map((account) => TokenAccountParser(tokenAccount.pubkey, account)),
+    startWith(tokenAccount)
+  );
+
 export const observeUserAccounts =
   (connection: Connection) =>
   (
@@ -15,14 +33,10 @@ export const observeUserAccounts =
     source.pipe(
       switchMap(([nativeAccount, tokenAccounts]) =>
         combineLatest([
-          fromAccountChangeEvent(connection, nativeAccount.pubkey).pipe(
-            concatMap(() => getNativeAccount(connection, nativeAccount.pubkey))
-          ),
+          fromNativeAccountChangeEvent(connection, nativeAccount),
           ...tokenAccounts.map((tokenAccount) =>
-            fromAccountChangeEvent(connection, tokenAccount.pubkey).pipe(
-              map((account) => TokenAccountParser(tokenAccount.pubkey, account))
-            )
+            fromTokenAccountChangeEvent(connection, tokenAccount)
           ),
-        ]).pipe(startWith([nativeAccount, ...tokenAccounts]))
+        ])
       )
     );
