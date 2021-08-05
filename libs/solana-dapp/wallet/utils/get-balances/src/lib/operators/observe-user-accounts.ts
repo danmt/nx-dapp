@@ -27,11 +27,9 @@ const fromTokenAccountChangeEvent = (
 
 export const observeUserAccounts =
   (connection: Connection) =>
-  (
-    source: Observable<[TokenAccount, TokenAccount[]]>
-  ): Observable<TokenAccount[]> =>
+  (source: Observable<TokenAccount[]>): Observable<TokenAccount[]> =>
     source.pipe(
-      switchMap(([nativeAccount, tokenAccounts]) =>
+      switchMap(([nativeAccount, ...tokenAccounts]) =>
         combineLatest([
           fromNativeAccountChangeEvent(connection, nativeAccount),
           ...tokenAccounts.map((tokenAccount) =>
