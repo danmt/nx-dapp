@@ -1,24 +1,39 @@
-import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
-import { MintParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
-import { AccountInfo, PublicKey } from '@solana/web3.js';
+import {
+  MintTokenAccount,
+  TokenAccount,
+} from '@nx-dapp/solana-dapp/account/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { calculateLamports, calculateQuantity } from '../operations';
 import { Balance } from '../types';
-import { createBalance } from '../utils';
+
+const createBalance = (
+  userAccounts: TokenAccount[],
+  mintAccount: MintTokenAccount
+): Balance => {
+  const filteredUserAccounts = userAccounts.filter(
+    (userAccount) =>
+      userAccount.info.mint.toBase58() === mintAccount.pubkey.toBase58()
+  );
+  const lamports = calculateLamports(filteredUserAccounts);
+  const quantity = calculateQuantity(lamports, mintAccount.info);
+
+  return {
+    address: mintAccount.pubkey.toBase58(),
+    lamports,
+    quantity,
+    hasBalance: quantity > 0 && filteredUserAccounts.length > 0,
+  };
+};
 
 export const mapToBalances =
-  (tokenAccounts: TokenAccount[]) =>
-  (
-    source: Observable<{ array: AccountInfo<Buffer>[]; keys: string[] }>
-  ): Observable<Balance[]> =>
+  (userAccounts: TokenAccount[]) =>
+  (source: Observable<MintTokenAccount[]>): Observable<Balance[]> =>
     source.pipe(
-      map(({ array: mintAccounts, keys }) =>
-        mintAccounts.map((account, index) =>
-          createBalance(
-            tokenAccounts,
-            MintParser(new PublicKey(keys[index]), account)
-          )
+      map((mintAccounts) =>
+        mintAccounts.map((mintAccount) =>
+          createBalance(userAccounts, mintAccount)
         )
       )
     );

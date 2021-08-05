@@ -4,3 +4,8 @@ export interface Balance {
   quantity: number;
   hasBalance: boolean;
 }
+
+export interface GetBalancesConfig {
+  rpcEndpoint: string;
+  walletPublicKey: string;
+}
