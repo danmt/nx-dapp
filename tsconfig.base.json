@@ -67,18 +67,6 @@
         "libs/solana-dapp/account/utils/serializer/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],
-      "@nx-dapp/solana-dapp/balance/angular": [
-        "libs/solana-dapp/balance/angular/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/balance/rx": [
-        "libs/solana-dapp/balance/rx/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/balance/types": [
-        "libs/solana-dapp/balance/types/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/balance/utils/get-balances": [
-        "libs/solana-dapp/balance/utils/get-balances/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/connection/angular": [
         "libs/solana-dapp/connection/angular/src/index.ts"
       ],

@@ -81,18 +81,6 @@
     "solana-dapp-angular": {
       "tags": []
     },
-    "solana-dapp-balance-angular": {
-      "tags": []
-    },
-    "solana-dapp-balance-rx": {
-      "tags": []
-    },
-    "solana-dapp-balance-types": {
-      "tags": []
-    },
-    "solana-dapp-balance-utils-get-balances": {
-      "tags": []
-    },
     "solana-dapp-connection-angular": {
       "tags": []
     },
