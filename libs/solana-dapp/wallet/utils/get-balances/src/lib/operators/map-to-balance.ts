@@ -2,11 +2,11 @@ import {
   MintTokenAccount,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/types';
+import { Balance } from '@nx-dapp/solana-dapp/wallet/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { calculateLamports, calculateQuantity } from '../operations';
-import { Balance } from '../types';
 
 const createBalance = (
   userAccounts: TokenAccount[],
