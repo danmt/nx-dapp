@@ -1,4 +1,4 @@
-import { Connection } from '@solana/web3.js';
+import { Connection, PublicKey } from '@solana/web3.js';
 import { forkJoin, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
       getMarketAccounts(
         walletConnection,
         marketConnection,
-        config.walletPublicKey
+        new PublicKey(config.walletPublicKey)
       ).pipe(
         switchMap(({ marketAccounts, mintAccounts }) =>
           forkJoin([
