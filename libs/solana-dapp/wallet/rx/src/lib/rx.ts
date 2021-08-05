@@ -2,7 +2,6 @@ import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { getNativeAccount } from '@nx-dapp/solana-dapp/account/utils/get-native-account';
 import { getTokenAccounts } from '@nx-dapp/solana-dapp/account/utils/get-token-accounts';
-import { TokenAccountParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Network } from '@nx-dapp/solana-dapp/connection/types';
 import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import {
@@ -10,12 +9,7 @@ import {
   WalletNotReadyError,
   WalletNotSelectedError,
 } from '@nx-dapp/solana-dapp/wallet/utils/errors';
-import {
-  AccountInfo,
-  Connection,
-  PublicKey,
-  Transaction,
-} from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -34,7 +28,6 @@ import {
   exhaustMap,
   filter,
   map,
-  mapTo,
   observeOn,
   scan,
   shareReplay,
@@ -44,10 +37,7 @@ import {
 } from 'rxjs/operators';
 
 import {
-  ChangeAccountAction,
-  ConnectAction,
   ConnectWalletAction,
-  DisconnectAction,
   DisconnectWalletAction,
   InitAction,
   LoadConnectionAction,
@@ -55,7 +45,6 @@ import {
   LoadNetworkAction,
   LoadTokenAccountsAction,
   LoadWalletsAction,
-  ReadyAction,
   ResetAction,
   SelectWalletAction,
   SignTransactionAction,
@@ -67,7 +56,6 @@ import {
   WalletNetworkChangedAction,
   WalletSelectedAction,
 } from './actions';
-import { fromAdapterEvent } from './operators';
 import { reducer, walletInitialState } from './state';
 import { Action, IWalletService, WalletState } from './types';
 
@@ -117,16 +105,6 @@ export class WalletService implements IWalletService {
     map(({ tokenAccounts }) => tokenAccounts),
     distinctUntilChanged()
   );
-  onReady$ = this.adapter$
-    .pipe(fromAdapterEvent('ready'))
-    .pipe(mapTo(new ReadyAction()));
-  onConnect$ = this.adapter$
-    .pipe(fromAdapterEvent('connect'))
-    .pipe(mapTo(new ConnectAction()));
-  onDisconnect$ = this.adapter$
-    .pipe(fromAdapterEvent('disconnect'))
-    .pipe(mapTo(new DisconnectAction()));
-  onError$ = this.adapter$.pipe(fromAdapterEvent('error'));
 
   private walletConnected$ = this.actions$.pipe(
     ofType<ConnectWalletAction>('connectWallet'),
@@ -216,18 +194,6 @@ export class WalletService implements IWalletService {
     )
   );
 
-  private accountChanged$ = this.actions$.pipe(
-    ofType<ChangeAccountAction>('changeAccount'),
-    withLatestFrom(this.state$),
-    filter(([, { publicKey }]) => publicKey !== null),
-    map(
-      ([{ payload: account }, { publicKey }]) =>
-        new LoadNativeAccountAction(
-          TokenAccountParser(publicKey as PublicKey, account)
-        )
-    )
-  );
-
   private loadTokenAccounts$ = combineLatest([
     this.actions$.pipe(ofType<LoadConnectionAction>('loadConnection')),
     this.actions$.pipe(ofType<WalletConnectedAction>('walletConnected')),
@@ -248,9 +214,6 @@ export class WalletService implements IWalletService {
 
   constructor(wallets: Wallet[], defaultWallet: WalletName) {
     this.runEffects([
-      this.onReady$,
-      this.onConnect$,
-      this.onDisconnect$,
       this.walletConnected$,
       this.walletDisconnected$,
       this.walletSelected$,
@@ -259,7 +222,6 @@ export class WalletService implements IWalletService {
       this.walletNetworkChanged$,
       this.loadTokenAccounts$,
       this.loadNativeAccount$,
-      this.accountChanged$,
       this.reset$,
     ]);
 
@@ -347,10 +309,6 @@ export class WalletService implements IWalletService {
 
   loadNetwork(network: Network) {
     this._dispatcher.next(new LoadNetworkAction(network));
-  }
-
-  changeAccount(account: AccountInfo<Buffer>) {
-    this._dispatcher.next(new ChangeAccountAction(account));
   }
 
   loadConnection(connection: Connection) {

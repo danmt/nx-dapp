@@ -1,7 +1,6 @@
 import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
 
 import {
-  AccountChangedAction,
   LoadNativeAccountAction,
   LoadTokenAccountsAction,
   LoadWalletsAction,
@@ -162,11 +161,8 @@ export const reducer = (state: WalletState, action: Action) => {
         tokenAccounts: new Map(tokenAccounts),
       };
     }
-    case 'loadNativeAccount':
-    case 'accountChanged': {
-      const nativeAccount = (
-        action as LoadNativeAccountAction | AccountChangedAction
-      ).payload;
+    case 'loadNativeAccount': {
+      const nativeAccount = (action as LoadNativeAccountAction).payload;
       const tokenAccounts = state.tokenAccounts.set(
         nativeAccount.pubkey.toBase58(),
         nativeAccount

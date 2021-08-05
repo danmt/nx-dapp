@@ -5,23 +5,19 @@ import {
   WalletAdapter,
   WalletName,
 } from '@nx-dapp/solana-dapp/wallet/types';
-import {
-  AccountInfo,
-  Connection,
-  PublicKey,
-  Transaction,
-} from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 
 import {
-  ConnectAction,
   ConnectWalletAction,
-  DisconnectAction,
   DisconnectWalletAction,
   InitAction,
+  LoadConnectionAction,
+  LoadNativeAccountAction,
   LoadNetworkAction,
+  LoadTokenAccountsAction,
   LoadWalletsAction,
-  ReadyAction,
+  ResetAction,
   SelectWalletAction,
   SignTransactionAction,
   SignTransactionsAction,
@@ -52,9 +48,6 @@ export interface WalletState {
 
 export type Action =
   | InitAction
-  | ConnectAction
-  | DisconnectAction
-  | ReadyAction
   | LoadWalletsAction
   | ConnectWalletAction
   | WalletConnectedAction
@@ -67,7 +60,11 @@ export type Action =
   | LoadNetworkAction
   | SignTransactionsAction
   | TransactionsSignedAction
-  | WalletNetworkChangedAction;
+  | WalletNetworkChangedAction
+  | LoadConnectionAction
+  | LoadNativeAccountAction
+  | LoadTokenAccountsAction
+  | ResetAction;
 
 export interface IWalletService {
   actions$: Observable<Action>;
@@ -79,10 +76,6 @@ export interface IWalletService {
   wallet$: Observable<Wallet | null>;
   adapter$: Observable<WalletAdapter | null>;
   publicKey$: Observable<PublicKey | null>;
-  onReady$: Observable<ReadyAction>;
-  onConnect$: Observable<ConnectAction>;
-  onDisconnect$: Observable<DisconnectAction>;
-  onError$: Observable<unknown>; // TODO: Enhance error handling
   tokenAccounts$: Observable<Map<string, TokenAccount>>;
 
   loadWallets(wallets: Wallet[]): void;
@@ -98,8 +91,6 @@ export interface IWalletService {
   signAllTransactions(transactions: Transaction[]): void;
 
   loadNetwork(network: Network): void;
-
-  changeAccount(account: AccountInfo<Buffer>): void;
 
   loadConnection(connection: Connection): void;
 }
