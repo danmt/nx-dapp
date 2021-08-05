@@ -1,11 +1,10 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-import { forkJoin, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { mapToPrices } from './operators';
 import { GetPricesConfig, TokenPrice } from './types';
-import { getMarketAccounts, getMarketMintAccounts } from './utils';
-import { getMarketIndicatorAccounts } from './utils/get-market-indicator-accounts';
+import { getMarketAccounts } from './utils';
 
 export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
   of([
@@ -17,13 +16,6 @@ export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
         walletConnection,
         marketConnection,
         new PublicKey(config.walletPublicKey)
-      ).pipe(
-        switchMap(({ marketAccounts, mintAccounts }) =>
-          forkJoin([
-            getMarketMintAccounts(marketConnection, marketAccounts),
-            getMarketIndicatorAccounts(marketConnection, marketAccounts),
-          ]).pipe(mapToPrices(mintAccounts, marketAccounts))
-        )
-      )
+      ).pipe(mapToPrices)
     )
   );

@@ -35,13 +35,22 @@ const createPrice = (
   };
 };
 
-export const mapToPrices =
-  (mintAccounts: MintTokenAccount[], marketAccounts: MarketAccount[]) =>
-  (
-    source: Observable<[MintTokenAccount[], OrderbookAccount[]]>
-  ): Observable<TokenPrice[]> =>
-    source.pipe(
-      map(([marketMintAccounts, marketIndicatorAccounts]) =>
+export const mapToPrices = (
+  source: Observable<{
+    mintAccounts: MintTokenAccount[];
+    marketAccounts: MarketAccount[];
+    marketMintAccounts: MintTokenAccount[];
+    marketIndicatorAccounts: OrderbookAccount[];
+  }>
+): Observable<TokenPrice[]> =>
+  source.pipe(
+    map(
+      ({
+        marketAccounts,
+        mintAccounts,
+        marketMintAccounts,
+        marketIndicatorAccounts,
+      }) =>
         marketAccounts
           .map((marketAccount) =>
             createPrice(
@@ -52,5 +61,5 @@ export const mapToPrices =
             )
           )
           .filter((price): price is TokenPrice => price !== null)
-      )
-    );
+    )
+  );
