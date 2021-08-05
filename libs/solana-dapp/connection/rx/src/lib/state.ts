@@ -1,9 +1,7 @@
 import {
-  ConnectionAccountChangedAction,
   LoadConnectionAction,
   LoadNetworkAction,
   LoadNetworksAction,
-  LoadSendConnectionAction,
   SelectNetworkAction,
 } from './actions';
 import { DEFAULT_SLIPPAGE } from './consts';
@@ -15,8 +13,6 @@ export const connectionInitialState: ConnectionState = {
   networks: [],
   network: null,
   connection: null,
-  connectionAccount: null,
-  sendConnection: null,
 };
 
 export const reducer = (state: ConnectionState, action: Action) => {
@@ -40,16 +36,6 @@ export const reducer = (state: ConnectionState, action: Action) => {
       return {
         ...state,
         connection: (action as LoadConnectionAction).payload,
-      };
-    case 'loadSendConnection':
-      return {
-        ...state,
-        sendConnection: (action as LoadSendConnectionAction).payload,
-      };
-    case 'connectionAccountChanged':
-      return {
-        ...state,
-        connectionAccount: (action as ConnectionAccountChangedAction).payload,
       };
     default:
       return state;

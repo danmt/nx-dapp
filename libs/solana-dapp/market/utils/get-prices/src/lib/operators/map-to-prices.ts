@@ -3,11 +3,11 @@ import {
   MintTokenAccount,
   OrderbookAccount,
 } from '@nx-dapp/solana-dapp/account/types';
+import { TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { calculateMidPrice } from '../operations';
-import { TokenPrice } from '../types';
 
 const createPrice = (
   mintAccount: MintTokenAccount,

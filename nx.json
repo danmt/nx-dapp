@@ -57,40 +57,16 @@
     "solana-dapp-account-utils-get-market-accounts": {
       "tags": []
     },
-    "solana-dapp-account-utils-get-market-indicator-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-market-mint-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-mint-accounts": {
-      "tags": []
-    },
     "solana-dapp-account-utils-get-multiple-accounts": {
       "tags": []
     },
-    "solana-dapp-account-utils-get-native-account": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-token-accounts": {
+    "solana-dapp-account-utils-get-user-accounts": {
       "tags": []
     },
     "solana-dapp-account-utils-serializer": {
       "tags": []
     },
     "solana-dapp-angular": {
-      "tags": []
-    },
-    "solana-dapp-balance-angular": {
-      "tags": []
-    },
-    "solana-dapp-balance-rx": {
-      "tags": []
-    },
-    "solana-dapp-balance-types": {
-      "tags": []
-    },
-    "solana-dapp-balance-utils-get-balances": {
       "tags": []
     },
     "solana-dapp-connection-angular": {
@@ -102,16 +78,7 @@
     "solana-dapp-connection-types": {
       "tags": []
     },
-    "solana-dapp-market-angular": {
-      "tags": []
-    },
-    "solana-dapp-market-rx": {
-      "tags": []
-    },
     "solana-dapp-market-types": {
-      "tags": []
-    },
-    "solana-dapp-market-utils-get-market-by-mint": {
       "tags": []
     },
     "solana-dapp-market-utils-get-prices": {
@@ -121,15 +88,6 @@
       "tags": []
     },
     "solana-dapp-utils-u64": {
-      "tags": []
-    },
-    "solana-dapp-wallet-adapters-phantom": {
-      "tags": []
-    },
-    "solana-dapp-wallet-adapters-sollet": {
-      "tags": []
-    },
-    "solana-dapp-wallet-adapters-solong": {
       "tags": []
     },
     "solana-dapp-wallet-angular": {
@@ -145,9 +103,6 @@
       "tags": []
     },
     "solana-dapp-wallet-utils-get-balances": {
-      "tags": []
-    },
-    "solana-dapp-wallet-utils-poll": {
       "tags": []
     },
     "solana-dapp-wallet-utils-wallets": {

@@ -20,18 +20,12 @@ import {
 } from 'rxjs/operators';
 
 import {
-  ConnectionAccountChangedAction,
-  ConnectionSlotChangedAction,
   InitAction,
   LoadConnectionAction,
   LoadNetworkAction,
   LoadNetworksAction,
-  LoadSendConnectionAction,
   SelectNetworkAction,
-  SendConnectionAccountChangedAction,
-  SendConnectionSlotChangedAction,
 } from './actions';
-import { fromAccountChangeEvent, fromSlotChangeEvent } from './operators';
 import { connectionInitialState, reducer } from './state';
 import { Action, IConnectionService } from './types';
 
@@ -50,49 +44,13 @@ export class ConnectionService implements IConnectionService {
     map(({ networks }) => networks),
     distinctUntilChanged()
   );
-  selectedNetwork$ = this.state$.pipe(
-    map(({ selectedNetwork }) => selectedNetwork),
-    distinctUntilChanged()
-  );
   network$ = this.state$.pipe(
     map(({ network }) => network),
-    distinctUntilChanged()
-  );
-  env$ = this.network$.pipe(
-    map((network) => network?.name || null),
     distinctUntilChanged()
   );
   connection$ = this.state$.pipe(
     map(({ connection }) => connection),
     distinctUntilChanged()
-  );
-  connectionAccount$ = this.state$.pipe(
-    map(({ connectionAccount }) => connectionAccount),
-    distinctUntilChanged()
-  );
-  sendConnection$ = this.state$.pipe(
-    map(({ sendConnection }) => sendConnection),
-    distinctUntilChanged()
-  );
-
-  private connectionAccountChange$ = this.connection$.pipe(
-    fromAccountChangeEvent,
-    map((account) => new ConnectionAccountChangedAction(account))
-  );
-
-  private connectionSlotChange$ = this.connection$.pipe(
-    fromSlotChangeEvent,
-    map(() => new ConnectionSlotChangedAction())
-  );
-
-  private sendConnectionAccountChange$ = this.sendConnection$.pipe(
-    fromAccountChangeEvent,
-    map(() => new SendConnectionAccountChangedAction())
-  );
-
-  private sendConnectionSlotChange$ = this.sendConnection$.pipe(
-    fromSlotChangeEvent,
-    map(() => new SendConnectionSlotChangedAction())
   );
 
   private loadNetwork$ = combineLatest([
@@ -115,24 +73,8 @@ export class ConnectionService implements IConnectionService {
     )
   );
 
-  private loadSendConnection$ = this.actions$.pipe(
-    ofType<LoadNetworkAction>('loadNetwork'),
-    map(
-      ({ payload: { url } }) =>
-        new LoadSendConnectionAction(new Connection(url, 'recent'))
-    )
-  );
-
   constructor(networks: Network[], defaultNetwork: string) {
-    this.runEffects([
-      this.connectionAccountChange$,
-      this.connectionSlotChange$,
-      this.sendConnectionAccountChange$,
-      this.sendConnectionSlotChange$,
-      this.loadNetwork$,
-      this.loadConnection$,
-      this.loadSendConnection$,
-    ]);
+    this.runEffects([this.loadNetwork$, this.loadConnection$]);
 
     setTimeout(() => {
       this.selectNetwork(defaultNetwork);

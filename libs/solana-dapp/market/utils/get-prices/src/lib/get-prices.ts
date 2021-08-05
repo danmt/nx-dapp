@@ -1,10 +1,13 @@
+import {
+  getMarketAccounts,
+  observeMarketAccounts,
+} from '@nx-dapp/solana-dapp/account/utils/get-market-accounts';
+import { GetPricesConfig, TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { mapToPrices, observeMarketAccounts } from './operators';
-import { GetPricesConfig, TokenPrice } from './types';
-import { getMarketAccounts } from './utils';
+import { mapToPrices } from './operators';
 
 export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
   of([

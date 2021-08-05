@@ -85,7 +85,8 @@ export class AppComponent implements OnInit {
       ]).pipe(
         map(([prices, balances, tokens]) =>
           balances.map((balance) => {
-            const token = tokens.get(balance.address);
+            const token =
+              tokens.find((token) => token.address === balance.address) || null;
 
             const price =
               prices.find((price) => price.address === balance.address)
@@ -116,10 +117,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.connectionService.connection$
-      .pipe(isNotNull)
-      .subscribe((connection) => this.walletService.loadConnection(connection));
-
     this.connectionService.network$
       .pipe(isNotNull)
       .subscribe((network) => this.walletService.loadNetwork(network));

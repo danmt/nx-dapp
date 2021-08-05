@@ -1,34 +1,47 @@
-import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
-import { DexMarketParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
-import { SerumMarket } from '@nx-dapp/solana-dapp/market/types';
+import {
+  MarketAccount,
+  MintTokenAccount,
+  OrderbookAccount,
+} from '@nx-dapp/solana-dapp/account/types';
+import {
+  getMintAccounts,
+  getUserAccounts,
+} from '@nx-dapp/solana-dapp/account/utils/get-user-accounts';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
+
+import { getMarketIndicatorAccounts } from './get-market-indicator-accounts';
+import { getMarketMintAccounts } from './get-market-mint-accounts';
+import { mapToMarketAccounts } from './operators';
 
 export const getMarketAccounts = (
-  marketByMint: Map<string, SerumMarket>,
-  connection: Connection
-): Observable<Map<string, ParsedAccountBase>> =>
-  getMultipleAccounts(
-    connection,
-    [...marketByMint.values()].map((market) =>
-      market.marketInfo.address.toBase58()
-    ),
-    'single'
-  ).pipe(
-    map(({ array: marketAccounts, keys: marketAccountAddresses }) =>
-      marketAccounts
-        .map((marketAccount, index) =>
-          DexMarketParser(
-            new PublicKey(marketAccountAddresses[index]),
-            marketAccount
+  walletConnection: Connection,
+  marketConnection: Connection,
+  walletPublicKey: PublicKey
+): Observable<{
+  mintAccounts: MintTokenAccount[];
+  marketAccounts: MarketAccount[];
+  marketMintAccounts: MintTokenAccount[];
+  marketIndicatorAccounts: OrderbookAccount[];
+}> =>
+  getUserAccounts(walletConnection, walletPublicKey).pipe(
+    concatMap((userAccounts) =>
+      getMintAccounts(walletConnection, userAccounts).pipe(
+        mapToMarketAccounts(marketConnection),
+        concatMap(({ mintAccounts, marketAccounts }) =>
+          forkJoin([
+            getMarketMintAccounts(marketConnection, marketAccounts),
+            getMarketIndicatorAccounts(marketConnection, marketAccounts),
+          ]).pipe(
+            map(([marketMintAccounts, marketIndicatorAccounts]) => ({
+              mintAccounts,
+              marketAccounts,
+              marketMintAccounts,
+              marketIndicatorAccounts,
+            }))
           )
         )
-        .reduce(
-          (marketAccounts, marketAccount) =>
-            marketAccounts.set(marketAccount.pubkey.toBase58(), marketAccount),
-          new Map<string, ParsedAccountBase>()
-        )
+      )
     )
   );
