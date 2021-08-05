@@ -8,17 +8,17 @@ import { map } from 'rxjs/operators';
 
 export const getNativeAccount = (
   connection: Connection,
-  pubkey: PublicKey
+  walletPublicKey: PublicKey
 ): Observable<TokenAccount> =>
-  from(defer(() => connection.getAccountInfo(pubkey))).pipe(
+  from(defer(() => connection.getAccountInfo(walletPublicKey))).pipe(
     isNotNull,
     map((account) => ({
-      pubkey: pubkey,
+      pubkey: walletPublicKey,
       account,
       info: {
-        address: pubkey,
+        address: walletPublicKey,
         mint: NATIVE_MINT,
-        owner: pubkey,
+        owner: walletPublicKey,
         amount: new u64(account.lamports),
         delegate: null,
         delegatedAmount: new u64(0),
