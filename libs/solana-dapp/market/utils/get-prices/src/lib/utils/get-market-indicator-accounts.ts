@@ -5,45 +5,36 @@ import {
 import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
 import { OrderBookParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { from, Observable } from 'rxjs';
-import { map, mergeMap, reduce } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-const getMarketIndicatorAccount = (
-  connection: Connection,
-  marketAccount: MarketAccount
-): Observable<OrderbookAccount> =>
-  getMultipleAccounts(
-    connection,
-    [marketAccount.info.asks.toBase58(), marketAccount.info.bids.toBase58()],
-    'single'
-  ).pipe(
-    mergeMap(
-      ({ array: marketIndicatorAccounts, keys: marketIndicatorAddresses }) =>
-        from(marketIndicatorAccounts).pipe(
-          map((marketIndicatorAccount, index) =>
-            OrderBookParser(
-              new PublicKey(marketIndicatorAddresses[index]),
-              marketIndicatorAccount
-            )
-          )
-        )
+const getMarketIndicatorAddresses = (
+  marketAccounts: MarketAccount[]
+): string[] => [
+  ...new Set(
+    marketAccounts.reduce(
+      (marketIndicatorAccounts: string[], marketAccount: MarketAccount) => [
+        ...marketIndicatorAccounts,
+        marketAccount.info.asks.toBase58(),
+        marketAccount.info.bids.toBase58(),
+      ],
+      []
     )
-  );
+  ).values(),
+];
 
 export const getMarketIndicatorAccounts = (
   connection: Connection,
   marketAccounts: MarketAccount[]
 ): Observable<OrderbookAccount[]> =>
-  from(marketAccounts).pipe(
-    mergeMap((marketAccount) =>
-      getMarketIndicatorAccount(connection, marketAccount)
-    ),
-    reduce(
-      (marketIndicatorAccounts, account) =>
-        new Map(
-          marketIndicatorAccounts.set(account.pubkey.toBase58(), account)
-        ),
-      new Map<string, OrderbookAccount>()
-    ),
-    map((marketIndicatorAccounts) => [...marketIndicatorAccounts.values()])
+  getMultipleAccounts(
+    connection,
+    getMarketIndicatorAddresses(marketAccounts),
+    'single'
+  ).pipe(
+    map(({ array: marketIndicatorAccounts, keys: marketIndicatorAddresses }) =>
+      marketIndicatorAccounts.map((account, index) =>
+        OrderBookParser(new PublicKey(marketIndicatorAddresses[index]), account)
+      )
+    )
   );
