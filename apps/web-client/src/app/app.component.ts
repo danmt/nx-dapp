@@ -1,16 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
-  BALANCE_SERVICE,
   CONNECTION_SERVICE,
-  IBalanceService,
   IConnectionService,
-  IMarketService,
   IWalletService,
-  MARKET_SERVICE,
   WALLET_SERVICE,
   WalletName,
 } from '@nx-dapp/solana-dapp/angular';
+import { getPrices } from '@nx-dapp/solana-dapp/market/utils/get-prices';
+import { getTokens } from '@nx-dapp/solana-dapp/market/utils/get-tokens';
+import { getBalances } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
+import { combineLatest, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-root',
@@ -42,13 +43,11 @@ import {
           <ng-container *ngFor="let balance of balances$ | async">
             <li *ngIf="balance.hasBalance" class="flex p-2 mb-1 items-center">
               <figure class="block w-6 h-6 mr-2">
-                <img class="w-full h-full" [src]="balance.tokenLogo" />
+                <img class="w-full h-full" [src]="balance.logo" />
               </figure>
               <div>
-                {{ balance.tokenName }} ({{ balance.tokenSymbol }}):
-                {{ balance.tokenQuantity }} ({{
-                  balance.tokenInUSD | currency
-                }})
+                {{ balance.name }} ({{ balance.symbol }}):
+                {{ balance.quantity }} ({{ balance.total | currency }})
               </div>
             </li>
           </ng-container>
@@ -62,14 +61,58 @@ export class AppComponent implements OnInit {
   network$ = this.connectionService.network$;
   wallets$ = this.walletService.wallets$;
   isConnected$ = this.walletService.connected$;
-  balances$ = this.balanceService.balances$;
-  totalInUSD$ = this.balanceService.totalInUSD$;
+
+  balances$ = combineLatest([
+    this.walletService.publicKey$,
+    this.connectionService.network$,
+  ]).pipe(
+    switchMap(([publicKey, network]) => {
+      if (!publicKey || !network) {
+        return of([]);
+      }
+
+      return combineLatest([
+        getPrices({
+          rpcEndpoint: network.url,
+          marketRpcEndpoint: 'https://solana-api.projectserum.com/',
+          walletPublicKey: publicKey.toBase58(),
+        }),
+        getBalances({
+          rpcEndpoint: network.url,
+          walletPublicKey: publicKey.toBase58(),
+        }),
+        getTokens(network.chainID),
+      ]).pipe(
+        map(([prices, balances, tokens]) =>
+          balances.map((balance) => {
+            const token = tokens.get(balance.address);
+
+            const price =
+              prices.find((price) => price.address === balance.address)
+                ?.price || 0;
+
+            return {
+              ...balance,
+              price,
+              total: price * balance.quantity,
+              logo: token?.logoURI,
+              name: token?.name,
+              symbol: token?.symbol,
+            };
+          })
+        )
+      );
+    })
+  );
+  totalInUSD$ = this.balances$.pipe(
+    map((balances) =>
+      balances.reduce((totalInUSD, balance) => totalInUSD + balance.total, 0)
+    )
+  );
 
   constructor(
     @Inject(WALLET_SERVICE) private walletService: IWalletService,
-    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService,
-    @Inject(MARKET_SERVICE) private marketService: IMarketService,
-    @Inject(BALANCE_SERVICE) private balanceService: IBalanceService
+    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService
   ) {}
 
   ngOnInit() {
@@ -77,51 +120,9 @@ export class AppComponent implements OnInit {
       .pipe(isNotNull)
       .subscribe((connection) => this.walletService.loadConnection(connection));
 
-    this.connectionService.connectionAccount$
-      .pipe(isNotNull)
-      .subscribe((account) => this.walletService.changeAccount(account));
-
     this.connectionService.network$
       .pipe(isNotNull)
       .subscribe((network) => this.walletService.loadNetwork(network));
-
-    this.walletService.connected$.subscribe((connected) => {
-      this.balanceService.loadWalletConnected(connected);
-    });
-
-    this.walletService.tokenAccounts$.subscribe((tokenAccounts) => {
-      this.marketService.loadTokenAccounts(tokenAccounts);
-      this.balanceService.loadTokenAccounts(tokenAccounts);
-    });
-
-    this.marketService.networkTokens$.subscribe((networkTokens) =>
-      this.balanceService.loadNetworkTokens(networkTokens)
-    );
-
-    this.marketService.mintTokens$.subscribe((mintTokens) =>
-      this.balanceService.loadMintTokens(mintTokens)
-    );
-
-    this.marketService.mintAccounts$.subscribe((mintAccounts) =>
-      this.balanceService.loadMintAccounts(mintAccounts)
-    );
-
-    this.marketService.marketAccounts$.subscribe((marketAccounts) =>
-      this.balanceService.loadMarketAccounts(marketAccounts)
-    );
-
-    this.marketService.marketByMint$.subscribe((marketByMint) =>
-      this.balanceService.loadMarketByMint(marketByMint)
-    );
-
-    this.marketService.marketMintAccounts$.subscribe((marketMintAccounts) =>
-      this.balanceService.loadMarketMintAccounts(marketMintAccounts)
-    );
-
-    this.marketService.marketIndicatorAccounts$.subscribe(
-      (marketIndicatorAccounts) =>
-        this.balanceService.loadMarketIndicatorAccounts(marketIndicatorAccounts)
-    );
   }
 
   onSelectNetwork(networkId: string) {
