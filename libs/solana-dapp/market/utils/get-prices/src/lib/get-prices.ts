@@ -2,8 +2,9 @@ import { Connection } from '@solana/web3.js';
 import { forkJoin, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { mapToPrices } from './operators';
 import { GetPricesConfig, TokenPrice } from './types';
-import { getMarketAccounts, getMarketMintAccounts, mapToPrices } from './utils';
+import { getMarketAccounts, getMarketMintAccounts } from './utils';
 import { getMarketIndicatorAccounts } from './utils/get-market-indicator-accounts';
 
 export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
