@@ -243,81 +243,6 @@
         }
       }
     },
-    "solana-dapp-account-utils-get-market-indicator-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-market-indicator-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-market-indicator-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-market-indicator-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-market-indicator-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-market-indicator-accounts/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-get-market-mint-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-market-mint-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-market-mint-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-market-mint-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-market-mint-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-market-mint-accounts/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-get-mint-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-mint-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-mint-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-mint-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-mint-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-mint-accounts/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "solana-dapp-account-utils-get-multiple-accounts": {
       "root": "libs/solana-dapp/account/utils/get-multiple-accounts",
       "sourceRoot": "libs/solana-dapp/account/utils/get-multiple-accounts/src",
@@ -343,51 +268,26 @@
         }
       }
     },
-    "solana-dapp-account-utils-get-native-account": {
-      "root": "libs/solana-dapp/account/utils/get-native-account",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-native-account/src",
+    "solana-dapp-account-utils-get-user-accounts": {
+      "root": "libs/solana-dapp/account/utils/get-user-accounts",
+      "sourceRoot": "libs/solana-dapp/account/utils/get-user-accounts/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-native-account/**/*.ts"
+              "libs/solana-dapp/account/utils/get-user-accounts/**/*.ts"
             ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-native-account"
+            "coverage/libs/solana-dapp/account/utils/get-user-accounts"
           ],
           "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-native-account/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-get-token-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-token-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-token-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-token-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-token-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-token-accounts/jest.config.js",
+            "jestConfig": "libs/solana-dapp/account/utils/get-user-accounts/jest.config.js",
             "passWithNoTests": true
           }
         }

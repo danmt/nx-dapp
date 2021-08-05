@@ -1,10 +1,14 @@
+import {
+  getMintAccounts,
+  getUserAccounts,
+  observeUserAccounts,
+} from '@nx-dapp/solana-dapp/account/utils/get-user-accounts';
 import { Balance, GetBalancesConfig } from '@nx-dapp/solana-dapp/wallet/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { mapToBalances, observeUserAccounts } from './operators';
-import { getMintAccounts, getUserAccounts } from './utils';
+import { mapToBalances } from './operators';
 
 export const getBalances = (config: GetBalancesConfig): Observable<Balance[]> =>
   of(new Connection(config.rpcEndpoint, 'recent')).pipe(

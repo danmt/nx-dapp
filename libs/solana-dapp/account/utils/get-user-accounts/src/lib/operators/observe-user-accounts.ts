@@ -5,7 +5,7 @@ import { AccountInfo, Connection } from '@solana/web3.js';
 import { combineLatest, Observable } from 'rxjs';
 import { concatMap, map, startWith, switchMap } from 'rxjs/operators';
 
-import { getNativeAccount } from '../utils';
+import { getNativeAccount } from '../get-native-account';
 
 const fromNativeAccountChangeEvent = (
   connection: Connection,

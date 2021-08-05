@@ -1,4 +1,3 @@
-import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
 import { Network } from '@nx-dapp/solana-dapp/connection/types';
 import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import { Connection, Transaction } from '@solana/web3.js';
@@ -79,20 +78,4 @@ export class LoadConnectionAction {
   type = 'loadConnection';
 
   constructor(public payload: Connection) {}
-}
-
-export class LoadNativeAccountAction {
-  type = 'loadNativeAccount';
-
-  constructor(public payload: TokenAccount) {}
-}
-
-export class LoadTokenAccountsAction {
-  type = 'loadTokenAccounts';
-
-  constructor(public payload: Map<string, TokenAccount>) {}
-}
-
-export class ResetAction {
-  type = 'reset';
 }

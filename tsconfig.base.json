@@ -45,23 +45,11 @@
       "@nx-dapp/solana-dapp/account/utils/get-market-accounts": [
         "libs/solana-dapp/account/utils/get-market-accounts/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/account/utils/get-market-indicator-accounts": [
-        "libs/solana-dapp/account/utils/get-market-indicator-accounts/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/get-market-mint-accounts": [
-        "libs/solana-dapp/account/utils/get-market-mint-accounts/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/get-mint-accounts": [
-        "libs/solana-dapp/account/utils/get-mint-accounts/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/account/utils/get-multiple-accounts": [
         "libs/solana-dapp/account/utils/get-multiple-accounts/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/account/utils/get-native-account": [
-        "libs/solana-dapp/account/utils/get-native-account/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/get-token-accounts": [
-        "libs/solana-dapp/account/utils/get-token-accounts/src/index.ts"
+      "@nx-dapp/solana-dapp/account/utils/get-user-accounts": [
+        "libs/solana-dapp/account/utils/get-user-accounts/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/account/utils/serializer": [
         "libs/solana-dapp/account/utils/serializer/src/index.ts"

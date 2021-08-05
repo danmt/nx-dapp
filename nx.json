@@ -57,22 +57,10 @@
     "solana-dapp-account-utils-get-market-accounts": {
       "tags": []
     },
-    "solana-dapp-account-utils-get-market-indicator-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-market-mint-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-mint-accounts": {
-      "tags": []
-    },
     "solana-dapp-account-utils-get-multiple-accounts": {
       "tags": []
     },
-    "solana-dapp-account-utils-get-native-account": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-token-accounts": {
+    "solana-dapp-account-utils-get-user-accounts": {
       "tags": []
     },
     "solana-dapp-account-utils-serializer": {

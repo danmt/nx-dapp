@@ -116,10 +116,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.connectionService.connection$
-      .pipe(isNotNull)
-      .subscribe((connection) => this.walletService.loadConnection(connection));
-
     this.connectionService.network$
       .pipe(isNotNull)
       .subscribe((network) => this.walletService.loadNetwork(network));

@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'solana-dapp-account-utils-get-market-mint-accounts',
+  displayName: 'solana-dapp-account-utils-get-user-accounts',
   preset: '../../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory:
-    '../../../../../coverage/libs/solana-dapp/account/utils/get-market-mint-accounts',
+    '../../../../../coverage/libs/solana-dapp/account/utils/get-user-accounts',
 };
