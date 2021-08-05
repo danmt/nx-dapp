@@ -508,52 +508,6 @@
         }
       }
     },
-    "solana-dapp-market-angular": {
-      "projectType": "library",
-      "root": "libs/solana-dapp/market/angular",
-      "sourceRoot": "libs/solana-dapp/market/angular/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/market/angular"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/market/angular/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/market/angular/src/**/*.ts",
-              "libs/solana-dapp/market/angular/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "solana-dapp-market-rx": {
-      "root": "libs/solana-dapp/market/rx",
-      "sourceRoot": "libs/solana-dapp/market/rx/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/solana-dapp/market/rx/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/market/rx"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/market/rx/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "solana-dapp-market-types": {
       "root": "libs/solana-dapp/market/types",
       "sourceRoot": "libs/solana-dapp/market/types/src",
@@ -570,31 +524,6 @@
           "outputs": ["coverage/libs/solana-dapp/market/types"],
           "options": {
             "jestConfig": "libs/solana-dapp/market/types/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-market-utils-get-market-by-mint": {
-      "root": "libs/solana-dapp/market/utils/get-market-by-mint",
-      "sourceRoot": "libs/solana-dapp/market/utils/get-market-by-mint/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/market/utils/get-market-by-mint/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/market/utils/get-market-by-mint"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/market/utils/get-market-by-mint/jest.config.js",
             "passWithNoTests": true
           }
         }

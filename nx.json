@@ -90,16 +90,7 @@
     "solana-dapp-connection-types": {
       "tags": []
     },
-    "solana-dapp-market-angular": {
-      "tags": []
-    },
-    "solana-dapp-market-rx": {
-      "tags": []
-    },
     "solana-dapp-market-types": {
-      "tags": []
-    },
-    "solana-dapp-market-utils-get-market-by-mint": {
       "tags": []
     },
     "solana-dapp-market-utils-get-prices": {
