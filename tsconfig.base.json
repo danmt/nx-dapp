@@ -76,15 +76,6 @@
       "@nx-dapp/solana-dapp/utils/u64": [
         "libs/solana-dapp/utils/u64/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/wallet/adapters/phantom": [
-        "libs/solana-dapp/wallet/adapters/phantom/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/wallet/adapters/sollet": [
-        "libs/solana-dapp/wallet/adapters/sollet/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/wallet/adapters/solong": [
-        "libs/solana-dapp/wallet/adapters/solong/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/wallet/angular": [
         "libs/solana-dapp/wallet/angular/src/index.ts"
       ],
@@ -99,9 +90,6 @@
       ],
       "@nx-dapp/solana-dapp/wallet/utils/get-balances": [
         "libs/solana-dapp/wallet/utils/get-balances/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/wallet/utils/poll": [
-        "libs/solana-dapp/wallet/utils/poll/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/wallet/utils/wallets": [
         "libs/solana-dapp/wallet/utils/wallets/src/index.ts"

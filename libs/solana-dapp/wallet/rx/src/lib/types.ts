@@ -11,7 +11,6 @@ import {
   ConnectWalletAction,
   DisconnectWalletAction,
   InitAction,
-  LoadConnectionAction,
   LoadNetworkAction,
   LoadWalletsAction,
   SelectWalletAction,
@@ -54,8 +53,7 @@ export type Action =
   | LoadNetworkAction
   | SignTransactionsAction
   | TransactionsSignedAction
-  | WalletNetworkChangedAction
-  | LoadConnectionAction;
+  | WalletNetworkChangedAction;
 
 export interface IWalletService {
   actions$: Observable<Action>;

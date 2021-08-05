@@ -9,9 +9,10 @@ import {
   WalletPublicKeyError,
   WalletSignatureError,
 } from '@nx-dapp/solana-dapp/wallet/utils/errors';
-import { pollUntilReady } from '@nx-dapp/solana-dapp/wallet/utils/poll';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
+
+import { pollUntilReady } from '../utils/poll';
 
 interface SolongProvider {
   currentAccount?: string | null;

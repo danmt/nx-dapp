@@ -13,9 +13,10 @@ import {
   WalletSignatureError,
   WalletWindowClosedError,
 } from '@nx-dapp/solana-dapp/wallet/utils/errors';
-import { pollUntilReady } from '@nx-dapp/solana-dapp/wallet/utils/poll';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
+
+import { pollUntilReady } from '../utils/poll';
 
 export interface PhantomProviderEvents {
   connect: (...args: unknown[]) => unknown;

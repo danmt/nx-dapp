@@ -90,15 +90,6 @@
     "solana-dapp-utils-u64": {
       "tags": []
     },
-    "solana-dapp-wallet-adapters-phantom": {
-      "tags": []
-    },
-    "solana-dapp-wallet-adapters-sollet": {
-      "tags": []
-    },
-    "solana-dapp-wallet-adapters-solong": {
-      "tags": []
-    },
     "solana-dapp-wallet-angular": {
       "tags": []
     },
@@ -112,9 +103,6 @@
       "tags": []
     },
     "solana-dapp-wallet-utils-get-balances": {
-      "tags": []
-    },
-    "solana-dapp-wallet-utils-poll": {
       "tags": []
     },
     "solana-dapp-wallet-utils-wallets": {

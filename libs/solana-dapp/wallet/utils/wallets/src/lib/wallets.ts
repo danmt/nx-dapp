@@ -1,16 +1,13 @@
+import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
+
 import {
   PhantomWalletAdapter,
   PhantomWalletAdapterConfig,
-} from '@nx-dapp/solana-dapp/wallet/adapters/phantom';
-import {
   SolletWalletAdapter,
   SolletWalletAdapterConfig,
-} from '@nx-dapp/solana-dapp/wallet/adapters/sollet';
-import {
   SolongWalletAdapter,
   SolongWalletAdapterConfig,
-} from '@nx-dapp/solana-dapp/wallet/adapters/solong';
-import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
+} from './adapters';
 
 export const ICONS_URL =
   'https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons';
