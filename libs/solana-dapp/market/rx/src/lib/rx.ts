@@ -146,7 +146,7 @@ export class MarketService implements IMarketService {
     this.actions$.pipe(ofType<LoadNetworkAction>('loadNetwork')),
   ]).pipe(
     switchMap(([, { payload: network }]) =>
-      getTokens(network).pipe(
+      getTokens(network.chainID).pipe(
         map((tokens) => new LoadNetworkTokensAction(tokens))
       )
     )
