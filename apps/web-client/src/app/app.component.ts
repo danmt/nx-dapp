@@ -85,7 +85,8 @@ export class AppComponent implements OnInit {
       ]).pipe(
         map(([prices, balances, tokens]) =>
           balances.map((balance) => {
-            const token = tokens.get(balance.address);
+            const token =
+              tokens.find((token) => token.address === balance.address) || null;
 
             const price =
               prices.find((price) => price.address === balance.address)
