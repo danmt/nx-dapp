@@ -14,5 +14,5 @@ export interface Market {
 export interface GetPricesConfig {
   walletPublicKey: string;
   rpcEndpoint: string;
-  marketEndpoint: string;
+  marketRpcEndpoint: string;
 }

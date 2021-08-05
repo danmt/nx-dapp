@@ -9,7 +9,7 @@ import { getMarketAccounts } from './utils';
 export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
   of([
     new Connection(config.rpcEndpoint, 'recent'),
-    new Connection(config.marketEndpoint, 'recent'),
+    new Connection(config.marketRpcEndpoint, 'recent'),
   ]).pipe(
     switchMap(([walletConnection, marketConnection]) =>
       getMarketAccounts(
