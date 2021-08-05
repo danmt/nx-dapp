@@ -1,5 +1,5 @@
 import {
-  ParsedAccountBase,
+  MintTokenAccount,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/types';
 import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
@@ -15,7 +15,7 @@ const getMintAddresses = (userAccounts: TokenAccount[]) => [
 export const getMintAccounts = (
   connection: Connection,
   userAccounts: TokenAccount[]
-): Observable<ParsedAccountBase[]> =>
+): Observable<MintTokenAccount[]> =>
   getMultipleAccounts(
     connection,
     getMintAddresses(userAccounts),

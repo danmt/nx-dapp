@@ -1,4 +1,7 @@
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
+import {
+  MarketAccount,
+  MintTokenAccount,
+} from '@nx-dapp/solana-dapp/account/types';
 import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
 import { MintParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Connection, PublicKey } from '@solana/web3.js';
@@ -7,8 +10,8 @@ import { map, mergeMap, reduce } from 'rxjs/operators';
 
 const getMarketMintAccount = (
   connection: Connection,
-  marketAccount: ParsedAccountBase
-): Observable<ParsedAccountBase> =>
+  marketAccount: MarketAccount
+): Observable<MintTokenAccount> =>
   getMultipleAccounts(
     connection,
     [
@@ -31,8 +34,8 @@ const getMarketMintAccount = (
 
 export const getMarketMintAccounts = (
   connection: Connection,
-  marketAccounts: ParsedAccountBase[]
-): Observable<ParsedAccountBase[]> =>
+  marketAccounts: MarketAccount[]
+): Observable<MintTokenAccount[]> =>
   from(marketAccounts).pipe(
     mergeMap((marketAccount) =>
       getMarketMintAccount(connection, marketAccount)
@@ -40,7 +43,7 @@ export const getMarketMintAccounts = (
     reduce(
       (marketMintAccounts, account) =>
         new Map(marketMintAccounts.set(account.pubkey.toBase58(), account)),
-      new Map<string, ParsedAccountBase>()
+      new Map<string, MintTokenAccount>()
     ),
     map((marketMintAccounts) => [...marketMintAccounts.values()])
   );

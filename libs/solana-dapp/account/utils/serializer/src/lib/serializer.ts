@@ -1,4 +1,5 @@
 import {
+  OrderbookAccount,
   ParsedAccountBase,
   TokenAccount,
   TokenAccountInfo,
@@ -107,19 +108,22 @@ const DEFAULT_DEX_ID = new PublicKey(
 
 export const DexMarketParser = (
   pubkey: PublicKey,
-  acc: AccountInfo<Buffer>
+  account: AccountInfo<Buffer>
 ) => {
-  const market = MARKETS.find((m) => m.address.equals(pubkey));
+  const market = MARKETS.find((market) => market.address.equals(pubkey));
   const decoded = Market.getLayout(market?.programId || DEFAULT_DEX_ID).decode(
-    acc.data
+    account.data
   );
 
   const details = {
     pubkey,
     account: {
-      ...acc,
+      ...account,
     },
-    info: decoded,
+    info: {
+      ...decoded,
+      programId: market?.programId || DEFAULT_DEX_ID,
+    },
   } as ParsedAccountBase;
 
   return details;
@@ -134,7 +138,7 @@ export const OrderBookParser = (id: PublicKey, acc: AccountInfo<Buffer>) => {
       ...acc,
     },
     info: decoded,
-  } as ParsedAccountBase;
+  } as OrderbookAccount;
 
   return details;
 };

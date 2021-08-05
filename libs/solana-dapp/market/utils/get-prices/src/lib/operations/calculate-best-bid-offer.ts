@@ -3,7 +3,7 @@ import { Orderbook } from '@project-serum/serum';
 export const calculateBestBidOffer = (
   bidsBook: Orderbook,
   asksBook: Orderbook
-) => {
+): number => {
   const bestBid = bidsBook.getL2(1);
   const bestAsk = asksBook.getL2(1);
 

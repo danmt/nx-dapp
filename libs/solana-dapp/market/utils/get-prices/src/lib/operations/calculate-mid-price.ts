@@ -1,15 +1,20 @@
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
+import {
+  MarketAccount,
+  MintTokenAccount,
+  OrderbookAccount,
+} from '@nx-dapp/solana-dapp/account/types';
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
+
 import { calculateBestBidOffer } from './calculate-best-bid-offer';
 
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
 export const calculateMidPrice = (
-  marketAccount: ParsedAccountBase,
+  marketAccount: MarketAccount,
   mintAddress: string,
-  marketMintAccounts: ParsedAccountBase[],
-  marketIndicatorAccounts: ParsedAccountBase[]
-) => {
+  marketMintAccounts: MintTokenAccount[],
+  marketIndicatorAccounts: OrderbookAccount[]
+): number => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
     ({ address }) => address.toBase58() === mintAddress
   );

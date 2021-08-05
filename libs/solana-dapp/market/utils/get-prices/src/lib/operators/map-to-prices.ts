@@ -1,4 +1,8 @@
-import { ParsedAccountBase } from '@nx-dapp/solana-dapp/account/types';
+import {
+  MarketAccount,
+  MintTokenAccount,
+  OrderbookAccount,
+} from '@nx-dapp/solana-dapp/account/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -6,10 +10,10 @@ import { calculateMidPrice } from '../operations';
 import { TokenPrice } from '../types';
 
 const createPrice = (
-  marketAccount: ParsedAccountBase,
-  mintAccounts: ParsedAccountBase[],
-  marketMintAccounts: ParsedAccountBase[],
-  marketIndicatorAccounts: ParsedAccountBase[]
+  marketAccount: MarketAccount,
+  mintAccounts: MintTokenAccount[],
+  marketMintAccounts: MintTokenAccount[],
+  marketIndicatorAccounts: OrderbookAccount[]
 ): TokenPrice | null => {
   const mintAccount = mintAccounts.find(
     (mintAccount) =>
@@ -32,9 +36,9 @@ const createPrice = (
 };
 
 export const mapToPrices =
-  (mintAccounts: ParsedAccountBase[], marketAccounts: ParsedAccountBase[]) =>
+  (mintAccounts: MintTokenAccount[], marketAccounts: MarketAccount[]) =>
   (
-    source: Observable<[ParsedAccountBase[], ParsedAccountBase[]]>
+    source: Observable<[MintTokenAccount[], OrderbookAccount[]]>
   ): Observable<TokenPrice[]> =>
     source.pipe(
       map(([marketMintAccounts, marketIndicatorAccounts]) =>
