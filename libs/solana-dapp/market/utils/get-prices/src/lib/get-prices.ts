@@ -2,7 +2,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { mapToPrices } from './operators';
+import { mapToPrices, observeMarketAccounts } from './operators';
 import { GetPricesConfig, TokenPrice } from './types';
 import { getMarketAccounts } from './utils';
 
@@ -16,6 +16,6 @@ export const getPrices = (config: GetPricesConfig): Observable<TokenPrice[]> =>
         walletConnection,
         marketConnection,
         new PublicKey(config.walletPublicKey)
-      ).pipe(mapToPrices)
+      ).pipe(observeMarketAccounts(marketConnection), mapToPrices)
     )
   );
