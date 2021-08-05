@@ -4,12 +4,11 @@ import {
 } from '@nx-dapp/solana-dapp/account/types';
 import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
 import { DexMarketParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
+import { Market } from '@nx-dapp/solana-dapp/market/types';
 import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
-
-import { Market } from '../types';
 
 const getMarket = (mintAddress: string): Market | null => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
