@@ -10,25 +10,16 @@ import { calculateMidPrice } from '../operations';
 import { TokenPrice } from '../types';
 
 const createPrice = (
-  marketAccount: MarketAccount,
-  mintAccounts: MintTokenAccount[],
+  mintAccount: MintTokenAccount,
+  marketAccounts: MarketAccount[],
   marketMintAccounts: MintTokenAccount[],
   marketIndicatorAccounts: OrderbookAccount[]
 ): TokenPrice | null => {
-  const mintAccount = mintAccounts.find(
-    (mintAccount) =>
-      mintAccount.pubkey.toBase58() === marketAccount.info.baseMint.toBase58()
-  );
-
-  if (!mintAccount) {
-    return null;
-  }
-
   return {
     address: mintAccount.pubkey.toBase58(),
     price: calculateMidPrice(
-      marketAccount,
-      mintAccount.pubkey.toBase58(),
+      mintAccount,
+      marketAccounts,
       marketMintAccounts,
       marketIndicatorAccounts
     ),
@@ -51,11 +42,11 @@ export const mapToPrices = (
         marketMintAccounts,
         marketIndicatorAccounts,
       }) =>
-        marketAccounts
-          .map((marketAccount) =>
+        mintAccounts
+          .map((mintAccount) =>
             createPrice(
-              marketAccount,
-              mintAccounts,
+              mintAccount,
+              marketAccounts,
               marketMintAccounts,
               marketIndicatorAccounts
             )

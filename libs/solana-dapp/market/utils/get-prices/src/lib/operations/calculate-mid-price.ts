@@ -10,30 +10,36 @@ import { calculateBestBidOffer } from './calculate-best-bid-offer';
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
 export const calculateMidPrice = (
-  marketAccount: MarketAccount,
-  mintAddress: string,
+  mintAccount: MintTokenAccount,
+  marketAccounts: MarketAccount[],
   marketMintAccounts: MintTokenAccount[],
   marketIndicatorAccounts: OrderbookAccount[]
 ): number => {
-  const SERUM_TOKEN = TOKEN_MINTS.find(
-    ({ address }) => address.toBase58() === mintAddress
+  const SERUM_TOKEN = TOKEN_MINTS.find(({ address }) =>
+    address.equals(mintAccount.pubkey)
   );
 
   if (STABLE_COINS.has(SERUM_TOKEN?.name || '')) {
     return 1.0;
   }
 
+  const marketAccount = marketAccounts.find(({ info }) =>
+    info.baseMint.equals(mintAccount.pubkey)
+  );
+
+  if (!marketAccount) {
+    return 0;
+  }
+
   const decodedMarket = marketAccount.info;
 
   const baseMintDecimals =
-    marketMintAccounts.find(
-      (account) =>
-        account.pubkey.toBase58() === decodedMarket.baseMint.toBase58()
+    marketMintAccounts.find(({ pubkey }) =>
+      pubkey.equals(decodedMarket.baseMint)
     )?.info.decimals || 0;
   const quoteMintDecimals =
-    marketMintAccounts.find(
-      (account) =>
-        account.pubkey.toBase58() === decodedMarket.quoteMint.toBase58()
+    marketMintAccounts.find(({ pubkey }) =>
+      pubkey.equals(decodedMarket.quoteMint)
     )?.info.decimals || 0;
 
   const market = new Market(
@@ -44,11 +50,11 @@ export const calculateMidPrice = (
     decodedMarket.programId
   );
 
-  const bids = marketIndicatorAccounts.find(
-    (account) => account.pubkey.toBase58() === decodedMarket.bids.toBase58()
+  const bids = marketIndicatorAccounts.find(({ pubkey }) =>
+    pubkey.equals(decodedMarket.bids)
   )?.info;
-  const asks = marketIndicatorAccounts.find(
-    (account) => account.pubkey.toBase58() === decodedMarket.asks.toBase58()
+  const asks = marketIndicatorAccounts.find(({ pubkey }) =>
+    pubkey.equals(decodedMarket.asks)
   )?.info;
 
   if (!bids || !asks) {
