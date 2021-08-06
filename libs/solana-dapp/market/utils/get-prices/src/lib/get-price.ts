@@ -1,5 +1,4 @@
-import { getMintAccount } from '@nx-dapp/solana-dapp/account/utils/generics';
-import { getMarketData } from '@nx-dapp/solana-dapp/account/utils/get-market-accounts';
+import { getMarketData, getMintAccount } from '@nx-dapp/solana-dapp/account';
 import { GetPriceConfig, TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';

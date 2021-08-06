@@ -48,19 +48,7 @@
     "shared-operators-of-type": {
       "tags": []
     },
-    "solana-dapp-account-types": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-generics": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-market-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-user-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-serializer": {
+    "solana-dapp-account": {
       "tags": []
     },
     "solana-dapp-angular": {

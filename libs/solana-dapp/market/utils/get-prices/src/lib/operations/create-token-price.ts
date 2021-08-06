@@ -2,9 +2,9 @@ import {
   MarketAccount,
   MintTokenAccount,
   OrderbookAccount,
-} from '@nx-dapp/solana-dapp/account/types';
+} from '@nx-dapp/solana-dapp/account';
 import { TokenPrice } from '@nx-dapp/solana-dapp/market/types';
-import { calculateMidPrice2 } from '.';
+import { calculateMidPrice } from '.';
 
 export const createTokenPrice = (
   mintAccount: MintTokenAccount,
@@ -14,7 +14,7 @@ export const createTokenPrice = (
 ): TokenPrice | null => {
   return {
     address: mintAccount.pubkey.toBase58(),
-    price: calculateMidPrice2(
+    price: calculateMidPrice(
       mintAccount,
       marketAccount,
       marketMintAccounts,

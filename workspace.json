@@ -172,118 +172,22 @@
         }
       }
     },
-    "solana-dapp-account-types": {
-      "root": "libs/solana-dapp/account/types",
-      "sourceRoot": "libs/solana-dapp/account/types/src",
+    "solana-dapp-account": {
+      "root": "libs/solana-dapp/account",
+      "sourceRoot": "libs/solana-dapp/account/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/solana-dapp/account/types/**/*.ts"]
+            "lintFilePatterns": ["libs/solana-dapp/account/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/account/types"],
+          "outputs": ["coverage/libs/solana-dapp/account"],
           "options": {
-            "jestConfig": "libs/solana-dapp/account/types/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-generics": {
-      "root": "libs/solana-dapp/account/utils/generics",
-      "sourceRoot": "libs/solana-dapp/account/utils/generics/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/generics/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/account/utils/generics"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/generics/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-get-market-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-market-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-market-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-market-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-market-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-market-accounts/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-get-user-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-user-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-user-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-user-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-user-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-user-accounts/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-serializer": {
-      "root": "libs/solana-dapp/account/utils/serializer",
-      "sourceRoot": "libs/solana-dapp/account/utils/serializer/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/serializer/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/account/utils/serializer"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/serializer/jest.config.js",
+            "jestConfig": "libs/solana-dapp/account/jest.config.js",
             "passWithNoTests": true
           }
         }

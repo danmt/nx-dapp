@@ -1,9 +1,9 @@
 import {
+  getMarketsData,
   getMintAccounts,
   getUserAccountMints,
-} from '@nx-dapp/solana-dapp/account/utils/generics';
-import { getMarketsData } from '@nx-dapp/solana-dapp/account/utils/get-market-accounts';
-import { getUserAccounts } from '@nx-dapp/solana-dapp/account/utils/get-user-accounts';
+  getUserAccounts,
+} from '@nx-dapp/solana-dapp/account';
 import {
   GetPricesFromWalletConfig,
   TokenPrice,

@@ -1,7 +1,4 @@
-import {
-  MarketData,
-  MintTokenAccount,
-} from '@nx-dapp/solana-dapp/account/types';
+import { MarketData, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
 import { TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

@@ -36,21 +36,7 @@
       "@nx-dapp/shared/operators/of-type": [
         "libs/shared/operators/of-type/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/account/types": [
-        "libs/solana-dapp/account/types/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/generics": [
-        "libs/solana-dapp/account/utils/generics/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/get-market-accounts": [
-        "libs/solana-dapp/account/utils/get-market-accounts/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/get-user-accounts": [
-        "libs/solana-dapp/account/utils/get-user-accounts/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/account/utils/serializer": [
-        "libs/solana-dapp/account/utils/serializer/src/index.ts"
-      ],
+      "@nx-dapp/solana-dapp/account": ["libs/solana-dapp/account/src/index.ts"],
       "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],
       "@nx-dapp/solana-dapp/connection/angular": [
         "libs/solana-dapp/connection/angular/src/index.ts"

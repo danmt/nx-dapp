@@ -1,46 +1,37 @@
-import {
-  MarketAccount,
-  MarketsData,
-  MintTokenAccount,
-  OrderbookAccount,
-} from '@nx-dapp/solana-dapp/account/types';
+import { MarketsData, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
 import { TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { calculateMidPrice } from '../operations';
-
-const createPrice = (
-  mintAccount: MintTokenAccount,
-  marketAccounts: MarketAccount[],
-  marketMintAccounts: MintTokenAccount[],
-  marketIndicatorAccounts: OrderbookAccount[]
-): TokenPrice | null => {
-  return {
-    address: mintAccount.pubkey.toBase58(),
-    price: calculateMidPrice(
-      mintAccount,
-      marketAccounts,
-      marketMintAccounts,
-      marketIndicatorAccounts
-    ),
-  };
-};
+import { createTokenPrice } from '../operations';
 
 export const mapToPrices =
   (mintAccounts: MintTokenAccount[]) =>
   (source: Observable<MarketsData>): Observable<TokenPrice[]> =>
     source.pipe(
-      map(({ accounts, mintAccounts: marketMintAccounts, orderbookAccounts }) =>
-        mintAccounts
-          .map((mintAccount) =>
-            createPrice(
-              mintAccount,
-              accounts,
-              marketMintAccounts,
-              orderbookAccounts
-            )
-          )
-          .filter((price): price is TokenPrice => price !== null)
+      map(
+        ({
+          accounts: marketAccounts,
+          mintAccounts: marketMintAccounts,
+          orderbookAccounts,
+        }) =>
+          mintAccounts
+            .map((mintAccount) => {
+              const marketAccount = marketAccounts.find(({ info }) =>
+                info.baseMint.equals(mintAccount.pubkey)
+              );
+
+              if (!marketAccount) {
+                return null;
+              }
+
+              return createTokenPrice(
+                mintAccount,
+                marketAccount,
+                marketMintAccounts,
+                orderbookAccounts
+              );
+            })
+            .filter((price): price is TokenPrice => price !== null)
       )
     );
