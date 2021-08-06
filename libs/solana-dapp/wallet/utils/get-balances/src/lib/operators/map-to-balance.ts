@@ -1,7 +1,4 @@
-import {
-  MintTokenAccount,
-  TokenAccount,
-} from '@nx-dapp/solana-dapp/account/types';
+import { MintTokenAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
 import { Balance } from '@nx-dapp/solana-dapp/wallet/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
