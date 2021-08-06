@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'solana-dapp-market-utils-get-tokens',
-  preset: '../../../../../jest.preset.js',
+  displayName: 'solana-dapp-utils-get-tokens',
+  preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,6 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory:
-    '../../../../../coverage/libs/solana-dapp/market/utils/get-tokens',
+  coverageDirectory: '../../../../coverage/libs/solana-dapp/utils/get-tokens',
 };

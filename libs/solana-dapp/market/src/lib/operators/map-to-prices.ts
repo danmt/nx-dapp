@@ -1,9 +1,9 @@
 import { MarketsData, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
-import { TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { createTokenPrice } from '../operations';
+import { TokenPrice } from '../types';
 
 export const mapToPrices =
   (mintAccounts: MintTokenAccount[]) =>

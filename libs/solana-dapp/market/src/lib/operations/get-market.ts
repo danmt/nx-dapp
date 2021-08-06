@@ -1,5 +1,6 @@
-import { Market } from '@nx-dapp/solana-dapp/market/types';
 import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';
+
+import { Market } from '../types';
 
 export const getMarket = (mintAddress: string): Market | null => {
   const SERUM_TOKEN = TOKEN_MINTS.find(

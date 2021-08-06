@@ -1,10 +1,10 @@
 import { getMarketsData, getMintAccounts } from '@nx-dapp/solana-dapp/account';
-import { GetPricesConfig } from '@nx-dapp/solana-dapp/market/types';
 import { Connection } from '@solana/web3.js';
 import { switchMap } from 'rxjs/operators';
 
 import { getMarketAddresses } from './operations';
 import { mapToPrices } from './operators';
+import { GetPricesConfig } from './types';
 
 export const getPrices = (config: GetPricesConfig) => {
   const connection = new Connection(config.rpcEndpoint, 'recent');

@@ -47,14 +47,9 @@
       "@nx-dapp/solana-dapp/connection/types": [
         "libs/solana-dapp/connection/types/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/market/types": [
-        "libs/solana-dapp/market/types/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/market/utils/get-prices": [
-        "libs/solana-dapp/market/utils/get-prices/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/market/utils/get-tokens": [
-        "libs/solana-dapp/market/utils/get-tokens/src/index.ts"
+      "@nx-dapp/solana-dapp/market": ["libs/solana-dapp/market/src/index.ts"],
+      "@nx-dapp/solana-dapp/utils/get-tokens": [
+        "libs/solana-dapp/utils/get-tokens/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/utils/u64": [
         "libs/solana-dapp/utils/u64/src/index.ts"

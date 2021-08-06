@@ -4,16 +4,13 @@ import {
   getUserAccountMints,
   getUserAccounts,
 } from '@nx-dapp/solana-dapp/account';
-import {
-  GetPricesFromWalletConfig,
-  TokenPrice,
-} from '@nx-dapp/solana-dapp/market/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { getMarketAddresses } from './operations';
 import { mapToPrices } from './operators';
+import { GetPricesFromWalletConfig, TokenPrice } from './types';
 
 export const getPricesFromWallet = (
   config: GetPricesFromWalletConfig

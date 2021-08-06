@@ -3,8 +3,9 @@ import {
   MintTokenAccount,
   OrderbookAccount,
 } from '@nx-dapp/solana-dapp/account';
-import { TokenPrice } from '@nx-dapp/solana-dapp/market/types';
+
 import { calculateMidPrice } from '.';
+import { TokenPrice } from '../types';
 
 export const createTokenPrice = (
   mintAccount: MintTokenAccount,

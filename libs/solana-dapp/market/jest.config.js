@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'solana-dapp-market-types',
-  preset: '../../../../jest.preset.js',
+  displayName: 'solana-dapp-market',
+  preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/solana-dapp/market/types',
+  coverageDirectory: '../../../coverage/libs/solana-dapp/market',
 };

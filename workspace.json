@@ -285,68 +285,43 @@
         }
       }
     },
-    "solana-dapp-market-types": {
-      "root": "libs/solana-dapp/market/types",
-      "sourceRoot": "libs/solana-dapp/market/types/src",
+    "solana-dapp-market": {
+      "root": "libs/solana-dapp/market",
+      "sourceRoot": "libs/solana-dapp/market/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/solana-dapp/market/types/**/*.ts"]
+            "lintFilePatterns": ["libs/solana-dapp/market/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/market/types"],
+          "outputs": ["coverage/libs/solana-dapp/market"],
           "options": {
-            "jestConfig": "libs/solana-dapp/market/types/jest.config.js",
+            "jestConfig": "libs/solana-dapp/market/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "solana-dapp-market-utils-get-prices": {
-      "root": "libs/solana-dapp/market/utils/get-prices",
-      "sourceRoot": "libs/solana-dapp/market/utils/get-prices/src",
+    "solana-dapp-utils-get-tokens": {
+      "root": "libs/solana-dapp/utils/get-tokens",
+      "sourceRoot": "libs/solana-dapp/utils/get-tokens/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/market/utils/get-prices/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/solana-dapp/utils/get-tokens/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/market/utils/get-prices"],
+          "outputs": ["coverage/libs/solana-dapp/utils/get-tokens"],
           "options": {
-            "jestConfig": "libs/solana-dapp/market/utils/get-prices/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-market-utils-get-tokens": {
-      "root": "libs/solana-dapp/market/utils/get-tokens",
-      "sourceRoot": "libs/solana-dapp/market/utils/get-tokens/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/market/utils/get-tokens/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/market/utils/get-tokens"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/market/utils/get-tokens/jest.config.js",
+            "jestConfig": "libs/solana-dapp/utils/get-tokens/jest.config.js",
             "passWithNoTests": true
           }
         }

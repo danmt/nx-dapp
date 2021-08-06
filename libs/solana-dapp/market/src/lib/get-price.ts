@@ -1,11 +1,11 @@
 import { getMarketData, getMintAccount } from '@nx-dapp/solana-dapp/account';
-import { GetPriceConfig, TokenPrice } from '@nx-dapp/solana-dapp/market/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { getMarketAddress } from './operations';
 import { mapToPrice } from './operators';
+import { GetPriceConfig, TokenPrice } from './types';
 
 export const getPrice = (
   config: GetPriceConfig
