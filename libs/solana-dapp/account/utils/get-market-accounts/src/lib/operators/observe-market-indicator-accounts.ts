@@ -1,5 +1,5 @@
 import { OrderbookAccount } from '@nx-dapp/solana-dapp/account/types';
-import { fromAccountChangeEvent } from '@nx-dapp/solana-dapp/account/utils/from-account-change';
+import { fromAccountChangeEvent } from '@nx-dapp/solana-dapp/account/utils/generics';
 import { OrderBookParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Connection } from '@solana/web3.js';
 import { combineLatest, Observable } from 'rxjs';

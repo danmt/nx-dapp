@@ -193,26 +193,24 @@
         }
       }
     },
-    "solana-dapp-account-utils-from-account-change": {
-      "root": "libs/solana-dapp/account/utils/from-account-change",
-      "sourceRoot": "libs/solana-dapp/account/utils/from-account-change/src",
+    "solana-dapp-account-utils-generics": {
+      "root": "libs/solana-dapp/account/utils/generics",
+      "sourceRoot": "libs/solana-dapp/account/utils/generics/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/from-account-change/**/*.ts"
+              "libs/solana-dapp/account/utils/generics/**/*.ts"
             ]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/from-account-change"
-          ],
+          "outputs": ["coverage/libs/solana-dapp/account/utils/generics"],
           "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/from-account-change/jest.config.js",
+            "jestConfig": "libs/solana-dapp/account/utils/generics/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -238,31 +236,6 @@
           ],
           "options": {
             "jestConfig": "libs/solana-dapp/account/utils/get-market-accounts/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-account-utils-get-multiple-accounts": {
-      "root": "libs/solana-dapp/account/utils/get-multiple-accounts",
-      "sourceRoot": "libs/solana-dapp/account/utils/get-multiple-accounts/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/solana-dapp/account/utils/get-multiple-accounts/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/solana-dapp/account/utils/get-multiple-accounts"
-          ],
-          "options": {
-            "jestConfig": "libs/solana-dapp/account/utils/get-multiple-accounts/jest.config.js",
             "passWithNoTests": true
           }
         }

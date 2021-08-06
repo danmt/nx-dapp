@@ -1,5 +1,5 @@
 import { TokenAccount } from '@nx-dapp/solana-dapp/account/types';
-import { fromAccountChangeEvent } from '@nx-dapp/solana-dapp/account/utils/from-account-change';
+import { fromAccountChangeEvent } from '@nx-dapp/solana-dapp/account/utils/generics';
 import { Connection } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';

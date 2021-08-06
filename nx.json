@@ -51,13 +51,10 @@
     "solana-dapp-account-types": {
       "tags": []
     },
-    "solana-dapp-account-utils-from-account-change": {
+    "solana-dapp-account-utils-generics": {
       "tags": []
     },
     "solana-dapp-account-utils-get-market-accounts": {
-      "tags": []
-    },
-    "solana-dapp-account-utils-get-multiple-accounts": {
       "tags": []
     },
     "solana-dapp-account-utils-get-user-accounts": {

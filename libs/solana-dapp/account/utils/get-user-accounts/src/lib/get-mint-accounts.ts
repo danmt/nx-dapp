@@ -2,7 +2,7 @@ import {
   MintTokenAccount,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account/types';
-import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
+import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/generics';
 import { MintParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';

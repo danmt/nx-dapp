@@ -2,7 +2,7 @@ import {
   MarketAccount,
   MintTokenAccount,
 } from '@nx-dapp/solana-dapp/account/types';
-import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/get-multiple-accounts';
+import { getMultipleAccounts } from '@nx-dapp/solana-dapp/account/utils/generics';
 import { DexMarketParser } from '@nx-dapp/solana-dapp/account/utils/serializer';
 import { Market } from '@nx-dapp/solana-dapp/market/types';
 import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';

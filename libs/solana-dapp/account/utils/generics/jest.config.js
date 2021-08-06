@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'solana-dapp-account-utils-from-account-change',
+  displayName: 'solana-dapp-account-utils-generics',
   preset: '../../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory:
-    '../../../../../coverage/libs/solana-dapp/account/utils/from-account-change',
+    '../../../../../coverage/libs/solana-dapp/account/utils/generics',
 };
