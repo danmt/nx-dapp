@@ -1,6 +1,7 @@
 import {
+  MarketAccount,
+  MintTokenAccount,
   OrderbookAccount,
-  ParsedAccountBase,
   TokenAccount,
   TokenAccountInfo,
 } from '@nx-dapp/solana-dapp/account/types';
@@ -97,7 +98,7 @@ export const MintParser = (pubKey: PublicKey, info: AccountInfo<Buffer>) => {
       ...info,
     },
     info: data,
-  } as ParsedAccountBase;
+  } as MintTokenAccount;
 
   return details;
 };
@@ -124,7 +125,7 @@ export const DexMarketParser = (
       ...decoded,
       programId: market?.programId || DEFAULT_DEX_ID,
     },
-  } as ParsedAccountBase;
+  } as MarketAccount;
 
   return details;
 };

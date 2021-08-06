@@ -1,10 +1,9 @@
 import {
-  MarketAccount,
+  MarketAccounts,
   MintTokenAccount,
-  OrderbookAccount,
 } from '@nx-dapp/solana-dapp/account/types';
 import { Connection } from '@solana/web3.js';
-import { forkJoin, Observable, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { getMarketIndicatorAccounts } from './get-market-indicator-accounts';
@@ -14,24 +13,18 @@ import { mapToMarketAccounts } from './operators';
 export const getMarketAccounts = (
   marketConnection: Connection,
   mintAccounts: MintTokenAccount[]
-): Observable<{
-  mintAccounts: MintTokenAccount[];
-  marketAccounts: MarketAccount[];
-  marketMintAccounts: MintTokenAccount[];
-  marketIndicatorAccounts: OrderbookAccount[];
-}> =>
+): Observable<MarketAccounts> =>
   of(mintAccounts).pipe(
     mapToMarketAccounts(marketConnection),
     switchMap((marketAccounts) =>
-      forkJoin([
+      combineLatest([
         getMarketMintAccounts(marketConnection, marketAccounts),
         getMarketIndicatorAccounts(marketConnection, marketAccounts),
       ]).pipe(
         map(([marketMintAccounts, marketIndicatorAccounts]) => ({
-          mintAccounts,
-          marketAccounts,
-          marketMintAccounts,
-          marketIndicatorAccounts,
+          accounts: marketAccounts,
+          mints: marketMintAccounts,
+          indicators: marketIndicatorAccounts,
         }))
       )
     )

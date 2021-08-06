@@ -20,7 +20,9 @@ export const getPrices = (
   return getUserAccounts(connection, walletPublicKey).pipe(
     switchMap((userAccounts) => getMintAccounts(connection, userAccounts)),
     switchMap((mintAccounts) =>
-      getMarketAccounts(marketConnection, mintAccounts).pipe(mapToPrices)
+      getMarketAccounts(marketConnection, mintAccounts).pipe(
+        mapToPrices(mintAccounts)
+      )
     )
   );
 };

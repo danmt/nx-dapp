@@ -1,5 +1,6 @@
 import {
   MarketAccount,
+  MarketAccounts,
   MintTokenAccount,
   OrderbookAccount,
 } from '@nx-dapp/solana-dapp/account/types';
@@ -26,31 +27,15 @@ const createPrice = (
   };
 };
 
-export const mapToPrices = (
-  source: Observable<{
-    mintAccounts: MintTokenAccount[];
-    marketAccounts: MarketAccount[];
-    marketMintAccounts: MintTokenAccount[];
-    marketIndicatorAccounts: OrderbookAccount[];
-  }>
-): Observable<TokenPrice[]> =>
-  source.pipe(
-    map(
-      ({
-        marketAccounts,
-        mintAccounts,
-        marketMintAccounts,
-        marketIndicatorAccounts,
-      }) =>
+export const mapToPrices =
+  (mintAccounts: MintTokenAccount[]) =>
+  (source: Observable<MarketAccounts>): Observable<TokenPrice[]> =>
+    source.pipe(
+      map(({ accounts, mints, indicators }) =>
         mintAccounts
           .map((mintAccount) =>
-            createPrice(
-              mintAccount,
-              marketAccounts,
-              marketMintAccounts,
-              marketIndicatorAccounts
-            )
+            createPrice(mintAccount, accounts, mints, indicators)
           )
           .filter((price): price is TokenPrice => price !== null)
-    )
-  );
+      )
+    );

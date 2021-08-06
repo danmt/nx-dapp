@@ -6,7 +6,7 @@ import { AccountInfo, PublicKey } from '@solana/web3.js';
 export interface ParsedAccountBase {
   pubkey: PublicKey;
   account: AccountInfo<Buffer>;
-  info: any;
+  info: unknown;
 }
 
 export interface TokenAccountInfo {
@@ -69,4 +69,10 @@ export interface OrderbookAccount {
   pubkey: PublicKey;
   account: AccountInfo<Buffer>;
   info: OrderbookAccountInfo;
+}
+
+export interface MarketAccounts {
+  accounts: MarketAccount[];
+  mints: MintTokenAccount[];
+  indicators: OrderbookAccount[];
 }
