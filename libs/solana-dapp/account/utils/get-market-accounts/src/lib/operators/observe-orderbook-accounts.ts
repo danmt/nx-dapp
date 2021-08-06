@@ -5,7 +5,7 @@ import { Connection } from '@solana/web3.js';
 import { combineLatest, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-export const observeMarketIndicatorAccounts =
+export const observeOrderbookAccounts =
   (connection: Connection) =>
   (source: Observable<OrderbookAccount[]>): Observable<OrderbookAccount[]> =>
     source.pipe(

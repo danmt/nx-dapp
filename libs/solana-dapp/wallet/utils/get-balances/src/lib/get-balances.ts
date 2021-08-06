@@ -1,6 +1,7 @@
 import {
   getMintAccount,
   getMintAccounts,
+  getUserAccountMints,
 } from '@nx-dapp/solana-dapp/account/utils/generics';
 import { getUserAccounts } from '@nx-dapp/solana-dapp/account/utils/get-user-accounts';
 import {
@@ -13,7 +14,6 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { calculateMints } from './operations';
 import { mapToBalance, mapToBalances } from './operators';
 
 export const getBalancesFromWallet = (
@@ -24,7 +24,7 @@ export const getBalancesFromWallet = (
 
   return getUserAccounts(connection, walletPublicKey).pipe(
     switchMap((userAccounts) =>
-      getMintAccounts(connection, calculateMints(userAccounts)).pipe(
+      getMintAccounts(connection, getUserAccountMints(userAccounts)).pipe(
         mapToBalances(userAccounts)
       )
     )

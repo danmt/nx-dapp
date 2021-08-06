@@ -1,26 +1,19 @@
-import { getMarketAccounts } from '@nx-dapp/solana-dapp/account/utils/get-market-accounts';
-import {
-  getMintAccounts,
-  getUserAccounts,
-} from '@nx-dapp/solana-dapp/account/utils/get-user-accounts';
-import { GetPricesConfig, TokenPrice } from '@nx-dapp/solana-dapp/market/types';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
+import { getMintAccounts } from '@nx-dapp/solana-dapp/account/utils/generics';
+import { getMarketsData } from '@nx-dapp/solana-dapp/account/utils/get-market-accounts';
+import { GetPricesConfig } from '@nx-dapp/solana-dapp/market/types';
+import { Connection } from '@solana/web3.js';
 import { switchMap } from 'rxjs/operators';
 
+import { getMarketAddresses } from './operations';
 import { mapToPrices } from './operators';
 
-export const getPrices = (
-  config: GetPricesConfig
-): Observable<TokenPrice[]> => {
+export const getPrices = (config: GetPricesConfig) => {
   const connection = new Connection(config.rpcEndpoint, 'recent');
   const marketConnection = new Connection(config.marketRpcEndpoint, 'recent');
-  const walletPublicKey = new PublicKey(config.walletPublicKey);
 
-  return getUserAccounts(connection, walletPublicKey).pipe(
-    switchMap((userAccounts) => getMintAccounts(connection, userAccounts)),
+  return getMintAccounts(connection, config.mintAddresses).pipe(
     switchMap((mintAccounts) =>
-      getMarketAccounts(marketConnection, mintAccounts).pipe(
+      getMarketsData(marketConnection, getMarketAddresses(mintAccounts)).pipe(
         mapToPrices(mintAccounts)
       )
     )

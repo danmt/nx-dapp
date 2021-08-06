@@ -1,4 +1,2 @@
-export * from './lib/get-market-accounts';
-export * from './lib/get-market-mint-accounts';
-export * from './lib/get-market-indicator-accounts';
-export * from './lib/operators';
+export * from './lib/get-market-data';
+export * from './lib/get-markets-data';

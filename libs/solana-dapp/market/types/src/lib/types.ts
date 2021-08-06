@@ -42,7 +42,21 @@ export interface Market {
   deprecated: boolean;
 }
 
+export interface GetPriceConfig {
+  walletPublicKey: string;
+  rpcEndpoint: string;
+  marketRpcEndpoint: string;
+  mintAddress: string[];
+}
+
 export interface GetPricesConfig {
+  walletPublicKey: string;
+  rpcEndpoint: string;
+  marketRpcEndpoint: string;
+  mintAddresses: string[];
+}
+
+export interface GetPricesFromWalletConfig {
   walletPublicKey: string;
   rpcEndpoint: string;
   marketRpcEndpoint: string;

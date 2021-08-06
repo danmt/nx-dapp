@@ -71,8 +71,14 @@ export interface OrderbookAccount {
   info: OrderbookAccountInfo;
 }
 
-export interface MarketAccounts {
+export interface MarketData {
+  account: MarketAccount;
+  mintAccounts: MintTokenAccount[];
+  orderbookAccounts: OrderbookAccount[];
+}
+
+export interface MarketsData {
   accounts: MarketAccount[];
-  mints: MintTokenAccount[];
-  indicators: OrderbookAccount[];
+  mintAccounts: MintTokenAccount[];
+  orderbookAccounts: OrderbookAccount[];
 }
