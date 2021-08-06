@@ -11,7 +11,12 @@ import { getPrices } from '@nx-dapp/solana-dapp/market/utils/get-prices';
 import { getTokens } from '@nx-dapp/solana-dapp/market/utils/get-tokens';
 import { getBalances } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
 import { combineLatest, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  switchMap,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-root',
@@ -41,13 +46,16 @@ import { map, switchMap } from 'rxjs/operators';
 
         <ul>
           <ng-container *ngFor="let balance of balances$ | async">
-            <li *ngIf="balance.hasBalance" class="flex p-2 mb-1 items-center">
+            <li class="flex p-2 mb-1 items-center">
               <figure class="block w-6 h-6 mr-2">
                 <img class="w-full h-full" [src]="balance.logo" />
               </figure>
               <div>
                 {{ balance.name }} ({{ balance.symbol }}):
-                {{ balance.quantity }} ({{ balance.total | currency }})
+                {{ balance.quantity }} ({{
+                  balance.total | currency: 'USD':'$':'1.2-12'
+                }}
+                @ {{ balance.price | currency: 'USD':'$':'1.2-12' }})
               </div>
             </li>
           </ng-container>
@@ -63,25 +71,35 @@ export class AppComponent implements OnInit {
   isConnected$ = this.walletService.connected$;
 
   balances$ = combineLatest([
-    this.walletService.publicKey$,
-    this.connectionService.network$,
+    this.walletService.publicKey$.pipe(
+      map((publicKey) => publicKey?.toBase58() || null),
+      distinctUntilChanged()
+    ),
+    this.connectionService.network$.pipe(
+      map((network) => network?.url || null),
+      distinctUntilChanged()
+    ),
+    this.connectionService.network$.pipe(
+      map((network) => network?.chainID || null),
+      distinctUntilChanged()
+    ),
   ]).pipe(
-    switchMap(([publicKey, network]) => {
-      if (!publicKey || !network) {
+    switchMap(([walletPublicKey, rpcEndpoint, chainID]) => {
+      if (!walletPublicKey || !rpcEndpoint || !chainID) {
         return of([]);
       }
 
       return combineLatest([
         getPrices({
-          rpcEndpoint: network.url,
+          rpcEndpoint,
+          walletPublicKey,
           marketRpcEndpoint: 'https://solana-api.projectserum.com/',
-          walletPublicKey: publicKey.toBase58(),
         }),
         getBalances({
-          rpcEndpoint: network.url,
-          walletPublicKey: publicKey.toBase58(),
+          rpcEndpoint,
+          walletPublicKey,
         }),
-        getTokens(network.chainID),
+        getTokens(chainID),
       ]).pipe(
         map(([prices, balances, tokens]) =>
           balances.map((balance) => {
@@ -103,6 +121,10 @@ export class AppComponent implements OnInit {
           })
         )
       );
+    }),
+    shareReplay({
+      refCount: false,
+      bufferSize: 1,
     })
   );
   totalInUSD$ = this.balances$.pipe(

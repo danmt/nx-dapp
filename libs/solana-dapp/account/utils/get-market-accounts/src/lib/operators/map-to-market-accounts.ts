@@ -42,12 +42,7 @@ const getMarketAddresses = (mintAccounts: MintTokenAccount[]): string[] =>
 
 export const mapToMarketAccounts =
   (marketConnection: Connection) =>
-  (
-    source: Observable<MintTokenAccount[]>
-  ): Observable<{
-    marketAccounts: MarketAccount[];
-    mintAccounts: MintTokenAccount[];
-  }> =>
+  (source: Observable<MintTokenAccount[]>): Observable<MarketAccount[]> =>
     source.pipe(
       concatMap((mintAccounts) =>
         getMultipleAccounts(
@@ -55,15 +50,14 @@ export const mapToMarketAccounts =
           getMarketAddresses(mintAccounts),
           'single'
         ).pipe(
-          map(({ array: marketAccounts, keys: marketAccountAddresses }) => ({
-            mintAccounts: mintAccounts,
-            marketAccounts: marketAccounts.map((marketAccount, index) =>
+          map(({ array: marketAccounts, keys: marketAccountAddresses }) =>
+            marketAccounts.map((marketAccount, index) =>
               DexMarketParser(
                 new PublicKey(marketAccountAddresses[index]),
                 marketAccount
               )
-            ),
-          }))
+            )
+          )
         )
       )
     );

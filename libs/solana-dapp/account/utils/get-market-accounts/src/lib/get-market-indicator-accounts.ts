@@ -8,6 +8,8 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { observeMarketIndicatorAccounts } from '..';
+
 const getMarketIndicatorAddresses = (
   marketAccounts: MarketAccount[]
 ): string[] => [
@@ -36,5 +38,6 @@ export const getMarketIndicatorAccounts = (
       marketIndicatorAccounts.map((account, index) =>
         OrderBookParser(new PublicKey(marketIndicatorAddresses[index]), account)
       )
-    )
+    ),
+    observeMarketIndicatorAccounts(connection)
   );

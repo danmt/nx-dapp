@@ -5,6 +5,8 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { defer, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { observeTokenAccounts } from '..';
+
 export const getTokenAccounts = (
   connection: Connection,
   walletPublicKey: PublicKey
@@ -16,7 +18,9 @@ export const getTokenAccounts = (
       })
     )
   ).pipe(
-    map(({ value }) =>
-      value.map(({ pubkey, account }) => TokenAccountParser(pubkey, account))
+    map(
+      ({ value }) =>
+        value.map(({ pubkey, account }) => TokenAccountParser(pubkey, account)),
+      observeTokenAccounts(connection)
     )
   );
