@@ -1,16 +1,18 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { Component, Inject } from '@angular/core';
 import {
-  CONNECTION_SERVICE,
-  IConnectionService,
   IWalletService,
   WALLET_SERVICE,
   WalletName,
 } from '@nx-dapp/solana-dapp/angular';
 import { getPricesFromWallet } from '@nx-dapp/solana-dapp/market';
+import {
+  DEFAULT_NETWORK,
+  Network,
+  NETWORKS,
+} from '@nx-dapp/solana-dapp/network';
 import { getTokens } from '@nx-dapp/solana-dapp/utils/get-tokens';
 import { getBalancesFromWallet } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
-import { combineLatest, of } from 'rxjs';
+import { combineLatest, of, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
   map,
@@ -29,13 +31,11 @@ import {
         (connectWallet)="onConnectWallet()"
         (disconnectWallet)="onDisconnectWallet()"
       ></nx-dapp-wallets-dropdown>
-      <ng-container *ngIf="networks$ | async as networks">
-        <nx-dapp-connections-dropdown
-          [networks]="networks"
-          [network]="network$ | async"
-          (selectNetwork)="onSelectNetwork($event)"
-        ></nx-dapp-connections-dropdown>
-      </ng-container>
+      <nx-dapp-connections-dropdown
+        [networks]="networks"
+        [defaultNetwork]="defaultNetwork"
+        (selectNetwork)="onSelectNetwork($event)"
+      ></nx-dapp-connections-dropdown>
     </header>
 
     <main>
@@ -64,9 +64,11 @@ import {
     </main>
   `,
 })
-export class AppComponent implements OnInit {
-  networks$ = this.connectionService.networks$;
-  network$ = this.connectionService.network$;
+export class AppComponent {
+  defaultNetwork = DEFAULT_NETWORK;
+  networks = NETWORKS;
+  private setNetwork = new Subject<Network>();
+  network$ = this.setNetwork.asObservable();
   wallets$ = this.walletService.wallets$;
   isConnected$ = this.walletService.connected$;
 
@@ -75,11 +77,11 @@ export class AppComponent implements OnInit {
       map((publicKey) => publicKey?.toBase58() || null),
       distinctUntilChanged()
     ),
-    this.connectionService.network$.pipe(
+    this.network$.pipe(
       map((network) => network?.url || null),
       distinctUntilChanged()
     ),
-    this.connectionService.network$.pipe(
+    this.network$.pipe(
       map((network) => network?.chainID || null),
       distinctUntilChanged()
     ),
@@ -133,19 +135,11 @@ export class AppComponent implements OnInit {
     )
   );
 
-  constructor(
-    @Inject(WALLET_SERVICE) private walletService: IWalletService,
-    @Inject(CONNECTION_SERVICE) private connectionService: IConnectionService
-  ) {}
+  constructor(@Inject(WALLET_SERVICE) private walletService: IWalletService) {}
 
-  ngOnInit() {
-    this.connectionService.network$
-      .pipe(isNotNull)
-      .subscribe((network) => this.walletService.loadNetwork(network));
-  }
-
-  onSelectNetwork(networkId: string) {
-    this.connectionService.selectNetwork(networkId);
+  onSelectNetwork(network: Network) {
+    this.setNetwork.next(network);
+    this.walletService.setNetwork(network);
   }
 
   onSelectWallet(walletName: WalletName) {

@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
-  connectionServiceProvider,
   DEFAULT_NETWORK,
   Network,
   NETWORKS,
-} from '@nx-dapp/solana-dapp/connection/angular';
+} from '@nx-dapp/solana-dapp/network';
 import {
   DEFAULT_WALLET,
   getPhantomWallet,
@@ -25,7 +24,7 @@ export interface SolanaDappWalletConfig {
 export interface SolanaDappConfig {
   walletConfig: SolanaDappWalletConfig;
   networks: Network[];
-  defaultNetwork: string;
+  defaultNetwork: Network;
 }
 
 export const SOLANA_DAPP_DEFAULT_CONFIG: SolanaDappConfig = {
@@ -50,28 +49,17 @@ export class SolanaDappModule {
       ...config,
     };
 
-    const providers = [];
-
-    providers.push(
-      connectionServiceProvider(config.networks, config.defaultNetwork)
-    );
-
-    if (
-      config.walletConfig?.isEnabled &&
-      config.walletConfig?.wallets &&
-      config.walletConfig?.defaultWallet
-    ) {
-      providers.push(
-        walletServiceProvider(
-          config.walletConfig.wallets,
-          config.walletConfig.defaultWallet
-        )
-      );
-    }
-
     return {
       ngModule: SolanaDappModule,
-      providers: providers,
+      providers: [
+        walletServiceProvider(
+          config.walletConfig.wallets,
+          config.walletConfig.defaultWallet,
+          NETWORKS.find(
+            (network) => network.name === config?.defaultNetwork.name
+          ) || null
+        ),
+      ],
     };
   }
 }

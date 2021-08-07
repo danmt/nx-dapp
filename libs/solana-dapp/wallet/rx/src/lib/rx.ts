@@ -1,6 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { Network } from '@nx-dapp/solana-dapp/connection/types';
+import { Network } from '@nx-dapp/solana-dapp/network';
 import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import {
   WalletNotConnectedError,
@@ -38,9 +38,9 @@ import {
   ConnectWalletAction,
   DisconnectWalletAction,
   InitAction,
-  LoadNetworkAction,
   LoadWalletsAction,
   SelectWalletAction,
+  SetNetworkAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
@@ -93,6 +93,10 @@ export class WalletService implements IWalletService {
   );
   publicKey$ = this.state$.pipe(
     map(({ publicKey }) => publicKey),
+    distinctUntilChanged()
+  );
+  network$ = this.state$.pipe(
+    map(({ network }) => network),
     distinctUntilChanged()
   );
 
@@ -161,7 +165,7 @@ export class WalletService implements IWalletService {
   );
 
   private walletNetworkChanged$ = this.actions$.pipe(
-    ofType<LoadNetworkAction>('loadNetwork'),
+    ofType<SetNetworkAction>('loadNetwork'),
     withLatestFrom(this.state$),
     filter(([, { connected, connecting }]) => connected && !connecting),
     exhaustMap(([, state]) =>
@@ -171,7 +175,11 @@ export class WalletService implements IWalletService {
     )
   );
 
-  constructor(wallets: Wallet[], defaultWallet: WalletName) {
+  constructor(
+    wallets: Wallet[],
+    defaultWallet: WalletName,
+    defaultNetwork: Network | null
+  ) {
     this.runEffects([
       this.walletConnected$,
       this.walletDisconnected$,
@@ -182,6 +190,7 @@ export class WalletService implements IWalletService {
     ]);
 
     setTimeout(() => {
+      this.setNetwork(defaultNetwork);
       this.loadWallets(wallets);
       this.selectWallet(defaultWallet);
     });
@@ -263,8 +272,8 @@ export class WalletService implements IWalletService {
     this._dispatcher.next(new SignTransactionsAction(transactions));
   }
 
-  loadNetwork(network: Network) {
-    this._dispatcher.next(new LoadNetworkAction(network));
+  setNetwork(network: Network | null) {
+    this._dispatcher.next(new SetNetworkAction(network));
   }
 
   destroy() {

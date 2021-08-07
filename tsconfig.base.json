@@ -38,16 +38,8 @@
       ],
       "@nx-dapp/solana-dapp/account": ["libs/solana-dapp/account/src/index.ts"],
       "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],
-      "@nx-dapp/solana-dapp/connection/angular": [
-        "libs/solana-dapp/connection/angular/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/connection/rx": [
-        "libs/solana-dapp/connection/rx/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/connection/types": [
-        "libs/solana-dapp/connection/types/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/market": ["libs/solana-dapp/market/src/index.ts"],
+      "@nx-dapp/solana-dapp/network": ["libs/solana-dapp/network/src/index.ts"],
       "@nx-dapp/solana-dapp/utils/get-tokens": [
         "libs/solana-dapp/utils/get-tokens/src/index.ts"
       ],

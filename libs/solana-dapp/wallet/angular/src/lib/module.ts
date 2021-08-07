@@ -1,4 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { Network } from '@nx-dapp/solana-dapp/network';
 import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/rx';
 
 import { walletServiceProvider } from './provider';
@@ -7,11 +8,14 @@ import { walletServiceProvider } from './provider';
 export class WalletModule {
   static forRoot(
     wallets: Wallet[],
-    defaultWallet: WalletName
+    defaultWallet: WalletName,
+    defaultNetwork: Network | null
   ): ModuleWithProviders<WalletModule> {
     return {
       ngModule: WalletModule,
-      providers: [walletServiceProvider(wallets, defaultWallet)],
+      providers: [
+        walletServiceProvider(wallets, defaultWallet, defaultNetwork),
+      ],
     };
   }
 }

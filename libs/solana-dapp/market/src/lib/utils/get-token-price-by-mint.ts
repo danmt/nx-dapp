@@ -6,7 +6,7 @@ import {
 import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
 import { PublicKey } from '@solana/web3.js';
 
-import { calculateBestBidOffer } from '.';
+import { calculateBestBidOffer } from '../operations';
 
 const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
 
