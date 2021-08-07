@@ -12,9 +12,9 @@ export const getPrice = (
 ): Observable<TokenPrice | null> => {
   const connection = new Connection(config.rpcEndpoint, 'recent');
   const marketConnection = new Connection(config.marketRpcEndpoint, 'recent');
-  const walletPublicKey = new PublicKey(config.walletPublicKey);
+  const mintPublicKey = new PublicKey(config.mintAddress);
 
-  return getMintAccount(connection, walletPublicKey).pipe(
+  return getMintAccount(connection, mintPublicKey).pipe(
     switchMap((mintAccount) => {
       if (!mintAccount) {
         return of(null);
