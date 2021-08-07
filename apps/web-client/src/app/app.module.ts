@@ -11,7 +11,6 @@ import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/co
 import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
 import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
 import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
-import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -40,7 +39,6 @@ import { AppComponent } from './app.component';
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot(),
-    SolanaDappModule.forRoot(),
   ],
   bootstrap: [AppComponent],
 })

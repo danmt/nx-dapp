@@ -5,7 +5,7 @@ import {
   TokenAccount,
   TokenAccountInfo,
 } from '@nx-dapp/solana-dapp/account';
-import { u64 } from '@nx-dapp/solana-dapp/utils/u64';
+import { u64 } from '@nx-dapp/solana-dapp/utils';
 import { Market, MARKETS, Orderbook } from '@project-serum/serum';
 import { AccountLayout, MintInfo, MintLayout } from '@solana/spl-token';
 import { AccountInfo, PublicKey } from '@solana/web3.js';
