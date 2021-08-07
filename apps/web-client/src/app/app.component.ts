@@ -93,12 +93,12 @@ export class AppComponent {
 
       return combineLatest([
         getPricesFromWallet({
-          rpcEndpoint,
+          connection: rpcEndpoint,
           walletAddress,
-          marketRpcEndpoint: 'https://solana-api.projectserum.com/',
+          marketConnection: 'https://solana-api.projectserum.com/',
         }),
         getBalancesFromWallet({
-          rpcEndpoint,
+          connection: rpcEndpoint,
           walletAddress,
         }),
         getTokens(chainID),

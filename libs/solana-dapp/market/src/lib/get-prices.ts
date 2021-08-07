@@ -7,8 +7,14 @@ import { GetPricesConfig } from './types';
 import { getMarketAddresses } from './utils';
 
 export const getPrices = (config: GetPricesConfig) => {
-  const connection = new Connection(config.rpcEndpoint, 'recent');
-  const marketConnection = new Connection(config.marketRpcEndpoint, 'recent');
+  const connection =
+    config.connection instanceof Connection
+      ? config.connection
+      : new Connection(config.connection, 'recent');
+  const marketConnection =
+    config.marketConnection instanceof Connection
+      ? config.marketConnection
+      : new Connection(config.marketConnection, 'recent');
 
   return getMintAccounts(connection, config.mintAddresses).pipe(
     switchMap((mintAccounts) =>
