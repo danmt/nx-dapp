@@ -98,7 +98,7 @@ export class AppComponent {
           marketRpcEndpoint: 'https://solana-api.projectserum.com/',
         }),
         getBalancesFromWallet({
-          rpcEndpoint,
+          connection: rpcEndpoint,
           walletAddress,
         }),
         getTokens(chainID),
