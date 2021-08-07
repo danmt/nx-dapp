@@ -1,4 +1,4 @@
-import { Network } from '@nx-dapp/solana-dapp/connection/types';
+import { Network } from '@nx-dapp/solana-dapp/network';
 import { Wallet, WalletName } from '@nx-dapp/solana-dapp/wallet/types';
 import { Transaction } from '@solana/web3.js';
 
@@ -64,10 +64,10 @@ export class TransactionsSignedAction {
   constructor(public payload: Transaction[]) {}
 }
 
-export class LoadNetworkAction {
-  type = 'loadNetwork';
+export class SetNetworkAction {
+  type = 'setNetwork';
 
-  constructor(public payload: Network) {}
+  constructor(public payload: Network | null) {}
 }
 
 export class WalletNetworkChangedAction {

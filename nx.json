@@ -54,16 +54,10 @@
     "solana-dapp-angular": {
       "tags": []
     },
-    "solana-dapp-connection-angular": {
-      "tags": []
-    },
-    "solana-dapp-connection-rx": {
-      "tags": []
-    },
-    "solana-dapp-connection-types": {
-      "tags": []
-    },
     "solana-dapp-market": {
+      "tags": []
+    },
+    "solana-dapp-network": {
       "tags": []
     },
     "solana-dapp-utils-get-tokens": {

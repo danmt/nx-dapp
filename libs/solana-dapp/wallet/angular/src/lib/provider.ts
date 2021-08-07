@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { Network } from '@nx-dapp/solana-dapp/network';
 import {
   Wallet,
   WalletName,
@@ -11,8 +12,9 @@ export const WALLET_SERVICE = new InjectionToken<WalletService>(
 
 export const walletServiceProvider = (
   wallets: Wallet[],
-  defaultWallet: WalletName
+  defaultWallet: WalletName,
+  defaultNetwork: Network | null
 ) => ({
   provide: WALLET_SERVICE,
-  useFactory: () => new WalletService(wallets, defaultWallet),
+  useFactory: () => new WalletService(wallets, defaultWallet, defaultNetwork),
 });

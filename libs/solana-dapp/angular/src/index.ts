@@ -1,8 +1,4 @@
 export {
-  IConnectionService,
-  CONNECTION_SERVICE,
-} from '@nx-dapp/solana-dapp/connection/angular';
-export {
   IWalletService,
   WALLET_SERVICE,
   WalletName,

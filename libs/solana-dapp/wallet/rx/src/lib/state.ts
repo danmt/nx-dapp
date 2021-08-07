@@ -1,6 +1,7 @@
 import {
   LoadWalletsAction,
   SelectWalletAction,
+  SetNetworkAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
@@ -22,6 +23,7 @@ export const walletInitialState: WalletState = {
   adapter: null,
   signing: false,
   transactions: [],
+  network: null,
 };
 
 export const reducer = (state: WalletState, action: Action) => {
@@ -142,6 +144,11 @@ export const reducer = (state: WalletState, action: Action) => {
         signing: transactions.length > 0,
       };
     }
+    case 'setNetwork':
+      return {
+        ...state,
+        network: (action as SetNetworkAction).payload,
+      };
     default:
       return state;
   }
