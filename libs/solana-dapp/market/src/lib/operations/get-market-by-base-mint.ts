@@ -2,7 +2,7 @@ import { MARKETS, TOKEN_MINTS } from '@project-serum/serum';
 
 import { Market } from '../types';
 
-export const getMarket = (mintAddress: string): Market | null => {
+export const getMarketByBaseMint = (mintAddress: string): Market | null => {
   const SERUM_TOKEN = TOKEN_MINTS.find(
     (tokenMint) => tokenMint.address.toBase58() === mintAddress
   );

@@ -49,12 +49,12 @@ export const getMarketsData = (
         getOrderbookAccounts(
           connection,
           getMarketsOrderbookAddresses(marketAccounts)
-        ).pipe(observeOrderbookAccounts(connection)),
+        ), // .pipe(observeOrderbookAccounts(connection)),
       ]).pipe(
-        map(([marketMintAccounts, marketIndicatorAccounts]) => ({
-          accounts: marketAccounts,
-          mintAccounts: marketMintAccounts,
-          orderbookAccounts: marketIndicatorAccounts,
+        map(([marketMintAccounts, orderbookAccounts]) => ({
+          marketAccounts,
+          marketMintAccounts,
+          orderbookAccounts,
         }))
       )
     )

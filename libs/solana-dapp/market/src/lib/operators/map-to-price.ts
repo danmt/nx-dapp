@@ -2,19 +2,22 @@ import { MarketData, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { createTokenPrice } from '../operations';
+import { getTokenPriceByMint } from '../operations';
 import { TokenPrice } from '../types';
 
 export const mapToPrice =
   (mintAccount: MintTokenAccount) =>
-  (source: Observable<MarketData>): Observable<TokenPrice | null> =>
+  (source: Observable<MarketData | null>): Observable<TokenPrice> =>
     source.pipe(
-      map(({ account, mintAccounts: marketMintAccounts, orderbookAccounts }) =>
-        createTokenPrice(
-          mintAccount,
-          account,
-          marketMintAccounts,
-          orderbookAccounts
-        )
-      )
+      map((marketData) => ({
+        address: mintAccount.pubkey.toBase58(),
+        price: marketData
+          ? getTokenPriceByMint(
+              mintAccount,
+              marketData.marketAccount,
+              marketData.marketMintAccounts,
+              marketData.orderbookAccounts
+            )
+          : 0,
+      }))
     );

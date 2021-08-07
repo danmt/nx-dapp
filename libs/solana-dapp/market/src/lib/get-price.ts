@@ -3,7 +3,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { getMarketAddress } from './operations';
+import { getMarketByBaseMint } from './operations';
 import { mapToPrice } from './operators';
 import { GetPriceConfig, TokenPrice } from './types';
 
@@ -20,15 +20,16 @@ export const getPrice = (
         return of(null);
       }
 
-      const marketAddress = getMarketAddress(mintAccount);
+      const market = getMarketByBaseMint(mintAccount.pubkey.toBase58());
 
-      if (!marketAddress) {
+      if (!market) {
         return of(null);
       }
 
-      return getMarketData(marketConnection, new PublicKey(marketAddress)).pipe(
-        mapToPrice(mintAccount)
-      );
+      return getMarketData(
+        marketConnection,
+        new PublicKey(market.address)
+      ).pipe(mapToPrice(mintAccount));
     })
   );
 };

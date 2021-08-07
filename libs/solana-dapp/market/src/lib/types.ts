@@ -7,6 +7,14 @@ export interface MarketInfo {
   deprecated: boolean;
 }
 
+export interface MarketInfo2 {
+  address: PublicKey;
+  programId: PublicKey;
+  name: string;
+  deprecated: boolean;
+  isStable: boolean;
+}
+
 export interface SerumMarket {
   marketInfo: MarketInfo;
   marketAccount?: AccountInfo<Buffer>;
