@@ -49,7 +49,7 @@ export const getMarketsData = (
         getOrderbookAccounts(
           connection,
           getMarketsOrderbookAddresses(marketAccounts)
-        ), // .pipe(observeOrderbookAccounts(connection)),
+        ).pipe(observeOrderbookAccounts(connection)),
       ]).pipe(
         map(([marketMintAccounts, orderbookAccounts]) => ({
           marketAccounts,
