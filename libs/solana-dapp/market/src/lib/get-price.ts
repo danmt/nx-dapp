@@ -3,9 +3,9 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { getMarketByBaseMint } from './operations';
 import { mapToPrice } from './operators';
 import { GetPriceConfig, TokenPrice } from './types';
+import { getMarketByBaseMint } from './utils';
 
 export const getPrice = (
   config: GetPriceConfig

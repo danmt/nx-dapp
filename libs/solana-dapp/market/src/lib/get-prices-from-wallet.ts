@@ -8,9 +8,9 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { getMarketAddresses } from './operations';
 import { mapToPrices } from './operators';
 import { GetPricesFromWalletConfig, TokenPrice } from './types';
+import { getMarketAddresses } from './utils';
 
 export const getPricesFromWallet = (
   config: GetPricesFromWalletConfig

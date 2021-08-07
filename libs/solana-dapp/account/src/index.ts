@@ -11,7 +11,6 @@ export * from './lib/get-token-accounts';
 export * from './lib/get-native-account';
 export * from './lib/get-user-accounts';
 export * from './lib/operators';
-export * from './lib/operations';
 export * from './lib/get-markets-data';
 export * from './lib/get-market-data';
 export * from './lib/types';

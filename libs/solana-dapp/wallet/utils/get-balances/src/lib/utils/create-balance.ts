@@ -1,8 +1,9 @@
 import { MintTokenAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
 import { Balance } from '@nx-dapp/solana-dapp/wallet/types';
-import { calculateLamports, calculateQuantity } from '.';
 
-export const calculateBalance = (
+import { calculateLamports, calculateQuantity } from '../operations';
+
+export const createBalance = (
   userAccounts: TokenAccount[],
   mintAccount: MintTokenAccount
 ): Balance => {

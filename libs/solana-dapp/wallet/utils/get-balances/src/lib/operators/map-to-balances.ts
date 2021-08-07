@@ -3,7 +3,7 @@ import { Balance } from '@nx-dapp/solana-dapp/wallet/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { calculateBalance } from '../operations';
+import { createBalance } from '../utils';
 
 export const mapToBalances =
   (userAccounts: TokenAccount[]) =>
@@ -11,7 +11,7 @@ export const mapToBalances =
     source.pipe(
       map((mintAccounts) =>
         mintAccounts.map((mintAccount) =>
-          calculateBalance(userAccounts, mintAccount)
+          createBalance(userAccounts, mintAccount)
         )
       )
     );

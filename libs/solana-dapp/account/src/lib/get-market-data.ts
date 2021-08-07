@@ -1,4 +1,3 @@
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { MarketData } from '@nx-dapp/solana-dapp/account';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { combineLatest, Observable, of } from 'rxjs';
@@ -7,9 +6,9 @@ import { map, switchMap } from 'rxjs/operators';
 import {
   getMarketAccount,
   getMarketMintAddresses,
-  getMarketOrderbookAddresses,
   getMintAccounts,
   getOrderbookAccounts,
+  getOrderbookAddresses,
   observeOrderbookAccounts,
 } from '..';
 
@@ -27,7 +26,7 @@ export const getMarketData = (
         getMintAccounts(connection, getMarketMintAddresses(marketAccount)),
         getOrderbookAccounts(
           connection,
-          getMarketOrderbookAddresses(marketAccount)
+          getOrderbookAddresses(marketAccount)
         ).pipe(observeOrderbookAccounts(connection)),
       ]).pipe(
         map(([marketMintAccounts, orderbookAccounts]) => ({

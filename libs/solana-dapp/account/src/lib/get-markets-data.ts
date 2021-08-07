@@ -6,9 +6,9 @@ import { map, switchMap } from 'rxjs/operators';
 import {
   getMarketAccounts,
   getMarketMintAddresses,
-  getMarketOrderbookAddresses,
   getMintAccounts,
   getOrderbookAccounts,
+  getOrderbookAddresses,
   observeOrderbookAccounts,
 } from '..';
 
@@ -31,7 +31,7 @@ const getMarketsOrderbookAddresses = (
     marketAccounts.reduce(
       (marketMintAccounts: string[], marketAccount: MarketAccount) => [
         ...marketMintAccounts,
-        ...getMarketOrderbookAddresses(marketAccount),
+        ...getOrderbookAddresses(marketAccount),
       ],
       []
     )

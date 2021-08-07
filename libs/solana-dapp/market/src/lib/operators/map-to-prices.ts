@@ -2,7 +2,7 @@ import { MarketsData, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { getTokenPriceByMint } from '../operations';
+import { getTokenPriceByMint } from '../utils';
 import { TokenPrice } from '../types';
 
 export const mapToPrices =
