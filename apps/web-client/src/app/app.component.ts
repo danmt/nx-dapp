@@ -12,7 +12,7 @@ import {
 } from '@nx-dapp/solana-dapp/network';
 import { getTokens } from '@nx-dapp/solana-dapp/utils/get-tokens';
 import { getBalancesFromWallet } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
-import { combineLatest, of, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import {
   distinctUntilChanged,
   map,
@@ -65,9 +65,9 @@ import {
   `,
 })
 export class AppComponent {
+  private setNetwork = new BehaviorSubject<Network>(DEFAULT_NETWORK);
   defaultNetwork = DEFAULT_NETWORK;
   networks = NETWORKS;
-  private setNetwork = new Subject<Network>();
   network$ = this.setNetwork.asObservable();
   wallets$ = this.walletService.wallets$;
   isConnected$ = this.walletService.connected$;
