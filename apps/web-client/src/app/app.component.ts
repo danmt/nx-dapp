@@ -1,28 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import {
-  IWalletService,
-  WALLET_SERVICE,
-  WalletName,
-} from '@nx-dapp/solana-dapp/angular';
-import { getPricesFromWallet } from '@nx-dapp/solana-dapp/market';
-import {
-  DEFAULT_NETWORK,
-  Network,
-  NETWORKS,
-} from '@nx-dapp/solana-dapp/network';
-import { getTokens } from '@nx-dapp/solana-dapp/utils/get-tokens';
-import { getBalancesFromWallet } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import {
-  distinctUntilChanged,
-  map,
-  shareReplay,
-  switchMap,
-} from 'rxjs/operators';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'nx-dapp-root',
-  template: `
+  template: 'NX DAPP' /* `
     <header>
       <nx-dapp-wallets-dropdown
         [wallets]="wallets$ | async"
@@ -62,10 +42,10 @@ import {
         </ul>
       </section>
     </main>
-  `,
+  `, */,
 })
 export class AppComponent {
-  private setNetwork = new BehaviorSubject<Network>(DEFAULT_NETWORK);
+  /* private setNetwork = new BehaviorSubject<Network>(DEFAULT_NETWORK);
   defaultNetwork = DEFAULT_NETWORK;
   networks = NETWORKS;
   network$ = this.setNetwork.asObservable();
@@ -152,5 +132,5 @@ export class AppComponent {
 
   onDisconnectWallet() {
     this.walletService.disconnect();
-  }
+  } */
 }

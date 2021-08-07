@@ -54,34 +54,22 @@
     "solana-dapp-angular": {
       "tags": []
     },
+    "solana-dapp-balance": {
+      "tags": []
+    },
     "solana-dapp-market": {
       "tags": []
     },
     "solana-dapp-network": {
       "tags": []
     },
-    "solana-dapp-utils-get-tokens": {
+    "solana-dapp-token": {
       "tags": []
     },
-    "solana-dapp-utils-u64": {
+    "solana-dapp-utils": {
       "tags": []
     },
-    "solana-dapp-wallet-angular": {
-      "tags": []
-    },
-    "solana-dapp-wallet-rx": {
-      "tags": []
-    },
-    "solana-dapp-wallet-types": {
-      "tags": []
-    },
-    "solana-dapp-wallet-utils-errors": {
-      "tags": []
-    },
-    "solana-dapp-wallet-utils-get-balances": {
-      "tags": []
-    },
-    "solana-dapp-wallet-utils-wallets": {
+    "solana-dapp-wallet": {
       "tags": []
     },
     "web-client": {

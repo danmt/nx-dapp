@@ -1,6 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { TokenAccount } from '@nx-dapp/solana-dapp/account';
-import { u64 } from '@nx-dapp/solana-dapp/utils/u64';
+import { u64 } from '@nx-dapp/solana-dapp/utils';
 import { NATIVE_MINT } from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { defer, from, Observable } from 'rxjs';
