@@ -7,8 +7,8 @@ import {
 } from '@nx-dapp/solana-dapp/balance';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { SolanaDappWalletService } from '.';
 
+import { SolanaDappWalletService } from '.';
 import { SolanaDappConnectionService } from './connection.service';
 
 @Injectable({

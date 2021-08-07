@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { switchMap } from 'rxjs/operators';
-import { SolanaDappConnectionService } from './connection.service';
 import {
   getPrice,
   getPrices,
@@ -8,7 +6,10 @@ import {
   TokenPrice,
 } from '@nx-dapp/solana-dapp/market';
 import { combineLatest, Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 import { SolanaDappWalletService } from '.';
+import { SolanaDappConnectionService } from './connection.service';
 
 @Injectable({
   providedIn: 'root',
