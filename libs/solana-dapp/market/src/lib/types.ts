@@ -51,21 +51,19 @@ export interface Market {
 }
 
 export interface GetPriceConfig {
-  walletPublicKey: string;
   rpcEndpoint: string;
   marketRpcEndpoint: string;
-  mintAddress: string[];
+  mintAddress: string;
 }
 
 export interface GetPricesConfig {
-  walletPublicKey: string;
   rpcEndpoint: string;
   marketRpcEndpoint: string;
   mintAddresses: string[];
 }
 
 export interface GetPricesFromWalletConfig {
-  walletPublicKey: string;
+  walletAddress: string;
   rpcEndpoint: string;
   marketRpcEndpoint: string;
 }

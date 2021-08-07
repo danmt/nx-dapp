@@ -17,7 +17,7 @@ export const getPricesFromWallet = (
 ): Observable<TokenPrice[]> => {
   const connection = new Connection(config.rpcEndpoint, 'recent');
   const marketConnection = new Connection(config.marketRpcEndpoint, 'recent');
-  const walletPublicKey = new PublicKey(config.walletPublicKey);
+  const walletPublicKey = new PublicKey(config.walletAddress);
 
   return getUserAccounts(connection, walletPublicKey).pipe(
     switchMap((userAccounts) =>
