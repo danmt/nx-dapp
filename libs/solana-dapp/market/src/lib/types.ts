@@ -1,41 +1,4 @@
-import { AccountInfo, PublicKey } from '@solana/web3.js';
-
-export interface MarketInfo {
-  address: PublicKey;
-  programId: PublicKey;
-  name: string;
-  deprecated: boolean;
-}
-
-export interface MarketInfo2 {
-  address: PublicKey;
-  programId: PublicKey;
-  name: string;
-  deprecated: boolean;
-  isStable: boolean;
-}
-
-export interface SerumMarket {
-  marketInfo: MarketInfo;
-  marketAccount?: AccountInfo<Buffer>;
-  mintBase?: AccountInfo<Buffer>;
-  mintQuote?: AccountInfo<Buffer>;
-  bidAccount?: AccountInfo<Buffer>;
-  askAccount?: AccountInfo<Buffer>;
-  eventQueue?: AccountInfo<Buffer>;
-
-  swap?: {
-    dailyVolume: number;
-  };
-
-  midPrice?: (mint?: PublicKey) => number;
-}
-
-export interface TokenDetails {
-  pubkey: PublicKey;
-  address: string;
-  label: string;
-}
+import { Connection, PublicKey } from '@solana/web3.js';
 
 export interface TokenPrice {
   address: string;
@@ -51,19 +14,19 @@ export interface Market {
 }
 
 export interface GetPriceConfig {
-  rpcEndpoint: string;
-  marketRpcEndpoint: string;
+  connection: string | Connection;
+  marketConnection: string | Connection;
   mintAddress: string;
 }
 
 export interface GetPricesConfig {
-  rpcEndpoint: string;
-  marketRpcEndpoint: string;
+  connection: string | Connection;
+  marketConnection: string | Connection;
   mintAddresses: string[];
 }
 
 export interface GetPricesFromWalletConfig {
+  connection: string | Connection;
+  marketConnection: string | Connection;
   walletAddress: string;
-  rpcEndpoint: string;
-  marketRpcEndpoint: string;
 }
