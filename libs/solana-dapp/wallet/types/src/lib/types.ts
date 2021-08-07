@@ -49,7 +49,19 @@ export interface Balance {
   hasBalance: boolean;
 }
 
+export interface GetBalancesFromWalletConfig {
+  rpcEndpoint: string;
+  walletAddress: string;
+}
+
+export interface GetBalanceConfig {
+  rpcEndpoint: string;
+  walletAddress: string;
+  mintAddress: string;
+}
+
 export interface GetBalancesConfig {
   rpcEndpoint: string;
-  walletPublicKey: string;
+  walletAddress: string;
+  mintAddresses: string[];
 }

@@ -5,11 +5,13 @@ import { map } from 'rxjs/operators';
 
 import { createBalance } from '../utils';
 
-export const mapToBalance =
+export const mapToBalances =
   (userAccounts: TokenAccount[]) =>
-  (source: Observable<MintTokenAccount | null>): Observable<Balance | null> =>
+  (source: Observable<MintTokenAccount[]>): Observable<Balance[]> =>
     source.pipe(
-      map((mintAccount) =>
-        mintAccount ? createBalance(userAccounts, mintAccount) : null
+      map((mintAccounts) =>
+        mintAccounts.map((mintAccount) =>
+          createBalance(userAccounts, mintAccount)
+        )
       )
     );
