@@ -7,9 +7,9 @@ import {
   WALLET_SERVICE,
   WalletName,
 } from '@nx-dapp/solana-dapp/angular';
-import { getPrices } from '@nx-dapp/solana-dapp/market/utils/get-prices';
-import { getTokens } from '@nx-dapp/solana-dapp/market/utils/get-tokens';
-import { getBalances } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
+import { getPricesFromWallet } from '@nx-dapp/solana-dapp/market';
+import { getTokens } from '@nx-dapp/solana-dapp/utils/get-tokens';
+import { getBalancesFromWallet } from '@nx-dapp/solana-dapp/wallet/utils/get-balances';
 import { combineLatest, of } from 'rxjs';
 import {
   distinctUntilChanged,
@@ -84,20 +84,20 @@ export class AppComponent implements OnInit {
       distinctUntilChanged()
     ),
   ]).pipe(
-    switchMap(([walletPublicKey, rpcEndpoint, chainID]) => {
-      if (!walletPublicKey || !rpcEndpoint || !chainID) {
+    switchMap(([walletAddress, rpcEndpoint, chainID]) => {
+      if (!walletAddress || !rpcEndpoint || !chainID) {
         return of([]);
       }
 
       return combineLatest([
-        getPrices({
+        getPricesFromWallet({
           rpcEndpoint,
-          walletPublicKey,
+          walletAddress,
           marketRpcEndpoint: 'https://solana-api.projectserum.com/',
         }),
-        getBalances({
+        getBalancesFromWallet({
           rpcEndpoint,
-          walletPublicKey,
+          walletAddress,
         }),
         getTokens(chainID),
       ]).pipe(
