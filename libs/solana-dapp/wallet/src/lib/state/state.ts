@@ -30,33 +30,6 @@ export interface WalletState {
   network: Network | null;
 }
 
-export interface IWalletService {
-  actions$: Observable<ActionTypes>;
-  state$: Observable<WalletState>;
-  ready$: Observable<boolean>;
-  connected$: Observable<boolean>;
-  walletName$: Observable<WalletName | null>;
-  wallets$: Observable<Wallet[]>;
-  wallet$: Observable<Wallet | null>;
-  adapter$: Observable<WalletAdapter | null>;
-  publicKey$: Observable<PublicKey | null>;
-  network$: Observable<Network | null>;
-
-  loadWallets(wallets: Wallet[]): void;
-
-  selectWallet(wallet: WalletName): void;
-
-  connect(): void;
-
-  disconnect(): void;
-
-  signTransaction(transaction: Transaction): void;
-
-  signAllTransactions(transactions: Transaction[]): void;
-
-  setNetwork(network: Network | null): void;
-}
-
 export const walletInitialState: WalletState = {
   publicKey: null,
   connected: false,

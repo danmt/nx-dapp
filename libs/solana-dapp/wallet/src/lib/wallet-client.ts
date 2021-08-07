@@ -33,7 +33,6 @@ import {
   ConnectWalletAction,
   DisconnectWalletAction,
   InitAction,
-  IWalletService,
   LoadWalletsAction,
   reducer,
   SelectWalletAction,
@@ -49,14 +48,14 @@ import {
   WalletSelectedAction,
   WalletState,
 } from './state';
-import { Wallet, WalletName } from './types';
+import { Wallet, WalletName, IWalletClient } from './types';
 import {
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
 } from './utils';
 
-export class WalletService implements IWalletService {
+export class WalletClient implements IWalletClient {
   private readonly _destroy = new Subject();
   private readonly _dispatcher = new BehaviorSubject<ActionTypes>(
     new InitAction()
