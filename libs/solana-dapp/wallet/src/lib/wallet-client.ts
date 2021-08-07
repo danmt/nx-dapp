@@ -36,7 +36,6 @@ import {
   LoadWalletsAction,
   reducer,
   SelectWalletAction,
-  SetNetworkAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
@@ -97,10 +96,6 @@ export class WalletClient implements IWalletClient {
   );
   publicKey$ = this.state$.pipe(
     map(({ publicKey }) => publicKey),
-    distinctUntilChanged()
-  );
-  network$ = this.state$.pipe(
-    map(({ network }) => network),
     distinctUntilChanged()
   );
 
@@ -168,33 +163,16 @@ export class WalletClient implements IWalletClient {
     )
   );
 
-  private walletNetworkChanged$ = this.actions$.pipe(
-    ofType<SetNetworkAction>('loadNetwork'),
-    withLatestFrom(this.state$),
-    filter(([, { connected, connecting }]) => connected && !connecting),
-    exhaustMap(([, state]) =>
-      this.handleDisconnect(state).pipe(
-        map(() => new WalletNetworkChangedAction())
-      )
-    )
-  );
-
-  constructor(
-    wallets: Wallet[],
-    defaultWallet: WalletName,
-    defaultNetwork: Network | null
-  ) {
+  constructor(wallets: Wallet[], defaultWallet: WalletName) {
     this.runEffects([
       this.walletConnected$,
       this.walletDisconnected$,
       this.walletSelected$,
       this.transactionSigned$,
       this.transactionsSigned$,
-      this.walletNetworkChanged$,
     ]);
 
     setTimeout(() => {
-      this.setNetwork(defaultNetwork);
       this.loadWallets(wallets);
       this.selectWallet(defaultWallet);
     });
@@ -274,10 +252,6 @@ export class WalletClient implements IWalletClient {
 
   signAllTransactions(transactions: Transaction[]) {
     this._dispatcher.next(new SignTransactionsAction(transactions));
-  }
-
-  setNetwork(network: Network | null) {
-    this._dispatcher.next(new SetNetworkAction(network));
   }
 
   destroy() {

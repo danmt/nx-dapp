@@ -56,7 +56,6 @@ export interface IWalletClient {
   wallet$: Observable<Wallet | null>;
   adapter$: Observable<WalletAdapter | null>;
   publicKey$: Observable<PublicKey | null>;
-  network$: Observable<Network | null>;
 
   loadWallets(wallets: Wallet[]): void;
 
@@ -69,6 +68,4 @@ export interface IWalletClient {
   signTransaction(transaction: Transaction): void;
 
   signAllTransactions(transactions: Transaction[]): void;
-
-  setNetwork(network: Network | null): void;
 }
