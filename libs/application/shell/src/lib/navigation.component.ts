@@ -85,14 +85,10 @@ import { map, shareReplay } from 'rxjs/operators';
             </button>
             <mat-menu #menu="matMenu" class="w-52">
               <button mat-menu-item>Wallet</button>
-              <a
-                mat-menu-item
-                routerLink="/portfolios/view-portfolio"
-                class="flex justify-between items-center"
-              >
+              <button mat-menu-item class="flex justify-between items-center">
                 <span>Change network</span>
                 <mat-icon class="mr-0">settings_ethernet</mat-icon>
-              </a>
+              </button>
               <mat-divider></mat-divider>
               <button
                 mat-menu-item
