@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 
 @Component({
-  selector: 'nx-dapp-view-report',
+  selector: 'nx-dapp-view-portfolio',
   template: `
     <header nxDappPageHeader>
       <h1>Portfolio</h1>
@@ -12,6 +12,6 @@ import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ViewReportComponent {
+export class ViewPortfolioComponent {
   @HostBinding('class') class = 'block p-4';
 }

@@ -20,15 +20,15 @@ import { ShellComponent } from './shell.component';
         component: ShellComponent,
         children: [
           {
-            path: 'reports',
+            path: 'portfolios',
             loadChildren: () =>
-              import('@nx-dapp/application/reports/shell').then(
-                (m) => m.FeaturesShellModule
+              import('@nx-dapp/application/portfolios/shell').then(
+                (m) => m.PortfoliosShellModule
               ),
           },
           {
             path: '**',
-            redirectTo: 'reports',
+            redirectTo: 'portfolios',
           },
         ],
       },

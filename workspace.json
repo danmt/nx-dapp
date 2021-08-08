@@ -1,17 +1,19 @@
 {
   "version": 2,
   "projects": {
-    "application-reports-features-view-report": {
+    "application-portfolios-features-view-portfolio": {
       "projectType": "library",
-      "root": "libs/application/reports/features/view-report",
-      "sourceRoot": "libs/application/reports/features/view-report/src",
+      "root": "libs/application/portfolios/features/view-portfolio",
+      "sourceRoot": "libs/application/portfolios/features/view-portfolio/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/reports/features/view-report"],
+          "outputs": [
+            "coverage/libs/application/portfolios/features/view-portfolio"
+          ],
           "options": {
-            "jestConfig": "libs/application/reports/features/view-report/jest.config.js",
+            "jestConfig": "libs/application/portfolios/features/view-portfolio/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -19,24 +21,24 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/reports/features/view-report/src/**/*.ts",
-              "libs/application/reports/features/view-report/src/**/*.html"
+              "libs/application/portfolios/features/view-portfolio/src/**/*.ts",
+              "libs/application/portfolios/features/view-portfolio/src/**/*.html"
             ]
           }
         }
       }
     },
-    "application-reports-shell": {
+    "application-portfolios-shell": {
       "projectType": "library",
-      "root": "libs/application/reports/shell",
-      "sourceRoot": "libs/application/reports/shell/src",
+      "root": "libs/application/portfolios/shell",
+      "sourceRoot": "libs/application/portfolios/shell/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/reports/shell"],
+          "outputs": ["coverage/libs/application/portfolios/shell"],
           "options": {
-            "jestConfig": "libs/application/reports/shell/jest.config.js",
+            "jestConfig": "libs/application/portfolios/shell/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -44,8 +46,8 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/reports/shell/src/**/*.ts",
-              "libs/application/reports/shell/src/**/*.html"
+              "libs/application/portfolios/shell/src/**/*.ts",
+              "libs/application/portfolios/shell/src/**/*.html"
             ]
           }
         }

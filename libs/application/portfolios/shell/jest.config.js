@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'application-reports-shell',
+  displayName: 'application-portfolios-shell',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/application/reports/shell',
+  coverageDirectory: '../../../../coverage/libs/application/portfolios/shell',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

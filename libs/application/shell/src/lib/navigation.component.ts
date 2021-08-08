@@ -19,7 +19,7 @@ import { map, shareReplay } from 'rxjs/operators';
           <img src="assets/images/logo.jpeg" />
         </figure>
         <mat-nav-list>
-          <a mat-list-item href="#">Report</a>
+          <a mat-list-item routerLink="portfolios/view-portfolio">Portfolio</a>
           <div class="mt-8 px-4">
             <button
               mat-raised-button

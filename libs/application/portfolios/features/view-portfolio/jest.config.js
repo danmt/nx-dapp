@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'application-reports-features-view-report',
+  displayName: 'application-portfolios-features-view-portfolio',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../../coverage/libs/application/reports/features/view-report',
+    '../../../../../coverage/libs/application/portfolios/features/view-portfolio',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

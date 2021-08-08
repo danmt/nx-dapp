@@ -3,16 +3,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { PageHeaderModule } from '@nx-dapp/shared/ui/page-header';
 
-import { ViewReportComponent } from './view-report.component';
+import { ViewPortfolioComponent } from './view-portfolio.component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: ViewReportComponent },
+      { path: '', pathMatch: 'full', component: ViewPortfolioComponent },
     ]),
     PageHeaderModule,
   ],
-  declarations: [ViewReportComponent],
+  declarations: [ViewPortfolioComponent],
 })
-export class ViewReportModule {}
+export class ViewPortfolioModule {}

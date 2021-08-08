@@ -27,10 +27,10 @@
     ]
   },
   "projects": {
-    "application-reports-features-view-report": {
+    "application-portfolios-features-view-portfolio": {
       "tags": []
     },
-    "application-reports-shell": {
+    "application-portfolios-shell": {
       "tags": []
     },
     "application-shell": {
