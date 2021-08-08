@@ -27,6 +27,12 @@
     ]
   },
   "projects": {
+    "application-reports-features-view-report": {
+      "tags": []
+    },
+    "application-reports-shell": {
+      "tags": []
+    },
     "application-shell": {
       "tags": []
     },

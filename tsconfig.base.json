@@ -15,6 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/application/reports/features/view-report": [
+        "libs/application/reports/features/view-report/src/index.ts"
+      ],
+      "@nx-dapp/application/reports/shell": [
+        "libs/application/reports/shell/src/index.ts"
+      ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"

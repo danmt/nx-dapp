@@ -15,7 +15,23 @@ import { ShellComponent } from './shell.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: ShellComponent },
+      {
+        path: '',
+        component: ShellComponent,
+        children: [
+          {
+            path: 'reports',
+            loadChildren: () =>
+              import('@nx-dapp/application/reports/shell').then(
+                (m) => m.FeaturesShellModule
+              ),
+          },
+          {
+            path: '**',
+            redirectTo: 'reports',
+          },
+        ],
+      },
     ]),
     LayoutModule,
     MatToolbarModule,

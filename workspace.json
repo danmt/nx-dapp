@@ -1,6 +1,56 @@
 {
   "version": 2,
   "projects": {
+    "application-reports-features-view-report": {
+      "projectType": "library",
+      "root": "libs/application/reports/features/view-report",
+      "sourceRoot": "libs/application/reports/features/view-report/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/reports/features/view-report"],
+          "options": {
+            "jestConfig": "libs/application/reports/features/view-report/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/reports/features/view-report/src/**/*.ts",
+              "libs/application/reports/features/view-report/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-reports-shell": {
+      "projectType": "library",
+      "root": "libs/application/reports/shell",
+      "sourceRoot": "libs/application/reports/shell/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/reports/shell"],
+          "options": {
+            "jestConfig": "libs/application/reports/shell/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/reports/shell/src/**/*.ts",
+              "libs/application/reports/shell/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-shell": {
       "projectType": "library",
       "root": "libs/application/shell",
