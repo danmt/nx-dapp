@@ -1,6 +1,31 @@
 {
   "version": 2,
   "projects": {
+    "application-shell": {
+      "projectType": "library",
+      "root": "libs/application/shell",
+      "sourceRoot": "libs/application/shell/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shell"],
+          "options": {
+            "jestConfig": "libs/application/shell/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shell/src/**/*.ts",
+              "libs/application/shell/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-connection-data-access-connections": {
       "projectType": "library",
       "root": "libs/shared/connection/data-access/connections",

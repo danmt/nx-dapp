@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"
       ],
