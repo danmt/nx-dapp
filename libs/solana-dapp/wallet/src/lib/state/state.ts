@@ -1,12 +1,12 @@
 import { Network } from '@nx-dapp/solana-dapp/network';
 import { PublicKey, Transaction } from '@solana/web3.js';
-import { Observable } from 'rxjs';
+import { SetNetworkAction } from '.';
+
 import { Wallet, WalletAdapter, WalletName } from '../types';
 import {
   ActionTypes,
   LoadWalletsAction,
   SelectWalletAction,
-  SetNetworkAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
@@ -112,7 +112,7 @@ export const reducer = (state: WalletState, action: ActionTypes) => {
         disconnecting: true,
       };
     case 'walletDisconnected':
-    case 'walletNetworkChanged':
+    case 'networkChanged':
       return {
         ...state,
         disconnecting: false,

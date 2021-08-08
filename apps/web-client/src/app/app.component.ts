@@ -1,8 +1,18 @@
 import { Component } from '@angular/core';
+import {
+  Network,
+  SolanaDappBalanceService,
+  SolanaDappMarketService,
+  SolanaDappNetworkService,
+  SolanaDappWalletService,
+  WalletName,
+} from '@nx-dapp/solana-dapp/angular';
+import { combineLatest } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-root',
-  template: 'NX DAPP' /* `
+  template: `
     <header>
       <nx-dapp-wallets-dropdown
         [wallets]="wallets$ | async"
@@ -32,7 +42,7 @@ import { Component } from '@angular/core';
               </figure>
               <div>
                 {{ balance.name }} ({{ balance.symbol }}):
-                {{ balance.quantity }} ({{
+                {{ balance.quantity | currency: 'USD':'':'1.2-12' }} ({{
                   balance.total | currency: 'USD':'$':'1.2-12'
                 }}
                 @ {{ balance.price | currency: 'USD':'$':'1.2-12' }})
@@ -42,68 +52,37 @@ import { Component } from '@angular/core';
         </ul>
       </section>
     </main>
-  `, */,
+  `,
 })
 export class AppComponent {
-  /* private setNetwork = new BehaviorSubject<Network>(DEFAULT_NETWORK);
-  defaultNetwork = DEFAULT_NETWORK;
-  networks = NETWORKS;
-  network$ = this.setNetwork.asObservable();
   wallets$ = this.walletService.wallets$;
+  networks = this.networkService.networks;
+  network$ = this.networkService.network$;
+  defaultNetwork = this.networkService.defaultNetwork;
   isConnected$ = this.walletService.connected$;
-
   balances$ = combineLatest([
-    this.walletService.publicKey$.pipe(
-      map((publicKey) => publicKey?.toBase58() || null),
-      distinctUntilChanged()
-    ),
-    this.network$.pipe(
-      map((network) => network?.url || null),
-      distinctUntilChanged()
-    ),
-    this.network$.pipe(
-      map((network) => network?.chainID || null),
-      distinctUntilChanged()
-    ),
+    this.marketService.getPricesFromWallet(),
+    this.balanceService.getBalancesFromWallet(),
+    this.networkService.tokens$,
   ]).pipe(
-    switchMap(([walletAddress, rpcEndpoint, chainID]) => {
-      if (!walletAddress || !rpcEndpoint || !chainID) {
-        return of([]);
-      }
+    map(([prices, balances, tokens]) =>
+      balances.map((balance) => {
+        const token =
+          tokens.find((token) => token.address === balance.address) || null;
 
-      return combineLatest([
-        getPricesFromWallet({
-          connection: rpcEndpoint,
-          walletAddress,
-          marketConnection: 'https://solana-api.projectserum.com/',
-        }),
-        getBalancesFromWallet({
-          connection: rpcEndpoint,
-          walletAddress,
-        }),
-        getTokens(chainID),
-      ]).pipe(
-        map(([prices, balances, tokens]) =>
-          balances.map((balance) => {
-            const token =
-              tokens.find((token) => token.address === balance.address) || null;
+        const price =
+          prices.find((price) => price.address === balance.address)?.price || 0;
 
-            const price =
-              prices.find((price) => price.address === balance.address)
-                ?.price || 0;
-
-            return {
-              ...balance,
-              price,
-              total: price * balance.quantity,
-              logo: token?.logoURI,
-              name: token?.name,
-              symbol: token?.symbol,
-            };
-          })
-        )
-      );
-    }),
+        return {
+          ...balance,
+          price,
+          total: price * balance.quantity,
+          logo: token?.logoURI,
+          name: token?.name,
+          symbol: token?.symbol,
+        };
+      })
+    ),
     shareReplay({
       refCount: false,
       bufferSize: 1,
@@ -115,11 +94,15 @@ export class AppComponent {
     )
   );
 
-  constructor(@Inject(WALLET_SERVICE) private walletService: IWalletService) {}
+  constructor(
+    private walletService: SolanaDappWalletService,
+    private networkService: SolanaDappNetworkService,
+    private marketService: SolanaDappMarketService,
+    private balanceService: SolanaDappBalanceService
+  ) {}
 
   onSelectNetwork(network: Network) {
-    this.setNetwork.next(network);
-    this.walletService.setNetwork(network);
+    this.networkService.changeNetwork(network);
   }
 
   onSelectWallet(walletName: WalletName) {
@@ -132,5 +115,5 @@ export class AppComponent {
 
   onDisconnectWallet() {
     this.walletService.disconnect();
-  } */
+  }
 }
