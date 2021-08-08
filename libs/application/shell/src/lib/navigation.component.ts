@@ -32,8 +32,15 @@ import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
                 width: 80%;
                 margin: 0 auto;
               "
+              (click)="onDisconnectWallet()"
             >
-              Logout
+              Disconnect
+              <mat-icon
+                aria-label="disconnect wallet"
+                class="w-4 h-4 text-base leading-none"
+              >
+                logout
+              </mat-icon>
             </button>
           </div>
         </mat-nav-list>
@@ -104,5 +111,9 @@ export class NavigationComponent {
 
   onConnectWallet() {
     this.matDialog.open(ConnectWalletComponent, { hasBackdrop: true });
+  }
+
+  onDisconnectWallet() {
+    this.walletService.disconnect();
   }
 }
