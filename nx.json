@@ -36,6 +36,9 @@
     "application-shell": {
       "tags": []
     },
+    "application-wallets-features-connect-wallet": {
+      "tags": []
+    },
     "shared-connection-data-access-connections": {
       "tags": []
     },
@@ -55,6 +58,9 @@
       "tags": []
     },
     "shared-operators-of-type": {
+      "tags": []
+    },
+    "shared-ui-modal-header": {
       "tags": []
     },
     "shared-ui-page-header": {

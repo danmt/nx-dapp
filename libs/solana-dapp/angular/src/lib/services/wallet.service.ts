@@ -3,6 +3,7 @@ import { Network } from '@nx-dapp/solana-dapp/network';
 import {
   DEFAULT_WALLET,
   getPhantomWallet,
+  getSolflareWallet,
   getSolletWallet,
   getSolongWallet,
   WalletClient,
@@ -19,15 +20,20 @@ import { SolanaDappNetworkService } from '.';
 export class SolanaDappWalletService implements OnDestroy {
   private readonly destroy = new Subject();
   private readonly _walletClient = new WalletClient(
-    [getSolletWallet(), getPhantomWallet(), getSolongWallet()],
+    [
+      getSolletWallet(),
+      getPhantomWallet(),
+      getSolongWallet(),
+      getSolflareWallet(),
+    ],
     DEFAULT_WALLET
   );
   wallets$ = this._walletClient.wallets$;
+  selectedWallet$ = this._walletClient.selectedWallet$;
+  connected$ = this._walletClient.connected$;
+  connecting$ = this._walletClient.connecting$;
   walletAddress$ = this._walletClient.publicKey$.pipe(
     map((publicKey) => publicKey?.toBase58() || null)
-  );
-  connected$ = this._walletClient.connected$.pipe(
-    map((connected) => connected)
   );
 
   constructor(private solanaDappNetworkService: SolanaDappNetworkService) {

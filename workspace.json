@@ -78,6 +78,33 @@
         }
       }
     },
+    "application-wallets-features-connect-wallet": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/connect-wallet",
+      "sourceRoot": "libs/application/wallets/features/connect-wallet/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/features/connect-wallet"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/connect-wallet/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/connect-wallet/src/**/*.ts",
+              "libs/application/wallets/features/connect-wallet/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-connection-data-access-connections": {
       "projectType": "library",
       "root": "libs/shared/connection/data-access/connections",
@@ -245,6 +272,31 @@
           "options": {
             "jestConfig": "libs/shared/operators/of-type/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-ui-modal-header": {
+      "projectType": "library",
+      "root": "libs/shared/ui/modal-header",
+      "sourceRoot": "libs/shared/ui/modal-header/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/ui/modal-header"],
+          "options": {
+            "jestConfig": "libs/shared/ui/modal-header/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/ui/modal-header/src/**/*.ts",
+              "libs/shared/ui/modal-header/src/**/*.html"
+            ]
           }
         }
       }

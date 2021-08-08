@@ -35,6 +35,7 @@ export enum WalletName {
   Phantom = 'Phantom',
   Solong = 'Solong',
   Sollet = 'Sollet',
+  Solflare = 'Solflare',
 }
 
 export interface Wallet {
@@ -56,6 +57,8 @@ export interface IWalletClient {
   wallet$: Observable<Wallet | null>;
   adapter$: Observable<WalletAdapter | null>;
   publicKey$: Observable<PublicKey | null>;
+  selectedWallet$: Observable<WalletName | null>;
+  connecting$: Observable<boolean>;
 
   loadWallets(wallets: Wallet[]): void;
 

@@ -22,6 +22,9 @@
         "libs/application/portfolios/shell/src/index.ts"
       ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
+      "@nx-dapp/application/wallets/features/connect-wallet": [
+        "libs/application/wallets/features/connect-wallet/src/index.ts"
+      ],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"
       ],
@@ -42,6 +45,9 @@
       ],
       "@nx-dapp/shared/operators/of-type": [
         "libs/shared/operators/of-type/src/index.ts"
+      ],
+      "@nx-dapp/shared/ui/modal-header": [
+        "libs/shared/ui/modal-header/src/index.ts"
       ],
       "@nx-dapp/shared/ui/page-header": [
         "libs/shared/ui/page-header/src/index.ts"

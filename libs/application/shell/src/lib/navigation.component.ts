@@ -2,7 +2,10 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 
+import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
 @Component({
   selector: 'nx-dapp-navigation',
   template: `
@@ -20,7 +23,7 @@ import { map, shareReplay } from 'rxjs/operators';
         </figure>
         <mat-nav-list>
           <a mat-list-item routerLink="portfolios/view-portfolio">Portfolio</a>
-          <div class="mt-8 px-4">
+          <div class="mt-8 px-4" *ngIf="connected$ | async">
             <button
               mat-raised-button
               color="warn"
@@ -45,6 +48,16 @@ import { map, shareReplay } from 'rxjs/operators';
             *ngIf="isHandset$ | async"
           >
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+
+          <button
+            *ngIf="(connected$ | async) === false"
+            mat-raised-button
+            color="accent"
+            style="margin-left: auto"
+            (click)="onConnectWallet()"
+          >
+            Connect
           </button>
         </mat-toolbar>
         <ng-content></ng-content>
@@ -81,6 +94,15 @@ export class NavigationComponent {
       map((result) => result.matches),
       shareReplay()
     );
+  connected$ = this.walletService.connected$;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private matDialog: MatDialog,
+    private walletService: SolanaDappWalletService
+  ) {}
+
+  onConnectWallet() {
+    this.matDialog.open(ConnectWalletComponent, { hasBackdrop: true });
+  }
 }

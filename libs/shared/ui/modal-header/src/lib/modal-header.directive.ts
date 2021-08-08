@@ -1,9 +1,9 @@
 import { Directive, ElementRef, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[nxDappPageHeader]',
+  selector: '[nxDappModalHeader]',
 })
-export class PageHeaderDirective implements OnInit {
+export class ModalHeaderDirective implements OnInit {
   constructor(private el: ElementRef<Element>, private renderer: Renderer2) {}
 
   ngOnInit() {
@@ -19,7 +19,7 @@ export class PageHeaderDirective implements OnInit {
       this.renderer.setAttribute(
         this.titleElement,
         'class',
-        'text-2xl flex items-center m-0'
+        'text-lg flex items-center m-0'
       );
     }
 
