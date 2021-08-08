@@ -1,4 +1,6 @@
+import { Network } from '@nx-dapp/solana-dapp/network';
 import { PublicKey, Transaction } from '@solana/web3.js';
+import { SetNetworkAction } from '.';
 
 import { Wallet, WalletAdapter, WalletName } from '../types';
 import {
@@ -25,6 +27,7 @@ export interface WalletState {
   adapter: WalletAdapter | null;
   signing: boolean;
   transactions: Transaction[];
+  network: Network | null;
 }
 
 export const walletInitialState: WalletState = {
@@ -40,6 +43,7 @@ export const walletInitialState: WalletState = {
   adapter: null,
   signing: false,
   transactions: [],
+  network: null,
 };
 
 export const reducer = (state: WalletState, action: ActionTypes) => {
@@ -108,7 +112,7 @@ export const reducer = (state: WalletState, action: ActionTypes) => {
         disconnecting: true,
       };
     case 'walletDisconnected':
-    case 'walletNetworkChanged':
+    case 'networkChanged':
       return {
         ...state,
         disconnecting: false,
@@ -160,6 +164,11 @@ export const reducer = (state: WalletState, action: ActionTypes) => {
         signing: transactions.length > 0,
       };
     }
+    case 'setNetwork':
+      return {
+        ...state,
+        network: (action as SetNetworkAction).payload,
+      };
     default:
       return state;
   }

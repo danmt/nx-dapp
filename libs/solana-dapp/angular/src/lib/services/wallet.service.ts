@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Network } from '@nx-dapp/solana-dapp/network';
 import {
   DEFAULT_WALLET,
   getPhantomWallet,
@@ -7,54 +8,53 @@ import {
   WalletClient,
   WalletName,
 } from '@nx-dapp/solana-dapp/wallet';
-import { map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
-import { SolanaDappConnectionService } from './connection.service';
+import { SolanaDappNetworkService } from '.';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SolanaDappWalletService {
-  walletClient$ = this.solanaDappConnectionService.connection$.pipe(
-    map(() => new WalletClient(this.wallets, DEFAULT_WALLET)),
-    shareReplay({
-      refCount: false,
-      bufferSize: 1,
-    })
+export class SolanaDappWalletService implements OnDestroy {
+  private readonly destroy = new Subject();
+  private readonly _walletClient = new WalletClient(
+    [getSolletWallet(), getPhantomWallet(), getSolongWallet()],
+    DEFAULT_WALLET
   );
-  walletAddress$ = this.walletClient$.pipe(
-    switchMap((walletClient) =>
-      walletClient.publicKey$.pipe(
-        map((publicKey) => publicKey?.toBase58() || null)
-      )
-    )
+  wallets$ = this._walletClient.wallets$;
+  walletAddress$ = this._walletClient.publicKey$.pipe(
+    map((publicKey) => publicKey?.toBase58() || null)
   );
-  connected$ = this.walletClient$.pipe(
-    switchMap((walletClient) =>
-      walletClient.connected$.pipe(map((connected) => connected))
-    )
+  connected$ = this._walletClient.connected$.pipe(
+    map((connected) => connected)
   );
-  wallets = [getSolletWallet(), getPhantomWallet(), getSolongWallet()];
 
-  constructor(
-    private solanaDappConnectionService: SolanaDappConnectionService
-  ) {}
+  constructor(private solanaDappNetworkService: SolanaDappNetworkService) {
+    this.solanaDappNetworkService.network$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((network) => this.setNetwork(network));
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.complete();
+    this._walletClient.destroy();
+  }
+
+  setNetwork(network: Network) {
+    this._walletClient.setNetwork(network);
+  }
 
   selectWallet(walletName: WalletName) {
-    this.walletClient$
-      .pipe(take(1))
-      .subscribe((walletClient) => walletClient.selectWallet(walletName));
+    this._walletClient.selectWallet(walletName);
   }
 
   connect() {
-    this.walletClient$
-      .pipe(take(1))
-      .subscribe((walletClient) => walletClient.connect());
+    this._walletClient.connect();
   }
 
   disconnect() {
-    this.walletClient$
-      .pipe(take(1))
-      .subscribe((walletClient) => walletClient.disconnect());
+    this._walletClient.disconnect();
   }
 }

@@ -34,8 +34,10 @@ import {
   DisconnectWalletAction,
   InitAction,
   LoadWalletsAction,
+  NetworkChangedAction,
   reducer,
   SelectWalletAction,
+  SetNetworkAction,
   SignTransactionAction,
   SignTransactionsAction,
   TransactionSignedAction,
@@ -43,11 +45,10 @@ import {
   WalletConnectedAction,
   WalletDisconnectedAction,
   walletInitialState,
-  WalletNetworkChangedAction,
   WalletSelectedAction,
   WalletState,
 } from './state';
-import { Wallet, WalletName, IWalletClient } from './types';
+import { IWalletClient, Wallet, WalletName } from './types';
 import {
   WalletNotConnectedError,
   WalletNotReadyError,
@@ -163,6 +164,15 @@ export class WalletClient implements IWalletClient {
     )
   );
 
+  networkChanged$ = this.actions$.pipe(
+    ofType<SetNetworkAction>('setNetwork'),
+    withLatestFrom(this.state$),
+    filter(([, { connected }]) => connected),
+    exhaustMap(([, state]) =>
+      this.handleDisconnect(state).pipe(map(() => new NetworkChangedAction()))
+    )
+  );
+
   constructor(wallets: Wallet[], defaultWallet: WalletName) {
     this.runEffects([
       this.walletConnected$,
@@ -170,6 +180,7 @@ export class WalletClient implements IWalletClient {
       this.walletSelected$,
       this.transactionSigned$,
       this.transactionsSigned$,
+      this.networkChanged$,
     ]);
 
     setTimeout(() => {
@@ -236,6 +247,10 @@ export class WalletClient implements IWalletClient {
 
   selectWallet(walletName: WalletName) {
     this._dispatcher.next(new SelectWalletAction(walletName));
+  }
+
+  setNetwork(network: Network) {
+    this._dispatcher.next(new SetNetworkAction(network));
   }
 
   connect() {

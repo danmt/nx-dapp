@@ -65,8 +65,14 @@ export class TransactionsSignedAction {
   constructor(public payload: Transaction[]) {}
 }
 
-export class WalletNetworkChangedAction {
-  type = 'walletNetworkChanged';
+export class SetNetworkAction {
+  type = 'setNetwork';
+
+  constructor(public payload: Network) {}
+}
+
+export class NetworkChangedAction {
+  type = 'networkChanged';
 }
 
 export type ActionTypes =
@@ -82,4 +88,5 @@ export type ActionTypes =
   | WalletSelectedAction
   | SignTransactionsAction
   | TransactionsSignedAction
-  | WalletNetworkChangedAction;
+  | SetNetworkAction
+  | NetworkChangedAction;

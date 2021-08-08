@@ -15,7 +15,7 @@ import { map, shareReplay } from 'rxjs/operators';
   template: `
     <header>
       <nx-dapp-wallets-dropdown
-        [wallets]="wallets"
+        [wallets]="wallets$ | async"
         [isConnected]="isConnected$ | async"
         (selectWallet)="onSelectWallet($event)"
         (connectWallet)="onConnectWallet()"
@@ -55,7 +55,7 @@ import { map, shareReplay } from 'rxjs/operators';
   `,
 })
 export class AppComponent {
-  wallets = this.walletService.wallets;
+  wallets$ = this.walletService.wallets$;
   networks = this.networkService.networks;
   network$ = this.networkService.network$;
   defaultNetwork = this.networkService.defaultNetwork;
