@@ -247,6 +247,31 @@
         }
       }
     },
+    "shared-ui-page-header": {
+      "projectType": "library",
+      "root": "libs/shared/ui/page-header",
+      "sourceRoot": "libs/shared/ui/page-header/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/ui/page-header"],
+          "options": {
+            "jestConfig": "libs/shared/ui/page-header/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/ui/page-header/src/**/*.ts",
+              "libs/shared/ui/page-header/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "solana-dapp-account": {
       "root": "libs/solana-dapp/account",
       "sourceRoot": "libs/solana-dapp/account/src",
@@ -439,10 +464,7 @@
               "apps/web-client/src/favicon.ico",
               "apps/web-client/src/assets"
             ],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "apps/web-client/src/styles.scss"
-            ],
+            "styles": ["apps/web-client/src/styles.scss"],
             "scripts": [],
             "customWebpackConfig": {
               "path": "apps/web-client/webpack.config.js",

@@ -15,7 +15,9 @@ import { map, shareReplay } from 'rxjs/operators';
         [mode]="(isHandset$ | async) ? 'over' : 'side'"
         [opened]="(isHandset$ | async) === false"
       >
-        <mat-toolbar>Menu</mat-toolbar>
+        <figure class="mx-4 mt-4 mb-2">
+          <img src="assets/images/logo.jpeg" />
+        </figure>
         <mat-nav-list>
           <a mat-list-item href="#">Report</a>
           <div class="mt-8 px-4">
@@ -44,7 +46,6 @@ import { map, shareReplay } from 'rxjs/operators';
           >
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
-          <span>application-shell</span>
         </mat-toolbar>
         <ng-content></ng-content>
       </mat-sidenav-content>
