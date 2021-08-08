@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import {
+  Network,
   SolanaDappBalanceService,
   SolanaDappMarketService,
   SolanaDappNetworkService,
   SolanaDappWalletService,
+  WalletName,
 } from '@nx-dapp/solana-dapp/angular';
-import { Network } from '@nx-dapp/solana-dapp/network';
-import { WalletName } from '@nx-dapp/solana-dapp/wallet';
 import { combineLatest } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 

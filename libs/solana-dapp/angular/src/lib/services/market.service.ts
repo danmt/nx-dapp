@@ -8,8 +8,7 @@ import {
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { SolanaDappWalletService } from '.';
-import { SolanaDappConnectionService } from './connection.service';
+import { SolanaDappConnectionService, SolanaDappWalletService } from '.';
 
 @Injectable({
   providedIn: 'root',

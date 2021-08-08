@@ -3,7 +3,7 @@ import { Connection } from '@solana/web3.js';
 import { of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
-import { SolanaDappNetworkService } from './network.service';
+import { SolanaDappNetworkService } from '.';
 
 @Injectable({
   providedIn: 'root',

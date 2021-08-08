@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import {
   SolanaDappConnectionService,
@@ -7,12 +7,17 @@ import {
   SolanaDappWalletService,
 } from './services';
 
-@NgModule({
-  providers: [
-    SolanaDappConnectionService,
-    SolanaDappMarketService,
-    SolanaDappNetworkService,
-    SolanaDappWalletService,
-  ],
-})
-export class SolanaDappModule {}
+@NgModule()
+export class SolanaDappModule {
+  static forRoot(): ModuleWithProviders<SolanaDappModule> {
+    return {
+      ngModule: SolanaDappModule,
+      providers: [
+        SolanaDappConnectionService,
+        SolanaDappMarketService,
+        SolanaDappNetworkService,
+        SolanaDappWalletService,
+      ],
+    };
+  }
+}
