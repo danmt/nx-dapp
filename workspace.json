@@ -107,6 +107,81 @@
         }
       }
     },
+    "application-portfolios-ui-portfolio-totals": {
+      "projectType": "library",
+      "root": "libs/application/portfolios/ui/portfolio-totals",
+      "sourceRoot": "libs/application/portfolios/ui/portfolio-totals/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/portfolios/ui/portfolio-totals"
+          ],
+          "options": {
+            "jestConfig": "libs/application/portfolios/ui/portfolio-totals/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/portfolios/ui/portfolio-totals/src/**/*.ts",
+              "libs/application/portfolios/ui/portfolio-totals/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-ui-position-list-item": {
+      "projectType": "library",
+      "root": "libs/application/portfolios/ui/position-list-item",
+      "sourceRoot": "libs/application/portfolios/ui/position-list-item/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/portfolios/ui/position-list-item"
+          ],
+          "options": {
+            "jestConfig": "libs/application/portfolios/ui/position-list-item/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/portfolios/ui/position-list-item/src/**/*.ts",
+              "libs/application/portfolios/ui/position-list-item/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-utils": {
+      "root": "libs/application/portfolios/utils",
+      "sourceRoot": "libs/application/portfolios/utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/application/portfolios/utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/portfolios/utils"],
+          "options": {
+            "jestConfig": "libs/application/portfolios/utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "application-shell": {
       "projectType": "library",
       "root": "libs/application/shell",

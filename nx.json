@@ -39,6 +39,15 @@
     "application-portfolios-shell": {
       "tags": []
     },
+    "application-portfolios-ui-portfolio-totals": {
+      "tags": []
+    },
+    "application-portfolios-ui-position-list-item": {
+      "tags": []
+    },
+    "application-portfolios-utils": {
+      "tags": []
+    },
     "application-shell": {
       "tags": []
     },
