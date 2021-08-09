@@ -72,15 +72,13 @@ import { map, shareReplay } from 'rxjs/operators';
           </button>
 
           <div *ngIf="connected$ | async" class="ml-auto flex items-center">
-            <div class="text-sm mr-4">
-              {{ walletAddress$ | async }}
-            </div>
             <button
-              mat-mini-fab
+              mat-raised-button
               color="accent"
               aria-label="Wallet settings"
               [matMenuTriggerFor]="menu"
             >
+              {{ walletAddress$ | async }}
               <mat-icon>account_balance_wallet</mat-icon>
             </button>
             <mat-menu #menu="matMenu" class="w-52">
