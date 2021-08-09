@@ -9,6 +9,7 @@ import {
 } from '@nx-dapp/solana-dapp/angular';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 
 @Component({
   selector: 'nx-dapp-navigation',
@@ -82,7 +83,7 @@ import { map, shareReplay } from 'rxjs/operators';
               <mat-icon>account_balance_wallet</mat-icon>
             </button>
             <mat-menu #menu="matMenu" class="w-52">
-              <button mat-menu-item>Wallet</button>
+              <button mat-menu-item (click)="onViewWallet()">Wallet</button>
               <button mat-menu-item class="flex justify-between items-center">
                 <span>Change network</span>
                 <mat-icon class="mr-0">settings_ethernet</mat-icon>
@@ -151,5 +152,9 @@ export class NavigationComponent {
 
   onDisconnectWallet() {
     this.walletService.disconnect();
+  }
+
+  onViewWallet() {
+    this.matDialog.open(ViewWalletComponent, { hasBackdrop: true });
   }
 }

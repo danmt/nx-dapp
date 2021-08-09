@@ -25,6 +25,9 @@
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"
       ],
+      "@nx-dapp/application/wallets/features/view-wallet": [
+        "libs/application/wallets/features/view-wallet/src/index.ts"
+      ],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"
       ],

@@ -39,6 +39,9 @@
     "application-wallets-features-connect-wallet": {
       "tags": []
     },
+    "application-wallets-features-view-wallet": {
+      "tags": []
+    },
     "shared-connection-data-access-connections": {
       "tags": []
     },
