@@ -20,6 +20,7 @@ import {
   exhaustMap,
   filter,
   map,
+  mapTo,
   observeOn,
   scan,
   shareReplay,
@@ -28,6 +29,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
+import { fromAdapterEvent } from '..';
 import {
   ActionTypes,
   ConnectWalletAction,
@@ -60,6 +62,7 @@ export class WalletClient implements IWalletClient {
   private readonly _dispatcher = new BehaviorSubject<ActionTypes>(
     new InitAction()
   );
+  destroy$ = this._destroy.asObservable();
   actions$ = this._dispatcher.asObservable();
   state$ = this._dispatcher.pipe(
     scan(reducer, walletInitialState),
@@ -110,6 +113,11 @@ export class WalletClient implements IWalletClient {
   disconnecting$ = this.state$.pipe(
     map(({ disconnecting }) => disconnecting),
     distinctUntilChanged()
+  );
+  onConnect$ = this.adapter$.pipe(fromAdapterEvent('connect'), mapTo(true));
+  onDisconnect$ = this.adapter$.pipe(
+    fromAdapterEvent('disconnect'),
+    mapTo(true)
   );
 
   private walletConnected$ = this.actions$.pipe(
@@ -203,7 +211,7 @@ export class WalletClient implements IWalletClient {
 
   private runEffects(effects: Observable<ActionTypes>[]) {
     merge(...effects)
-      .pipe(takeUntil(this._destroy), observeOn(asyncScheduler))
+      .pipe(takeUntil(this.destroy$), observeOn(asyncScheduler))
       .subscribe((action) => this._dispatcher.next(action));
   }
 
