@@ -1,6 +1,264 @@
 {
   "version": 2,
   "projects": {
+    "application-networks-features-change-network": {
+      "projectType": "library",
+      "root": "libs/application/networks/features/change-network",
+      "sourceRoot": "libs/application/networks/features/change-network/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/networks/features/change-network"
+          ],
+          "options": {
+            "jestConfig": "libs/application/networks/features/change-network/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/networks/features/change-network/src/**/*.ts",
+              "libs/application/networks/features/change-network/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-networks-ui-networks-radio-group": {
+      "projectType": "library",
+      "root": "libs/application/networks/ui/networks-radio-group",
+      "sourceRoot": "libs/application/networks/ui/networks-radio-group/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/networks/ui/networks-radio-group"
+          ],
+          "options": {
+            "jestConfig": "libs/application/networks/ui/networks-radio-group/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/networks/ui/networks-radio-group/src/**/*.ts",
+              "libs/application/networks/ui/networks-radio-group/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-features-view-portfolio": {
+      "projectType": "library",
+      "root": "libs/application/portfolios/features/view-portfolio",
+      "sourceRoot": "libs/application/portfolios/features/view-portfolio/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/portfolios/features/view-portfolio"
+          ],
+          "options": {
+            "jestConfig": "libs/application/portfolios/features/view-portfolio/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/portfolios/features/view-portfolio/src/**/*.ts",
+              "libs/application/portfolios/features/view-portfolio/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-shell": {
+      "projectType": "library",
+      "root": "libs/application/portfolios/shell",
+      "sourceRoot": "libs/application/portfolios/shell/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/portfolios/shell"],
+          "options": {
+            "jestConfig": "libs/application/portfolios/shell/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/portfolios/shell/src/**/*.ts",
+              "libs/application/portfolios/shell/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-ui-portfolio-totals": {
+      "projectType": "library",
+      "root": "libs/application/portfolios/ui/portfolio-totals",
+      "sourceRoot": "libs/application/portfolios/ui/portfolio-totals/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/portfolios/ui/portfolio-totals"
+          ],
+          "options": {
+            "jestConfig": "libs/application/portfolios/ui/portfolio-totals/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/portfolios/ui/portfolio-totals/src/**/*.ts",
+              "libs/application/portfolios/ui/portfolio-totals/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-ui-position-list-item": {
+      "projectType": "library",
+      "root": "libs/application/portfolios/ui/position-list-item",
+      "sourceRoot": "libs/application/portfolios/ui/position-list-item/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/portfolios/ui/position-list-item"
+          ],
+          "options": {
+            "jestConfig": "libs/application/portfolios/ui/position-list-item/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/portfolios/ui/position-list-item/src/**/*.ts",
+              "libs/application/portfolios/ui/position-list-item/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-portfolios-utils": {
+      "root": "libs/application/portfolios/utils",
+      "sourceRoot": "libs/application/portfolios/utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/application/portfolios/utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/portfolios/utils"],
+          "options": {
+            "jestConfig": "libs/application/portfolios/utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "application-shell": {
+      "projectType": "library",
+      "root": "libs/application/shell",
+      "sourceRoot": "libs/application/shell/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shell"],
+          "options": {
+            "jestConfig": "libs/application/shell/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shell/src/**/*.ts",
+              "libs/application/shell/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-wallets-features-connect-wallet": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/connect-wallet",
+      "sourceRoot": "libs/application/wallets/features/connect-wallet/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/features/connect-wallet"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/connect-wallet/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/connect-wallet/src/**/*.ts",
+              "libs/application/wallets/features/connect-wallet/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-wallets-features-view-wallet": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/view-wallet",
+      "sourceRoot": "libs/application/wallets/features/view-wallet/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/wallets/features/view-wallet"],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/view-wallet/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/view-wallet/src/**/*.ts",
+              "libs/application/wallets/features/view-wallet/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-connection-data-access-connections": {
       "projectType": "library",
       "root": "libs/shared/connection/data-access/connections",
@@ -168,6 +426,56 @@
           "options": {
             "jestConfig": "libs/shared/operators/of-type/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-ui-modal-header": {
+      "projectType": "library",
+      "root": "libs/shared/ui/modal-header",
+      "sourceRoot": "libs/shared/ui/modal-header/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/ui/modal-header"],
+          "options": {
+            "jestConfig": "libs/shared/ui/modal-header/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/ui/modal-header/src/**/*.ts",
+              "libs/shared/ui/modal-header/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "shared-ui-page-header": {
+      "projectType": "library",
+      "root": "libs/shared/ui/page-header",
+      "sourceRoot": "libs/shared/ui/page-header/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/ui/page-header"],
+          "options": {
+            "jestConfig": "libs/shared/ui/page-header/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/ui/page-header/src/**/*.ts",
+              "libs/shared/ui/page-header/src/**/*.html"
+            ]
           }
         }
       }
@@ -364,10 +672,7 @@
               "apps/web-client/src/favicon.ico",
               "apps/web-client/src/assets"
             ],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "apps/web-client/src/styles.scss"
-            ],
+            "styles": ["apps/web-client/src/styles.scss"],
             "scripts": [],
             "customWebpackConfig": {
               "path": "apps/web-client/webpack.config.js",

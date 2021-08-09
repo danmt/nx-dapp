@@ -37,3 +37,16 @@ export const getSolletWallet = (
   icon: `${ICONS_URL}/sollet.svg`,
   adapter: () => new SolletWalletAdapter(config),
 });
+
+export const getSolflareWallet = (
+  config?: SolletWalletAdapterConfig
+): Wallet => ({
+  name: WalletName.Solflare,
+  url: 'https://solflare.com',
+  icon: `${ICONS_URL}/solflare.svg`,
+  adapter: () =>
+    new SolletWalletAdapter({
+      ...config,
+      provider: config?.provider || 'https://solflare.com/access-wallet',
+    }),
+});

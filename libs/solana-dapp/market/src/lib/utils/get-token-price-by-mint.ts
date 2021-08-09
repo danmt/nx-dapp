@@ -3,12 +3,10 @@ import {
   MintTokenAccount,
   OrderbookAccount,
 } from '@nx-dapp/solana-dapp/account';
-import { Market, Orderbook, TOKEN_MINTS } from '@project-serum/serum';
+import { Market, Orderbook } from '@project-serum/serum';
 import { PublicKey } from '@solana/web3.js';
 
-import { calculateBestBidOffer } from '../operations';
-
-const STABLE_COINS = new Set(['USDC', 'wUSDC', 'USDT']);
+import { calculateBestBidOffer, isStableCoin } from '../operations';
 
 const getMintDecimals = (mintAccounts: MintTokenAccount[], pubkey: PublicKey) =>
   mintAccounts.find((mintAccount) => mintAccount.pubkey.equals(pubkey))?.info
@@ -20,11 +18,7 @@ export const getTokenPriceByMint = (
   marketMintAccounts: MintTokenAccount[],
   orderbookAccounts: OrderbookAccount[]
 ): number => {
-  const SERUM_TOKEN = TOKEN_MINTS.find((tokenMint) =>
-    tokenMint.address.equals(mintAccount.pubkey)
-  );
-
-  if (STABLE_COINS.has(SERUM_TOKEN?.name || '')) {
+  if (isStableCoin(mintAccount.pubkey)) {
     return 1;
   }
 

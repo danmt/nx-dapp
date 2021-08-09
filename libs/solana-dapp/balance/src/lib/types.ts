@@ -23,3 +23,8 @@ export interface GetBalancesConfig {
   walletAddress: string;
   mintAddresses: string[];
 }
+
+export interface GetBalanceForWalletConfig {
+  connection: string | Connection;
+  walletAddress: string;
+}

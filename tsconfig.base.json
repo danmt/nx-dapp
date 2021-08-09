@@ -15,6 +15,34 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/application/networks/features/change-network": [
+        "libs/application/networks/features/change-network/src/index.ts"
+      ],
+      "@nx-dapp/application/networks/ui/networks-radio-group": [
+        "libs/application/networks/ui/networks-radio-group/src/index.ts"
+      ],
+      "@nx-dapp/application/portfolios/features/view-portfolio": [
+        "libs/application/portfolios/features/view-portfolio/src/index.ts"
+      ],
+      "@nx-dapp/application/portfolios/shell": [
+        "libs/application/portfolios/shell/src/index.ts"
+      ],
+      "@nx-dapp/application/portfolios/ui/portfolio-totals": [
+        "libs/application/portfolios/ui/portfolio-totals/src/index.ts"
+      ],
+      "@nx-dapp/application/portfolios/ui/position-list-item": [
+        "libs/application/portfolios/ui/position-list-item/src/index.ts"
+      ],
+      "@nx-dapp/application/portfolios/utils": [
+        "libs/application/portfolios/utils/src/index.ts"
+      ],
+      "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
+      "@nx-dapp/application/wallets/features/connect-wallet": [
+        "libs/application/wallets/features/connect-wallet/src/index.ts"
+      ],
+      "@nx-dapp/application/wallets/features/view-wallet": [
+        "libs/application/wallets/features/view-wallet/src/index.ts"
+      ],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"
       ],
@@ -35,6 +63,12 @@
       ],
       "@nx-dapp/shared/operators/of-type": [
         "libs/shared/operators/of-type/src/index.ts"
+      ],
+      "@nx-dapp/shared/ui/modal-header": [
+        "libs/shared/ui/modal-header/src/index.ts"
+      ],
+      "@nx-dapp/shared/ui/page-header": [
+        "libs/shared/ui/page-header/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/account": ["libs/solana-dapp/account/src/index.ts"],
       "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],

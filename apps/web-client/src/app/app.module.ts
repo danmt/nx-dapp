@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -6,11 +7,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ConnectionsModule as ConnectionsDataAccessModule } from '@nx-dapp/shared/connection/data-access/connections';
-import { EndpointsModule as EndpointsDataAccessModule } from '@nx-dapp/shared/connection/data-access/endpoints';
-import { DataAccessModule as TokensDataAccessModule } from '@nx-dapp/shared/connection/data-access/tokens';
-import { ConnectionsDropdownModule } from '@nx-dapp/shared/connection/ui/connections-dropdown';
-import { WalletsDropdownModule } from '@nx-dapp/shared/connection/ui/wallets-dropdown';
+import { ShellModule } from '@nx-dapp/application/shell';
 import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
 
 import { environment } from '../environments/environment';
@@ -22,11 +19,6 @@ import { AppComponent } from './app.component';
     BrowserModule,
     RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
     BrowserAnimationsModule,
-    ConnectionsDropdownModule,
-    ConnectionsDataAccessModule,
-    TokensDataAccessModule,
-    EndpointsDataAccessModule,
-    WalletsDropdownModule,
     StoreModule.forRoot(
       {},
       {
@@ -41,6 +33,8 @@ import { AppComponent } from './app.component';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot(),
     SolanaDappModule.forRoot(),
+    MatTooltipModule,
+    ShellModule,
   ],
   bootstrap: [AppComponent],
 })
