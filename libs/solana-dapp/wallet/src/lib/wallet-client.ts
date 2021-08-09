@@ -107,6 +107,10 @@ export class WalletClient implements IWalletClient {
     map(({ connecting }) => connecting),
     distinctUntilChanged()
   );
+  disconnecting$ = this.state$.pipe(
+    map(({ disconnecting }) => disconnecting),
+    distinctUntilChanged()
+  );
 
   private walletConnected$ = this.actions$.pipe(
     ofType<ConnectWalletAction>('connectWallet'),

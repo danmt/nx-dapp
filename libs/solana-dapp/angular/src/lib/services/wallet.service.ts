@@ -32,6 +32,7 @@ export class SolanaDappWalletService implements OnDestroy {
   selectedWallet$ = this._walletClient.selectedWallet$;
   connected$ = this._walletClient.connected$;
   connecting$ = this._walletClient.connecting$;
+  disconnecting$ = this._walletClient.disconnecting$;
   walletAddress$ = this._walletClient.publicKey$.pipe(
     map((publicKey) => publicKey?.toBase58() || null)
   );
