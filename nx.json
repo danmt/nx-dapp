@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "application-networks-features-change-network": {
+      "tags": []
+    },
     "application-portfolios-features-view-portfolio": {
       "tags": []
     },

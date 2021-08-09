@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   obscureWalletAddress,
@@ -9,7 +10,7 @@ import {
 } from '@nx-dapp/solana-dapp/angular';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
+import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
 
 @Component({
   selector: 'nx-dapp-navigation',
@@ -84,7 +85,11 @@ import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-
             </button>
             <mat-menu #menu="matMenu" class="w-52">
               <button mat-menu-item (click)="onViewWallet()">Wallet</button>
-              <button mat-menu-item class="flex justify-between items-center">
+              <button
+                mat-menu-item
+                class="flex justify-between items-center"
+                (click)="onChangeNetwork()"
+              >
                 <span>Change network</span>
                 <mat-icon class="mr-0">settings_ethernet</mat-icon>
               </button>
@@ -156,5 +161,9 @@ export class NavigationComponent {
 
   onViewWallet() {
     this.matDialog.open(ViewWalletComponent, { hasBackdrop: true });
+  }
+
+  onChangeNetwork() {
+    this.matDialog.open(ChangeNetworkComponent, { hasBackdrop: true });
   }
 }

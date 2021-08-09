@@ -1,6 +1,33 @@
 {
   "version": 2,
   "projects": {
+    "application-networks-features-change-network": {
+      "projectType": "library",
+      "root": "libs/application/networks/features/change-network",
+      "sourceRoot": "libs/application/networks/features/change-network/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/networks/features/change-network"
+          ],
+          "options": {
+            "jestConfig": "libs/application/networks/features/change-network/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/networks/features/change-network/src/**/*.ts",
+              "libs/application/networks/features/change-network/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-portfolios-features-view-portfolio": {
       "projectType": "library",
       "root": "libs/application/portfolios/features/view-portfolio",
