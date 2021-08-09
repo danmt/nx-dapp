@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { NotificationsService } from '@nx-dapp/application/utils/notifications';
 
 @Component({
   selector: 'nx-dapp-shell',
@@ -10,4 +11,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShellComponent {}
+export class ShellComponent implements OnInit {
+  constructor(private notificationsService: NotificationsService) {}
+
+  ngOnInit() {
+    this.notificationsService.init();
+  }
+}

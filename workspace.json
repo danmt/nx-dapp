@@ -207,6 +207,31 @@
         }
       }
     },
+    "application-utils-notifications": {
+      "projectType": "library",
+      "root": "libs/application/utils/notifications",
+      "sourceRoot": "libs/application/utils/notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/utils/notifications"],
+          "options": {
+            "jestConfig": "libs/application/utils/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/utils/notifications/src/**/*.ts",
+              "libs/application/utils/notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-wallets-features-connect-wallet": {
       "projectType": "library",
       "root": "libs/application/wallets/features/connect-wallet",
