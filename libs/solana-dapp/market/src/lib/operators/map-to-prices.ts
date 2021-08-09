@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { getTokenPriceByMint } from '../utils';
 import { TokenPrice } from '../types';
+import { isStableCoin } from '../operations';
 
 export const mapToPrices =
   (mintAccounts: MintTokenAccount[]) =>
@@ -20,6 +21,7 @@ export const mapToPrices =
             marketMintAccounts,
             orderbookAccounts
           ),
+          isStable: isStableCoin(mintAccount.pubkey),
         }))
       )
     );
