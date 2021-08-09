@@ -11,7 +11,7 @@ import {
   SolanaDappWalletService,
 } from '@nx-dapp/solana-dapp/angular';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, switchMap, take } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 
 export interface ViewModel {
   portfolio: Portfolio;
@@ -51,7 +51,7 @@ export class ViewPortfolioStore extends ComponentStore<ViewModel> {
         combineLatest([
           this.balanceService.getBalancesFromWallet(),
           this.networkService.tokens$,
-          this.marketService.getPricesFromWallet().pipe(take(3)),
+          this.marketService.getPricesFromWallet(),
         ])
       ),
       mapToPortfolio,
