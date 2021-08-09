@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Balance,
   getBalance,
+  getBalanceForWallet,
   getBalances,
   getBalancesFromWallet,
 } from '@nx-dapp/solana-dapp/balance';
@@ -60,6 +61,21 @@ export class SolanaDappBalanceService {
         }
 
         return getBalancesFromWallet({ connection, walletAddress });
+      })
+    );
+  }
+
+  getBalanceForWallet(): Observable<Balance | null> {
+    return combineLatest([
+      this.solanaDappConnectionService.connection$,
+      this.solanaDappWalletService.walletAddress$,
+    ]).pipe(
+      switchMap(([connection, walletAddress]) => {
+        if (!walletAddress) {
+          return of(null);
+        }
+
+        return getBalanceForWallet({ connection, walletAddress });
       })
     );
   }
