@@ -165,7 +165,9 @@ export class NavigationComponent {
   }
 
   onDisconnectWallet() {
-    this.walletService.disconnect();
+    if (confirm('Are you sure? This action will disconnect your wallet.')) {
+      this.walletService.disconnect();
+    }
   }
 
   onViewWallet() {

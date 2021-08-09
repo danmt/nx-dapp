@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import {
   Network,
   SolanaDappNetworkService,
+  SolanaDappWalletService,
 } from '@nx-dapp/solana-dapp/angular';
 import { BehaviorSubject } from 'rxjs';
 
@@ -14,23 +15,30 @@ import { BehaviorSubject } from 'rxjs';
       <p>Pick your option and press change.</p>
     </header>
 
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-2">
       <nx-dapp-networks-radio-group
         [networks]="networks"
         [network]="network$ | async"
         (networkSelected)="onNetworkSelected($event)"
       ></nx-dapp-networks-radio-group>
 
-      <button
-        *ngrxLet="selectedNetwork$ as selectedNetwork"
-        mat-stroked-button
-        color="primary"
-        class="uppercase w-full h-12"
-        (click)="onChangeNetwork(selectedNetwork!)"
-        [disabled]="!selectedNetwork"
-      >
-        Change network
-      </button>
+      <p class="text-warn m-0 text-center" *ngIf="connected$ | async">
+        Changing the network will disconnect <br />
+        you from the wallet.
+      </p>
+
+      <ng-container *ngrxLet="connected$ as connected">
+        <button
+          *ngrxLet="selectedNetwork$ as selectedNetwork"
+          mat-stroked-button
+          color="primary"
+          class="uppercase w-full h-12"
+          (click)="onChangeNetwork(connected, selectedNetwork!)"
+          [disabled]="!selectedNetwork"
+        >
+          Change network
+        </button>
+      </ng-container>
     </div>
 
     <button
@@ -51,15 +59,23 @@ export class ChangeNetworkComponent {
   networks = this.networkService.networks;
   network$ = this.networkService.network$;
   selectedNetwork$ = this._selectedNetwork.asObservable();
+  connected$ = this.walletService.connected$;
 
   constructor(
     private networkService: SolanaDappNetworkService,
+    private walletService: SolanaDappWalletService,
     private dialogRef: MatDialogRef<ChangeNetworkComponent>
   ) {}
 
-  onChangeNetwork(network: Network) {
-    this.networkService.changeNetwork(network);
-    this.dialogRef.close();
+  onChangeNetwork(connected: boolean, network: Network) {
+    if (
+      !connected ||
+      (connected &&
+        confirm('Are you sure? This action will disconnect your wallet.'))
+    ) {
+      this.networkService.changeNetwork(network);
+      this.dialogRef.close();
+    }
   }
 
   onNetworkSelected(network: Network) {

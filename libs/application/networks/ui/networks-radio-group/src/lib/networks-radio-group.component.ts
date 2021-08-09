@@ -12,7 +12,7 @@ import { Network } from '@nx-dapp/solana-dapp/angular';
         [value]="network"
         class="w-full"
       >
-        <div class="ml-4 py-4 flex flex-col gap-1">
+        <div class="ml-4 py-2 flex flex-col gap-1">
           <p class="uppercase m-0">{{ network.name }}</p>
           <p class="text-opacity-25 text-xs italic truncate text-primary m-0">
             {{ network.url }}
