@@ -59,6 +59,7 @@ export interface IWalletClient {
   publicKey$: Observable<PublicKey | null>;
   selectedWallet$: Observable<WalletName | null>;
   connecting$: Observable<boolean>;
+  disconnecting$: Observable<boolean>;
 
   loadWallets(wallets: Wallet[]): void;
 
