@@ -144,7 +144,9 @@ export class ViewWalletComponent implements OnInit, OnDestroy {
   }
 
   onDisconnectWallet() {
-    this.walletService.disconnect();
+    if (confirm('Are you sure? This action will disconnect your wallet.')) {
+      this.walletService.disconnect();
+    }
   }
 
   onCopyAddress(tooltip: MatTooltip) {
