@@ -53,12 +53,9 @@ export class SolanaDappWalletService implements OnDestroy {
     this._walletClient.setNetwork(network);
   }
 
-  selectWallet(walletName: WalletName) {
+  connect(walletName: WalletName) {
     this._walletClient.selectWallet(walletName);
-  }
-
-  connect() {
-    this._walletClient.connect();
+    setTimeout(() => this._walletClient.connect());
   }
 
   disconnect() {
