@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -15,28 +16,31 @@ import { filter, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'nx-dapp-connect-wallet',
   template: `
-    <div class="w-60 relative">
-      <header nxDappModalHeader class="mr-8">
-        <h1>Connect wallet</h1>
-        <p>Pick your option and press connect.</p>
-      </header>
+    <header nxDappModalHeader class="mr-8">
+      <h1>Connect wallet</h1>
+      <p>Pick your option and press connect.</p>
+    </header>
 
+    <div class="flex flex-col-reverse gap-8">
       <button
-        mat-icon-button
-        aria-label="Close connection attempt"
-        class="w-8 h-8 leading-none absolute top-0 right-0"
-        mat-dialog-close
+        mat-stroked-button
+        color="primary"
+        class="uppercase w-full h-12"
+        [disabled]="(selectedWallet$ | async) === null"
+        (click)="onConnectWallet()"
       >
-        <mat-icon>close</mat-icon>
+        <ng-container *ngIf="(connecting$ | async) === false; else connecting">
+          Connect
+        </ng-container>
       </button>
 
-      <div class="flex flex-wrap justify-around">
+      <div class="flex flex-wrap justify-around gap-4">
         <button
           *ngFor="let wallet of wallets$ | async"
           (click)="onWalletSelected(wallet.name)"
         >
           <figure
-            class="w-24 h-24 p-4 m-2 opacity-30 hover:opacity-100"
+            class="w-24 h-24 p-4 opacity-30 hover:opacity-100"
             [ngClass]="{
               'opacity-100': (selectedWallet$ | async) === wallet.name
             }"
@@ -48,28 +52,26 @@ import { filter, takeUntil } from 'rxjs/operators';
           </figure>
         </button>
       </div>
-
-      <button
-        mat-raised-button
-        color="primary"
-        class="uppercase w-full mt-8 h-12"
-        [disabled]="(selectedWallet$ | async) === null"
-        (click)="onConnectWallet()"
-      >
-        <ng-container *ngIf="(connecting$ | async) === false; else connecting">
-          Connect
-        </ng-container>
-      </button>
     </div>
 
+    <button
+      mat-icon-button
+      aria-label="Close connection attempt"
+      class="w-8 h-8 leading-none absolute top-0 right-0"
+      mat-dialog-close
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
     <ng-template #connecting>
-      <mat-spinner color="accent" diameter="28" class="mx-auto"></mat-spinner>
+      <mat-spinner color="primary" diameter="28" class="mx-auto"></mat-spinner>
     </ng-template>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConnectWalletComponent implements OnInit, OnDestroy {
+  @HostBinding('class') class = 'block w-72 relative';
   private readonly _destroy = new Subject();
   wallets$ = this.walletService.wallets$;
   selectedWallet$ = this.walletService.selectedWallet$;
