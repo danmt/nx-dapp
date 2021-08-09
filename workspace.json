@@ -28,6 +28,33 @@
         }
       }
     },
+    "application-networks-ui-networks-radio-group": {
+      "projectType": "library",
+      "root": "libs/application/networks/ui/networks-radio-group",
+      "sourceRoot": "libs/application/networks/ui/networks-radio-group/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/networks/ui/networks-radio-group"
+          ],
+          "options": {
+            "jestConfig": "libs/application/networks/ui/networks-radio-group/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/networks/ui/networks-radio-group/src/**/*.ts",
+              "libs/application/networks/ui/networks-radio-group/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-portfolios-features-view-portfolio": {
       "projectType": "library",
       "root": "libs/application/portfolios/features/view-portfolio",

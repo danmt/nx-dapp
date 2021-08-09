@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { SolanaDappNetworkService } from '@nx-dapp/solana-dapp/angular';
+import {
+  Network,
+  SolanaDappNetworkService,
+} from '@nx-dapp/solana-dapp/angular';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'nx-dapp-change-network',
@@ -12,26 +15,19 @@ import { SolanaDappNetworkService } from '@nx-dapp/solana-dapp/angular';
     </header>
 
     <div class="flex flex-col gap-8">
-      <mat-radio-group [formControl]="networkControl">
-        <mat-radio-button
-          *ngFor="let network of networks"
-          [value]="network"
-          class="w-full"
-        >
-          <div class="ml-4 py-4 flex flex-col gap-1">
-            <p class="uppercase m-0">{{ network.name }}</p>
-            <p class="text-opacity-25 text-xs italic truncate text-primary m-0">
-              {{ network.url }}
-            </p>
-          </div>
-        </mat-radio-button>
-      </mat-radio-group>
+      <nx-dapp-networks-radio-group
+        [networks]="networks"
+        [network]="network$ | async"
+        (networkSelected)="onNetworkSelected($event)"
+      ></nx-dapp-networks-radio-group>
 
       <button
+        *ngrxLet="selectedNetwork$ as selectedNetwork"
         mat-stroked-button
         color="primary"
         class="uppercase w-full h-12"
-        (click)="onChangeNetwork()"
+        (click)="onChangeNetwork(selectedNetwork!)"
+        [disabled]="!selectedNetwork"
       >
         Change network
       </button>
@@ -50,17 +46,23 @@ import { SolanaDappNetworkService } from '@nx-dapp/solana-dapp/angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangeNetworkComponent {
+  private readonly _selectedNetwork = new BehaviorSubject<Network | null>(null);
   @HostBinding('class') class = 'block relative w-64';
   networks = this.networkService.networks;
-  networkControl = new FormControl(this.networkService.networks[0]);
+  network$ = this.networkService.network$;
+  selectedNetwork$ = this._selectedNetwork.asObservable();
 
   constructor(
     private networkService: SolanaDappNetworkService,
     private dialogRef: MatDialogRef<ChangeNetworkComponent>
   ) {}
 
-  onChangeNetwork() {
-    this.networkService.changeNetwork(this.networkControl.value);
+  onChangeNetwork(network: Network) {
+    this.networkService.changeNetwork(network);
     this.dialogRef.close();
+  }
+
+  onNetworkSelected(network: Network) {
+    this._selectedNetwork.next(network);
   }
 }

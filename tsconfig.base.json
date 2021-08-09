@@ -18,6 +18,9 @@
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
       ],
+      "@nx-dapp/application/networks/ui/networks-radio-group": [
+        "libs/application/networks/ui/networks-radio-group/src/index.ts"
+      ],
       "@nx-dapp/application/portfolios/features/view-portfolio": [
         "libs/application/portfolios/features/view-portfolio/src/index.ts"
       ],
