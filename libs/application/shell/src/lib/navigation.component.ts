@@ -63,36 +63,45 @@ import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/c
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
 
-          <button
-            *ngIf="(connected$ | async) === false"
-            mat-raised-button
-            color="accent"
-            class="ml-auto"
-            (click)="onConnectWallet()"
-          >
-            Connect
-          </button>
-
-          <div *ngIf="connected$ | async" class="ml-auto flex items-center">
+          <div *ngIf="(connected$ | async) === false" class="ml-auto">
             <button
               mat-raised-button
               color="accent"
-              aria-label="Wallet settings"
-              [matMenuTriggerFor]="menu"
+              (click)="onConnectWallet()"
             >
-              {{ walletAddress$ | async }}
-              <mat-icon>account_balance_wallet</mat-icon>
+              Connect
             </button>
-            <mat-menu #menu="matMenu" class="w-52">
-              <button mat-menu-item (click)="onViewWallet()">Wallet</button>
-              <button
-                mat-menu-item
-                class="flex justify-between items-center"
-                (click)="onChangeNetwork()"
-              >
-                <span>Change network</span>
-                <mat-icon class="mr-0">settings_ethernet</mat-icon>
-              </button>
+          </div>
+
+          <div *ngIf="connected$ | async" class="ml-auto flex items-center">
+            {{ walletAddress$ | async }}
+          </div>
+          <button
+            mat-mini-fab
+            color="accent"
+            [matMenuTriggerFor]="menu"
+            class="ml-4"
+          >
+            <mat-icon>settings</mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu" class="w-52">
+            <button
+              *ngIf="connected$ | async"
+              mat-menu-item
+              (click)="onViewWallet()"
+            >
+              Wallet
+            </button>
+            <button
+              mat-menu-item
+              class="flex justify-between items-center"
+              (click)="onChangeNetwork()"
+            >
+              <span>Change network</span>
+              <mat-icon class="mr-0">settings_ethernet</mat-icon>
+            </button>
+            <ng-container *ngIf="connected$ | async">
               <mat-divider></mat-divider>
               <button
                 mat-menu-item
@@ -102,8 +111,8 @@ import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/c
                 <span class="font-bold text-warn">Disconnect</span>
                 <mat-icon class="text-warn mr-0">logout</mat-icon>
               </button>
-            </mat-menu>
-          </div>
+            </ng-container>
+          </mat-menu>
         </mat-toolbar>
         <ng-content></ng-content>
       </mat-sidenav-content>
