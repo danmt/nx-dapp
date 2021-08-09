@@ -9,6 +9,7 @@ export class WalletError extends Error {
 
 export class WalletWindowClosedError extends WalletError {
   name = 'WalletWindowClosedError';
+  message = 'Wallet window was closed';
 }
 
 export class WalletNotFoundError extends WalletError {

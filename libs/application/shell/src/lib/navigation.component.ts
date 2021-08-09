@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
 import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
@@ -10,7 +11,6 @@ import {
 } from '@nx-dapp/solana-dapp/angular';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
 
 @Component({
   selector: 'nx-dapp-navigation',

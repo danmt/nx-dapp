@@ -37,6 +37,9 @@
         "libs/application/portfolios/utils/src/index.ts"
       ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
+      "@nx-dapp/application/utils/notifications": [
+        "libs/application/utils/notifications/src/index.ts"
+      ],
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"
       ],

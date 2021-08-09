@@ -60,6 +60,8 @@ export interface IWalletClient {
   selectedWallet$: Observable<WalletName | null>;
   connecting$: Observable<boolean>;
   disconnecting$: Observable<boolean>;
+  onConnect$: Observable<boolean>;
+  onDisconnect$: Observable<boolean>;
 
   loadWallets(wallets: Wallet[]): void;
 

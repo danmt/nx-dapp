@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { NotificationsModule } from '@nx-dapp/application/utils/notifications';
 
 import { NavigationComponent } from './navigation.component';
 import { ShellComponent } from './shell.component';
@@ -45,6 +46,7 @@ import { ShellComponent } from './shell.component';
     MatIconModule,
     MatListModule,
     MatMenuModule,
+    NotificationsModule,
   ],
   declarations: [ShellComponent, NavigationComponent],
 })

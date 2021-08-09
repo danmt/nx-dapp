@@ -56,7 +56,7 @@ export class ConnectWalletComponent {
   ) {}
 
   onConnectWallet(walletName: WalletName) {
-    this.walletService.connect(walletName);
+    this.walletService.selectAndConnect(walletName);
     this.dialogRef.close();
   }
 }
