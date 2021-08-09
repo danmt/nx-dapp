@@ -33,6 +33,12 @@ export class WalletConnectedAction {
   type = 'walletConnected';
 }
 
+export class WalletConnectionFailedAction {
+  type = 'walletConnectionFailed';
+
+  constructor(public payload: string) {}
+}
+
 export class DisconnectWalletAction {
   type = 'disconnectWallet';
 }
@@ -89,4 +95,5 @@ export type ActionTypes =
   | SignTransactionsAction
   | TransactionsSignedAction
   | SetNetworkAction
-  | NetworkChangedAction;
+  | NetworkChangedAction
+  | WalletConnectionFailedAction;

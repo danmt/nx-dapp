@@ -15,6 +15,7 @@ import {
   throwError,
 } from 'rxjs';
 import {
+  catchError,
   concatMap,
   distinctUntilChanged,
   exhaustMap,
@@ -45,6 +46,7 @@ import {
   TransactionSignedAction,
   TransactionsSignedAction,
   WalletConnectedAction,
+  WalletConnectionFailedAction,
   WalletDisconnectedAction,
   walletInitialState,
   WalletSelectedAction,
@@ -119,13 +121,27 @@ export class WalletClient implements IWalletClient {
     fromAdapterEvent('disconnect'),
     mapTo(true)
   );
+  onError$ = this.adapter$.pipe(
+    fromAdapterEvent('error'),
+    filter((error): error is Error => error instanceof Error),
+    map((error) => ({ name: error.name, message: error.message }))
+  );
 
   private walletConnected$ = this.actions$.pipe(
     ofType<ConnectWalletAction>('connectWallet'),
     withLatestFrom(this.state$),
     filter(([, { connected, disconnecting }]) => !connected && !disconnecting),
     exhaustMap(([, state]) =>
-      this.handleConnect(state).pipe(map(() => new WalletConnectedAction()))
+      this.handleConnect(state).pipe(
+        map(() => new WalletConnectedAction()),
+        catchError((error) =>
+          of(
+            new WalletConnectionFailedAction(
+              typeof error === 'string' ? error : error.name
+            )
+          )
+        )
+      )
     )
   );
 

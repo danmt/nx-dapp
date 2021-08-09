@@ -113,6 +113,7 @@ export const reducer = (state: WalletState, action: ActionTypes) => {
       };
     case 'walletDisconnected':
     case 'networkChanged':
+    case 'walletConnectionFailed':
       return {
         ...state,
         disconnecting: false,
