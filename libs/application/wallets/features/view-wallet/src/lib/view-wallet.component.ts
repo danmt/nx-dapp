@@ -108,7 +108,7 @@ import { filter, takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewWalletComponent implements OnInit, OnDestroy {
-  @HostBinding('class') class = 'block relative w-60';
+  @HostBinding('class') class = 'block relative w-64';
   private readonly _destroy = new Subject();
   private readonly _copied = new BehaviorSubject(false);
   disconnecting$ = this.walletService.disconnecting$;
