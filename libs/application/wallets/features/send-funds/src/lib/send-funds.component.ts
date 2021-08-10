@@ -23,7 +23,7 @@ import { MatDialogRef } from '@angular/material/dialog';
         >
       </mat-form-field>
 
-      <mat-form-field class="w-full">
+      <mat-form-field class="w-full" appearance="fill">
         <mat-label>Amount</mat-label>
         <input matInput formControlName="amount" type="number" required />
         <mat-hint>Maximum amount is ?</mat-hint>
