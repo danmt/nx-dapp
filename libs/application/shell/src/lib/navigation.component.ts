@@ -1,9 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
-import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
+import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
+import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   obscureWalletAddress,
@@ -157,11 +157,14 @@ export class NavigationComponent {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private matDialog: MatDialog,
-    private walletService: SolanaDappWalletService
+    private walletService: SolanaDappWalletService,
+    private connectWalletService: ConnectWalletService,
+    private changeNetworkService: ChangeNetworkService,
+    private viewWalletService: ViewWalletService
   ) {}
 
   onConnectWallet() {
-    this.matDialog.open(ConnectWalletComponent, { hasBackdrop: true });
+    this.connectWalletService.open();
   }
 
   onDisconnectWallet() {
@@ -171,10 +174,10 @@ export class NavigationComponent {
   }
 
   onViewWallet() {
-    this.matDialog.open(ViewWalletComponent, { hasBackdrop: true });
+    this.viewWalletService.open();
   }
 
   onChangeNetwork() {
-    this.matDialog.open(ChangeNetworkComponent, { hasBackdrop: true });
+    this.changeNetworkService.open();
   }
 }

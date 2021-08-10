@@ -67,6 +67,7 @@
       "@nx-dapp/shared/operators/of-type": [
         "libs/shared/operators/of-type/src/index.ts"
       ],
+      "@nx-dapp/shared/ui/focus": ["libs/shared/ui/focus/src/index.ts"],
       "@nx-dapp/shared/ui/modal-header": [
         "libs/shared/ui/modal-header/src/index.ts"
       ],

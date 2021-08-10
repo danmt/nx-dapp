@@ -45,7 +45,7 @@ export interface Wallet {
   adapter: () => WalletAdapter;
 }
 
-export const DEFAULT_WALLET = WalletName.Sollet;
+export const DEFAULT_WALLET = WalletName.Solong;
 
 export interface IWalletClient {
   actions$: Observable<ActionTypes>;
