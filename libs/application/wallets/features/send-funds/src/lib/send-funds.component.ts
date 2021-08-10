@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Inject,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { SendFundsData } from './types';
 
 @Component({
   selector: 'nx-dapp-send-funds',
@@ -26,7 +33,10 @@ import { MatDialogRef } from '@angular/material/dialog';
       <mat-form-field class="w-full" appearance="fill">
         <mat-label>Amount</mat-label>
         <input matInput formControlName="amount" type="number" required />
-        <mat-hint>Maximum amount is ?</mat-hint>
+        <mat-hint
+          >Maximum amount is {{ data.position.quantity }}
+          {{ data.position.symbol }}
+        </mat-hint>
         <mat-error
           *ngIf="submitted && sendFundsGroup.get('amount')?.errors?.required"
           >The amount is mandatory.</mat-error
@@ -68,7 +78,10 @@ export class SendFundsComponent {
     amount: new FormControl(null, [Validators.required]),
   });
 
-  constructor(private dialogRef: MatDialogRef<SendFundsComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<SendFundsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: SendFundsData
+  ) {}
 
   onSendFunds() {
     this.submitted = true;
