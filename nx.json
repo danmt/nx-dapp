@@ -57,6 +57,9 @@
     "application-wallets-features-connect-wallet": {
       "tags": []
     },
+    "application-wallets-features-send-funds": {
+      "tags": []
+    },
     "application-wallets-features-view-wallet": {
       "tags": []
     },

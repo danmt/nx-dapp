@@ -259,6 +259,31 @@
         }
       }
     },
+    "application-wallets-features-send-funds": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/send-funds",
+      "sourceRoot": "libs/application/wallets/features/send-funds/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/wallets/features/send-funds"],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/send-funds/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/send-funds/src/**/*.ts",
+              "libs/application/wallets/features/send-funds/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-wallets-features-view-wallet": {
       "projectType": "library",
       "root": "libs/application/wallets/features/view-wallet",
