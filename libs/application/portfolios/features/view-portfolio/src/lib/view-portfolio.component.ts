@@ -5,7 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
 
 import { ViewPortfolioStore } from './view-portfolio.store';
@@ -93,7 +93,8 @@ export class ViewPortfolioComponent implements OnInit {
   constructor(
     private viewPortfolioStore: ViewPortfolioStore,
     private walletService: SolanaDappWalletService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private connectWalletService: ConnectWalletService,
   ) {}
 
   ngOnInit() {
@@ -101,6 +102,6 @@ export class ViewPortfolioComponent implements OnInit {
   }
 
   onConnectWallet() {
-    this.matDialog.open(ConnectWalletComponent, { hasBackdrop: true });
+    this.connectWalletService.open();
   }
 }
