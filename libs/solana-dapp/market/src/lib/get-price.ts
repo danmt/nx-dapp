@@ -1,13 +1,13 @@
 import { getMarketData, getMintAccount } from '@nx-dapp/solana-dapp/account';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { switchMap, throttleTime } from 'rxjs/operators';
 
 import { mapToPrice } from './operators';
 import { GetPriceConfig, TokenPrice } from './types';
 import { getMarketByBaseMint } from './utils';
 
-const DEBOUNCE_TIME_IN_MS = 1_000;
+const THROTTLE_TIME_IN_MS = 30_000;
 
 export const getPrice = (
   config: GetPriceConfig
@@ -39,6 +39,6 @@ export const getPrice = (
         new PublicKey(market.address)
       ).pipe(mapToPrice(mintAccount));
     }),
-    debounceTime(DEBOUNCE_TIME_IN_MS)
+    throttleTime(THROTTLE_TIME_IN_MS)
   );
 };
