@@ -1,11 +1,19 @@
-import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import {
   Network,
   SolanaDappNetworkService,
   SolanaDappWalletService,
 } from '@nx-dapp/solana-dapp/angular';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-change-network',
@@ -15,31 +23,35 @@ import { BehaviorSubject } from 'rxjs';
       <p>Pick your option and press change.</p>
     </header>
 
-    <div class="flex flex-col gap-2">
-      <nx-dapp-networks-radio-group
-        [networks]="networks"
-        [network]="network$ | async"
-        (networkSelected)="onNetworkSelected($event)"
-      ></nx-dapp-networks-radio-group>
-
-      <p class="text-warn m-0 text-center" *ngIf="connected$ | async">
-        Changing the network will disconnect <br />
-        you from the wallet.
-      </p>
-
-      <ng-container *ngrxLet="connected$ as connected">
-        <button
-          *ngrxLet="selectedNetwork$ as selectedNetwork"
-          mat-stroked-button
-          color="primary"
-          class="uppercase w-full h-12"
-          (click)="onChangeNetwork(connected, selectedNetwork!)"
-          [disabled]="!selectedNetwork"
+    <ng-container *ngrxLet="connected$ as connected">
+      <ng-container *ngrxLet="selectedNetwork$ as selectedNetwork">
+        <form
+          class="flex flex-col gap-2"
+          [formGroup]="changeNetworkGroup"
+          (ngSubmit)="onChangeNetwork(connected, selectedNetwork!)"
         >
-          Change network
-        </button>
+          <nx-dapp-networks-radio-group
+            [networks]="networks"
+            [network]="network$ | async"
+            (networkSelected)="onNetworkSelected($event)"
+          ></nx-dapp-networks-radio-group>
+
+          <p class="text-warn m-0 text-center" *ngIf="connected">
+            Changing the network will disconnect <br />
+            you from the wallet.
+          </p>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            class="uppercase w-full h-12"
+            [disabled]="!selectedNetwork || changeNetworkGroup.invalid"
+          >
+            Change network
+          </button>
+        </form>
       </ng-container>
-    </div>
+    </ng-container>
 
     <button
       mat-icon-button
@@ -53,19 +65,36 @@ import { BehaviorSubject } from 'rxjs';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChangeNetworkComponent {
+export class ChangeNetworkComponent implements OnInit, OnDestroy {
+  private readonly _destroy = new Subject();
   private readonly _selectedNetwork = new BehaviorSubject<Network | null>(null);
   @HostBinding('class') class = 'block relative w-64';
   networks = this.networkService.networks;
   network$ = this.networkService.network$;
   selectedNetwork$ = this._selectedNetwork.asObservable();
   connected$ = this.walletService.connected$;
+  changeNetworkGroup = new FormGroup({
+    selectedNetwork: new FormControl(null, [Validators.required]),
+  });
 
   constructor(
     private networkService: SolanaDappNetworkService,
     private walletService: SolanaDappWalletService,
     private dialogRef: MatDialogRef<ChangeNetworkComponent>
   ) {}
+
+  ngOnInit() {
+    this.selectedNetwork$
+      .pipe(takeUntil(this._destroy))
+      .subscribe((selectedNetwork) =>
+        this.changeNetworkGroup.setValue({ selectedNetwork })
+      );
+  }
+
+  ngOnDestroy() {
+    this._destroy.next();
+    this._destroy.complete();
+  }
 
   onChangeNetwork(connected: boolean, network: Network) {
     if (
