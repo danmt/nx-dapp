@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { RouterModule } from '@angular/router';
 import { PortfolioTotalsModule } from '@nx-dapp/application/portfolios/ui/portfolio-totals';
@@ -14,6 +16,8 @@ import { ViewPortfolioComponent } from './view-portfolio.component';
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: ViewPortfolioComponent },
     ]),
+    MatButtonModule,
+    MatDialogModule,
     MatGridListModule,
     PageHeaderModule,
     PositionListItemModule,
