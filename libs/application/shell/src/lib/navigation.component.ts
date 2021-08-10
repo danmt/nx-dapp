@@ -1,9 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
-import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
+import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
   obscureWalletAddress,
@@ -157,7 +155,7 @@ export class NavigationComponent {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private matDialog: MatDialog,
-    private walletService: SolanaDappWalletService
+    private viewWalletService: ViewWalletService
   ) {}
 
   onConnectWallet() {
@@ -171,7 +169,7 @@ export class NavigationComponent {
   }
 
   onViewWallet() {
-    this.matDialog.open(ViewWalletComponent, { hasBackdrop: true });
+    this.viewWalletService.open();
   }
 
   onChangeNetwork() {
