@@ -6,10 +6,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 export class FocusDirective {
   @Input() set nxDappFocus(value: boolean) {
     if (value) {
-      console.log('i should be focused');
-      setTimeout(() => {
-        this.element.nativeElement.focus();
-      }, 1000);
+      this.element.nativeElement.focus();
     }
   }
 
