@@ -17,6 +17,7 @@ import {
       <button
         *ngFor="let wallet of wallets$ | async"
         (click)="onConnectWallet(wallet.name)"
+        [nxDappFocus]="(selectedWallet$ | async) === wallet.name"
       >
         <figure
           class="w-24 h-24 p-4 opacity-30 hover:opacity-100"
@@ -48,7 +49,6 @@ export class ConnectWalletComponent {
   @HostBinding('class') class = 'block w-72 relative';
   wallets$ = this.walletService.wallets$;
   selectedWallet$ = this.walletService.selectedWallet$;
-  connecting$ = this.walletService.connecting$;
 
   constructor(
     private walletService: SolanaDappWalletService,

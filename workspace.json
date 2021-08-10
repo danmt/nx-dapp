@@ -455,6 +455,31 @@
         }
       }
     },
+    "shared-ui-focus": {
+      "projectType": "library",
+      "root": "libs/shared/ui/focus",
+      "sourceRoot": "libs/shared/ui/focus/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/ui/focus"],
+          "options": {
+            "jestConfig": "libs/shared/ui/focus/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/ui/focus/src/**/*.ts",
+              "libs/shared/ui/focus/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "shared-ui-modal-header": {
       "projectType": "library",
       "root": "libs/shared/ui/modal-header",
