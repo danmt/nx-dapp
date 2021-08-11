@@ -1,3 +1,4 @@
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 import { Observable } from 'rxjs';
@@ -9,11 +10,6 @@ export interface WalletAdapterEvents {
   connect: () => void;
   disconnect: () => void;
   error: (error: Error) => void;
-}
-
-export interface Transaction {
-  id: string;
-  data: Web3Transaction;
 }
 
 export interface WalletAdapter extends EventEmitter<WalletAdapterEvents> {

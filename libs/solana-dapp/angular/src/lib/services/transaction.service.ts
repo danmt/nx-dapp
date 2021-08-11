@@ -43,11 +43,6 @@ export interface ExtendedTransaction extends Transaction {
   txId?: string;
 }
 
-export interface TransactionResponse {
-  id: string;
-  txId: string;
-}
-
 interface TransactionState {
   transactions: ExtendedTransaction[];
   isProcessing: boolean;

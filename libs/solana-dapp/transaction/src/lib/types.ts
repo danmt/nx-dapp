@@ -4,3 +4,8 @@ export interface Transaction {
   id: string;
   data: Web3Transaction;
 }
+
+export interface TransactionResponse {
+  id: string;
+  txId: string;
+}
