@@ -6,6 +6,19 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import {
+  SolanaDappConnectionService,
+  SolanaDappWalletService,
+} from '@nx-dapp/solana-dapp/angular';
+import {
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from '@solana/web3.js';
+import { combineLatest } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { SendFundsData } from './types';
 
@@ -80,15 +93,42 @@ export class SendFundsComponent {
 
   constructor(
     private dialogRef: MatDialogRef<SendFundsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SendFundsData
+    @Inject(MAT_DIALOG_DATA) public data: SendFundsData,
+    private connectionService: SolanaDappConnectionService,
+    private walletService: SolanaDappWalletService
   ) {}
 
   onSendFunds() {
     this.submitted = true;
 
     if (this.sendFundsGroup.valid) {
-      console.log(this.sendFundsGroup.value);
-      this.dialogRef.close();
+      combineLatest([
+        this.connectionService.getRecentBlockhash(),
+        this.walletService.publicKey$.pipe(isNotNull),
+      ])
+        .pipe(
+          take(1),
+          map(([{ blockhash }, fromPubkey]) =>
+            new Transaction({
+              recentBlockhash: blockhash,
+              feePayer: fromPubkey,
+            }).add(
+              SystemProgram.transfer({
+                fromPubkey: fromPubkey,
+                toPubkey: new PublicKey(
+                  this.sendFundsGroup.get('recipient')?.value
+                ),
+                lamports:
+                  LAMPORTS_PER_SOL * this.sendFundsGroup.get('amount')?.value ||
+                  0,
+              })
+            )
+          )
+        )
+        .subscribe((transaction) => {
+          this.walletService.signTransaction(transaction);
+          this.dialogRef.close();
+        });
     }
   }
 }

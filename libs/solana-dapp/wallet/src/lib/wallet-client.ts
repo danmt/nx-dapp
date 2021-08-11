@@ -126,6 +126,10 @@ export class WalletClient implements IWalletClient {
     filter((error): error is Error => error instanceof Error),
     map((error) => ({ name: error.name, message: error.message }))
   );
+  onTransactionSigned$ = this.actions$.pipe(
+    ofType<TransactionSignedAction>('transactionSigned'),
+    map(({ payload }) => payload)
+  );
 
   private walletConnected$ = this.actions$.pipe(
     ofType<ConnectWalletAction>('connectWallet'),
@@ -178,11 +182,11 @@ export class WalletClient implements IWalletClient {
     )
   );
 
-  private transactionSigned$ = this.actions$.pipe(
+  transactionSigned$ = this.actions$.pipe(
     ofType<SignTransactionAction>('signTransaction'),
     withLatestFrom(this.state$),
     filter(([, { signing }]) => signing),
-    exhaustMap(([{ payload: transaction }, state]) =>
+    concatMap(([{ payload: transaction }, state]) =>
       this.handleSignTransaction(transaction, state).pipe(
         map(() => new TransactionSignedAction(transaction))
       )

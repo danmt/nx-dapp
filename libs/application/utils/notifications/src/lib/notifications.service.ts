@@ -1,8 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { filter, takeUntil, tap } from 'rxjs/operators';
+import {
+  SolanaDappConnectionService,
+  SolanaDappWalletService,
+} from '@nx-dapp/solana-dapp/angular';
 import { merge, Subject } from 'rxjs';
+import { concatMap, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Injectable()
 export class NotificationsService implements OnDestroy {
@@ -37,10 +40,26 @@ export class NotificationsService implements OnDestroy {
 
   constructor(
     private walletService: SolanaDappWalletService,
+    private connectionService: SolanaDappConnectionService,
     private snackBar: MatSnackBar
   ) {}
 
   init() {
+    this.connectionService.connection$
+      .pipe(
+        switchMap((connection) =>
+          this.walletService.onTransactionSigned$.pipe(
+            concatMap((transaction) =>
+              connection.sendRawTransaction(transaction.serialize())
+            ),
+            concatMap((transactionId) =>
+              connection.confirmTransaction(transactionId)
+            )
+          )
+        )
+      )
+      .subscribe(() => console.log('transaction succeeded'));
+
     merge(
       this._walletConnected$,
       this._walletDisconnected$,

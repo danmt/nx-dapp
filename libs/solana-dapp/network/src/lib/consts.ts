@@ -20,5 +20,5 @@ export const NETWORKS: Network[] = [
   },
 ];
 
-export const DEFAULT_NETWORK = NETWORKS[0];
+export const DEFAULT_NETWORK = NETWORKS[2];
 export const DEFAULT_SLIPPAGE = 0.25;

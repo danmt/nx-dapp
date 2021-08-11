@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Connection } from '@solana/web3.js';
 import { of } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { concatMap, map, shareReplay, take } from 'rxjs/operators';
 
 import { SolanaDappNetworkService } from '.';
 
@@ -26,4 +26,11 @@ export class SolanaDappConnectionService {
   );
 
   constructor(private solanaDappNetworkService: SolanaDappNetworkService) {}
+
+  getRecentBlockhash() {
+    return this.connection$.pipe(
+      take(1),
+      concatMap((connection) => connection.getRecentBlockhash())
+    );
+  }
 }
