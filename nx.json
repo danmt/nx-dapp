@@ -54,7 +54,7 @@
     "application-transactions-features-transactions-in-process": {
       "tags": []
     },
-    "application-utils-notifications": {
+    "application/transactions/utils/transaction-notifications": {
       "tags": []
     },
     "application-wallets-features-connect-wallet": {
@@ -64,6 +64,9 @@
       "tags": []
     },
     "application-wallets-features-view-wallet": {
+      "tags": []
+    },
+    "application/wallets/utils/wallet-notifications": {
       "tags": []
     },
     "shared-connection-data-access-connections": {

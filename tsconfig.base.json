@@ -15,6 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/application/transactions/utils/transaction-notifications": [
+        "libs/application/transactions/utils/transaction-notifications/src/index.ts"
+      ],
+      "@nx-dapp/application/wallets/utils/wallet-notifications": [
+        "libs/application/wallets/utils/wallet-notifications/src/index.ts"
+      ],
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
       ],
@@ -39,9 +45,6 @@
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
       "@nx-dapp/application/transactions/features/transactions-in-process": [
         "libs/application/transactions/features/transactions-in-process/src/index.ts"
-      ],
-      "@nx-dapp/application/utils/notifications": [
-        "libs/application/utils/notifications/src/index.ts"
       ],
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"

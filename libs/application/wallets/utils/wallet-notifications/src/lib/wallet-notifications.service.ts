@@ -14,7 +14,7 @@ enum MessageTypes {
 }
 
 @Injectable()
-export class NotificationsService implements OnDestroy {
+export class WalletNotificationsService implements OnDestroy {
   private readonly _destroy = new Subject();
   private readonly _walletConnected$ = this.walletService.onConnect$.pipe(
     tap(() => this.showMessage('Wallet connected!', MessageTypes.Success, 3000))
@@ -28,12 +28,6 @@ export class NotificationsService implements OnDestroy {
     filter(({ name }) => name === 'WalletWindowClosedError'),
     tap((error) => this.showMessage(error.message, MessageTypes.Error))
   );
-  private readonly _transactionConfirmed$ =
-    this.transactionService.onTransactionConfirmed$.pipe(
-      tap(() =>
-        this.showMessage('Transaction confirmed', MessageTypes.Success, 3000)
-      )
-    );
 
   constructor(
     private snackBar: MatSnackBar,
@@ -45,8 +39,7 @@ export class NotificationsService implements OnDestroy {
     merge(
       this._walletConnected$,
       this._walletDisconnected$,
-      this._walletWindowClosedError$,
-      this._transactionConfirmed$
+      this._walletWindowClosedError$
     )
       .pipe(takeUntil(this._destroy))
       .subscribe();

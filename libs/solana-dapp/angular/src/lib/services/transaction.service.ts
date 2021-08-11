@@ -138,6 +138,10 @@ export class SolanaDappTransactionService implements OnDestroy {
     map(({ inProcess }) => inProcess),
     distinctUntilChanged()
   );
+  onTransactionCreated$ = this.actions$.pipe(
+    ofType<Action>('transactionCreated'),
+    map(({ payload }) => payload as Transaction)
+  );
   onTransactionConfirmed$ = this.actions$.pipe(
     ofType<Action>('transactionConfirmed'),
     map(({ payload }) => (payload as TransactionResponse).txId)

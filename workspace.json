@@ -234,17 +234,19 @@
         }
       }
     },
-    "application-utils-notifications": {
+    "application/transactions/utils/transaction-notifications": {
       "projectType": "library",
-      "root": "libs/application/utils/notifications",
-      "sourceRoot": "libs/application/utils/notifications/src",
+      "root": "libs/application/transactions/utils/transaction-notifications",
+      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/utils/notifications"],
+          "outputs": [
+            "coverage/libs/application/transactions/utils/transaction-notifications"
+          ],
           "options": {
-            "jestConfig": "libs/application/utils/notifications/jest.config.js",
+            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -252,8 +254,8 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/utils/notifications/src/**/*.ts",
-              "libs/application/utils/notifications/src/**/*.html"
+              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
+              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
             ]
           }
         }
@@ -331,6 +333,33 @@
             "lintFilePatterns": [
               "libs/application/wallets/features/view-wallet/src/**/*.ts",
               "libs/application/wallets/features/view-wallet/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application/wallets/utils/wallet-notifications": {
+      "projectType": "library",
+      "root": "libs/application/wallets/utils/wallet-notifications",
+      "sourceRoot": "libs/application/wallets/utils/wallet-notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/utils/wallet-notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/utils/wallet-notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/utils/wallet-notifications/src/**/*.ts",
+              "libs/application/wallets/utils/wallet-notifications/src/**/*.html"
             ]
           }
         }
