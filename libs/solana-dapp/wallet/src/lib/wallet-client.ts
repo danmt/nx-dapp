@@ -1,7 +1,6 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { Network } from '@nx-dapp/solana-dapp/network';
-import { Transaction } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -30,7 +29,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import { fromAdapterEvent } from '..';
+import { fromAdapterEvent, Transaction } from '..';
 import {
   ActionTypes,
   ConnectWalletAction,
@@ -182,7 +181,7 @@ export class WalletClient implements IWalletClient {
     )
   );
 
-  transactionSigned$ = this.actions$.pipe(
+  private transactionSigned$ = this.actions$.pipe(
     ofType<SignTransactionAction>('signTransaction'),
     withLatestFrom(this.state$),
     filter(([, { signing }]) => signing),
@@ -204,7 +203,7 @@ export class WalletClient implements IWalletClient {
     )
   );
 
-  networkChanged$ = this.actions$.pipe(
+  private networkChanged$ = this.actions$.pipe(
     ofType<SetNetworkAction>('setNetwork'),
     withLatestFrom(this.state$),
     filter(([, { connected }]) => connected),
@@ -258,27 +257,43 @@ export class WalletClient implements IWalletClient {
   private handleSignTransaction(
     transaction: Transaction,
     { adapter, connected, wallet }: WalletState
-  ) {
+  ): Observable<Transaction> {
     if (!connected) {
       return throwError(new WalletNotConnectedError());
     }
     if (!adapter || !wallet) {
       return throwError(new WalletNotSelectedError());
     }
-    return from(defer(() => adapter.signTransaction(transaction)));
+    return from(defer(() => adapter.signTransaction(transaction.data))).pipe(
+      map((signedTransaction) => ({
+        id: transaction.id,
+        data: signedTransaction,
+      }))
+    );
   }
 
   private handleSignAllTransactions(
     transactions: Transaction[],
     { adapter, connected, wallet }: WalletState
-  ) {
+  ): Observable<Transaction[]> {
     if (!connected) {
       return throwError(new WalletNotConnectedError());
     }
     if (!adapter || !wallet) {
       return throwError(new WalletNotSelectedError());
     }
-    return from(defer(() => adapter.signAllTransactions(transactions)));
+    return from(
+      defer(() =>
+        adapter.signAllTransactions(transactions.map(({ data }) => data))
+      )
+    ).pipe(
+      map((signedTransactions) =>
+        signedTransactions.map((signedTransaction, index) => ({
+          id: transactions[index].id,
+          data: signedTransaction,
+        }))
+      )
+    );
   }
 
   loadWallets(wallets: Wallet[]) {

@@ -5,6 +5,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { RouterModule } from '@angular/router';
 import { PortfolioTotalsModule } from '@nx-dapp/application/portfolios/ui/portfolio-totals';
 import { PositionListItemModule } from '@nx-dapp/application/portfolios/ui/position-list-item';
+import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { SendFundsModule } from '@nx-dapp/application/wallets/features/send-funds';
 import { PageHeaderModule } from '@nx-dapp/shared/ui/page-header';
 
@@ -22,6 +23,7 @@ import { ViewPortfolioComponent } from './view-portfolio.component';
     PositionListItemModule,
     PortfolioTotalsModule,
     SendFundsModule,
+    ConnectWalletModule,
   ],
   declarations: [ViewPortfolioComponent],
 })

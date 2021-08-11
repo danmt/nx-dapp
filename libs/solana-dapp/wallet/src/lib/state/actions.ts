@@ -1,7 +1,6 @@
 import { Network } from '@nx-dapp/solana-dapp/network';
-import { Transaction } from '@solana/web3.js';
 
-import { Wallet, WalletName } from '../types';
+import { Transaction, Wallet, WalletName } from '../types';
 
 export class InitAction {
   type = 'init';

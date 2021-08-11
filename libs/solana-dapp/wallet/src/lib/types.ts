@@ -1,5 +1,4 @@
-import { Network } from '@nx-dapp/solana-dapp/network';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 import { Observable } from 'rxjs';
 
@@ -12,6 +11,11 @@ export interface WalletAdapterEvents {
   error: (error: Error) => void;
 }
 
+export interface Transaction {
+  id: string;
+  data: Web3Transaction;
+}
+
 export interface WalletAdapter extends EventEmitter<WalletAdapterEvents> {
   publicKey: PublicKey | null;
   ready: boolean;
@@ -21,8 +25,10 @@ export interface WalletAdapter extends EventEmitter<WalletAdapterEvents> {
 
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  signTransaction: (transaction: Transaction) => Promise<Transaction>;
-  signAllTransactions: (transaction: Transaction[]) => Promise<Transaction[]>;
+  signTransaction: (transaction: Web3Transaction) => Promise<Web3Transaction>;
+  signAllTransactions: (
+    transaction: Web3Transaction[]
+  ) => Promise<Web3Transaction[]>;
 }
 
 export enum WalletAdapterNetwork {

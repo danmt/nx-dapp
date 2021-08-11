@@ -1,8 +1,8 @@
 import { Network } from '@nx-dapp/solana-dapp/network';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
 import { SetNetworkAction } from '.';
 
-import { Wallet, WalletAdapter, WalletName } from '../types';
+import { Wallet, WalletAdapter, WalletName, Transaction } from '../types';
 import {
   ActionTypes,
   LoadWalletsAction,
