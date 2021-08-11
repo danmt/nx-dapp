@@ -10,7 +10,6 @@ import {
   Transaction,
   TransactionResponse,
 } from '@nx-dapp/solana-dapp/transaction';
-import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -33,7 +32,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import { SolanaDappNetworkService, SolanaDappWalletService } from '.';
+import { SolanaDappConnectionService, SolanaDappWalletService } from '.';
 
 interface Action {
   type: string;
@@ -126,13 +125,6 @@ export class SolanaDappTransactionService implements OnDestroy {
       bufferSize: 1,
     })
   );
-  connection$ = this.networkService.network$.pipe(
-    map(({ url }) => new Connection(url, 'recent')),
-    shareReplay({
-      refCount: false,
-      bufferSize: 1,
-    })
-  );
   transactions$ = this.state$.pipe(
     map(({ transactions }) => transactions),
     distinctUntilChanged()
@@ -171,7 +163,7 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   private transactionSent$ = this.actions$.pipe(
     ofType<Action>('transactionSigned'),
-    withLatestFrom(this.connection$),
+    withLatestFrom(this.connectionService.transactionConnection$),
     concatMap(([transaction, connection]) =>
       sendTransaction(connection, transaction.payload as Transaction).pipe(
         map((txId) => ({
@@ -187,7 +179,7 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   private transactionConfirmed$ = this.actions$.pipe(
     ofType<Action>('transactionSent'),
-    withLatestFrom(this.connection$),
+    withLatestFrom(this.connectionService.transactionConnection$),
     concatMap(([transaction, connection]) =>
       confirmTransaction(
         connection,
@@ -205,7 +197,7 @@ export class SolanaDappTransactionService implements OnDestroy {
   );
 
   constructor(
-    private networkService: SolanaDappNetworkService,
+    private connectionService: SolanaDappConnectionService,
     private walletService: SolanaDappWalletService
   ) {
     this.runEffects([
@@ -229,7 +221,7 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   transfer(recipientAddress: string, amount: number) {
     return combineLatest([
-      this.connection$,
+      this.connectionService.transactionConnection$,
       this.walletService.walletAddress$.pipe(isNotNull),
     ]).pipe(
       first(),
