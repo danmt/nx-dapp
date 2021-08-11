@@ -10,7 +10,14 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 
-import { Transaction, TransferConfig } from './types';
+import { Transaction } from './types';
+
+export interface TransferConfig {
+  connection: string | Connection;
+  walletAddress: string;
+  recipientAddress: string;
+  amount: number;
+}
 
 export const getTransferTransaction = (
   config: TransferConfig
