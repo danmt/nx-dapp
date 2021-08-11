@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { sendTransaction } from '@nx-dapp/solana-dapp/connection';
 import { getTransferTransaction } from '@nx-dapp/solana-dapp/transaction';
 import { Transaction } from '@nx-dapp/solana-dapp/wallet';
 import { Connection } from '@solana/web3.js';
@@ -23,6 +24,7 @@ import {
   shareReplay,
   takeUntil,
   tap,
+  withLatestFrom,
 } from 'rxjs/operators';
 
 import {
@@ -172,20 +174,17 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   private transactionSent$ = this.actions$.pipe(
     ofType<Action>('transactionSigned'),
-    concatMap((transaction) =>
-      this.connectionService
-        .sendRawTransaction(
-          (transaction.payload as Transaction).data.serialize()
-        )
-        .pipe(
-          map((txId) => ({
-            type: 'transactionSent',
-            payload: {
-              id: (transaction.payload as Transaction).id,
-              txId,
-            },
-          }))
-        )
+    withLatestFrom(this.connection$),
+    concatMap(([transaction, connection]) =>
+      sendTransaction(connection, transaction.payload as Transaction).pipe(
+        map((txId) => ({
+          type: 'transactionSent',
+          payload: {
+            id: (transaction.payload as Transaction).id,
+            txId,
+          },
+        }))
+      )
     )
   );
 
