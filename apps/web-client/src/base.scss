@@ -1,85 +1,48 @@
-
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-/**
-* Generated theme by Material Theme Generator
-* https://materialtheme.arcsine.dev
-* Fork at: https://materialtheme.arcsine.dev/?c=YHBhbGV0dGU$YHByaW1hcnk$YF48IzBkZWI4MiIsIj9lcjwjYjZmOWRhIiwiO2VyPCMwN2UyNjV$LCIlPmBePCM2YzFlYTQiLCI~ZXI8I2QzYmNlNCIsIjtlcjwjNGYxMjg5fiwid2Fybj5gXjwjOWMwMDAwIiwiP2VyPCNlMWIzYjMiLCI7ZXI8IzgwMDAwMH4sIj9UZXh0PCMwMDAwMDAiLCI~PTwjZmFmYWZhIiwiO1RleHQ8I2ZmZmZmZiIsIjs9PCMwNjAzMDd$LCJmb250cz5bYEA8KC00fixgQDwoLTN$LGBAPCgtMn4sYEA8KC0xfixgQDxoZWFkbGluZX4sYEA8dGl0bGV$LGBAPHN1YiktMn4sYEA8c3ViKS0xfixgQDxib2R5LTJ$LGBAPGJvZHktMX4sYEA8YnV0dG9ufixgQDxjYXB0aW9ufixgQDxpbnB1dCIsInNpemU$bnVsbH1dLCJpY29uczxGaWxsZWQiLCI~bmVzcz5mYWxzZSwidmVyc2lvbj4xMX0=
-*/
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
+// utilities
+$success-bgcolor: #059669;
+$error-bgcolor: #dc2626;
+$warning-bgcolor: #fbbf24;
 
+$white-text-color: white;
+$black-text-color: black;
 
+@mixin snackbar-span {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: bold;
+}
 
-// Foreground Elements
+@mixin snackbar($background-color, $color, $span-content-text) {
+  background-color: $background-color !important;
+  color: $color !important;
 
-
-// Specific component overrides, pieces that are not in line with the general theming
-
-
+  .mat-simple-snackbar > span { 
+    &::before {
+        @include snackbar-span;
+        content: $span-content-text; // TO DO: review
+    }
+  }
+}
+// end utilities
 
 body {
   margin: 0;
 }
 
-.logo {
-  background-image: url('./assets/images/logo.jpeg');
-  width: 160px;
-  height: 160px;
-  background-size: 160px;
-  background-repeat: no-repeat;
-}
-
-.flex-basis-full {
-  flex-basis: 100%;
-}
-
-.max-w-80 {
-  max-width: 20rem;
-}
-
 .success-snackbar {
-  background-color: #059669 !important;
-  color: white !important;
-
-  .mat-simple-snackbar > span { // TO DO: review
-    &::before {
-      content: 'Hooray 🎉!';
-      display: block;
-      font-size: 1.125rem;
-      font-weight: bold;
-    }
-  }
+  @include snackbar($success-bgcolor, $white-text-color, 'Hooray 🎉!');
 }
 
 .warning-snackbar {
-  background-color: #fbbf24 !important;
-  color: black !important;
-
-  .mat-simple-snackbar > span {
-    &::before {
-      content: 'Wee-oww 🚨!';
-      display: block;
-      font-size: 1.125rem;
-      font-weight: bold;
-    }
-  }
+  @include snackbar($warning-bgcolor, $black-text-color, 'Wee-oww 🚨!');
 }
 
 .error-snackbar {
-  background-color: #dc2626 !important;
-  color: white !important;
-
-  .mat-simple-snackbar > span {
-    &::before {
-      content: 'Upss 🚧!';
-      display: block;
-      font-size: 1.125rem;
-      font-weight: bold;
-    }
-  }
+  @include snackbar($error-bgcolor, $white-text-color, 'Upss 🚧!');
 }
 
 input[readonly] {
