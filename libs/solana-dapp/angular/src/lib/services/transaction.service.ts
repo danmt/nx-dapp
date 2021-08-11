@@ -35,16 +35,8 @@ interface Action {
   payload?: unknown;
 }
 
-enum TransactionStatus {
-  PendingSign = 'PendingSign',
-  Cancelled = 'Cancelled',
-  PendingSend = 'PendingSend',
-  PendingConfirmation = 'PendingConfirmation',
-  Confirmed = 'Confirmed',
-}
-
 export interface ExtendedTransaction extends Transaction {
-  status: TransactionStatus;
+  status: string;
   txId?: string;
 }
 
@@ -75,7 +67,7 @@ const reducer = (state: TransactionState, action: Action) => {
           ...state.transactions,
           {
             ...(action.payload as Transaction),
-            status: TransactionStatus.PendingSign,
+            status: 'Pending Sign',
           },
         ],
         isProcessing: true,
@@ -86,7 +78,7 @@ const reducer = (state: TransactionState, action: Action) => {
         ...state,
         transactions: state.transactions.map((transaction) =>
           transaction.id === (action.payload as Transaction).id
-            ? { ...transaction, status: TransactionStatus.PendingSend }
+            ? { ...transaction, status: 'Pending Send' }
             : transaction
         ),
       };
@@ -97,7 +89,7 @@ const reducer = (state: TransactionState, action: Action) => {
           transaction.id === (action.payload as TransactionResponse).id
             ? {
                 ...transaction,
-                status: TransactionStatus.PendingConfirmation,
+                status: 'Pending Confirmation',
                 txId: (action.payload as TransactionResponse).txId,
               }
             : transaction
@@ -108,7 +100,7 @@ const reducer = (state: TransactionState, action: Action) => {
         ...state,
         transactions: state.transactions.map((transaction) =>
           transaction.id === (action.payload as Transaction).id
-            ? { ...transaction, status: TransactionStatus.Confirmed }
+            ? { ...transaction, status: 'Confirmed' }
             : transaction
         ),
         inProcess: state.inProcess - 1,

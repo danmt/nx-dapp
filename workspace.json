@@ -207,6 +207,33 @@
         }
       }
     },
+    "application-transactions-features-transactions-in-process": {
+      "projectType": "library",
+      "root": "libs/application/transactions/features/transactions-in-process",
+      "sourceRoot": "libs/application/transactions/features/transactions-in-process/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/features/transactions-in-process"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/features/transactions-in-process/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/features/transactions-in-process/src/**/*.ts",
+              "libs/application/transactions/features/transactions-in-process/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-utils-notifications": {
       "projectType": "library",
       "root": "libs/application/utils/notifications",
