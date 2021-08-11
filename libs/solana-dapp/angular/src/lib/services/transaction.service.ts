@@ -17,6 +17,7 @@ import {
   distinctUntilChanged,
   first,
   map,
+  mapTo,
   observeOn,
   scan,
   shareReplay,
@@ -154,6 +155,14 @@ export class SolanaDappTransactionService implements OnDestroy {
     map(({ payload }) => (payload as TransactionResponse).txId)
   );
 
+  private transactionCreated$ = this.actions$.pipe(
+    ofType<Action>('transactionCreated'),
+    tap((transaction) =>
+      this.walletService.signTransaction(transaction.payload as Transaction)
+    ),
+    mapTo({ type: 'noop' })
+  );
+
   private transactionSigned$ = this.walletService.onTransactionSigned$.pipe(
     map((transaction) => ({
       type: 'transactionSigned',
@@ -203,6 +212,7 @@ export class SolanaDappTransactionService implements OnDestroy {
     private walletService: SolanaDappWalletService
   ) {
     this.runEffects([
+      this.transactionCreated$,
       this.transactionSigned$,
       this.transactionSent$,
       this.transactionConfirmed$,
@@ -234,13 +244,12 @@ export class SolanaDappTransactionService implements OnDestroy {
           amount,
         })
       ),
-      tap((transaction) => {
-        this.walletService.signTransaction(transaction);
+      tap((transaction) =>
         this._dispatcher.next({
           type: 'transactionCreated',
           payload: transaction,
-        });
-      })
+        })
+      )
     );
   }
 }
