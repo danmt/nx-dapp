@@ -1,9 +1,15 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
-import { sendTransaction } from '@nx-dapp/solana-dapp/connection';
-import { getTransferTransaction } from '@nx-dapp/solana-dapp/transaction';
-import { Transaction } from '@nx-dapp/solana-dapp/wallet';
+import {
+  confirmTransaction,
+  sendTransaction,
+} from '@nx-dapp/solana-dapp/connection';
+import {
+  getTransferTransaction,
+  Transaction,
+  TransactionResponse,
+} from '@nx-dapp/solana-dapp/transaction';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -27,11 +33,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import {
-  SolanaDappConnectionService,
-  SolanaDappNetworkService,
-  SolanaDappWalletService,
-} from '.';
+import { SolanaDappNetworkService, SolanaDappWalletService } from '.';
 
 interface Action {
   type: string;
@@ -185,23 +187,24 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   private transactionConfirmed$ = this.actions$.pipe(
     ofType<Action>('transactionSent'),
-    concatMap((transaction) =>
-      this.connectionService
-        .confirmTransaction((transaction.payload as TransactionResponse).txId)
-        .pipe(
-          map((txId) => ({
-            type: 'transactionConfirmed',
-            payload: {
-              id: (transaction.payload as Transaction).id,
-              txId,
-            },
-          }))
-        )
+    withLatestFrom(this.connection$),
+    concatMap(([transaction, connection]) =>
+      confirmTransaction(
+        connection,
+        (transaction.payload as TransactionResponse).txId
+      ).pipe(
+        map((txId) => ({
+          type: 'transactionConfirmed',
+          payload: {
+            id: (transaction.payload as Transaction).id,
+            txId,
+          },
+        }))
+      )
     )
   );
 
   constructor(
-    private connectionService: SolanaDappConnectionService,
     private networkService: SolanaDappNetworkService,
     private walletService: SolanaDappWalletService
   ) {
