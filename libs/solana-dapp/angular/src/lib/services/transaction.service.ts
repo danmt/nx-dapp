@@ -1,13 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { getTransferTransaction } from '@nx-dapp/solana-dapp/transaction';
 import { Transaction } from '@nx-dapp/solana-dapp/wallet';
-import {
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  SystemProgram,
-  Transaction as Web3Transaction,
-} from '@solana/web3.js';
+import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -19,6 +15,7 @@ import {
 import {
   concatMap,
   distinctUntilChanged,
+  first,
   map,
   observeOn,
   scan,
@@ -26,9 +23,12 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
 
-import { SolanaDappConnectionService, SolanaDappWalletService } from '.';
+import {
+  SolanaDappConnectionService,
+  SolanaDappNetworkService,
+  SolanaDappWalletService,
+} from '.';
 
 interface Action {
   type: string;
@@ -126,6 +126,13 @@ export class SolanaDappTransactionService implements OnDestroy {
       bufferSize: 1,
     })
   );
+  connection$ = this.networkService.network$.pipe(
+    map(({ url }) => new Connection(url, 'recent')),
+    shareReplay({
+      refCount: false,
+      bufferSize: 1,
+    })
+  );
   transactions$ = this.state$.pipe(
     map(({ transactions }) => transactions),
     distinctUntilChanged()
@@ -192,6 +199,7 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   constructor(
     private connectionService: SolanaDappConnectionService,
+    private networkService: SolanaDappNetworkService,
     private walletService: SolanaDappWalletService
   ) {
     this.runEffects([
@@ -214,22 +222,18 @@ export class SolanaDappTransactionService implements OnDestroy {
 
   transfer(recipientAddress: string, amount: number) {
     return combineLatest([
-      this.connectionService.getRecentBlockhash(),
-      this.walletService.publicKey$.pipe(isNotNull),
+      this.connection$,
+      this.walletService.walletAddress$.pipe(isNotNull),
     ]).pipe(
-      map(([{ blockhash }, fromPubkey]) => ({
-        id: uuid(),
-        data: new Web3Transaction({
-          recentBlockhash: blockhash,
-          feePayer: fromPubkey,
-        }).add(
-          SystemProgram.transfer({
-            fromPubkey: fromPubkey,
-            toPubkey: new PublicKey(recipientAddress),
-            lamports: LAMPORTS_PER_SOL * amount || 0,
-          })
-        ),
-      })),
+      first(),
+      concatMap(([connection, walletAddress]) =>
+        getTransferTransaction({
+          connection,
+          walletAddress,
+          recipientAddress,
+          amount,
+        })
+      ),
       tap((transaction) => {
         this.walletService.signTransaction(transaction);
         this._dispatcher.next({

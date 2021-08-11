@@ -105,7 +105,11 @@ export class SendFundsComponent {
           this.sendFundsGroup.get('recipient')?.value,
           this.sendFundsGroup.get('amount')?.value
         )
-        .subscribe(() => this.dialogRef.close());
+        .subscribe({
+          next: () => console.log('emitted'),
+          complete: () => console.log('completed'),
+        });
+      //.subscribe(() => this.dialogRef.close());
     }
   }
 }
