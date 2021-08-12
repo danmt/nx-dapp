@@ -48,6 +48,12 @@
     "application-portfolios-utils": {
       "tags": []
     },
+    "application-shared-ui-navigation": {
+      "tags": []
+    },
+    "application-shared-ui-settings-menu": {
+      "tags": []
+    },
     "application-shell": {
       "tags": []
     },

@@ -36,6 +36,12 @@
       "@nx-dapp/application/portfolios/utils": [
         "libs/application/portfolios/utils/src/index.ts"
       ],
+      "@nx-dapp/application/shared/ui/navigation": [
+        "libs/application/shared/ui/navigation/src/index.ts"
+      ],
+      "@nx-dapp/application/shared/ui/settings-menu": [
+        "libs/application/shared/ui/settings-menu/src/index.ts"
+      ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
       "@nx-dapp/application/transactions/features/transactions-in-process": [
         "libs/application/transactions/features/transactions-in-process/src/index.ts"
