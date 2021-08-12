@@ -11,6 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { ReactiveComponentModule } from '@ngrx/component';
 import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/change-network';
+import { SettingsMenuModule } from '@nx-dapp/application/shared/ui/settings-menu';
 import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { TransactionNotificationsModule } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
@@ -57,6 +58,7 @@ import { ShellComponent } from './shell.component';
     ChangeNetworkModule,
     ViewWalletModule,
     TransactionsInProcessModule,
+    SettingsMenuModule,
   ],
   declarations: [ShellComponent, NavigationComponent],
 })

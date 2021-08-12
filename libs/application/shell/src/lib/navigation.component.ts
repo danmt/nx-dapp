@@ -75,43 +75,13 @@ import { map, shareReplay } from 'rxjs/operators';
           <div *ngIf="connected$ | async" class="ml-auto flex items-center">
             {{ walletAddress$ | async }}
           </div>
-          <button
-            mat-mini-fab
-            color="accent"
-            [matMenuTriggerFor]="menu"
-            class="ml-4"
+          <nx-dapp-settings-menu
+            [isConnected]="connected$ | async"
+            (viewWallet)="onViewWallet()"
+            (changeNetwork)="onChangeNetwork()"
+            (disconnectWallet)="onDisconnectWallet()"
           >
-            <mat-icon>settings</mat-icon>
-          </button>
-
-          <mat-menu #menu="matMenu" class="w-52">
-            <button
-              *ngIf="connected$ | async"
-              mat-menu-item
-              (click)="onViewWallet()"
-            >
-              Wallet
-            </button>
-            <button
-              mat-menu-item
-              class="flex justify-between items-center"
-              (click)="onChangeNetwork()"
-            >
-              <span>Change network</span>
-              <mat-icon class="mr-0">settings_ethernet</mat-icon>
-            </button>
-            <ng-container *ngIf="connected$ | async">
-              <mat-divider></mat-divider>
-              <button
-                mat-menu-item
-                (click)="onDisconnectWallet()"
-                class="flex justify-between items-center"
-              >
-                <span class="font-bold text-warn">Disconnect</span>
-                <mat-icon class="text-warn mr-0">logout</mat-icon>
-              </button>
-            </ng-container>
-          </mat-menu>
+          </nx-dapp-settings-menu>
         </mat-toolbar>
         <ng-content></ng-content>
       </mat-sidenav-content>
