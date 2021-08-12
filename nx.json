@@ -48,7 +48,16 @@
     "application-portfolios-utils": {
       "tags": []
     },
+    "application/shared/ui/focus": {
+      "tags": []
+    },
+    "application/shared/ui/modal-header": {
+      "tags": []
+    },
     "application-shared-ui-navigation": {
+      "tags": []
+    },
+    "application/shared/ui/page-header": {
       "tags": []
     },
     "application-shared-ui-settings-menu": {
@@ -75,34 +84,7 @@
     "application/wallets/utils/wallet-notifications": {
       "tags": []
     },
-    "shared-connection-data-access-connections": {
-      "tags": []
-    },
-    "shared-connection-data-access-endpoints": {
-      "tags": []
-    },
-    "shared-connection-data-access-tokens": {
-      "tags": []
-    },
-    "shared-connection-ui-connections-dropdown": {
-      "tags": []
-    },
-    "shared-connection-ui-wallets-dropdown": {
-      "tags": []
-    },
-    "shared-operators-not-null": {
-      "tags": []
-    },
-    "shared-operators-of-type": {
-      "tags": []
-    },
-    "shared-ui-focus": {
-      "tags": []
-    },
-    "shared-ui-modal-header": {
-      "tags": []
-    },
-    "shared-ui-page-header": {
+    "shared-utils-operators": {
       "tags": []
     },
     "solana-dapp-account": {

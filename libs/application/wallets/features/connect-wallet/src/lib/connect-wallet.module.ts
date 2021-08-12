@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { FocusModule } from '@nx-dapp/shared/ui/focus';
-import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
+import { FocusModule } from '@nx-dapp/application/shared/ui/focus';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
 import { ConnectWalletService } from './connect-wallet.service';
 import { ConnectWalletComponent } from './connect-wallet.component';

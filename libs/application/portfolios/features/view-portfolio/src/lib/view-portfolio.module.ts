@@ -7,7 +7,7 @@ import { PortfolioTotalsModule } from '@nx-dapp/application/portfolios/ui/portfo
 import { PositionListItemModule } from '@nx-dapp/application/portfolios/ui/position-list-item';
 import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { SendFundsModule } from '@nx-dapp/application/wallets/features/send-funds';
-import { PageHeaderModule } from '@nx-dapp/shared/ui/page-header';
+import { PageHeaderModule } from '@nx-dapp/application/shared/ui/page-header';
 
 import { ViewPortfolioComponent } from './view-portfolio.component';
 

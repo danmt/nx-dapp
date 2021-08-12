@@ -6,7 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
 import { SendFundsComponent } from './send-funds.component';
 import { SendFundsService } from './send-funds.service';

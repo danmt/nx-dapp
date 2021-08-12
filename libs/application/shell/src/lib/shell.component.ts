@@ -4,7 +4,7 @@ import { TransactionNotificationsService } from '@nx-dapp/application/transactio
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/utils/wallet-notifications';
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import {
   obscureWalletAddress,
   SolanaDappTransactionService,

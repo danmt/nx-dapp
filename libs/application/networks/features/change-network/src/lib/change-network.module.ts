@@ -6,7 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveComponentModule } from '@ngrx/component';
 import { NetworksRadioGroupModule } from '@nx-dapp/application/networks/ui/networks-radio-group';
-import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
 import { ChangeNetworkComponent } from './change-network.component';
 import { ChangeNetworkService } from './change-network.service';

@@ -1,4 +1,4 @@
-import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { ofType } from '@nx-dapp/shared/utils/operators';
 import {
   confirmTransaction,
   sendTransaction,

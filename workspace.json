@@ -182,6 +182,56 @@
         }
       }
     },
+    "application/shared/ui/focus": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/focus",
+      "sourceRoot": "libs/application/shared/ui/focus/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/focus"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/focus/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/focus/src/**/*.ts",
+              "libs/application/shared/ui/focus/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application/shared/ui/modal-header": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/modal-header",
+      "sourceRoot": "libs/application/shared/ui/modal-header/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/modal-header"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/modal-header/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/modal-header/src/**/*.ts",
+              "libs/application/shared/ui/modal-header/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-shared-ui-navigation": {
       "projectType": "library",
       "root": "libs/application/shared/ui/navigation",
@@ -202,6 +252,31 @@
             "lintFilePatterns": [
               "libs/application/shared/ui/navigation/src/**/*.ts",
               "libs/application/shared/ui/navigation/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application/shared/ui/page-header": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/page-header",
+      "sourceRoot": "libs/application/shared/ui/page-header/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/page-header"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/page-header/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/page-header/src/**/*.ts",
+              "libs/application/shared/ui/page-header/src/**/*.html"
             ]
           }
         }
@@ -415,248 +490,23 @@
         }
       }
     },
-    "shared-connection-data-access-connections": {
-      "projectType": "library",
-      "root": "libs/shared/connection/data-access/connections",
-      "sourceRoot": "libs/shared/connection/data-access/connections/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/connection/data-access/connections"
-          ],
-          "options": {
-            "jestConfig": "libs/shared/connection/data-access/connections/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/connection/data-access/connections/src/**/*.ts",
-              "libs/shared/connection/data-access/connections/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-connection-data-access-endpoints": {
-      "projectType": "library",
-      "root": "libs/shared/connection/data-access/endpoints",
-      "sourceRoot": "libs/shared/connection/data-access/endpoints/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/connection/data-access/endpoints"],
-          "options": {
-            "jestConfig": "libs/shared/connection/data-access/endpoints/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/connection/data-access/endpoints/src/**/*.ts",
-              "libs/shared/connection/data-access/endpoints/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-connection-data-access-tokens": {
-      "projectType": "library",
-      "root": "libs/shared/connection/data-access/tokens",
-      "sourceRoot": "libs/shared/connection/data-access/tokens/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/connection/data-access/tokens"],
-          "options": {
-            "jestConfig": "libs/shared/connection/data-access/tokens/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/connection/data-access/tokens/src/**/*.ts",
-              "libs/shared/connection/data-access/tokens/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-connection-ui-connections-dropdown": {
-      "projectType": "library",
-      "root": "libs/shared/connection/ui/connections-dropdown",
-      "sourceRoot": "libs/shared/connection/ui/connections-dropdown/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/shared/connection/ui/connections-dropdown"
-          ],
-          "options": {
-            "jestConfig": "libs/shared/connection/ui/connections-dropdown/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/connection/ui/connections-dropdown/src/**/*.ts",
-              "libs/shared/connection/ui/connections-dropdown/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-connection-ui-wallets-dropdown": {
-      "projectType": "library",
-      "root": "libs/shared/connection/ui/wallets-dropdown",
-      "sourceRoot": "libs/shared/connection/ui/wallets-dropdown/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/connection/ui/wallets-dropdown"],
-          "options": {
-            "jestConfig": "libs/shared/connection/ui/wallets-dropdown/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/connection/ui/wallets-dropdown/src/**/*.ts",
-              "libs/shared/connection/ui/wallets-dropdown/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-operators-not-null": {
-      "root": "libs/shared/operators/not-null",
-      "sourceRoot": "libs/shared/operators/not-null/src",
+    "shared-utils-operators": {
+      "root": "libs/shared/utils/operators",
+      "sourceRoot": "libs/shared/utils/operators/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/operators/not-null/**/*.ts"]
+            "lintFilePatterns": ["libs/shared/utils/operators/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/operators/not-null"],
+          "outputs": ["coverage/libs/shared/utils/operators"],
           "options": {
-            "jestConfig": "libs/shared/operators/not-null/jest.config.js",
+            "jestConfig": "libs/shared/utils/operators/jest.config.js",
             "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-operators-of-type": {
-      "root": "libs/shared/operators/of-type",
-      "sourceRoot": "libs/shared/operators/of-type/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/operators/of-type/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/operators/of-type"],
-          "options": {
-            "jestConfig": "libs/shared/operators/of-type/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-ui-focus": {
-      "projectType": "library",
-      "root": "libs/shared/ui/focus",
-      "sourceRoot": "libs/shared/ui/focus/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/ui/focus"],
-          "options": {
-            "jestConfig": "libs/shared/ui/focus/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/ui/focus/src/**/*.ts",
-              "libs/shared/ui/focus/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-ui-modal-header": {
-      "projectType": "library",
-      "root": "libs/shared/ui/modal-header",
-      "sourceRoot": "libs/shared/ui/modal-header/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/ui/modal-header"],
-          "options": {
-            "jestConfig": "libs/shared/ui/modal-header/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/ui/modal-header/src/**/*.ts",
-              "libs/shared/ui/modal-header/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "shared-ui-page-header": {
-      "projectType": "library",
-      "root": "libs/shared/ui/page-header",
-      "sourceRoot": "libs/shared/ui/page-header/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/ui/page-header"],
-          "options": {
-            "jestConfig": "libs/shared/ui/page-header/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/shared/ui/page-header/src/**/*.ts",
-              "libs/shared/ui/page-header/src/**/*.html"
-            ]
           }
         }
       }
