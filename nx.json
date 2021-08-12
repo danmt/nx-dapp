@@ -75,21 +75,6 @@
     "application/wallets/utils/wallet-notifications": {
       "tags": []
     },
-    "shared-connection-data-access-connections": {
-      "tags": []
-    },
-    "shared-connection-data-access-endpoints": {
-      "tags": []
-    },
-    "shared-connection-data-access-tokens": {
-      "tags": []
-    },
-    "shared-connection-ui-connections-dropdown": {
-      "tags": []
-    },
-    "shared-connection-ui-wallets-dropdown": {
-      "tags": []
-    },
     "shared-operators-not-null": {
       "tags": []
     },

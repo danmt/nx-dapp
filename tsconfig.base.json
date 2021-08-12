@@ -61,21 +61,6 @@
       "@nx-dapp/application/wallets/utils/wallet-notifications": [
         "libs/application/wallets/utils/wallet-notifications/src/index.ts"
       ],
-      "@nx-dapp/shared/connection/data-access/connections": [
-        "libs/shared/connection/data-access/connections/src/index.ts"
-      ],
-      "@nx-dapp/shared/connection/data-access/endpoints": [
-        "libs/shared/connection/data-access/endpoints/src/index.ts"
-      ],
-      "@nx-dapp/shared/connection/data-access/tokens": [
-        "libs/shared/connection/data-access/tokens/src/index.ts"
-      ],
-      "@nx-dapp/shared/connection/ui/connections-dropdown": [
-        "libs/shared/connection/ui/connections-dropdown/src/index.ts"
-      ],
-      "@nx-dapp/shared/connection/ui/wallets-dropdown": [
-        "libs/shared/connection/ui/wallets-dropdown/src/index.ts"
-      ],
       "@nx-dapp/shared/operators/not-null": [
         "libs/shared/operators/not-null/src/index.ts"
       ],
