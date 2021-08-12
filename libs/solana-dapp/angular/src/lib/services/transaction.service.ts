@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { TransactionClient } from '@nx-dapp/solana-dapp/transaction';
 import { merge } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';

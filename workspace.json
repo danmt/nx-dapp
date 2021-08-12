@@ -415,48 +415,6 @@
         }
       }
     },
-    "shared-operators-not-null": {
-      "root": "libs/shared/operators/not-null",
-      "sourceRoot": "libs/shared/operators/not-null/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/operators/not-null/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/operators/not-null"],
-          "options": {
-            "jestConfig": "libs/shared/operators/not-null/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-operators-of-type": {
-      "root": "libs/shared/operators/of-type",
-      "sourceRoot": "libs/shared/operators/of-type/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/operators/of-type/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/operators/of-type"],
-          "options": {
-            "jestConfig": "libs/shared/operators/of-type/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "shared-ui-focus": {
       "projectType": "library",
       "root": "libs/shared/ui/focus",
@@ -528,6 +486,27 @@
               "libs/shared/ui/page-header/src/**/*.ts",
               "libs/shared/ui/page-header/src/**/*.html"
             ]
+          }
+        }
+      }
+    },
+    "shared-utils-operators": {
+      "root": "libs/shared/utils/operators",
+      "sourceRoot": "libs/shared/utils/operators/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/utils/operators/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/utils/operators"],
+          "options": {
+            "jestConfig": "libs/shared/utils/operators/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

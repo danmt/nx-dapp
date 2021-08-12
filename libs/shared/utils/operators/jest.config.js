@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-operators-of-type',
+  displayName: 'shared-utils-operators',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/shared/operators/of-type',
+  coverageDirectory: '../../../../coverage/libs/shared/utils/operators',
 };

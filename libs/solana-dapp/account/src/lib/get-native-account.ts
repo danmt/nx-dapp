@@ -1,4 +1,4 @@
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { TokenAccount } from '@nx-dapp/solana-dapp/account';
 import { u64 } from '@nx-dapp/solana-dapp/utils';
 import { NATIVE_MINT } from '@solana/spl-token';

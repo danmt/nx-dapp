@@ -1,4 +1,4 @@
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { fromEventPattern, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { WalletAdapter, WalletAdapterEvents } from '../types';

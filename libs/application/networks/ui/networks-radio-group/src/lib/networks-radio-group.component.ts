@@ -1,6 +1,6 @@
 import { Component, Input, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { Network } from '@nx-dapp/solana-dapp/angular';
 
 @Component({

@@ -1,5 +1,5 @@
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
-import { ofType } from '@nx-dapp/shared/operators/of-type';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
+import { ofType } from '@nx-dapp/shared/utils/operators';
 import { Network } from '@nx-dapp/solana-dapp/network';
 import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 import {
