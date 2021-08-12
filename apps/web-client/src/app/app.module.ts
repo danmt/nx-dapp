@@ -7,7 +7,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ShellModule } from '@nx-dapp/application/shell';
 import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
 
 import { environment } from '../environments/environment';
@@ -17,7 +16,16 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabledBlocking' }),
+    RouterModule.forRoot(
+      [
+        {
+          path: '',
+          loadChildren: () =>
+            import('@nx-dapp/application/shell').then((m) => m.ShellModule),
+        },
+      ],
+      { initialNavigation: 'enabledBlocking' }
+    ),
     BrowserAnimationsModule,
     StoreModule.forRoot(
       {},
@@ -34,7 +42,6 @@ import { AppComponent } from './app.component';
     StoreRouterConnectingModule.forRoot(),
     SolanaDappModule.forRoot(),
     MatTooltipModule,
-    ShellModule,
   ],
   bootstrap: [AppComponent],
 })
