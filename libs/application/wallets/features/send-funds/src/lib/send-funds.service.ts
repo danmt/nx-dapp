@@ -4,9 +4,7 @@ import { Position } from '@nx-dapp/application/portfolios/utils';
 
 import { SendFundsComponent } from './send-funds.component';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SendFundsService {
   constructor(private matDialog: MatDialog) {}
 
