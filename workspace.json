@@ -182,6 +182,31 @@
         }
       }
     },
+    "application-shared-ui-navigation": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/navigation",
+      "sourceRoot": "libs/application/shared/ui/navigation/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/navigation"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/navigation/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/navigation/src/**/*.ts",
+              "libs/application/shared/ui/navigation/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-shared-ui-settings-menu": {
       "projectType": "library",
       "root": "libs/application/shared/ui/settings-menu",

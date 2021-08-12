@@ -1,13 +1,11 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
-import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
-import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import {
-  obscureWalletAddress,
-  SolanaDappWalletService,
-} from '@nx-dapp/solana-dapp/angular';
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -28,7 +26,7 @@ import { map, shareReplay } from 'rxjs/operators';
         </figure>
         <mat-nav-list>
           <a mat-list-item routerLink="/portfolios/view-portfolio">Portfolio</a>
-          <div class="mt-8 px-4" *ngIf="connected$ | async">
+          <div class="mt-8 px-4" *ngIf="isConnected">
             <button
               mat-raised-button
               color="warn"
@@ -62,7 +60,7 @@ import { map, shareReplay } from 'rxjs/operators';
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
 
-          <div *ngIf="(connected$ | async) === false" class="ml-auto">
+          <div *ngIf="!isConnected" class="ml-auto">
             <button
               mat-raised-button
               color="accent"
@@ -72,18 +70,12 @@ import { map, shareReplay } from 'rxjs/operators';
             </button>
           </div>
 
-          <div *ngIf="connected$ | async" class="ml-auto flex items-center">
-            {{ walletAddress$ | async }}
+          <div *ngIf="isConnected" class="ml-auto flex items-center">
+            {{ walletAddress }}
           </div>
-          <nx-dapp-settings-menu
-            [isConnected]="connected$ | async"
-            (viewWallet)="onViewWallet()"
-            (changeNetwork)="onChangeNetwork()"
-            (disconnectWallet)="onDisconnectWallet()"
-          >
-          </nx-dapp-settings-menu>
+          <ng-content></ng-content>
         </mat-toolbar>
-        <ng-content></ng-content>
+        <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
@@ -111,41 +103,24 @@ import { map, shareReplay } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
+  @Input() isConnected: boolean | null = null;
+  @Input() walletAddress: string | null = null;
+  @Output() connectWallet = new EventEmitter();
+  @Output() disconnectWallet = new EventEmitter();
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
       map((result) => result.matches),
       shareReplay()
     );
-  connected$ = this.walletService.connected$;
-  walletAddress$ = this.walletService.walletAddress$.pipe(
-    isNotNull,
-    obscureWalletAddress
-  );
 
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private walletService: SolanaDappWalletService,
-    private connectWalletService: ConnectWalletService,
-    private changeNetworkService: ChangeNetworkService,
-    private viewWalletService: ViewWalletService
-  ) {}
+  constructor(private breakpointObserver: BreakpointObserver) {}
 
   onConnectWallet() {
-    this.connectWalletService.open();
+    this.connectWallet.emit();
   }
 
   onDisconnectWallet() {
-    if (confirm('Are you sure? This action will disconnect your wallet.')) {
-      this.walletService.disconnect();
-    }
-  }
-
-  onViewWallet() {
-    this.viewWalletService.open();
-  }
-
-  onChangeNetwork() {
-    this.changeNetworkService.open();
+    this.disconnectWallet.emit();
   }
 }
