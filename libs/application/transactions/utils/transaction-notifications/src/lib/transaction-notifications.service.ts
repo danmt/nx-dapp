@@ -4,8 +4,6 @@ import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
 import { merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
-import { TransactionCreatedComponent } from './transaction-created.component';
-
 enum MessageTypes {
   Success = 'success',
   Warning = 'warning',
@@ -15,17 +13,6 @@ enum MessageTypes {
 @Injectable()
 export class TransactionNotificationsService implements OnDestroy {
   private readonly _destroy = new Subject();
-
-  private readonly _transactionCreated$ =
-    this.transactionService.onTransactionCreated$.pipe(
-      tap(() =>
-        this.snackBar.openFromComponent(TransactionCreatedComponent, {
-          horizontalPosition: 'left',
-          verticalPosition: 'bottom',
-          panelClass: ['bg-primary', 'text-white'],
-        })
-      )
-    );
 
   private readonly _transactionConfirmed$ =
     this.transactionService.onTransactionConfirmed$.pipe(
@@ -40,7 +27,7 @@ export class TransactionNotificationsService implements OnDestroy {
   ) {}
 
   init() {
-    merge(this._transactionConfirmed$, this._transactionCreated$)
+    merge(this._transactionConfirmed$)
       .pipe(takeUntil(this._destroy))
       .subscribe();
   }

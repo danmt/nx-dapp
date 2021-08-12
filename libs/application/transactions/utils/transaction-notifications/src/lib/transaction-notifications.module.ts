@@ -6,7 +6,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { TransactionNotificationsService } from './transaction-notifications.service';
-import { TransactionCreatedComponent } from './transaction-created.component';
 
 @NgModule({
   imports: [
@@ -17,6 +16,6 @@ import { TransactionCreatedComponent } from './transaction-created.component';
     MatSnackBarModule,
   ],
   providers: [TransactionNotificationsService],
-  declarations: [TransactionCreatedComponent],
+  declarations: [],
 })
 export class TransactionNotificationsModule {}
