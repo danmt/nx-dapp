@@ -270,6 +270,10 @@ $altTheme: (
 }
 
 body {
+  --success-color: #059669;
+  --warning-color: #fbbf24;
+  --error-color: #dc2626;
+
   margin: 0;
   background-color: $dark-background;
   color: $light-text;
@@ -304,7 +308,7 @@ mat-icon {
 }
 
 .success-snackbar {
-  background-color: #059669 !important;
+  background-color: var(--success-color) !important;
   color: white !important;
 
   .mat-simple-snackbar > span {
@@ -318,7 +322,7 @@ mat-icon {
 }
 
 .warning-snackbar {
-  background-color: #fbbf24 !important;
+  background-color: var(--warning-color) !important;
   color: black !important;
 
   .mat-simple-snackbar > span {
@@ -332,7 +336,7 @@ mat-icon {
 }
 
 .error-snackbar {
-  background-color: #dc2626 !important;
+  background-color: var(--error-color) !important;
   color: white !important;
 
   .mat-simple-snackbar > span {

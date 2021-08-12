@@ -1,12 +1,13 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { Network } from '@nx-dapp/solana-dapp/network';
-import { Transaction } from '@solana/web3.js';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 import {
   asyncScheduler,
   BehaviorSubject,
   combineLatest,
   defer,
+  EMPTY,
   from,
   merge,
   Observable,
@@ -30,7 +31,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import { fromAdapterEvent } from '..';
+import { fromAdapterEvent } from './operators';
 import {
   ActionTypes,
   ConnectWalletAction,
@@ -54,6 +55,7 @@ import {
 } from './state';
 import { IWalletClient, Wallet, WalletName } from './types';
 import {
+  WalletError,
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
@@ -123,8 +125,20 @@ export class WalletClient implements IWalletClient {
   );
   onError$ = this.adapter$.pipe(
     fromAdapterEvent('error'),
-    filter((error): error is Error => error instanceof Error),
-    map((error) => ({ name: error.name, message: error.message }))
+    filter((error): error is WalletError => error instanceof WalletError),
+    map((error) => ({
+      name: error.name,
+      message: error.message,
+      data: error.data,
+    }))
+  );
+  onTransactionSignatureFail$ = this.onError$.pipe(
+    filter((error) => error.name === 'WalletSignatureError'),
+    map(({ data }) => data as string)
+  );
+  onTransactionSigned$ = this.actions$.pipe(
+    ofType<TransactionSignedAction>('transactionSigned'),
+    map(({ payload }) => payload)
   );
 
   private walletConnected$ = this.actions$.pipe(
@@ -182,9 +196,10 @@ export class WalletClient implements IWalletClient {
     ofType<SignTransactionAction>('signTransaction'),
     withLatestFrom(this.state$),
     filter(([, { signing }]) => signing),
-    exhaustMap(([{ payload: transaction }, state]) =>
+    concatMap(([{ payload: transaction }, state]) =>
       this.handleSignTransaction(transaction, state).pipe(
-        map(() => new TransactionSignedAction(transaction))
+        map(() => new TransactionSignedAction(transaction)),
+        catchError(() => EMPTY)
       )
     )
   );
@@ -200,7 +215,7 @@ export class WalletClient implements IWalletClient {
     )
   );
 
-  networkChanged$ = this.actions$.pipe(
+  private networkChanged$ = this.actions$.pipe(
     ofType<SetNetworkAction>('setNetwork'),
     withLatestFrom(this.state$),
     filter(([, { connected }]) => connected),
@@ -254,27 +269,43 @@ export class WalletClient implements IWalletClient {
   private handleSignTransaction(
     transaction: Transaction,
     { adapter, connected, wallet }: WalletState
-  ) {
+  ): Observable<Transaction> {
     if (!connected) {
       return throwError(new WalletNotConnectedError());
     }
     if (!adapter || !wallet) {
       return throwError(new WalletNotSelectedError());
     }
-    return from(defer(() => adapter.signTransaction(transaction)));
+    return from(defer(() => adapter.signTransaction(transaction))).pipe(
+      map((signedTransaction) => ({
+        id: transaction.id,
+        data: signedTransaction,
+      }))
+    );
   }
 
   private handleSignAllTransactions(
     transactions: Transaction[],
     { adapter, connected, wallet }: WalletState
-  ) {
+  ): Observable<Transaction[]> {
     if (!connected) {
       return throwError(new WalletNotConnectedError());
     }
     if (!adapter || !wallet) {
       return throwError(new WalletNotSelectedError());
     }
-    return from(defer(() => adapter.signAllTransactions(transactions)));
+    return from(
+      defer(() =>
+        adapter.signAllTransactions(transactions.map(({ data }) => data))
+      )
+    ).pipe(
+      map((signedTransactions) =>
+        signedTransactions.map((signedTransaction, index) => ({
+          id: transactions[index].id,
+          data: signedTransaction,
+        }))
+      )
+    );
   }
 
   loadWallets(wallets: Wallet[]) {

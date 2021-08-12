@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   HostBinding,
   Input,
+  Output,
 } from '@angular/core';
 import { Position } from '@nx-dapp/application/portfolios/utils';
 
@@ -24,6 +26,14 @@ import { Position } from '@nx-dapp/application/portfolios/utils';
         <p class="text-center italic text-xs">
           ≈{{ position.total | currency }}
         </p>
+        <button
+          class="block mx-auto"
+          mat-raised-button
+          color="primary"
+          (click)="onSendFunds()"
+        >
+          Send funds
+        </button>
       </div>
     </mat-card>
   `,
@@ -33,4 +43,9 @@ import { Position } from '@nx-dapp/application/portfolios/utils';
 export class PositionListItemComponent {
   @HostBinding('class') class = 'block w-full h-full';
   @Input() position!: Position;
+  @Output() sendFunds = new EventEmitter();
+
+  onSendFunds() {
+    this.sendFunds.emit();
+  }
 }

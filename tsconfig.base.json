@@ -37,14 +37,23 @@
         "libs/application/portfolios/utils/src/index.ts"
       ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
-      "@nx-dapp/application/utils/notifications": [
-        "libs/application/utils/notifications/src/index.ts"
+      "@nx-dapp/application/transactions/features/transactions-in-process": [
+        "libs/application/transactions/features/transactions-in-process/src/index.ts"
+      ],
+      "@nx-dapp/application/transactions/utils/transaction-notifications": [
+        "libs/application/transactions/utils/transaction-notifications/src/index.ts"
       ],
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"
       ],
+      "@nx-dapp/application/wallets/features/send-funds": [
+        "libs/application/wallets/features/send-funds/src/index.ts"
+      ],
       "@nx-dapp/application/wallets/features/view-wallet": [
         "libs/application/wallets/features/view-wallet/src/index.ts"
+      ],
+      "@nx-dapp/application/wallets/utils/wallet-notifications": [
+        "libs/application/wallets/utils/wallet-notifications/src/index.ts"
       ],
       "@nx-dapp/shared/connection/data-access/connections": [
         "libs/shared/connection/data-access/connections/src/index.ts"
@@ -77,9 +86,15 @@
       "@nx-dapp/solana-dapp/account": ["libs/solana-dapp/account/src/index.ts"],
       "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],
       "@nx-dapp/solana-dapp/balance": ["libs/solana-dapp/balance/src/index.ts"],
+      "@nx-dapp/solana-dapp/connection": [
+        "libs/solana-dapp/connection/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/market": ["libs/solana-dapp/market/src/index.ts"],
       "@nx-dapp/solana-dapp/network": ["libs/solana-dapp/network/src/index.ts"],
       "@nx-dapp/solana-dapp/token": ["libs/solana-dapp/token/src/index.ts"],
+      "@nx-dapp/solana-dapp/transaction": [
+        "libs/solana-dapp/transaction/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/utils": ["libs/solana-dapp/utils/src/index.ts"],
       "@nx-dapp/solana-dapp/wallet": ["libs/solana-dapp/wallet/src/index.ts"]
     }

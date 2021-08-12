@@ -51,13 +51,22 @@
     "application-shell": {
       "tags": []
     },
-    "application-utils-notifications": {
+    "application-transactions-features-transactions-in-process": {
       "tags": []
     },
     "application-wallets-features-connect-wallet": {
       "tags": []
     },
+    "application-wallets-features-send-funds": {
+      "tags": []
+    },
     "application-wallets-features-view-wallet": {
+      "tags": []
+    },
+    "application/transactions/utils/transaction-notifications": {
+      "tags": []
+    },
+    "application/wallets/utils/wallet-notifications": {
       "tags": []
     },
     "shared-connection-data-access-connections": {
@@ -99,6 +108,9 @@
     "solana-dapp-balance": {
       "tags": []
     },
+    "solana-dapp-connection": {
+      "tags": []
+    },
     "solana-dapp-market": {
       "tags": []
     },
@@ -106,6 +118,9 @@
       "tags": []
     },
     "solana-dapp-token": {
+      "tags": []
+    },
+    "solana-dapp-transaction": {
       "tags": []
     },
     "solana-dapp-utils": {

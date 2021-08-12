@@ -4,8 +4,9 @@ import {
   HostBinding,
   OnInit,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Position } from '@nx-dapp/application/portfolios/utils';
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { SendFundsService } from '@nx-dapp/application/wallets/features/send-funds';
 import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
 
 import { ViewPortfolioStore } from './view-portfolio.store';
@@ -42,6 +43,7 @@ import { ViewPortfolioStore } from './view-portfolio.store';
                 >
                   <nx-dapp-position-list-item
                     [position]="position"
+                    (sendFunds)="onSendFunds(position)"
                   ></nx-dapp-position-list-item>
                 </mat-grid-tile>
               </mat-grid-list>
@@ -93,8 +95,8 @@ export class ViewPortfolioComponent implements OnInit {
   constructor(
     private viewPortfolioStore: ViewPortfolioStore,
     private walletService: SolanaDappWalletService,
-    private matDialog: MatDialog,
     private connectWalletService: ConnectWalletService,
+    private sendFundsService: SendFundsService
   ) {}
 
   ngOnInit() {
@@ -103,5 +105,9 @@ export class ViewPortfolioComponent implements OnInit {
 
   onConnectWallet() {
     this.connectWalletService.open();
+  }
+
+  onSendFunds(position: Position) {
+    this.sendFundsService.open(position);
   }
 }

@@ -1,5 +1,5 @@
 import { Network } from '@nx-dapp/solana-dapp/network';
-import { Transaction } from '@solana/web3.js';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 
 import { Wallet, WalletName } from '../types';
 

@@ -3,9 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ConnectWalletComponent } from './connect-wallet.component';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ConnectWalletService {
   constructor(private matDialog: MatDialog) {}
 

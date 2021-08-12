@@ -1,5 +1,5 @@
-import { Network } from '@nx-dapp/solana-dapp/network';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
+import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 import { Observable } from 'rxjs';
 
@@ -21,8 +21,10 @@ export interface WalletAdapter extends EventEmitter<WalletAdapterEvents> {
 
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  signTransaction: (transaction: Transaction) => Promise<Transaction>;
-  signAllTransactions: (transaction: Transaction[]) => Promise<Transaction[]>;
+  signTransaction: (transaction: Transaction) => Promise<Web3Transaction>;
+  signAllTransactions: (
+    transaction: Web3Transaction[]
+  ) => Promise<Web3Transaction[]>;
 }
 
 export enum WalletAdapterNetwork {
@@ -45,7 +47,7 @@ export interface Wallet {
   adapter: () => WalletAdapter;
 }
 
-export const DEFAULT_WALLET = WalletName.Solong;
+export const DEFAULT_WALLET = WalletName.Sollet;
 
 export interface IWalletClient {
   actions$: Observable<ActionTypes>;

@@ -1,5 +1,6 @@
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 import Wallet from '@project-serum/sol-wallet-adapter';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
 import {
@@ -120,19 +121,15 @@ export class SolletWalletAdapter
     }
   }
 
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  async signTransaction(transaction: Transaction): Promise<Web3Transaction> {
     try {
       const wallet = this._wallet;
       if (!wallet) throw new WalletNotConnectedError();
 
       try {
-        return wallet.signTransaction(transaction);
+        return await wallet.signTransaction(transaction.data);
       } catch (error) {
-        if (error instanceof Error) {
-          throw new WalletSignatureError(error.message, error);
-        } else {
-          throw error;
-        }
+        throw new WalletSignatureError(error.message, error, transaction.id);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -143,8 +140,8 @@ export class SolletWalletAdapter
   }
 
   async signAllTransactions(
-    transactions: Transaction[]
-  ): Promise<Transaction[]> {
+    transactions: Web3Transaction[]
+  ): Promise<Web3Transaction[]> {
     try {
       const wallet = this._wallet;
       if (!wallet) throw new WalletNotConnectedError();

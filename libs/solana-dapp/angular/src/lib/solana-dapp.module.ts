@@ -5,6 +5,7 @@ import {
   SolanaDappConnectionService,
   SolanaDappMarketService,
   SolanaDappNetworkService,
+  SolanaDappTransactionService,
   SolanaDappWalletService,
 } from './services';
 
@@ -19,6 +20,7 @@ export class SolanaDappModule {
         SolanaDappMarketService,
         SolanaDappNetworkService,
         SolanaDappWalletService,
+        SolanaDappTransactionService,
       ],
     };
   }

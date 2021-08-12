@@ -2,7 +2,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -10,7 +9,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { NotificationsModule } from '@nx-dapp/application/utils/notifications';
+import { ReactiveComponentModule } from '@ngrx/component';
+import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
+import { TransactionNotificationsModule } from '@nx-dapp/application/transactions/utils/transaction-notifications';
+import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { WalletNotificationsModule } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 
 import { NavigationComponent } from './navigation.component';
 import { ShellComponent } from './shell.component';
@@ -40,13 +43,16 @@ import { ShellComponent } from './shell.component';
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
-    MatDialogModule,
     MatDividerModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,
-    NotificationsModule,
+    ReactiveComponentModule,
+    WalletNotificationsModule,
+    TransactionNotificationsModule,
+    ConnectWalletModule,
+    TransactionsInProcessModule,
   ],
   declarations: [ShellComponent, NavigationComponent],
 })

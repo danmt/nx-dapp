@@ -9,7 +9,14 @@ import { SolanaDappNetworkService } from '.';
   providedIn: 'root',
 })
 export class SolanaDappConnectionService {
-  connection$ = this.solanaDappNetworkService.network$.pipe(
+  connection$ = this.networkService.network$.pipe(
+    map(({ url }) => new Connection(url, 'recent')),
+    shareReplay({
+      refCount: false,
+      bufferSize: 1,
+    })
+  );
+  transactionConnection$ = this.networkService.network$.pipe(
     map(({ url }) => new Connection(url, 'recent')),
     shareReplay({
       refCount: false,
@@ -25,5 +32,5 @@ export class SolanaDappConnectionService {
     })
   );
 
-  constructor(private solanaDappNetworkService: SolanaDappNetworkService) {}
+  constructor(private networkService: SolanaDappNetworkService) {}
 }

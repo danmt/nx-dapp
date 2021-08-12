@@ -1,9 +1,11 @@
 export class WalletError extends Error {
   public error: unknown;
+  public data: unknown;
 
-  constructor(message?: string, error?: unknown) {
+  constructor(message?: string, error?: unknown, data?: unknown) {
     super(message);
     this.error = error;
+    this.data = data;
   }
 }
 
