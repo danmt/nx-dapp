@@ -179,7 +179,7 @@ export class PhantomWalletAdapter
       if (!provider) throw new WalletNotConnectedError();
 
       try {
-        return provider.signTransaction(transaction.data);
+        return await provider.signTransaction(transaction.data);
       } catch (error) {
         throw new WalletSignatureError(error.message, error, transaction.id);
       }
