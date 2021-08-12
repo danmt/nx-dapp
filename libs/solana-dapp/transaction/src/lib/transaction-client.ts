@@ -82,7 +82,7 @@ export class TransactionClient {
     withLatestFrom(this.connection$),
     concatMap(
       ([
-        [{ payload: createTransaction, payload: walletAddress }],
+        [{ payload: createTransaction }, { payload: walletAddress }],
         connection,
       ]) =>
         getTransferTransaction({
