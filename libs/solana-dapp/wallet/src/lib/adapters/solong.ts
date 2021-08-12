@@ -1,4 +1,5 @@
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
+import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
 import { WalletAdapter, WalletAdapterEvents } from '../types';
@@ -14,7 +15,7 @@ import {
 interface SolongProvider {
   currentAccount?: string | null;
   selectAccount: () => Promise<string>;
-  signTransaction: (transaction: Transaction) => Promise<Transaction>;
+  signTransaction: (transaction: Web3Transaction) => Promise<Web3Transaction>;
 }
 
 interface SolongWindow extends Window {
@@ -110,15 +111,19 @@ export class SolongWalletAdapter
     }
   }
 
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  async signTransaction(transaction: Transaction): Promise<Web3Transaction> {
     try {
       const provider = this._provider;
       if (!provider) throw new WalletNotConnectedError();
 
       try {
-        return await provider.signTransaction(transaction);
+        return await provider.signTransaction(transaction.data);
       } catch (error) {
-        throw new WalletSignatureError((error as Error)?.message, error);
+        throw new WalletSignatureError(
+          (error as Error)?.message,
+          error,
+          transaction.id
+        );
       }
     } catch (error) {
       this.emit('error', error as Error);
@@ -127,8 +132,8 @@ export class SolongWalletAdapter
   }
 
   async signAllTransactions(
-    transactions: Transaction[]
-  ): Promise<Transaction[]> {
+    transactions: Web3Transaction[]
+  ): Promise<Web3Transaction[]> {
     try {
       const provider = this._provider;
       if (!provider) throw new WalletNotConnectedError();

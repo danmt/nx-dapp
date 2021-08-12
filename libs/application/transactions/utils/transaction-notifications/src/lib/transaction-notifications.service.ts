@@ -20,6 +20,12 @@ export class TransactionNotificationsService implements OnDestroy {
         this.showMessage('Transaction confirmed', MessageTypes.Success, 3000)
       )
     );
+  private readonly _transactionCancelled$ =
+    this.transactionService.onTransactionCancelled$.pipe(
+      tap(() =>
+        this.showMessage('Transaction cancelled', MessageTypes.Warning, 3000)
+      )
+    );
 
   constructor(
     private snackBar: MatSnackBar,
@@ -27,7 +33,7 @@ export class TransactionNotificationsService implements OnDestroy {
   ) {}
 
   init() {
-    merge(this._transactionConfirmed$)
+    merge(this._transactionConfirmed$, this._transactionCancelled$)
       .pipe(takeUntil(this._destroy))
       .subscribe();
   }

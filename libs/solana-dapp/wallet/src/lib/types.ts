@@ -21,7 +21,7 @@ export interface WalletAdapter extends EventEmitter<WalletAdapterEvents> {
 
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  signTransaction: (transaction: Web3Transaction) => Promise<Web3Transaction>;
+  signTransaction: (transaction: Transaction) => Promise<Web3Transaction>;
   signAllTransactions: (
     transaction: Web3Transaction[]
   ) => Promise<Web3Transaction[]>;

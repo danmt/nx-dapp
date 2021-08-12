@@ -104,6 +104,7 @@ export class SendFundsComponent {
         this.sendFundsGroup.get('recipient')?.value,
         this.sendFundsGroup.get('amount')?.value
       );
+      this.dialogRef.close();
     }
   }
 }

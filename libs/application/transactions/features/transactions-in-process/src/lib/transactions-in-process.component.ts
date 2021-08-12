@@ -18,12 +18,23 @@ import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
         <p class="flex items-center m-0 gap-2">
           <span>{{ transaction.id }}</span>
           <mat-spinner
-            *ngIf="transaction.status !== 'Confirmed'"
+            *ngIf="transaction.isProcessing"
             diameter="24"
             color="primary"
           ></mat-spinner>
         </p>
-        <div>{{ transaction.status }}</div>
+        <div
+          class="px-4 py-2 text-xs uppercase font-bold rounded-sm"
+          [ngClass]="{
+            'bg-success text-white': transaction.status === 'Confirmed',
+            'bg-error text-white': transaction.status === 'Cancelled',
+            'bg-warning text-black':
+              transaction.status !== 'Confirmed' &&
+              transaction.status !== 'Cancelled'
+          }"
+        >
+          {{ transaction.status }}
+        </div>
       </li>
     </ul>
 

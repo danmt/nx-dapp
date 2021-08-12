@@ -7,6 +7,7 @@ import {
   BehaviorSubject,
   combineLatest,
   defer,
+  EMPTY,
   from,
   merge,
   Observable,
@@ -54,6 +55,7 @@ import {
 } from './state';
 import { IWalletClient, Wallet, WalletName } from './types';
 import {
+  WalletError,
   WalletNotConnectedError,
   WalletNotReadyError,
   WalletNotSelectedError,
@@ -123,8 +125,16 @@ export class WalletClient implements IWalletClient {
   );
   onError$ = this.adapter$.pipe(
     fromAdapterEvent('error'),
-    filter((error): error is Error => error instanceof Error),
-    map((error) => ({ name: error.name, message: error.message }))
+    filter((error): error is WalletError => error instanceof WalletError),
+    map((error) => ({
+      name: error.name,
+      message: error.message,
+      data: error.data,
+    }))
+  );
+  onTransactionSignatureFail$ = this.onError$.pipe(
+    filter((error) => error.name === 'WalletSignatureError'),
+    map(({ data }) => data as string)
   );
   onTransactionSigned$ = this.actions$.pipe(
     ofType<TransactionSignedAction>('transactionSigned'),
@@ -188,7 +198,8 @@ export class WalletClient implements IWalletClient {
     filter(([, { signing }]) => signing),
     concatMap(([{ payload: transaction }, state]) =>
       this.handleSignTransaction(transaction, state).pipe(
-        map(() => new TransactionSignedAction(transaction))
+        map(() => new TransactionSignedAction(transaction)),
+        catchError(() => EMPTY)
       )
     )
   );
@@ -265,7 +276,7 @@ export class WalletClient implements IWalletClient {
     if (!adapter || !wallet) {
       return throwError(new WalletNotSelectedError());
     }
-    return from(defer(() => adapter.signTransaction(transaction.data))).pipe(
+    return from(defer(() => adapter.signTransaction(transaction))).pipe(
       map((signedTransaction) => ({
         id: transaction.id,
         data: signedTransaction,

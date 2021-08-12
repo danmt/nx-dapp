@@ -13,6 +13,7 @@ export interface TransactionResponse {
 export interface ExtendedTransaction extends Transaction {
   status: string;
   txId?: string;
+  isProcessing: boolean;
 }
 
 export interface CreateTransactionPayload {

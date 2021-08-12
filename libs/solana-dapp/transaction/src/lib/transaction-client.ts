@@ -74,6 +74,10 @@ export class TransactionClient {
     ofType<Action>('transactionConfirmed'),
     map(({ payload }) => payload as TransactionResponse)
   );
+  onTransactionCancelled$ = this.actions$.pipe(
+    ofType<Action>('cancelTransaction'),
+    map(({ payload }) => payload as string)
+  );
 
   private transactionCreated$ = combineLatest([
     this.actions$.pipe(ofType<Action>('createTransaction')),
@@ -124,12 +128,9 @@ export class TransactionClient {
         connection,
         (transaction.payload as TransactionResponse).txId
       ).pipe(
-        map((txId) => ({
+        map(() => ({
           type: 'transactionConfirmed',
-          payload: {
-            id: (transaction.payload as Transaction).id,
-            txId,
-          },
+          payload: (transaction.payload as Transaction).id,
         }))
       )
     )
@@ -171,6 +172,13 @@ export class TransactionClient {
         recipientAddress,
         amount,
       },
+    });
+  }
+
+  cancelTransaction(id: string) {
+    this._dispatcher.next({
+      type: 'cancelTransaction',
+      payload: id,
     });
   }
 

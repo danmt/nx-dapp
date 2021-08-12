@@ -31,30 +31,32 @@ export const reducer = (state: TransactionState, action: Action) => {
           ...state.transactions,
           {
             ...(action.payload as Transaction),
-            status: 'Pending Sign',
+            status: 'Signing',
+            isProcessing: true,
           },
         ],
         isProcessing: true,
         inProcess: state.inProcess + 1,
       };
-    case 'transactionSigned':
+    case 'sendTransaction':
       return {
         ...state,
         transactions: state.transactions.map((transaction) =>
           transaction.id === (action.payload as Transaction).id
-            ? { ...transaction, status: 'Pending Send' }
+            ? { ...transaction, status: 'Sending', isProcessing: true }
             : transaction
         ),
       };
-    case 'transactionSent':
+    case 'confirmTransaction':
       return {
         ...state,
         transactions: state.transactions.map((transaction) =>
           transaction.id === (action.payload as TransactionResponse).id
             ? {
                 ...transaction,
-                status: 'Pending Confirmation',
+                status: 'Confirming',
                 txId: (action.payload as TransactionResponse).txId,
+                isProcessing: true,
               }
             : transaction
         ),
@@ -63,8 +65,19 @@ export const reducer = (state: TransactionState, action: Action) => {
       return {
         ...state,
         transactions: state.transactions.map((transaction) =>
-          transaction.id === (action.payload as Transaction).id
-            ? { ...transaction, status: 'Confirmed' }
+          transaction.id === action.payload
+            ? { ...transaction, status: 'Confirmed', isProcessing: false }
+            : transaction
+        ),
+        inProcess: state.inProcess - 1,
+        isProcessing: state.inProcess - 1 > 0,
+      };
+    case 'cancelTransaction':
+      return {
+        ...state,
+        transactions: state.transactions.map((transaction) =>
+          transaction.id === action.payload
+            ? { ...transaction, status: 'Cancelled', isProcessing: false }
             : transaction
         ),
         inProcess: state.inProcess - 1,

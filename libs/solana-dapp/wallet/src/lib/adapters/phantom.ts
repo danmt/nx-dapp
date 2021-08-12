@@ -1,4 +1,5 @@
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
+import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
 import { WalletAdapter, WalletAdapterEvents } from '../types';
@@ -26,8 +27,10 @@ interface PhantomProvider extends EventEmitter<PhantomProviderEvents> {
   publicKey?: { toBuffer(): Buffer };
   isConnected: boolean;
   autoApprove: boolean;
-  signTransaction: (transaction: Transaction) => Promise<Transaction>;
-  signAllTransactions: (transactions: Transaction[]) => Promise<Transaction[]>;
+  signTransaction: (transaction: Web3Transaction) => Promise<Web3Transaction>;
+  signAllTransactions: (
+    transactions: Web3Transaction[]
+  ) => Promise<Web3Transaction[]>;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   _handleDisconnect: (...args: unknown[]) => unknown;
@@ -170,19 +173,15 @@ export class PhantomWalletAdapter
     }
   }
 
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  async signTransaction(transaction: Transaction): Promise<Web3Transaction> {
     try {
       const provider = this._provider;
       if (!provider) throw new WalletNotConnectedError();
 
       try {
-        return provider.signTransaction(transaction);
+        return provider.signTransaction(transaction.data);
       } catch (error) {
-        if (error instanceof Error) {
-          throw new WalletSignatureError(error.message, error);
-        } else {
-          throw error;
-        }
+        throw new WalletSignatureError(error.message, error, transaction.id);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -193,8 +192,8 @@ export class PhantomWalletAdapter
   }
 
   async signAllTransactions(
-    transactions: Transaction[]
-  ): Promise<Transaction[]> {
+    transactions: Web3Transaction[]
+  ): Promise<Web3Transaction[]> {
     try {
       const provider = this._provider;
       if (!provider) throw new WalletNotConnectedError();
