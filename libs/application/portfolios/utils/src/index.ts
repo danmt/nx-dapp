@@ -1,2 +1,2 @@
-export * from './lib/operators';
+export * from './lib/creators';
 export * from './lib/types';
