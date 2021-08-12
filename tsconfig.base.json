@@ -15,6 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/application/shared/ui/focus": [
+        "libs/application/shared/ui/focus/src/index.ts"
+      ],
+      "@nx-dapp/application/shared/ui/modal-header": [
+        "libs/application/shared/ui/modal-header/src/index.ts"
+      ],
+      "@nx-dapp/application/shared/ui/page-header": [
+        "libs/application/shared/ui/page-header/src/index.ts"
+      ],
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
       ],
@@ -60,13 +69,6 @@
       ],
       "@nx-dapp/application/wallets/utils/wallet-notifications": [
         "libs/application/wallets/utils/wallet-notifications/src/index.ts"
-      ],
-      "@nx-dapp/shared/ui/focus": ["libs/shared/ui/focus/src/index.ts"],
-      "@nx-dapp/shared/ui/modal-header": [
-        "libs/shared/ui/modal-header/src/index.ts"
-      ],
-      "@nx-dapp/shared/ui/page-header": [
-        "libs/shared/ui/page-header/src/index.ts"
       ],
       "@nx-dapp/shared/utils/operators": [
         "libs/shared/utils/operators/src/index.ts"

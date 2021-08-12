@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'shared-ui-page-header',
-  preset: '../../../../jest.preset.js',
+  displayName: 'application/shared/ui/page-header',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +8,8 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/ui/page-header',
+  coverageDirectory:
+    '../../../../../coverage/libs/application/shared/ui/page-header',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

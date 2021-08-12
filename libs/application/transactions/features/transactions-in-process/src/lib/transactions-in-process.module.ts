@@ -8,7 +8,7 @@ import { TransactionsInProcessTriggerComponent } from './transactions-in-process
 import { TransactionsInProcessComponent } from './transactions-in-process.component';
 import { MatButtonModule } from '@angular/material/button';
 
-import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
 @NgModule({
   imports: [

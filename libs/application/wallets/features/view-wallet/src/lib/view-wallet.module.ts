@@ -6,7 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 import { ViewWalletService } from './view-wallet.service';
 
 import { ViewWalletComponent } from './view-wallet.component';

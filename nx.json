@@ -48,7 +48,16 @@
     "application-portfolios-utils": {
       "tags": []
     },
+    "application/shared/ui/focus": {
+      "tags": []
+    },
+    "application/shared/ui/modal-header": {
+      "tags": []
+    },
     "application-shared-ui-navigation": {
+      "tags": []
+    },
+    "application/shared/ui/page-header": {
       "tags": []
     },
     "application-shared-ui-settings-menu": {
@@ -73,15 +82,6 @@
       "tags": []
     },
     "application/wallets/utils/wallet-notifications": {
-      "tags": []
-    },
-    "shared-ui-focus": {
-      "tags": []
-    },
-    "shared-ui-modal-header": {
-      "tags": []
-    },
-    "shared-ui-page-header": {
       "tags": []
     },
     "shared-utils-operators": {

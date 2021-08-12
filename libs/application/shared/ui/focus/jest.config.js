@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'shared-ui-focus',
-  preset: '../../../../jest.preset.js',
+  displayName: 'application/shared/ui/focus',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/ui/focus',
+  coverageDirectory: '../../../../../coverage/libs/application/shared/ui/focus',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

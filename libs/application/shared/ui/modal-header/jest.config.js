@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'shared-ui-modal-header',
-  preset: '../../../../jest.preset.js',
+  displayName: 'application/shared/ui/modal-header',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
@@ -8,7 +8,8 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/ui/modal-header',
+  coverageDirectory:
+    '../../../../../coverage/libs/application/shared/ui/modal-header',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },
