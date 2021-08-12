@@ -14,7 +14,6 @@ import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
   BehaviorSubject,
-  combineLatest,
   merge,
   Observable,
   Subject,
@@ -39,6 +38,18 @@ export class TransactionClient {
     type: 'init',
   });
   actions$ = this._dispatcher.asObservable();
+  private readonly connection$ = this.actions$.pipe(
+    ofType<Action>('setNetwork'),
+    map((action) => new Connection((action.payload as Network).url, 'recent')),
+    shareReplay({
+      refCount: false,
+      bufferSize: 1,
+    })
+  );
+  private walletAddress$ = this.actions$.pipe(
+    ofType<Action>('setWalletAddress'),
+    map((action) => action.payload as string)
+  );
   state$ = this._dispatcher.pipe(
     scan(reducer, transactionInitialState),
     shareReplay({
@@ -58,14 +69,6 @@ export class TransactionClient {
     map(({ inProcess }) => inProcess),
     distinctUntilChanged()
   );
-  connection$ = this.actions$.pipe(
-    ofType<Action>('setNetwork'),
-    map((action) => new Connection((action.payload as Network).url, 'recent')),
-    shareReplay({
-      refCount: false,
-      bufferSize: 1,
-    })
-  );
   onTransactionCreated$ = this.actions$.pipe(
     ofType<Action>('transactionCreated'),
     map(({ payload }) => payload as Transaction)
@@ -79,28 +82,22 @@ export class TransactionClient {
     map(({ payload }) => payload as string)
   );
 
-  private transactionCreated$ = combineLatest([
-    this.actions$.pipe(ofType<Action>('createTransaction')),
-    this.actions$.pipe(ofType<Action>('setWalletAddress')),
-  ]).pipe(
-    withLatestFrom(this.connection$),
-    concatMap(
-      ([
-        [{ payload: createTransaction }, { payload: walletAddress }],
+  private transactionCreated$ = this.actions$.pipe(
+    ofType<Action>('createTransaction'),
+    withLatestFrom(this.connection$, this.walletAddress$),
+    concatMap(([{ payload: createTransaction }, connection, walletAddress]) =>
+      getTransferTransaction({
         connection,
-      ]) =>
-        getTransferTransaction({
-          connection,
-          walletAddress: walletAddress as string,
-          recipientAddress: (createTransaction as CreateTransactionPayload)
-            .recipientAddress,
-          amount: (createTransaction as CreateTransactionPayload).amount,
-        }).pipe(
-          map((transaction) => ({
-            type: 'transactionCreated',
-            payload: transaction,
-          }))
-        )
+        walletAddress,
+        recipientAddress: (createTransaction as CreateTransactionPayload)
+          .recipientAddress,
+        amount: (createTransaction as CreateTransactionPayload).amount,
+      }).pipe(
+        map((transaction) => ({
+          type: 'transactionCreated',
+          payload: transaction,
+        }))
+      )
     )
   );
 
