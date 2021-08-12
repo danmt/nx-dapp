@@ -9,3 +9,13 @@ export interface TransactionResponse {
   id: string;
   txId: string;
 }
+
+export interface ExtendedTransaction extends Transaction {
+  status: string;
+  txId?: string;
+}
+
+export interface CreateTransactionPayload {
+  recipientAddress: string;
+  amount: number;
+}

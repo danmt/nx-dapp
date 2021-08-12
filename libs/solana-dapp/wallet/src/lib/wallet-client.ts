@@ -1,6 +1,7 @@
 import { isNotNull } from '@nx-dapp/shared/operators/not-null';
 import { ofType } from '@nx-dapp/shared/operators/of-type';
 import { Network } from '@nx-dapp/solana-dapp/network';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -29,7 +30,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import { fromAdapterEvent, Transaction } from '..';
+import { fromAdapterEvent } from './operators';
 import {
   ActionTypes,
   ConnectWalletAction,

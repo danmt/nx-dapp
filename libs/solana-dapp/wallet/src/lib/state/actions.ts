@@ -1,6 +1,7 @@
 import { Network } from '@nx-dapp/solana-dapp/network';
+import { Transaction } from '@nx-dapp/solana-dapp/transaction';
 
-import { Transaction, Wallet, WalletName } from '../types';
+import { Wallet, WalletName } from '../types';
 
 export class InitAction {
   type = 'init';
