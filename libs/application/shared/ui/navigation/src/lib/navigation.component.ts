@@ -45,6 +45,16 @@ import { map, shareReplay } from 'rxjs/operators';
                 logout
               </mat-icon>
             </button>
+
+          </div>
+
+          <div
+              class="absolute bottom-5 w-full flex justify-center items-center"
+            >
+            <mat-icon class="mr-1">bedtime</mat-icon>
+            <mat-slide-toggle class="mr-1" (click)="toggleDarkMode()" checked>
+            </mat-slide-toggle>
+            <mat-icon>brightness_5</mat-icon>
           </div>
         </mat-nav-list>
       </mat-sidenav>
@@ -122,5 +132,14 @@ export class NavigationComponent {
 
   onDisconnectWallet() {
     this.disconnectWallet.emit();
+  }
+
+  toggleDarkMode() {
+    const bodyClass = document.body.className;
+
+    if (bodyClass.includes('darkMode'))
+      document.body.className = bodyClass.replace('darkMode', '');
+    else
+      document.body.className += ' darkMode';
   }
 }

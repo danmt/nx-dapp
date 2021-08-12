@@ -4,8 +4,8 @@
 
 // utilities
 $success-bgcolor: #059669;
-$error-bgcolor: #dc2626;
 $warning-bgcolor: #fbbf24;
+$error-bgcolor: #dc2626;
 
 $white-text-color: white;
 $black-text-color: black;
@@ -31,6 +31,9 @@ $black-text-color: black;
 
 body {
   margin: 0;
+  --success-color: $success-bgcolor;
+  --warning-color: $warning-bgcolor;
+  --error-color: $error-bgcolor;
 }
 
 .success-snackbar {

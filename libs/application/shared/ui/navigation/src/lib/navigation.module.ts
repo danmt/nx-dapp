@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
@@ -20,6 +21,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatListModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatSlideToggleModule
   ],
   declarations: [NavigationComponent],
   exports: [NavigationComponent],
