@@ -83,6 +83,9 @@ export const reducer = (state: TransactionState, action: Action) => {
         inProcess: state.inProcess - 1,
         isProcessing: state.inProcess - 1 > 0,
       };
+    case 'setNetwork':
+    case 'reset':
+      return { ...transactionInitialState };
     default:
       return state;
   }

@@ -158,6 +158,10 @@ export class TransactionClient {
     this._dispatcher.next({ type: 'setWalletAddress', payload: walletAddress });
   }
 
+  reset() {
+    this._dispatcher.next({ type: 'reset' });
+  }
+
   sendTransaction(transaction: Transaction) {
     this._dispatcher.next({
       type: 'sendTransaction',

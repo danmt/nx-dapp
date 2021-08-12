@@ -28,6 +28,10 @@ export class SolanaDappTransactionService
     tap((transaction) => this.sendTransaction(transaction))
   );
 
+  private walletDisconnected$ = this.walletService.onDisconnect$.pipe(
+    tap(() => this.reset())
+  );
+
   private cancelTransaction$ =
     this.walletService.onTransactionSignatureFail$.pipe(
       tap((transactionId) => this.cancelTransaction(transactionId))
@@ -44,7 +48,8 @@ export class SolanaDappTransactionService
       this.setWalletAddress$,
       this.sendTransaction$,
       this.signTransaction$,
-      this.cancelTransaction$
+      this.cancelTransaction$,
+      this.walletDisconnected$
     )
       .pipe(takeUntil(this.destroy$))
       .subscribe();
