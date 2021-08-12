@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
 
 import { SendFundsComponent } from './send-funds.component';
+import { SendFundsService } from './send-funds.service';
 
 @NgModule({
   imports: [
@@ -23,5 +24,6 @@ import { SendFundsComponent } from './send-funds.component';
   ],
   declarations: [SendFundsComponent],
   exports: [SendFundsComponent],
+  providers: [SendFundsService],
 })
 export class SendFundsModule {}

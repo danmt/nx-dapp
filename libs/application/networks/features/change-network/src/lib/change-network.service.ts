@@ -3,9 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ChangeNetworkComponent } from './change-network.component';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ChangeNetworkService {
   constructor(private matDialog: MatDialog) {}
 

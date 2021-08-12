@@ -10,9 +10,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { ReactiveComponentModule } from '@ngrx/component';
+import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/change-network';
 import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { TransactionNotificationsModule } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ViewWalletModule } from '@nx-dapp/application/wallets/features/view-wallet';
 import { WalletNotificationsModule } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 
 import { NavigationComponent } from './navigation.component';
@@ -52,6 +54,8 @@ import { ShellComponent } from './shell.component';
     WalletNotificationsModule,
     TransactionNotificationsModule,
     ConnectWalletModule,
+    ChangeNetworkModule,
+    ViewWalletModule,
     TransactionsInProcessModule,
   ],
   declarations: [ShellComponent, NavigationComponent],

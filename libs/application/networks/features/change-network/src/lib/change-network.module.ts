@@ -9,6 +9,7 @@ import { NetworksRadioGroupModule } from '@nx-dapp/application/networks/ui/netwo
 import { ModalHeaderModule } from '@nx-dapp/shared/ui/modal-header';
 
 import { ChangeNetworkComponent } from './change-network.component';
+import { ChangeNetworkService } from './change-network.service';
 
 @NgModule({
   imports: [
@@ -23,5 +24,6 @@ import { ChangeNetworkComponent } from './change-network.component';
   ],
   declarations: [ChangeNetworkComponent],
   exports: [ChangeNetworkComponent],
+  providers: [ChangeNetworkService],
 })
 export class ChangeNetworkModule {}
