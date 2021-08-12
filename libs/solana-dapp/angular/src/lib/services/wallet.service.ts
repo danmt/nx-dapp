@@ -8,7 +8,8 @@ import {
   WalletClient,
   WalletName,
 } from '@nx-dapp/solana-dapp/wallet';
-import { map, takeUntil } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
 
 import { SolanaDappNetworkService } from '.';
 
@@ -17,8 +18,11 @@ export class SolanaDappWalletService extends WalletClient implements OnDestroy {
   walletAddress$ = this.publicKey$.pipe(
     map((publicKey) => publicKey?.toBase58() || null)
   );
+  setNetwork$ = this.networkService.network$.pipe(
+    tap((network) => this.setNetwork(network))
+  );
 
-  constructor(private solanaDappNetworkService: SolanaDappNetworkService) {
+  constructor(private networkService: SolanaDappNetworkService) {
     super(
       [
         getSolletWallet(),
@@ -29,9 +33,7 @@ export class SolanaDappWalletService extends WalletClient implements OnDestroy {
       DEFAULT_WALLET
     );
 
-    this.solanaDappNetworkService.network$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((network) => this.setNetwork(network));
+    merge(this.setNetwork$).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   ngOnDestroy() {
