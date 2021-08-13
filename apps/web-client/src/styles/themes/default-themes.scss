@@ -99,3 +99,54 @@ $red-palette: (
     A700: $light-primary-text,
   )
 );
+
+
+$dak-blue-palette: (
+    50: #e4ecff,
+    100: #c1d2e6,
+    200: #a1b3cb,
+    300: #7f94b1,
+    400: #677e9d,
+    500: #4e698a,
+    600: #415b79,
+    700: #314963,
+    800: #23374d,
+    900: #112336,
+    contrast: (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $dark-primary-text,
+        400: $dark-primary-text,
+        500: $dark-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);
+
+$lightning-blue-palette: (
+    50: #e3f1f9,
+    100: #badcf3,
+    200: #90c7eb,
+    300: #67b0e2,
+    400: #49a0de,
+    500: #2c91d9,
+    600: #2384cc,
+    700: #1972ba,
+    800: #1162a8,
+    900: #014589,
+    contrast: (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $dark-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text
+    )
+);

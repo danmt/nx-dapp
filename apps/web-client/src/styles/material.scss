@@ -1,7 +1,7 @@
 @use '~@angular/material' as mat;
 @use "./themes/default-themes.scss" as abiqum;
 
-@import "~@angular/material/theming";
+
 @import 'https://fonts.googleapis.com/css?family=Material+Icons';
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&display=swap');
 
@@ -29,15 +29,15 @@ $fontConfig: (
 
 
 // Themes
-$angular-primary: mat.define-palette(abiqum.$grey-palette);
-$angular-accent: mat.define-palette(abiqum.$deep-purple-palette);
+$angular-primary: mat.define-palette(abiqum.$dak-blue-palette, 900);
+$angular-accent: mat.define-palette(abiqum.$lightning-blue-palette, 900);
 $angular-warn: mat.define-palette(abiqum.$red-palette);
 
 $angular-default-theme: mat.define-light-theme(
   (
     color: (
       primary: $angular-primary,
-      accent: $angular-accent,
+      accent: $angular-accent, 
       warn: $angular-warn,
     ),
   )
@@ -61,15 +61,7 @@ $angular-dark-theme: mat.define-dark-theme(
 
 
 // Custom
-// Handle buttons appropriately, with respect to line-height
-body {
-  background-color: mat.get-color-from-palette($angular-primary, 50);
-
-  &.darkMode {
-    background-color: mat.get-color-from-palette($angular-primary, 800);
-  }
-}
-
+//// Handle buttons appropriately, with respect to line-height
 .mat-raised-button,
 .mat-stroked-button,
 .mat-flat-button {
@@ -107,4 +99,3 @@ mat-icon {
 .mat-dialog-container {
     padding: 1rem !important;
 }
-  
