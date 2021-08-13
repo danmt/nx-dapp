@@ -513,17 +513,19 @@
         }
       }
     },
-    "application-wallets-features-send-funds": {
+    "application-wallets-features-native-transfer": {
       "projectType": "library",
-      "root": "libs/application/wallets/features/send-funds",
-      "sourceRoot": "libs/application/wallets/features/send-funds/src",
+      "root": "libs/application/wallets/features/native-transfer",
+      "sourceRoot": "libs/application/wallets/features/native-transfer/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/wallets/features/send-funds"],
+          "outputs": [
+            "coverage/libs/application/wallets/features/native-transfer"
+          ],
           "options": {
-            "jestConfig": "libs/application/wallets/features/send-funds/jest.config.js",
+            "jestConfig": "libs/application/wallets/features/native-transfer/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -531,8 +533,35 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/wallets/features/send-funds/src/**/*.ts",
-              "libs/application/wallets/features/send-funds/src/**/*.html"
+              "libs/application/wallets/features/native-transfer/src/**/*.ts",
+              "libs/application/wallets/features/native-transfer/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-wallets-features-spl-transfer": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/spl-transfer",
+      "sourceRoot": "libs/application/wallets/features/spl-transfer/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/features/spl-transfer"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/spl-transfer/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/spl-transfer/src/**/*.ts",
+              "libs/application/wallets/features/spl-transfer/src/**/*.html"
             ]
           }
         }

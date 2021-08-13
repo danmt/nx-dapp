@@ -38,7 +38,7 @@ export class TransactionClient {
     type: 'init',
   });
   actions$ = this._dispatcher.asObservable();
-  private readonly connection$ = this.actions$.pipe(
+  connection$ = this.actions$.pipe(
     ofType<Action>('setNetwork'),
     map((action) => new Connection((action.payload as Network).url, 'recent')),
     shareReplay({
@@ -174,6 +174,23 @@ export class TransactionClient {
       type: 'createNativeTransfer',
       payload: {
         recipientAddress,
+        amount,
+      },
+    });
+  }
+
+  createSplTransfer(
+    emitterAddress: string,
+    recipientAddress: string,
+    mintAddress: string,
+    amount: number
+  ) {
+    this._dispatcher.next({
+      type: 'createSplTransfer',
+      payload: {
+        emitterAddress,
+        recipientAddress,
+        mintAddress,
         amount,
       },
     });

@@ -6,7 +6,8 @@ import {
 } from '@angular/core';
 import { Position } from '@nx-dapp/application/portfolios/utils';
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { SendFundsService } from '@nx-dapp/application/wallets/features/send-funds';
+import { NativeTransferService } from '@nx-dapp/application/wallets/features/native-transfer';
+import { SplTransferService } from '@nx-dapp/application/wallets/features/spl-transfer';
 import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
 
 import { ViewPortfolioStore } from './view-portfolio.store';
@@ -96,7 +97,8 @@ export class ViewPortfolioComponent implements OnInit {
     private viewPortfolioStore: ViewPortfolioStore,
     private walletService: SolanaDappWalletService,
     private connectWalletService: ConnectWalletService,
-    private sendFundsService: SendFundsService
+    private nativeTransferService: NativeTransferService,
+    private splTransferService: SplTransferService
   ) {}
 
   ngOnInit() {
@@ -108,6 +110,10 @@ export class ViewPortfolioComponent implements OnInit {
   }
 
   onSendFunds(position: Position) {
-    this.sendFundsService.open(position);
+    if (position.isNative) {
+      this.nativeTransferService.open(position);
+    } else {
+      this.splTransferService.open(position);
+    }
   }
 }

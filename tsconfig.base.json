@@ -73,8 +73,11 @@
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"
       ],
-      "@nx-dapp/application/wallets/features/send-funds": [
-        "libs/application/wallets/features/send-funds/src/index.ts"
+      "@nx-dapp/application/wallets/features/native-transfer": [
+        "libs/application/wallets/features/native-transfer/src/index.ts"
+      ],
+      "@nx-dapp/application/wallets/features/spl-transfer": [
+        "libs/application/wallets/features/spl-transfer/src/index.ts"
       ],
       "@nx-dapp/application/wallets/features/view-wallet": [
         "libs/application/wallets/features/view-wallet/src/index.ts"

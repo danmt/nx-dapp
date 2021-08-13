@@ -8,8 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
-import { SendFundsComponent } from './send-funds.component';
-import { SendFundsService } from './send-funds.service';
+import { NativeTransferComponent } from './native-transfer.component';
+import { NativeTransferService } from './native-transfer.service';
 
 @NgModule({
   imports: [
@@ -22,8 +22,8 @@ import { SendFundsService } from './send-funds.service';
     MatInputModule,
     ModalHeaderModule,
   ],
-  declarations: [SendFundsComponent],
-  exports: [SendFundsComponent],
-  providers: [SendFundsService],
+  declarations: [NativeTransferComponent],
+  exports: [NativeTransferComponent],
+  providers: [NativeTransferService],
 })
-export class SendFundsModule {}
+export class NativeTransferModule {}

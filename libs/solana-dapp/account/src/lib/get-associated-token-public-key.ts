@@ -2,13 +2,13 @@ import { TokenInstructions } from '@project-serum/serum';
 import { ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PublicKey } from '@solana/web3.js';
 import { defer, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 export const getAssociatedTokenPublicKey = (
   walletPubkey: PublicKey,
   mintPubkey: PublicKey
-) =>
-  from(
+) => {
+  return from(
     defer(() =>
       PublicKey.findProgramAddress(
         [
@@ -20,3 +20,4 @@ export const getAssociatedTokenPublicKey = (
       )
     )
   ).pipe(map(([publicKey]) => publicKey));
+};

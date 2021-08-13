@@ -87,7 +87,10 @@
     "application-wallets-features-connect-wallet": {
       "tags": []
     },
-    "application-wallets-features-send-funds": {
+    "application-wallets-features-native-transfer": {
+      "tags": []
+    },
+    "application-wallets-features-spl-transfer": {
       "tags": []
     },
     "application-wallets-features-view-wallet": {

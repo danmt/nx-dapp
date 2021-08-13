@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'application-wallets-features-send-funds',
+  displayName: 'application-wallets-features-spl-transfer',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../../coverage/libs/application/wallets/features/send-funds',
+    '../../../../../coverage/libs/application/wallets/features/spl-transfer',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

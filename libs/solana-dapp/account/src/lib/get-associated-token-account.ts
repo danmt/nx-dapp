@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-import { concatMap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
 
 import { getAssociatedTokenPublicKey } from './get-associated-token-public-key';
 import { getTokenAccount } from './get-token-account';
