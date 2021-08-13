@@ -7,11 +7,10 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
+  associatedTokenAccountValidator,
   base58Validator,
   SolanaDappTransactionService,
 } from '@nx-dapp/solana-dapp/angular';
-import { PublicKey } from '@solana/web3.js';
-import { debounceTime, filter, switchMap } from 'rxjs/operators';
 
 import { SplTransferData } from './types';
 
@@ -32,20 +31,19 @@ import { SplTransferData } from './types';
           required
           autocomplete="off"
         />
-        <mat-hint *ngIf="!submitted || recipientAddressControl?.valid"
+        <mat-hint *ngIf="!submitted || recipientAddressControl.valid"
           >Enter the receiver's address.</mat-hint
         >
 
-        <mat-error
-          *ngIf="submitted && recipientAddressControl?.errors?.required"
+        <mat-error *ngIf="submitted && recipientAddressControl.errors?.required"
           >The recipient is mandatory.</mat-error
         >
-        <mat-error *ngIf="submitted && recipientAddressControl?.errors?.base58"
+        <mat-error *ngIf="submitted && recipientAddressControl.errors?.base58"
           >Make sure to use the right format</mat-error
         >
         <mat-error
           *ngIf="
-            submitted && recipientAddressControl?.errors?.associatedTokenAccount
+            submitted && recipientAddressControl.errors?.associatedTokenAccount
           "
           >Recipient doesn't have account</mat-error
         >
@@ -60,35 +58,21 @@ import { SplTransferData } from './types';
           required
           autocomplete="off"
         />
-        <mat-hint
+        <mat-hint *ngIf="!submitted || amountControl.valid"
           >Maximum amount is {{ data.position.quantity }}
           {{ data.position.symbol }}
         </mat-hint>
-        <mat-error
-          *ngIf="submitted && sendFundsGroup.get('amount')?.errors?.required"
+        <mat-error *ngIf="submitted && amountControl.errors?.required"
           >The amount is mandatory.</mat-error
         >
       </mat-form-field>
 
-      <p
-        class="text-xs text-center text-warn m-0"
-        *ngIf="
-          !recipientAddressControl?.errors &&
-          (recipientAccount$ | async) === null
-        "
-      >
-        The recipient wallet doesn't have this account.
-      </p>
-
       <button
         mat-stroked-button
         color="primary"
-        (click)="onSplTransfer()"
+        (click)="onSend()"
         class="w-full"
-        [disabled]="
-          submitted &&
-          (sendFundsGroup.invalid || (recipientAccount$ | async) === null)
-        "
+        [disabled]="submitted && sendFundsGroup.invalid"
       >
         Send funds
       </button>
@@ -116,30 +100,24 @@ export class SplTransferComponent {
   @HostBinding('class') class = 'block w-72 relative';
   submitted = false;
   sendFundsGroup = new FormGroup({
-    recipientAddress: new FormControl('', [
-      Validators.required,
-      base58Validator,
-    ]),
-    amount: new FormControl(null, [Validators.required]),
+    recipientAddress: new FormControl('', {
+      validators: [Validators.required, base58Validator],
+      asyncValidators: [
+        associatedTokenAccountValidator(
+          this.transactionService,
+          this.data.position.address
+        ),
+      ],
+    }),
+    amount: new FormControl(null, { validators: [Validators.required] }),
   });
 
-  recipientAccount$ = this.recipientAddressControl?.valueChanges.pipe(
-    debounceTime(400),
-    filter(() => this.recipientAddressControl?.valid || false),
-    switchMap((recipientAddress) =>
-      this.transactionService.getAssociatedTokenAccount(
-        new PublicKey(recipientAddress),
-        new PublicKey(this.data.position.address)
-      )
-    )
-  );
-
   get recipientAddressControl() {
-    return this.sendFundsGroup.get('recipientAddress');
+    return this.sendFundsGroup.get('recipientAddress') as FormControl;
   }
 
   get amountControl() {
-    return this.sendFundsGroup.get('amount');
+    return this.sendFundsGroup.get('amount') as FormControl;
   }
 
   constructor(
@@ -148,15 +126,16 @@ export class SplTransferComponent {
     private transactionService: SolanaDappTransactionService
   ) {}
 
-  onSplTransfer() {
+  onSend() {
     this.submitted = true;
+    this.sendFundsGroup.markAllAsTouched();
 
     if (
       this.sendFundsGroup.valid &&
       this.data.position.associatedTokenAddress
     ) {
-      const recipientAddress = this.recipientAddressControl?.value;
-      const amount = this.sendFundsGroup.get('amount')?.value;
+      const recipientAddress = this.recipientAddressControl.value;
+      const amount = this.amountControl.value;
 
       this.transactionService.createSplTransfer(
         this.data.position.associatedTokenAddress,
