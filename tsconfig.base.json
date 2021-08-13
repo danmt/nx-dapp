@@ -42,6 +42,9 @@
       "@nx-dapp/application/shared/ui/copy-to-clipboard": [
         "libs/application/shared/ui/copy-to-clipboard/src/index.ts"
       ],
+      "@nx-dapp/application/shared/ui/copyable-text": [
+        "libs/application/shared/ui/copyable-text/src/index.ts"
+      ],
       "@nx-dapp/application/shared/ui/focus": [
         "libs/application/shared/ui/focus/src/index.ts"
       ],

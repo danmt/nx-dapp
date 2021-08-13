@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CopyToClipboardModule } from '@nx-dapp/application/shared/ui/copy-to-clipboard';
+import { CopyableTextModule } from '@nx-dapp/application/shared/ui/copyable-text';
 import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
 import { ViewWalletComponent } from './view-wallet.component';
@@ -18,7 +18,7 @@ import { ViewWalletService } from './view-wallet.service';
     MatIconModule,
     MatProgressSpinnerModule,
     ModalHeaderModule,
-    CopyToClipboardModule,
+    CopyableTextModule,
   ],
   declarations: [ViewWalletComponent],
   providers: [ViewWalletService],

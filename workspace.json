@@ -207,6 +207,31 @@
         }
       }
     },
+    "application-shared-ui-copyable-text": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/copyable-text",
+      "sourceRoot": "libs/application/shared/ui/copyable-text/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/copyable-text"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/copyable-text/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/copyable-text/src/**/*.ts",
+              "libs/application/shared/ui/copyable-text/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-shared-ui-focus": {
       "projectType": "library",
       "root": "libs/application/shared/ui/focus",

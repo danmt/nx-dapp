@@ -1,5 +1,6 @@
 import { MintTokenAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
 import { Balance } from '@nx-dapp/solana-dapp/utils/types';
+import { NATIVE_MINT } from '@solana/spl-token';
 
 import { calculateLamports, calculateQuantity } from '../operations';
 
@@ -19,5 +20,6 @@ export const createBalance = (
     lamports,
     quantity,
     hasBalance: quantity > 0 && filteredUserAccounts.length > 0,
+    isNative: mintAccount.pubkey.equals(NATIVE_MINT),
   };
 };

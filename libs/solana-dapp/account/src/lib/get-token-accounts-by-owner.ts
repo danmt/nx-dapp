@@ -4,7 +4,7 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { defer, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export const getTokenAccounts = (
+export const getTokenAccountsByOwner = (
   connection: Connection,
   walletPublicKey: PublicKey
 ): Observable<TokenAccount[]> =>

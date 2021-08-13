@@ -51,6 +51,9 @@
     "application-shared-ui-copy-to-clipboard": {
       "tags": []
     },
+    "application-shared-ui-copyable-text": {
+      "tags": []
+    },
     "application-shared-ui-focus": {
       "tags": []
     },

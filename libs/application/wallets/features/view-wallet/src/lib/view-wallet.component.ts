@@ -28,20 +28,7 @@ import { filter, takeUntil } from 'rxjs/operators';
       <div>
         <h2 class="mb-1 text-base text-primary">Your Address</h2>
 
-        <div
-          class="bg-black bg-opacity-25 rounded-md px-3 py-1 flex items-center mb-2"
-        >
-          <p class="m-0 truncate flex-shrink">
-            {{ walletAddress }}
-          </p>
-
-          <nx-dapp-copy-to-clipboard
-            class="scale-75"
-            [data]="walletAddress"
-            tooltipLabel="Copied!"
-          >
-          </nx-dapp-copy-to-clipboard>
-        </div>
+        <nx-dapp-copyable-text [text]="walletAddress"></nx-dapp-copyable-text>
 
         <div class="flex justify-between items-center mb-2">
           <span>SOL Balance</span>

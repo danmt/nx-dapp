@@ -22,6 +22,8 @@ const createPositions = (
       price: tokenPrice?.price || 0,
       total: balance.quantity * (tokenPrice?.price || 0),
       isStable: tokenPrice?.isStable || false,
+      isNative: balance.isNative,
+      associatedTokenAddress: balance.associatedTokenAddress,
     };
   });
 };

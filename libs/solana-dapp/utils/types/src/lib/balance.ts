@@ -5,6 +5,8 @@ export interface Balance {
   lamports: number;
   quantity: number;
   hasBalance: boolean;
+  isNative: boolean;
+  associatedTokenAddress?: string;
 }
 
 export interface GetBalancesFromWalletConfig {

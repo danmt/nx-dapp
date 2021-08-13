@@ -12,29 +12,34 @@ import { Position } from '@nx-dapp/application/portfolios/utils';
   selector: 'nx-dapp-position-list-item',
   template: `
     <mat-card class="w-full h-full flex flex-col justify-around gap-2">
-      <figure class="w-32 h-32 flex flex-col gap-2 mx-auto flex-shrink-0">
-        <img [src]="position.logo" class="w-full h-full" />
-      </figure>
-      <h3 class="text-center m-0">
-        {{ position.name }}
-      </h3>
-      <div>
+      <header>
+        <figure class="w-32 h-32 flex flex-col gap-2 mx-auto flex-shrink-0">
+          <img [src]="position.logo" class="w-full h-full" />
+        </figure>
+        <h3 class="text-center m-0">
+          {{ position.name }}
+        </h3>
+      </header>
+
+      <div class="flex-grow">
         <p class="text-center m-0">Mint address</p>
-        <div
-          class="bg-black bg-opacity-25 rounded-md px-3 py-1 flex items-center mb-2"
+        <nx-dapp-copyable-text
+          [text]="position.address"
+        ></nx-dapp-copyable-text>
+
+        <ng-container
+          *ngIf="
+            !position.isNative && position.associatedTokenAddress !== undefined
+          "
         >
-          <p class="m-0 truncate flex-shrink">
-            {{ position.address }}
-          </p>
+          <p class="text-center m-0">Associated token address</p>
+          <nx-dapp-copyable-text
+            [text]="position.associatedTokenAddress"
+          ></nx-dapp-copyable-text>
+        </ng-container>
+      </div>
 
-          <nx-dapp-copy-to-clipboard
-            class="scale-75"
-            [data]="position.address"
-            tooltipLabel="Copied!"
-          >
-          </nx-dapp-copy-to-clipboard>
-        </div>
-
+      <footer>
         <p class="text-center m-0">
           <span class="text-xl">{{ position.quantity | currency: '':'' }}</span>
           <span class="text-xs ml-1">{{ position.symbol }}</span>
@@ -50,7 +55,7 @@ import { Position } from '@nx-dapp/application/portfolios/utils';
         >
           Send funds
         </button>
-      </div>
+      </footer>
     </mat-card>
   `,
   styles: [],

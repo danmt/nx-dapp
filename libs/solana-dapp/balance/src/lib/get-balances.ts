@@ -1,10 +1,11 @@
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { getMintAccounts, getUserAccounts } from '@nx-dapp/solana-dapp/account';
 import { Balance, GetBalancesConfig } from '@nx-dapp/solana-dapp/utils/types';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-import { mapToBalances } from './operators';
+import { addAssociatedTokenAccountAddress, mapToBalances } from './operators';
 
 export const getBalances = (
   config: GetBalancesConfig
@@ -19,6 +20,16 @@ export const getBalances = (
     switchMap((userAccounts) =>
       getMintAccounts(connection, config.mintAddresses).pipe(
         mapToBalances(userAccounts)
+      )
+    ),
+    switchMap((balances) =>
+      forkJoin(
+        balances.map((balance) =>
+          of(balance).pipe(
+            addAssociatedTokenAccountAddress(walletPublicKey),
+            isNotNull
+          )
+        )
       )
     )
   );
