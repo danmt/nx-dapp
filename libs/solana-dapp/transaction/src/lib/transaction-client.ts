@@ -4,7 +4,7 @@ import {
   sendTransaction,
 } from '@nx-dapp/solana-dapp/connection';
 import {
-  CreateTransactionPayload,
+  CreateNativeTransferPayload,
   Network,
   Transaction,
   TransactionResponse,
@@ -82,22 +82,24 @@ export class TransactionClient {
     map(({ payload }) => payload as string)
   );
 
-  private transactionCreated$ = this.actions$.pipe(
-    ofType<Action>('createTransaction'),
+  private nativeTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('createNativeTransfer'),
     withLatestFrom(this.connection$, this.walletAddress$),
-    concatMap(([{ payload: createTransaction }, connection, walletAddress]) =>
-      getNativeTransferTransaction({
-        connection,
-        walletAddress,
-        recipientAddress: (createTransaction as CreateTransactionPayload)
-          .recipientAddress,
-        amount: (createTransaction as CreateTransactionPayload).amount,
-      }).pipe(
-        map((transaction) => ({
-          type: 'transactionCreated',
-          payload: transaction,
-        }))
-      )
+    concatMap(
+      ([{ payload: createNativeTransfer }, connection, walletAddress]) =>
+        getNativeTransferTransaction({
+          connection,
+          walletAddress,
+          recipientAddress: (
+            createNativeTransfer as CreateNativeTransferPayload
+          ).recipientAddress,
+          amount: (createNativeTransfer as CreateNativeTransferPayload).amount,
+        }).pipe(
+          map((transaction) => ({
+            type: 'nativeTransferCreated',
+            payload: transaction,
+          }))
+        )
     )
   );
 
@@ -137,7 +139,7 @@ export class TransactionClient {
     this.runEffects([
       this.confirmTransaction$,
       this.transactionConfirmed$,
-      this.transactionCreated$,
+      this.nativeTransferCreated$,
     ]);
   }
 
@@ -166,9 +168,9 @@ export class TransactionClient {
     });
   }
 
-  createTransaction(recipientAddress: string, amount: number) {
+  createNativeTransfer(recipientAddress: string, amount: number) {
     this._dispatcher.next({
-      type: 'createTransaction',
+      type: 'createNativeTransfer',
       payload: {
         recipientAddress,
         amount,

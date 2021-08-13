@@ -16,7 +16,7 @@ export interface ExtendedTransaction extends Transaction {
   isProcessing: boolean;
 }
 
-export interface CreateTransactionPayload {
+export interface CreateNativeTransferPayload {
   recipientAddress: string;
   amount: number;
 }

@@ -12,7 +12,6 @@ export interface Action {
 export interface TransactionState {
   transactions: ExtendedTransaction[];
   isProcessing: boolean;
-
   inProcess: number;
 }
 
@@ -24,7 +23,7 @@ export const transactionInitialState: TransactionState = {
 
 export const reducer = (state: TransactionState, action: Action) => {
   switch (action.type) {
-    case 'transactionCreated':
+    case 'nativeTransferCreated':
       return {
         ...state,
         transactions: [

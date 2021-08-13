@@ -100,7 +100,7 @@ export class SendFundsComponent {
     this.submitted = true;
 
     if (this.sendFundsGroup.valid) {
-      this.transactionService.createTransaction(
+      this.transactionService.createNativeTransfer(
         this.sendFundsGroup.get('recipient')?.value,
         this.sendFundsGroup.get('amount')?.value
       );
