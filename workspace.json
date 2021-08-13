@@ -207,6 +207,31 @@
         }
       }
     },
+    "application-shared-ui-dark-theme": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/dark-theme",
+      "sourceRoot": "libs/application/shared/ui/dark-theme/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/dark-theme"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/dark-theme/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/dark-theme/src/**/*.ts",
+              "libs/application/shared/ui/dark-theme/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application/shared/ui/modal-header": {
       "projectType": "library",
       "root": "libs/application/shared/ui/modal-header",

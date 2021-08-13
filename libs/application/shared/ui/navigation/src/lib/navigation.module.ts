@@ -10,12 +10,14 @@ import { RouterModule } from '@angular/router';
 
 import { NavigationComponent } from './navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { DarkThemeModule } from '@nx-dapp/application/shared/ui/dark-theme'
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     LayoutModule,
+    DarkThemeModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,

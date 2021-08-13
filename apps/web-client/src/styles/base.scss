@@ -36,6 +36,10 @@ body {
   --error-color: $error-bgcolor;
 }
 
+.smooth-transition * { //refact
+  transition: background 0.3s;
+}
+
 .success-snackbar {
   @include snackbar($success-bgcolor, $white-text-color, 'Hooray 🎉!');
 }

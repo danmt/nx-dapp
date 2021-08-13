@@ -54,6 +54,9 @@
     "application/shared/ui/modal-header": {
       "tags": []
     },
+    "application-shared-ui-dark-theme": {
+      "tags": []
+    },
     "application-shared-ui-navigation": {
       "tags": []
     },
