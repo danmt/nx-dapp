@@ -30,7 +30,7 @@ export const obscureWith = (
     source.pipe(map((value) => value.split('').reduce(reducerFunction)));
 };
 
-export const obscureWalletAddress = (source: Observable<string>) =>
+export const obscureAddress = (source: Observable<string>) =>
   source.pipe(
     obscureWith(
       createReducer({

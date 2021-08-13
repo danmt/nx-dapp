@@ -729,6 +729,27 @@
         }
       }
     },
+    "solana-dapp-utils-operators": {
+      "root": "libs/solana-dapp/utils/operators",
+      "sourceRoot": "libs/solana-dapp/utils/operators/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana-dapp/utils/operators/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/utils/operators"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/utils/operators/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "solana-dapp-utils-types": {
       "root": "libs/solana-dapp/utils/types",
       "sourceRoot": "libs/solana-dapp/utils/types/src",

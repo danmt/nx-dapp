@@ -91,6 +91,9 @@
       "@nx-dapp/solana-dapp/utils/operations": [
         "libs/solana-dapp/utils/operations/src/index.ts"
       ],
+      "@nx-dapp/solana-dapp/utils/operators": [
+        "libs/solana-dapp/utils/operators/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/utils/types": [
         "libs/solana-dapp/utils/types/src/index.ts"
       ],

@@ -6,7 +6,7 @@ import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wa
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import {
-  obscureWalletAddress,
+  obscureAddress,
   SolanaDappTransactionService,
   SolanaDappWalletService,
 } from '@nx-dapp/solana-dapp/angular';
@@ -43,7 +43,7 @@ export class ShellComponent implements OnInit {
   connected$ = this.walletService.connected$;
   walletAddress$ = this.walletService.walletAddress$.pipe(
     isNotNull,
-    obscureWalletAddress
+    obscureAddress
   );
 
   constructor(
