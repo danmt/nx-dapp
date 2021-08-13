@@ -39,6 +39,9 @@
       "@nx-dapp/application/shared/ui/dark-theme": [
         "libs/application/shared/ui/dark-theme/src/index.ts"
       ],
+      "@nx-dapp/application/shared/ui/copy-to-clipboard": [
+        "libs/application/shared/ui/copy-to-clipboard/src/index.ts"
+      ],
       "@nx-dapp/application/shared/ui/focus": [
         "libs/application/shared/ui/focus/src/index.ts"
       ],
