@@ -69,10 +69,11 @@ export class TransactionClient {
     map(({ inProcess }) => inProcess),
     distinctUntilChanged()
   );
-  onTransactionCreated$ = this.actions$.pipe(
-    ofType<Action>('transactionCreated'),
+  onNativeTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('nativeTransferCreated'),
     map(({ payload }) => payload as Transaction)
   );
+  onTransactionCreated$ = merge(this.onNativeTransferCreated$);
   onTransactionConfirmed$ = this.actions$.pipe(
     ofType<Action>('transactionConfirmed'),
     map(({ payload }) => payload as TransactionResponse)
