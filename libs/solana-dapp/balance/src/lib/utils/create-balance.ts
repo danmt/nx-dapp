@@ -20,6 +20,7 @@ export const createBalance = (
     lamports,
     quantity,
     hasBalance: quantity > 0 && filteredUserAccounts.length > 0,
+    decimals: mintAccount.info.decimals,
     isNative: mintAccount.pubkey.equals(NATIVE_MINT),
   };
 };

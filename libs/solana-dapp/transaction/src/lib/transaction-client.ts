@@ -183,7 +183,8 @@ export class TransactionClient {
     emitterAddress: string,
     recipientAddress: string,
     mintAddress: string,
-    amount: number
+    amount: number,
+    decimals: number
   ) {
     this._dispatcher.next({
       type: 'createSplTransfer',
@@ -192,6 +193,7 @@ export class TransactionClient {
         recipientAddress,
         mintAddress,
         amount,
+        decimals,
       },
     });
   }

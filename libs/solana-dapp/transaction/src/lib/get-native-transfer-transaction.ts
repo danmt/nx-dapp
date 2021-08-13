@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
 
 import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
 
-export interface TransferConfig {
+export interface NativeTransferConfig {
   connection: string | Connection;
   walletAddress: string;
   recipientAddress: string;
@@ -20,7 +20,7 @@ export interface TransferConfig {
 }
 
 export const getNativeTransferTransaction = (
-  config: TransferConfig
+  config: NativeTransferConfig
 ): Observable<Transaction> => {
   const connection =
     config.connection instanceof Connection

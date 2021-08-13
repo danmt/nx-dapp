@@ -24,6 +24,7 @@ const createPositions = (
       isStable: tokenPrice?.isStable || false,
       isNative: balance.isNative,
       associatedTokenAddress: balance.associatedTokenAddress,
+      decimals: balance.decimals,
     };
   });
 };

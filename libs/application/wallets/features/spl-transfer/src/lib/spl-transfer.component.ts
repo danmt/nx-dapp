@@ -142,7 +142,8 @@ export class SplTransferComponent {
             this.data.position.associatedTokenAddress,
             recipientAssociatedTokenPublicKey.toBase58(),
             this.data.position.address,
-            this.amountControl.value
+            this.amountControl.value,
+            this.data.position.decimals
           );
           this.dialogRef.close();
         }

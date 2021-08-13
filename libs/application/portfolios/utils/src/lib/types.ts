@@ -8,6 +8,7 @@ export interface Position {
   total: number;
   isStable: boolean;
   isNative: boolean;
+  decimals: number;
   associatedTokenAddress?: string;
 }
 

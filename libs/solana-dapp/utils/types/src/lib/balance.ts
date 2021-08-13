@@ -6,6 +6,7 @@ export interface Balance {
   quantity: number;
   hasBalance: boolean;
   isNative: boolean;
+  decimals: number;
   associatedTokenAddress?: string;
 }
 
