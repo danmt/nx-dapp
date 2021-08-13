@@ -6,11 +6,13 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { getAssociatedTokenPublicKey } from '@nx-dapp/solana-dapp/account';
 import {
   associatedTokenAccountValidator,
   base58Validator,
   SolanaDappTransactionService,
 } from '@nx-dapp/solana-dapp/angular';
+import { PublicKey } from '@solana/web3.js';
 
 import { SplTransferData } from './types';
 
@@ -130,21 +132,21 @@ export class SplTransferComponent {
     this.submitted = true;
     this.sendFundsGroup.markAllAsTouched();
 
-    if (
-      this.sendFundsGroup.valid &&
-      this.data.position.associatedTokenAddress
-    ) {
-      const recipientAddress = this.recipientAddressControl.value;
-      const amount = this.amountControl.value;
-
-      this.transactionService.createSplTransfer(
-        this.data.position.associatedTokenAddress,
-        recipientAddress,
-        this.data.position.address,
-        amount
-      );
-
-      this.dialogRef.close();
+    if (this.sendFundsGroup.valid) {
+      getAssociatedTokenPublicKey(
+        new PublicKey(this.recipientAddressControl.value),
+        new PublicKey(this.data.position.address)
+      ).subscribe((recipientAssociatedTokenPublicKey) => {
+        if (this.data.position.associatedTokenAddress) {
+          this.transactionService.createSplTransfer(
+            this.data.position.associatedTokenAddress,
+            recipientAssociatedTokenPublicKey.toBase58(),
+            this.data.position.address,
+            this.amountControl.value
+          );
+          this.dialogRef.close();
+        }
+      });
     }
   }
 }
