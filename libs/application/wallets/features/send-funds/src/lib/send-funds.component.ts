@@ -6,7 +6,10 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
+import {
+  SolanaDappTransactionService,
+  base58Validator,
+} from '@nx-dapp/solana-dapp/angular';
 
 import { SendFundsData } from './types';
 
@@ -33,6 +36,10 @@ import { SendFundsData } from './types';
         <mat-error
           *ngIf="submitted && sendFundsGroup.get('recipient')?.errors?.required"
           >The recipient is mandatory.</mat-error
+        >
+        <mat-error
+          *ngIf="submitted && sendFundsGroup.get('recipient')?.errors?.base58"
+          >Make sure to use the right format</mat-error
         >
       </mat-form-field>
 
@@ -79,14 +86,20 @@ import { SendFundsData } from './types';
       <mat-icon>close</mat-icon>
     </button>
   `,
-  styles: [],
+  styles: [
+    `
+      mat-error + mat-error {
+        display: none;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendFundsComponent {
   @HostBinding('class') class = 'block w-72 relative';
   submitted = false;
   sendFundsGroup = new FormGroup({
-    recipient: new FormControl('', [Validators.required]),
+    recipient: new FormControl('', [Validators.required, base58Validator]),
     amount: new FormControl(null, [Validators.required]),
   });
 
