@@ -3,12 +3,15 @@ import {
   getUserAccountMints,
   getUserAccounts,
 } from '@nx-dapp/solana-dapp/account';
+import {
+  Balance,
+  GetBalancesFromWalletConfig,
+} from '@nx-dapp/solana-dapp/utils/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { mapToBalances } from './operators';
-import { Balance, GetBalancesFromWalletConfig } from './types';
 
 export const getBalancesFromWallet = (
   config: GetBalancesFromWalletConfig

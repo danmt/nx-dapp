@@ -2,7 +2,7 @@ import {
   ExtendedTransaction,
   Transaction,
   TransactionResponse,
-} from '@nx-dapp/solana-dapp/transaction';
+} from '@nx-dapp/solana-dapp/utils/types';
 
 export interface Action {
   type: string;

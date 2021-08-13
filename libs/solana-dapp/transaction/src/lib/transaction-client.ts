@@ -3,13 +3,12 @@ import {
   confirmTransaction,
   sendTransaction,
 } from '@nx-dapp/solana-dapp/connection';
-import { Network } from '@nx-dapp/solana-dapp/network';
 import {
   CreateTransactionPayload,
-  getTransferTransaction,
+  Network,
   Transaction,
   TransactionResponse,
-} from '@nx-dapp/solana-dapp/transaction';
+} from '@nx-dapp/solana-dapp/utils/types';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -29,6 +28,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
+import { getNativeTransferTransaction } from './get-native-transfer-transaction';
 import { Action, reducer, transactionInitialState } from './state';
 
 export class TransactionClient {
@@ -86,7 +86,7 @@ export class TransactionClient {
     ofType<Action>('createTransaction'),
     withLatestFrom(this.connection$, this.walletAddress$),
     concatMap(([{ payload: createTransaction }, connection, walletAddress]) =>
-      getTransferTransaction({
+      getNativeTransferTransaction({
         connection,
         walletAddress,
         recipientAddress: (createTransaction as CreateTransactionPayload)

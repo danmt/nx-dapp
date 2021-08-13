@@ -1,10 +1,10 @@
 import { getMintAccount, getUserAccounts } from '@nx-dapp/solana-dapp/account';
+import { Balance, GetBalanceConfig } from '@nx-dapp/solana-dapp/utils/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { mapToBalance } from './operators';
-import { Balance, GetBalanceConfig } from './types';
 
 export const getBalance = (
   config: GetBalanceConfig

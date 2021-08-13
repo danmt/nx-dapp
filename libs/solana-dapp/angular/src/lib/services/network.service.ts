@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  DEFAULT_NETWORK,
-  Network,
-  NETWORKS,
-} from '@nx-dapp/solana-dapp/network';
+import { DEFAULT_NETWORK, NETWORKS } from '@nx-dapp/solana-dapp/network';
 import { getTokens, TokenInfo } from '@nx-dapp/solana-dapp/token';
+import { Network } from '@nx-dapp/solana-dapp/utils/types';
 import { BehaviorSubject } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 

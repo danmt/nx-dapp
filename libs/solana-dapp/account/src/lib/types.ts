@@ -1,4 +1,4 @@
-import { u64 } from '@nx-dapp/solana-dapp/utils';
+import { u64 } from '@nx-dapp/solana-dapp/utils/operations';
 import { Slab } from '@project-serum/serum/lib/slab';
 import { MintInfo } from '@solana/spl-token';
 import { AccountInfo, PublicKey } from '@solana/web3.js';

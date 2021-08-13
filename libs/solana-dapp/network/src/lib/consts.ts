@@ -1,6 +1,6 @@
+import { ENV, Network } from '@nx-dapp/solana-dapp/utils/types';
 import { ENV as ChainID } from '@solana/spl-token-registry';
 import { clusterApiUrl } from '@solana/web3.js';
-import { ENV, Network } from './types';
 
 export const NETWORKS: Network[] = [
   {

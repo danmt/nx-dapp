@@ -15,15 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-dapp/application/shared/ui/focus": [
-        "libs/application/shared/ui/focus/src/index.ts"
-      ],
-      "@nx-dapp/application/shared/ui/modal-header": [
-        "libs/application/shared/ui/modal-header/src/index.ts"
-      ],
-      "@nx-dapp/application/shared/ui/page-header": [
-        "libs/application/shared/ui/page-header/src/index.ts"
-      ],
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
       ],
@@ -48,8 +39,17 @@
       "@nx-dapp/application/shared/ui/dark-theme": [
         "libs/application/shared/ui/dark-theme/src/index.ts"
       ],
+      "@nx-dapp/application/shared/ui/focus": [
+        "libs/application/shared/ui/focus/src/index.ts"
+      ],
+      "@nx-dapp/application/shared/ui/modal-header": [
+        "libs/application/shared/ui/modal-header/src/index.ts"
+      ],
       "@nx-dapp/application/shared/ui/navigation": [
         "libs/application/shared/ui/navigation/src/index.ts"
+      ],
+      "@nx-dapp/application/shared/ui/page-header": [
+        "libs/application/shared/ui/page-header/src/index.ts"
       ],
       "@nx-dapp/application/shared/ui/settings-menu": [
         "libs/application/shared/ui/settings-menu/src/index.ts"
@@ -88,7 +88,12 @@
       "@nx-dapp/solana-dapp/transaction": [
         "libs/solana-dapp/transaction/src/index.ts"
       ],
-      "@nx-dapp/solana-dapp/utils": ["libs/solana-dapp/utils/src/index.ts"],
+      "@nx-dapp/solana-dapp/utils/operations": [
+        "libs/solana-dapp/utils/operations/src/index.ts"
+      ],
+      "@nx-dapp/solana-dapp/utils/types": [
+        "libs/solana-dapp/utils/types/src/index.ts"
+      ],
       "@nx-dapp/solana-dapp/wallet": ["libs/solana-dapp/wallet/src/index.ts"]
     }
   },

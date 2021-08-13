@@ -1,7 +1,10 @@
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
+import {
+  WalletAdapter,
+  WalletAdapterEvents,
+} from '@nx-dapp/solana-dapp/utils/types';
 import { fromEventPattern, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { WalletAdapter, WalletAdapterEvents } from '../types';
 
 export const fromAdapterEvent =
   (eventName: keyof WalletAdapterEvents) =>

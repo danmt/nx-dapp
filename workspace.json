@@ -182,7 +182,7 @@
         }
       }
     },
-    "application/shared/ui/focus": {
+    "application-shared-ui-focus": {
       "projectType": "library",
       "root": "libs/application/shared/ui/focus",
       "sourceRoot": "libs/application/shared/ui/focus/src",
@@ -232,7 +232,7 @@
         }
       }
     },
-    "application/shared/ui/modal-header": {
+    "application-shared-ui-modal-header": {
       "projectType": "library",
       "root": "libs/application/shared/ui/modal-header",
       "sourceRoot": "libs/application/shared/ui/modal-header/src",
@@ -282,7 +282,7 @@
         }
       }
     },
-    "application/shared/ui/page-header": {
+    "application-shared-ui-page-header": {
       "projectType": "library",
       "root": "libs/application/shared/ui/page-header",
       "sourceRoot": "libs/application/shared/ui/page-header/src",
@@ -384,6 +384,33 @@
         }
       }
     },
+    "application-transactions-utils-transaction-notifications": {
+      "projectType": "library",
+      "root": "libs/application/transactions/utils/transaction-notifications",
+      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/utils/transaction-notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
+              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-wallets-features-connect-wallet": {
       "projectType": "library",
       "root": "libs/application/wallets/features/connect-wallet",
@@ -461,34 +488,7 @@
         }
       }
     },
-    "application/transactions/utils/transaction-notifications": {
-      "projectType": "library",
-      "root": "libs/application/transactions/utils/transaction-notifications",
-      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/application/transactions/utils/transaction-notifications"
-          ],
-          "options": {
-            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "application/wallets/utils/wallet-notifications": {
+    "application-wallets-utils-wallet-notifications": {
       "projectType": "library",
       "root": "libs/application/wallets/utils/wallet-notifications",
       "sourceRoot": "libs/application/wallets/utils/wallet-notifications/src",
@@ -708,22 +708,43 @@
         }
       }
     },
-    "solana-dapp-utils": {
-      "root": "libs/solana-dapp/utils",
-      "sourceRoot": "libs/solana-dapp/utils/src",
+    "solana-dapp-utils-operations": {
+      "root": "libs/solana-dapp/utils/operations",
+      "sourceRoot": "libs/solana-dapp/utils/operations/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/solana-dapp/utils/**/*.ts"]
+            "lintFilePatterns": ["libs/solana-dapp/utils/operations/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/utils"],
+          "outputs": ["coverage/libs/solana-dapp/utils/operations"],
           "options": {
-            "jestConfig": "libs/solana-dapp/utils/jest.config.js",
+            "jestConfig": "libs/solana-dapp/utils/operations/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "solana-dapp-utils-types": {
+      "root": "libs/solana-dapp/utils/types",
+      "sourceRoot": "libs/solana-dapp/utils/types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana-dapp/utils/types/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/utils/types"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/utils/types/jest.config.js",
             "passWithNoTests": true
           }
         }

@@ -1,8 +1,8 @@
 import { MintTokenAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
+import { Balance } from '@nx-dapp/solana-dapp/utils/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Balance } from '../types';
 import { createBalance } from '../utils';
 
 export const mapToBalance =

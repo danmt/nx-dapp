@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { WalletName } from '@nx-dapp/solana-dapp/utils/types';
 import {
   DEFAULT_WALLET,
   getPhantomWallet,
@@ -6,7 +7,6 @@ import {
   getSolletWallet,
   getSolongWallet,
   WalletClient,
-  WalletName,
 } from '@nx-dapp/solana-dapp/wallet';
 import { merge } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';

@@ -1,10 +1,10 @@
 import { MarketData, MintTokenAccount } from '@nx-dapp/solana-dapp/account';
+import { TokenPrice } from '@nx-dapp/solana-dapp/utils/types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { getTokenPriceByMint } from '../utils';
-import { TokenPrice } from '../types';
 import { isStableCoin } from '../operations';
+import { getTokenPriceByMint } from '../utils';
 
 export const mapToPrice =
   (mintAccount: MintTokenAccount) =>

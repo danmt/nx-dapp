@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 
-import { Transaction } from './types';
+import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
 
 export interface TransferConfig {
   connection: string | Connection;
@@ -19,7 +19,7 @@ export interface TransferConfig {
   amount: number;
 }
 
-export const getTransferTransaction = (
+export const getNativeTransferTransaction = (
   config: TransferConfig
 ): Observable<Transaction> => {
   const connection =

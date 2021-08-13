@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-  Balance,
   getBalance,
   getBalanceForWallet,
   getBalances,
   getBalancesFromWallet,
 } from '@nx-dapp/solana-dapp/balance';
+import { Balance } from '@nx-dapp/solana-dapp/utils/types';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 

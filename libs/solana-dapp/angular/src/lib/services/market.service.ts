@@ -3,8 +3,8 @@ import {
   getPrice,
   getPrices,
   getPricesFromWallet,
-  TokenPrice,
 } from '@nx-dapp/solana-dapp/market';
+import { TokenPrice } from '@nx-dapp/solana-dapp/utils/types';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
