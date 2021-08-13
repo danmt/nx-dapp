@@ -66,6 +66,9 @@
     "application-shared-ui-settings-menu": {
       "tags": []
     },
+    "application-shared-utils-obscure-address": {
+      "tags": []
+    },
     "application-shell": {
       "tags": []
     },
@@ -115,9 +118,6 @@
       "tags": []
     },
     "solana-dapp-utils-operations": {
-      "tags": []
-    },
-    "solana-dapp-utils-operators": {
       "tags": []
     },
     "solana-dapp-utils-types": {

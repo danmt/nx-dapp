@@ -87,7 +87,7 @@ import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service'
           </div>
 
           <div *ngIf="isConnected" class="ml-auto flex items-center">
-            {{ walletAddress }}
+            {{ walletAddress | obscureAddress }}
           </div>
           <ng-content></ng-content>
         </mat-toolbar>

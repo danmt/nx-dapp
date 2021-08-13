@@ -19,6 +19,8 @@ import { Position } from '@nx-dapp/application/portfolios/utils';
         {{ position.name }}
       </h3>
       <div>
+        <p>Mint address: {{ position.address | obscureAddress }}</p>
+
         <p class="text-center m-0">
           <span class="text-xl">{{ position.quantity | currency: '':'' }}</span>
           <span class="text-xs ml-1">{{ position.symbol }}</span>

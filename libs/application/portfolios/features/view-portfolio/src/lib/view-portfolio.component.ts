@@ -35,7 +35,7 @@ import { ViewPortfolioStore } from './view-portfolio.store';
             </section>
 
             <section>
-              <mat-grid-list cols="5" rowHeight="280px" gutterSize="16px">
+              <mat-grid-list cols="5" rowHeight="320px" gutterSize="16px">
                 <mat-grid-tile
                   *ngFor="let position of portfolio.positions"
                   colspan="1"
