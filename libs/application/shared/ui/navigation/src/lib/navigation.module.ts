@@ -1,3 +1,4 @@
+import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,10 +8,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { DarkThemeModule } from '@nx-dapp/application/shared/ui/dark-theme';
 
 import { NavigationComponent } from './navigation.component';
-import { LayoutModule } from '@angular/cdk/layout';
-import { DarkThemeModule } from '@nx-dapp/application/shared/ui/dark-theme'
 
 @NgModule({
   imports: [
@@ -23,7 +23,7 @@ import { DarkThemeModule } from '@nx-dapp/application/shared/ui/dark-theme'
     MatListModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
   declarations: [NavigationComponent],
   exports: [NavigationComponent],

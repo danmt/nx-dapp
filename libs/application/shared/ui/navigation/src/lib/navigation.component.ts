@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+
 import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service';
 
 @Component({
@@ -46,14 +47,18 @@ import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service'
                 logout
               </mat-icon>
             </button>
-
           </div>
 
           <div
-              class="absolute bottom-5 w-full flex justify-center items-center"
-            >
+            class="absolute bottom-5 w-full flex justify-center items-center"
+          >
             <mat-icon class="mr-1">bedtime</mat-icon>
-            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode(!$event.checked)" [nxDappSetDarkTheme]="isDarkThemeEnabled$ | async" [checked]="!!!(isDarkThemeEnabled$ | async)">
+            <mat-slide-toggle
+              class="mr-1"
+              (change)="toggleDarkMode(!$event.checked)"
+              [nxDappSetDarkTheme]="isDarkThemeEnabled$ | async"
+              [checked]="(isDarkThemeEnabled$ | async) === false"
+            >
             </mat-slide-toggle>
             <mat-icon>brightness_5</mat-icon>
           </div>
@@ -124,10 +129,13 @@ export class NavigationComponent {
       map((result) => result.matches),
       shareReplay()
     );
-  isDarkThemeEnabled$: Observable<boolean> = this.themeService.isDarkThemeEnabled$;
+  isDarkThemeEnabled$ = this.themeService.isDarkThemeEnabled$;
 
-  constructor(private breakpointObserver: BreakpointObserver, private themeService: ThemeService) {}
-  
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private themeService: ThemeService
+  ) {}
+
   onConnectWallet() {
     this.connectWallet.emit();
   }
@@ -136,8 +144,7 @@ export class NavigationComponent {
     this.disconnectWallet.emit();
   }
 
-  toggleDarkMode(isDarkThemeEnabledOn: boolean) {
-    console.log(isDarkThemeEnabledOn);
-    this.themeService.setDarkTheme(isDarkThemeEnabledOn);
+  toggleDarkMode(isDarkThemeEnabled: boolean) {
+    this.themeService.setDarkTheme(isDarkThemeEnabled);
   }
 }
