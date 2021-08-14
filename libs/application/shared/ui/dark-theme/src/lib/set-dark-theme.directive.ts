@@ -18,5 +18,4 @@ export class SetDarkThemeDirective {
     if (value) document.body.className += ' darkMode'; 
     else document.body.className = bodyClass.replace('darkMode', '');
   }
-
 }

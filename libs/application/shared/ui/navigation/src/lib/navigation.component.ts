@@ -9,6 +9,7 @@ import {
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { ThemeService } from '../../../dark-theme/src/lib/theme-service/theme-service.service';
 
 @Component({
   selector: 'nx-dapp-navigation',
@@ -53,7 +54,7 @@ import { map, shareReplay } from 'rxjs/operators';
               class="absolute bottom-5 w-full flex justify-center items-center"
             >
             <mat-icon class="mr-1">bedtime</mat-icon>
-            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode($event)" [nxDappSetDarkTheme]='isDarkThemeOn' checked>
+            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode(!$event.checked)" [nxDappSetDarkTheme]='!!(isDarkTheme$ | async)' checked>
             </mat-slide-toggle>
             <mat-icon>brightness_5</mat-icon>
           </div>
@@ -124,11 +125,10 @@ export class NavigationComponent {
       map((result) => result.matches),
       shareReplay()
     );
+  isDarkTheme$: Observable<boolean> = this.themeService.isDarkTheme$;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver, private themeService: ThemeService) {}
   
-  isDarkThemeOn = false;
-
   onConnectWallet() {
     this.connectWallet.emit();
   }
@@ -137,7 +137,7 @@ export class NavigationComponent {
     this.disconnectWallet.emit();
   }
 
-  toggleDarkMode(value: MatSlideToggleChange) {
-    this.isDarkThemeOn = !value.checked;
+  toggleDarkMode(isDarkThemeOn: boolean) {
+    this.themeService.setDarkTheme(isDarkThemeOn);
   }
 }
