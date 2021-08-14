@@ -3,9 +3,12 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class ThemeService {
-  private _isDarkThemeStoredOn = localStorage.getItem('darkTheme') === 'true';
-  private _darkTheme = new BehaviorSubject<boolean>(this._isDarkThemeStoredOn);
-  isDarkTheme$ = this._darkTheme.asObservable();
+  private _darkTheme = new BehaviorSubject<boolean>(this.defaultValue);
+  isDarkThemeEnabled$ = this._darkTheme.asObservable();
+
+  get defaultValue() {
+    return localStorage.getItem('darkTheme') === 'true';
+  }
 
   setDarkTheme(isDarkThemeOn: boolean) {
     this._darkTheme.next(isDarkThemeOn);

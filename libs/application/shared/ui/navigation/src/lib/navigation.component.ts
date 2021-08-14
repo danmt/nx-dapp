@@ -53,7 +53,7 @@ import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service'
               class="absolute bottom-5 w-full flex justify-center items-center"
             >
             <mat-icon class="mr-1">bedtime</mat-icon>
-            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode(!$event.checked)" [nxDappSetDarkTheme]='!!(isDarkTheme$ | async)' [checked]="!!!(isDarkTheme$ | async)">
+            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode(!$event.checked)" [nxDappSetDarkTheme]="isDarkThemeEnabled$ | async" [checked]="!!!(isDarkThemeEnabled$ | async)">
             </mat-slide-toggle>
             <mat-icon>brightness_5</mat-icon>
           </div>
@@ -124,7 +124,7 @@ export class NavigationComponent {
       map((result) => result.matches),
       shareReplay()
     );
-  isDarkTheme$: Observable<boolean> = this.themeService.isDarkTheme$;
+  isDarkThemeEnabled$: Observable<boolean> = this.themeService.isDarkThemeEnabled$;
 
   constructor(private breakpointObserver: BreakpointObserver, private themeService: ThemeService) {}
   
@@ -136,7 +136,8 @@ export class NavigationComponent {
     this.disconnectWallet.emit();
   }
 
-  toggleDarkMode(isDarkThemeOn: boolean) {
-    this.themeService.setDarkTheme(isDarkThemeOn);
+  toggleDarkMode(isDarkThemeEnabledOn: boolean) {
+    console.log(isDarkThemeEnabledOn);
+    this.themeService.setDarkTheme(isDarkThemeEnabledOn);
   }
 }
