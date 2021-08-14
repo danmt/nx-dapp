@@ -11,9 +11,7 @@ import { switchMap } from 'rxjs/operators';
 
 import { SolanaDappConnectionService, SolanaDappWalletService } from '.';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SolanaDappBalanceService {
   constructor(
     private solanaDappConnectionService: SolanaDappConnectionService,

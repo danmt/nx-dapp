@@ -1,11 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
-import { getAssociatedTokenAccount } from '@nx-dapp/solana-dapp/account';
 import { TransactionClient } from '@nx-dapp/solana-dapp/transaction';
-import { PublicKey } from '@solana/web3.js';
 import { merge } from 'rxjs';
-import { first, mergeMap, takeUntil, tap } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
+import { takeUntil, tap } from 'rxjs/operators';
 
 import { SolanaDappNetworkService, SolanaDappWalletService } from '.';
 
@@ -14,8 +11,6 @@ export class SolanaDappTransactionService
   extends TransactionClient
   implements OnDestroy
 {
-  id = uuid();
-
   private setNetwork$ = this.networkService.network$.pipe(
     tap((network) => this.setNetwork(network))
   );
@@ -58,15 +53,6 @@ export class SolanaDappTransactionService
     )
       .pipe(takeUntil(this.destroy$))
       .subscribe();
-  }
-
-  getAssociatedTokenAccount(publicKey: PublicKey, mintPublicKey: PublicKey) {
-    return this.connection$.pipe(
-      first(),
-      mergeMap((connection) =>
-        getAssociatedTokenAccount(connection, publicKey, mintPublicKey)
-      )
-    );
   }
 
   ngOnDestroy() {

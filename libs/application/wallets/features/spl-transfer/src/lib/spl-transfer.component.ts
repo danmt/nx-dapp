@@ -3,17 +3,16 @@ import {
   Component,
   HostBinding,
   Inject,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { getAssociatedTokenPublicKey } from '@nx-dapp/solana-dapp/account';
-import {
-  associatedTokenAccountValidator,
-  base58Validator,
-  SolanaDappTransactionService,
-} from '@nx-dapp/solana-dapp/angular';
-import { PublicKey } from '@solana/web3.js';
+import { base58Validator } from '@nx-dapp/solana-dapp/angular';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
+import { SplTransferStore } from './spl-transfer.store';
 import { SplTransferData } from './types';
 
 @Component({
@@ -36,18 +35,11 @@ import { SplTransferData } from './types';
         <mat-hint *ngIf="!submitted || recipientAddressControl.valid"
           >Enter the receiver's address.</mat-hint
         >
-
         <mat-error *ngIf="submitted && recipientAddressControl.errors?.required"
           >The recipient is mandatory.</mat-error
         >
         <mat-error *ngIf="submitted && recipientAddressControl.errors?.base58"
           >Make sure to use the right format</mat-error
-        >
-        <mat-error
-          *ngIf="
-            submitted && recipientAddressControl.errors?.associatedTokenAccount
-          "
-          >Recipient doesn't have account</mat-error
         >
       </mat-form-field>
 
@@ -68,6 +60,17 @@ import { SplTransferData } from './types';
           >The amount is mandatory.</mat-error
         >
       </mat-form-field>
+
+      <p
+        *ngIf="
+          submitted &&
+          recipientAddressControl.valid &&
+          associatedTokenAccountControl?.errors?.required
+        "
+        class="text-center text-warn text-xs m-0"
+      >
+        Recipient doesn't have account
+      </p>
 
       <button
         mat-stroked-button
@@ -97,21 +100,21 @@ import { SplTransferData } from './types';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SplTransferStore],
 })
-export class SplTransferComponent {
+export class SplTransferComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'block w-72 relative';
+  private readonly _destroy = new Subject();
   submitted = false;
   sendFundsGroup = new FormGroup({
-    recipientAddress: new FormControl('', {
-      validators: [Validators.required, base58Validator],
-      asyncValidators: [
-        associatedTokenAccountValidator(
-          this.transactionService,
-          this.data.position.address
-        ),
-      ],
-    }),
+    recipientAddress: new FormControl('', [
+      Validators.required,
+      base58Validator,
+    ]),
     amount: new FormControl(null, { validators: [Validators.required] }),
+    associatedTokenAccount: new FormControl(null, {
+      validators: [Validators.required],
+    }),
   });
 
   get recipientAddressControl() {
@@ -122,32 +125,46 @@ export class SplTransferComponent {
     return this.sendFundsGroup.get('amount') as FormControl;
   }
 
+  get associatedTokenAccountControl() {
+    return this.sendFundsGroup.get('associatedTokenAccount') as FormControl;
+  }
+
   constructor(
     private dialogRef: MatDialogRef<SplTransferComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SplTransferData,
-    private transactionService: SolanaDappTransactionService
+    private splTransferStore: SplTransferStore
   ) {}
+
+  ngOnInit() {
+    this.splTransferStore.associatedTokenAccount$
+      .pipe(takeUntil(this._destroy))
+      .subscribe((associatedTokenAccount) => {
+        this.associatedTokenAccountControl.setValue(associatedTokenAccount);
+      });
+
+    this.splTransferStore.init(
+      this.data.position,
+      this.recipientAddressControl.valueChanges.pipe(
+        filter(() => this.recipientAddressControl.valid)
+      ),
+      this.recipientAddressControl.valueChanges.pipe(
+        filter(() => this.recipientAddressControl.invalid)
+      )
+    );
+  }
+
+  ngOnDestroy() {
+    this._destroy.next();
+    this._destroy.complete();
+  }
 
   onSend() {
     this.submitted = true;
     this.sendFundsGroup.markAllAsTouched();
 
     if (this.sendFundsGroup.valid) {
-      getAssociatedTokenPublicKey(
-        new PublicKey(this.recipientAddressControl.value),
-        new PublicKey(this.data.position.address)
-      ).subscribe((recipientAssociatedTokenPublicKey) => {
-        if (this.data.position.associatedTokenAddress) {
-          this.transactionService.createSplTransfer(
-            this.data.position.associatedTokenAddress,
-            recipientAssociatedTokenPublicKey.toBase58(),
-            this.data.position.address,
-            this.amountControl.value,
-            this.data.position.decimals
-          );
-          this.dialogRef.close();
-        }
-      });
+      this.splTransferStore.sendTransfer(this.amountControl.value);
+      this.dialogRef.close();
     }
   }
 }

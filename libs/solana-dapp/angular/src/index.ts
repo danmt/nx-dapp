@@ -1,6 +1,7 @@
 export * from './lib/solana-dapp.module';
 export * from './lib/services';
 export * from './lib/validators';
+export * from '@nx-dapp/solana-dapp/account';
 export * from '@nx-dapp/solana-dapp/balance';
 export * from '@nx-dapp/solana-dapp/market';
 export * from '@nx-dapp/solana-dapp/network';
