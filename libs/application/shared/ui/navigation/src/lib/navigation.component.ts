@@ -6,10 +6,9 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { ThemeService } from '../../../dark-theme/src/lib/theme-service/theme-service.service';
+import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service';
 
 @Component({
   selector: 'nx-dapp-navigation',
@@ -54,7 +53,7 @@ import { ThemeService } from '../../../dark-theme/src/lib/theme-service/theme-se
               class="absolute bottom-5 w-full flex justify-center items-center"
             >
             <mat-icon class="mr-1">bedtime</mat-icon>
-            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode(!$event.checked)" [nxDappSetDarkTheme]='!!(isDarkTheme$ | async)' checked>
+            <mat-slide-toggle class="mr-1" (change)="toggleDarkMode(!$event.checked)" [nxDappSetDarkTheme]='!!(isDarkTheme$ | async)' [checked]="!!!(isDarkTheme$ | async)">
             </mat-slide-toggle>
             <mat-icon>brightness_5</mat-icon>
           </div>
