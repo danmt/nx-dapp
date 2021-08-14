@@ -23,6 +23,7 @@ export const transactionInitialState: TransactionState = {
 
 export const reducer = (state: TransactionState, action: Action) => {
   switch (action.type) {
+    case 'splTransferCreated':
     case 'nativeTransferCreated':
       return {
         ...state,

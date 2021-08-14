@@ -5,6 +5,7 @@ import {
 } from '@nx-dapp/solana-dapp/connection';
 import {
   CreateNativeTransferPayload,
+  CreateSplTransferPayload,
   Network,
   Transaction,
   TransactionResponse,
@@ -29,6 +30,7 @@ import {
 } from 'rxjs/operators';
 
 import { getNativeTransferTransaction } from './get-native-transfer-transaction';
+import { getSplTransferTransaction } from './get-spl-transfer-transaction';
 import { Action, reducer, transactionInitialState } from './state';
 
 export class TransactionClient {
@@ -73,7 +75,14 @@ export class TransactionClient {
     ofType<Action>('nativeTransferCreated'),
     map(({ payload }) => payload as Transaction)
   );
-  onTransactionCreated$ = merge(this.onNativeTransferCreated$);
+  onSplTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('splTransferCreated'),
+    map(({ payload }) => payload as Transaction)
+  );
+  onTransactionCreated$ = merge(
+    this.onNativeTransferCreated$,
+    this.onSplTransferCreated$
+  );
   onTransactionConfirmed$ = this.actions$.pipe(
     ofType<Action>('transactionConfirmed'),
     map(({ payload }) => payload as TransactionResponse)
@@ -101,6 +110,30 @@ export class TransactionClient {
             payload: transaction,
           }))
         )
+    )
+  );
+
+  private splTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('createSplTransfer'),
+    withLatestFrom(this.connection$, this.walletAddress$),
+    concatMap(([{ payload: createSplTransfer }, connection, walletAddress]) =>
+      getSplTransferTransaction({
+        connection,
+        walletAddress,
+        mintAddress: (createSplTransfer as CreateSplTransferPayload)
+          .mintAddress,
+        decimals: (createSplTransfer as CreateSplTransferPayload).decimals,
+        amount: (createSplTransfer as CreateSplTransferPayload).amount,
+        emitterAddress: (createSplTransfer as CreateSplTransferPayload)
+          .emitterAddress,
+        recipientAddress: (createSplTransfer as CreateSplTransferPayload)
+          .recipientAddress,
+      }).pipe(
+        map((transaction) => ({
+          type: 'splTransferCreated',
+          payload: transaction,
+        }))
+      )
     )
   );
 
@@ -141,6 +174,7 @@ export class TransactionClient {
       this.confirmTransaction$,
       this.transactionConfirmed$,
       this.nativeTransferCreated$,
+      this.splTransferCreated$,
     ]);
   }
 
@@ -186,20 +220,13 @@ export class TransactionClient {
     amount: number,
     decimals: number
   ) {
-    console.log({
-      emitterAddress,
-      recipientAddress,
-      mintAddress,
-      amount,
-      decimals,
-    });
     this._dispatcher.next({
       type: 'createSplTransfer',
       payload: {
         emitterAddress,
         recipientAddress,
         mintAddress,
-        amount,
+        amount: Math.round(amount * 10 ** decimals),
         decimals,
       },
     });

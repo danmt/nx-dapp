@@ -54,13 +54,13 @@
     "application-shared-ui-copyable-text": {
       "tags": []
     },
+    "application-shared-ui-dark-theme": {
+      "tags": []
+    },
     "application-shared-ui-focus": {
       "tags": []
     },
     "application-shared-ui-modal-header": {
-      "tags": []
-    },
-    "application-shared-ui-dark-theme": {
       "tags": []
     },
     "application-shared-ui-navigation": {

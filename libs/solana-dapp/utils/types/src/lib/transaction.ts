@@ -20,3 +20,11 @@ export interface CreateNativeTransferPayload {
   recipientAddress: string;
   amount: number;
 }
+
+export interface CreateSplTransferPayload {
+  emitterAddress: string;
+  recipientAddress: string;
+  mintAddress: string;
+  amount: number;
+  decimals: number;
+}

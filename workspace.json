@@ -232,31 +232,6 @@
         }
       }
     },
-    "application-shared-ui-focus": {
-      "projectType": "library",
-      "root": "libs/application/shared/ui/focus",
-      "sourceRoot": "libs/application/shared/ui/focus/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/shared/ui/focus"],
-          "options": {
-            "jestConfig": "libs/application/shared/ui/focus/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/application/shared/ui/focus/src/**/*.ts",
-              "libs/application/shared/ui/focus/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
     "application-shared-ui-dark-theme": {
       "projectType": "library",
       "root": "libs/application/shared/ui/dark-theme",
@@ -277,6 +252,31 @@
             "lintFilePatterns": [
               "libs/application/shared/ui/dark-theme/src/**/*.ts",
               "libs/application/shared/ui/dark-theme/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-shared-ui-focus": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/focus",
+      "sourceRoot": "libs/application/shared/ui/focus/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/focus"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/focus/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/focus/src/**/*.ts",
+              "libs/application/shared/ui/focus/src/**/*.html"
             ]
           }
         }
