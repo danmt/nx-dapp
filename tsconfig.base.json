@@ -45,6 +45,9 @@
       "@nx-dapp/application/portfolios/utils": [
         "libs/application/portfolios/utils/src/index.ts"
       ],
+      "@nx-dapp/application/shared/ui/dark-theme": [
+        "libs/application/shared/ui/dark-theme/src/index.ts"
+      ],
       "@nx-dapp/application/shared/ui/navigation": [
         "libs/application/shared/ui/navigation/src/index.ts"
       ],

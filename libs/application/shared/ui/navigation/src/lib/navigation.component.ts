@@ -9,10 +9,12 @@ import {
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
+import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service';
+
 @Component({
   selector: 'nx-dapp-navigation',
   template: `
-    <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav-container class="sidenav-container" fullscreen>
       <mat-sidenav
         #drawer
         class="sidenav"
@@ -45,6 +47,20 @@ import { map, shareReplay } from 'rxjs/operators';
                 logout
               </mat-icon>
             </button>
+          </div>
+
+          <div
+            class="absolute bottom-5 w-full flex justify-center items-center"
+          >
+            <mat-icon class="mr-1">bedtime</mat-icon>
+            <mat-slide-toggle
+              class="mr-1"
+              (change)="toggleDarkMode(!$event.checked)"
+              [nxDappSetDarkTheme]="isDarkThemeEnabled$ | async"
+              [checked]="(isDarkThemeEnabled$ | async) === false"
+            >
+            </mat-slide-toggle>
+            <mat-icon>brightness_5</mat-icon>
           </div>
         </mat-nav-list>
       </mat-sidenav>
@@ -113,8 +129,12 @@ export class NavigationComponent {
       map((result) => result.matches),
       shareReplay()
     );
+  isDarkThemeEnabled$ = this.themeService.isDarkThemeEnabled$;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private themeService: ThemeService
+  ) {}
 
   onConnectWallet() {
     this.connectWallet.emit();
@@ -122,5 +142,9 @@ export class NavigationComponent {
 
   onDisconnectWallet() {
     this.disconnectWallet.emit();
+  }
+
+  toggleDarkMode(isDarkThemeEnabled: boolean) {
+    this.themeService.setDarkTheme(isDarkThemeEnabled);
   }
 }

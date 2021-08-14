@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReactiveComponentModule } from '@ngrx/component';
 import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/change-network';
@@ -46,5 +46,11 @@ import { ShellComponent } from './shell.component';
     NavigationModule,
   ],
   declarations: [ShellComponent],
+  providers: [
+    {
+      provide: new InjectionToken('document'),
+      useValue: document
+    }
+  ]
 })
 export class ShellModule {}
