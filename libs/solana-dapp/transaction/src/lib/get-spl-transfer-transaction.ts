@@ -1,14 +1,8 @@
 import { getBlockHash } from '@nx-dapp/solana-dapp/connection';
-import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import {
-  Connection,
-  PublicKey,
-  Transaction as Web3Transaction,
-} from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
 
 import { createTransferCheckedInstruction } from './create-transfer-checked-instruction';
 
@@ -35,10 +29,8 @@ export const getSplTransferTransaction = (
   const mintPublicKey = new PublicKey(config.mintAddress);
 
   return getBlockHash(connection).pipe(
-    map(({ blockhash }) => ({
-      id: uuid(),
-      date: new Date(Date.now()),
-      data: new Web3Transaction({
+    map(({ blockhash }) =>
+      new Transaction({
         recentBlockhash: blockhash,
         feePayer: walletPublicKey,
       }).add(
@@ -52,7 +44,7 @@ export const getSplTransferTransaction = (
           config.amount,
           config.decimals
         )
-      ),
-    }))
+      )
+    )
   );
 };

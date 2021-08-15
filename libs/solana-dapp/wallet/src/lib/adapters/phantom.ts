@@ -1,5 +1,5 @@
 import {
-  Transaction,
+  TransactionPayload,
   WalletAdapter,
   WalletAdapterEvents,
 } from '@nx-dapp/solana-dapp/utils/types';
@@ -176,7 +176,9 @@ export class PhantomWalletAdapter
     }
   }
 
-  async signTransaction(transaction: Transaction): Promise<Web3Transaction> {
+  async signTransaction(
+    transaction: TransactionPayload
+  ): Promise<Web3Transaction> {
     try {
       const provider = this._provider;
       if (!provider) throw new WalletNotConnectedError();

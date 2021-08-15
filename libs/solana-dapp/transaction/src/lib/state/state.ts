@@ -1,6 +1,8 @@
 import {
-  ExtendedTransaction,
+  CreateNativeTransferPayload,
+  CreateSplTransferPayload,
   Transaction,
+  TransactionPayload,
   TransactionResponse,
 } from '@nx-dapp/solana-dapp/utils/types';
 
@@ -10,7 +12,7 @@ export interface Action {
 }
 
 export interface TransactionState {
-  transactions: ExtendedTransaction[];
+  transactions: Transaction[];
   isProcessing: boolean;
   inProcess: number;
 }
@@ -23,14 +25,16 @@ export const transactionInitialState: TransactionState = {
 
 export const reducer = (state: TransactionState, action: Action) => {
   switch (action.type) {
-    case 'splTransferCreated':
-    case 'nativeTransferCreated':
+    case 'createSplTransfer':
+    case 'createNativeTransfer':
       return {
         ...state,
         transactions: [
           ...state.transactions,
           {
-            ...(action.payload as Transaction),
+            ...(action.payload as
+              | CreateNativeTransferPayload
+              | CreateSplTransferPayload),
             status: 'Signing',
             isProcessing: true,
           },
@@ -38,11 +42,26 @@ export const reducer = (state: TransactionState, action: Action) => {
         isProcessing: true,
         inProcess: state.inProcess + 1,
       };
+    case 'splTransferCreated':
+    case 'nativeTransferCreated':
+      return {
+        ...state,
+        transactions: state.transactions.map((transaction) =>
+          transaction.id === (action.payload as TransactionPayload).id
+            ? {
+                ...transaction,
+                data: (action.payload as TransactionPayload).data,
+                status: 'Sending',
+                isProcessing: true,
+              }
+            : transaction
+        ),
+      };
     case 'sendTransaction':
       return {
         ...state,
         transactions: state.transactions.map((transaction) =>
-          transaction.id === (action.payload as Transaction).id
+          transaction.id === (action.payload as TransactionPayload).id
             ? { ...transaction, status: 'Sending', isProcessing: true }
             : transaction
         ),

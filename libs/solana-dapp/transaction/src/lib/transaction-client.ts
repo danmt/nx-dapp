@@ -7,7 +7,7 @@ import {
   CreateNativeTransferPayload,
   CreateSplTransferPayload,
   Network,
-  Transaction,
+  TransactionPayload,
   TransactionResponse,
 } from '@nx-dapp/solana-dapp/utils/types';
 import { Connection } from '@solana/web3.js';
@@ -28,6 +28,7 @@ import {
   takeUntil,
   withLatestFrom,
 } from 'rxjs/operators';
+import { v4 as uuid } from 'uuid';
 
 import { getNativeTransferTransaction } from './get-native-transfer-transaction';
 import { getSplTransferTransaction } from './get-spl-transfer-transaction';
@@ -73,11 +74,11 @@ export class TransactionClient {
   );
   onNativeTransferCreated$ = this.actions$.pipe(
     ofType<Action>('nativeTransferCreated'),
-    map(({ payload }) => payload as Transaction)
+    map(({ payload }) => payload as TransactionPayload)
   );
   onSplTransferCreated$ = this.actions$.pipe(
     ofType<Action>('splTransferCreated'),
-    map(({ payload }) => payload as Transaction)
+    map(({ payload }) => payload as TransactionPayload)
   );
   onTransactionCreated$ = merge(
     this.onNativeTransferCreated$,
@@ -107,7 +108,10 @@ export class TransactionClient {
         }).pipe(
           map((transaction) => ({
             type: 'nativeTransferCreated',
-            payload: transaction,
+            payload: {
+              id: (createNativeTransfer as CreateNativeTransferPayload).id,
+              data: transaction,
+            },
           }))
         )
     )
@@ -131,7 +135,10 @@ export class TransactionClient {
       }).pipe(
         map((transaction) => ({
           type: 'splTransferCreated',
-          payload: transaction,
+          payload: {
+            id: (createSplTransfer as CreateSplTransferPayload).id,
+            data: transaction,
+          },
         }))
       )
     )
@@ -141,11 +148,14 @@ export class TransactionClient {
     ofType<Action>('sendTransaction'),
     withLatestFrom(this.connection$),
     concatMap(([transaction, connection]) =>
-      sendTransaction(connection, transaction.payload as Transaction).pipe(
+      sendTransaction(
+        connection,
+        transaction.payload as TransactionPayload
+      ).pipe(
         map((txId) => ({
           type: 'confirmTransaction',
           payload: {
-            id: (transaction.payload as Transaction).id,
+            id: (transaction.payload as TransactionPayload).id,
             txId,
           },
         }))
@@ -163,7 +173,7 @@ export class TransactionClient {
       ).pipe(
         map(() => ({
           type: 'transactionConfirmed',
-          payload: (transaction.payload as Transaction).id,
+          payload: (transaction.payload as TransactionPayload).id,
         }))
       )
     )
@@ -196,7 +206,7 @@ export class TransactionClient {
     this._dispatcher.next({ type: 'reset' });
   }
 
-  sendTransaction(transaction: Transaction) {
+  sendTransaction(transaction: TransactionPayload) {
     this._dispatcher.next({
       type: 'sendTransaction',
       payload: transaction,
@@ -207,6 +217,8 @@ export class TransactionClient {
     this._dispatcher.next({
       type: 'createNativeTransfer',
       payload: {
+        id: uuid(),
+        date: new Date(Date.now()),
         recipientAddress,
         amount,
       },
@@ -223,6 +235,8 @@ export class TransactionClient {
     this._dispatcher.next({
       type: 'createSplTransfer',
       payload: {
+        id: uuid(),
+        date: new Date(Date.now()),
         emitterAddress,
         recipientAddress,
         mintAddress,

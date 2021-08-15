@@ -1,7 +1,7 @@
 import { isNotNull, ofType } from '@nx-dapp/shared/utils/operators';
 import {
   Network,
-  Transaction,
+  TransactionPayload,
   Wallet,
   WalletName,
 } from '@nx-dapp/solana-dapp/utils/types';
@@ -270,9 +270,9 @@ export class WalletClient implements IWalletClient {
   }
 
   private handleSignTransaction(
-    transaction: Transaction,
+    transaction: TransactionPayload,
     { adapter, connected, wallet }: WalletState
-  ): Observable<Transaction> {
+  ): Observable<TransactionPayload> {
     if (!connected) {
       return throwError(new WalletNotConnectedError());
     }
@@ -283,15 +283,14 @@ export class WalletClient implements IWalletClient {
       map((signedTransaction) => ({
         id: transaction.id,
         data: signedTransaction,
-        date: transaction.date,
       }))
     );
   }
 
   private handleSignAllTransactions(
-    transactions: Transaction[],
+    transactions: TransactionPayload[],
     { adapter, connected, wallet }: WalletState
-  ): Observable<Transaction[]> {
+  ): Observable<TransactionPayload[]> {
     if (!connected) {
       return throwError(new WalletNotConnectedError());
     }
@@ -307,7 +306,6 @@ export class WalletClient implements IWalletClient {
         signedTransactions.map((signedTransaction, index) => ({
           id: transactions[index].id,
           data: signedTransaction,
-          date: transactions[index].date,
         }))
       )
     );
@@ -333,11 +331,11 @@ export class WalletClient implements IWalletClient {
     this._dispatcher.next(new DisconnectWalletAction());
   }
 
-  signTransaction(transaction: Transaction) {
+  signTransaction(transaction: TransactionPayload) {
     this._dispatcher.next(new SignTransactionAction(transaction));
   }
 
-  signAllTransactions(transactions: Transaction[]) {
+  signAllTransactions(transactions: TransactionPayload[]) {
     this._dispatcher.next(new SignTransactionsAction(transactions));
   }
 

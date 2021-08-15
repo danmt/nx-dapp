@@ -1,6 +1,7 @@
-import { Transaction } from './transaction';
 import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
+
+import { TransactionPayload } from '..';
 
 export interface WalletAdapterEvents {
   ready: () => void;
@@ -18,7 +19,9 @@ export interface WalletAdapter extends EventEmitter<WalletAdapterEvents> {
 
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  signTransaction: (transaction: Transaction) => Promise<Web3Transaction>;
+  signTransaction: (
+    transaction: TransactionPayload
+  ) => Promise<Web3Transaction>;
   signAllTransactions: (
     transaction: Web3Transaction[]
   ) => Promise<Web3Transaction[]>;

@@ -1,5 +1,5 @@
 import {
-  Transaction,
+  TransactionPayload,
   WalletAdapter,
   WalletAdapterEvents,
   WalletAdapterNetwork,
@@ -121,7 +121,9 @@ export class SolletWalletAdapter
     }
   }
 
-  async signTransaction(transaction: Transaction): Promise<Web3Transaction> {
+  async signTransaction(
+    transaction: TransactionPayload
+  ): Promise<Web3Transaction> {
     try {
       const wallet = this._wallet;
       if (!wallet) throw new WalletNotConnectedError();

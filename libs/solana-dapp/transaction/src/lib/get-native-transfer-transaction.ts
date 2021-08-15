@@ -4,13 +4,10 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
-  Transaction as Web3Transaction,
+  Transaction,
 } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
-
-import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
 
 export interface NativeTransferConfig {
   connection: string | Connection;
@@ -31,10 +28,8 @@ export const getNativeTransferTransaction = (
   const amount = config.amount;
 
   return getBlockHash(connection).pipe(
-    map(({ blockhash }) => ({
-      id: uuid(),
-      date: new Date(Date.now()),
-      data: new Web3Transaction({
+    map(({ blockhash }) =>
+      new Transaction({
         recentBlockhash: blockhash,
         feePayer: walletPublicKey,
       }).add(
@@ -43,7 +38,7 @@ export const getNativeTransferTransaction = (
           toPubkey: recipientPublicKey,
           lamports: LAMPORTS_PER_SOL * amount || 0,
         })
-      ),
-    }))
+      )
+    )
   );
 };
