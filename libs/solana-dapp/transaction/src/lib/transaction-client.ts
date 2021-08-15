@@ -16,9 +16,11 @@ import {
   BehaviorSubject,
   merge,
   Observable,
+  of,
   Subject,
 } from 'rxjs';
 import {
+  catchError,
   concatMap,
   distinctUntilChanged,
   map,
@@ -92,6 +94,10 @@ export class TransactionClient {
     ofType<Action>('cancelTransaction'),
     map(({ payload }) => payload as string)
   );
+  onTransactionFailed$ = this.actions$.pipe(
+    ofType<Action>('transactionFailed'),
+    map(({ payload }) => payload as string)
+  );
 
   private nativeTransferCreated$ = this.actions$.pipe(
     ofType<Action>('createNativeTransfer'),
@@ -158,7 +164,13 @@ export class TransactionClient {
             id: (transaction.payload as TransactionPayload).id,
             txId,
           },
-        }))
+        })),
+        catchError(() =>
+          of({
+            type: 'transactionFailed',
+            payload: (transaction.payload as TransactionPayload).id,
+          })
+        )
       )
     )
   );

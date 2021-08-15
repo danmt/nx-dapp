@@ -102,6 +102,17 @@ export const reducer = (state: TransactionState, action: Action) => {
         inProcess: state.inProcess - 1,
         isProcessing: state.inProcess - 1 > 0,
       };
+    case 'transactionFailed':
+      return {
+        ...state,
+        transactions: state.transactions.map((transaction) =>
+          transaction.id === action.payload
+            ? { ...transaction, status: 'Failed', isProcessing: false }
+            : transaction
+        ),
+        inProcess: state.inProcess - 1,
+        isProcessing: state.inProcess - 1 > 0,
+      };
     case 'setNetwork':
     case 'reset':
       return { ...transactionInitialState };
