@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nx-dapp/application/transactions/features/native-transfer": [
+        "libs/application/transactions/features/native-transfer/src/index.ts"
+      ],
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
       ],
@@ -64,6 +67,9 @@
         "libs/application/shared/utils/obscure-address/src/index.ts"
       ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
+      "@nx-dapp/application/transactions/features/spl-transfer": [
+        "libs/application/transactions/features/spl-transfer/src/index.ts"
+      ],
       "@nx-dapp/application/transactions/features/transactions-in-process": [
         "libs/application/transactions/features/transactions-in-process/src/index.ts"
       ],
@@ -75,12 +81,6 @@
       ],
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"
-      ],
-      "@nx-dapp/application/wallets/features/native-transfer": [
-        "libs/application/wallets/features/native-transfer/src/index.ts"
-      ],
-      "@nx-dapp/application/wallets/features/spl-transfer": [
-        "libs/application/wallets/features/spl-transfer/src/index.ts"
       ],
       "@nx-dapp/application/wallets/features/view-wallet": [
         "libs/application/wallets/features/view-wallet/src/index.ts"
