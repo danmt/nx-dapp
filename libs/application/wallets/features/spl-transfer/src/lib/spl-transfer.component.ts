@@ -23,7 +23,7 @@ import { SplTransferData } from './types';
       <p>Complete the form and hit send.</p>
     </header>
 
-    <form [formGroup]="sendFundsGroup" class="flex flex-col gap-4">
+    <form [formGroup]="splTransferGroup" class="flex flex-col gap-4">
       <mat-form-field class="w-full" appearance="fill">
         <mat-label>Recipient</mat-label>
         <input
@@ -65,7 +65,8 @@ import { SplTransferData } from './types';
         *ngIf="
           submitted &&
           recipientAddressControl.valid &&
-          associatedTokenAccountControl?.errors?.required
+          (loading$ | async) === false &&
+          (associatedTokenAccount$ | async) === null
         "
         class="text-center text-warn text-xs m-0"
       >
@@ -77,7 +78,7 @@ import { SplTransferData } from './types';
         color="primary"
         (click)="onSend()"
         class="w-full"
-        [disabled]="submitted && sendFundsGroup.invalid"
+        [disabled]="submitted && splTransferGroup.invalid"
       >
         Send funds
       </button>
@@ -105,8 +106,10 @@ import { SplTransferData } from './types';
 export class SplTransferComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'block w-72 relative';
   private readonly _destroy = new Subject();
+  loading$ = this.splTransferStore.loading$;
+  associatedTokenAccount$ = this.splTransferStore.associatedTokenAccount$;
   submitted = false;
-  sendFundsGroup = new FormGroup({
+  splTransferGroup = new FormGroup({
     recipientAddress: new FormControl('', [
       Validators.required,
       base58Validator,
@@ -118,15 +121,15 @@ export class SplTransferComponent implements OnInit, OnDestroy {
   });
 
   get recipientAddressControl() {
-    return this.sendFundsGroup.get('recipientAddress') as FormControl;
+    return this.splTransferGroup.get('recipientAddress') as FormControl;
   }
 
   get amountControl() {
-    return this.sendFundsGroup.get('amount') as FormControl;
+    return this.splTransferGroup.get('amount') as FormControl;
   }
 
   get associatedTokenAccountControl() {
-    return this.sendFundsGroup.get('associatedTokenAccount') as FormControl;
+    return this.splTransferGroup.get('associatedTokenAccount') as FormControl;
   }
 
   constructor(
@@ -160,9 +163,9 @@ export class SplTransferComponent implements OnInit, OnDestroy {
 
   onSend() {
     this.submitted = true;
-    this.sendFundsGroup.markAllAsTouched();
+    this.splTransferGroup.markAllAsTouched();
 
-    if (this.sendFundsGroup.valid) {
+    if (this.splTransferGroup.valid) {
       this.splTransferStore.sendTransfer(this.amountControl.value);
       this.dialogRef.close();
     }

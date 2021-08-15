@@ -10,19 +10,23 @@ import {
 } from '@nx-dapp/solana-dapp/angular';
 import { PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
-import { concatMap, debounceTime, map, withLatestFrom } from 'rxjs/operators';
+import {
+  concatMap,
+  debounceTime,
+  map,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 
 export interface ViewModel {
-  associatedTokenAddress: string | null;
+  recipientAddress: string | null;
   associatedTokenAccount: TokenAccount | null;
   position: Position | null;
+  loading: boolean;
 }
 
 @Injectable()
 export class SplTransferStore extends ComponentStore<ViewModel> {
-  readonly associatedTokenAddress$ = this.select(
-    (state) => state.associatedTokenAddress
-  );
   readonly position$ = this.select((state) => state.position);
   readonly mintAddress$ = this.select(this.position$, (position) =>
     position ? position.address : null
@@ -30,15 +34,17 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
   readonly associatedTokenAccount$ = this.select(
     (state) => state.associatedTokenAccount
   );
+  readonly loading$ = this.select((state) => state.loading);
 
   constructor(
     private transactionService: SolanaDappTransactionService,
     private accountService: SolanaDappAccountService
   ) {
     super({
-      associatedTokenAddress: null,
+      recipientAddress: null,
       associatedTokenAccount: null,
       position: null,
+      loading: false,
     });
   }
 
@@ -47,11 +53,12 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
     position,
   }));
 
-  readonly setAssociatedTokenAddress = this.updater(
-    (state, associatedTokenAddress: string | null) => ({
+  readonly setRecipientAddress = this.updater(
+    (state, recipientAddress: string | null) => ({
       ...state,
-      associatedTokenAddress,
+      recipientAddress,
       associatedTokenAccount: null,
+      loading: true,
     })
   );
 
@@ -59,44 +66,21 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
     (state, associatedTokenAccount: TokenAccount | null) => ({
       ...state,
       associatedTokenAccount,
+      loading: false,
     })
   );
 
-  readonly clearAssociatedTokenAddress = this.updater((state) => ({
+  readonly clearRecipientAddress = this.updater((state) => ({
     ...state,
-    associatedTokenAddress: null,
+    recipientAddress: null,
     associatedTokenAccount: null,
   }));
 
-  readonly getRecipientAssociatedTokenAddress = this.effect(
-    (recipientAddress$: Observable<string>) => {
-      return recipientAddress$.pipe(
-        debounceTime(400),
-        withLatestFrom(this.mintAddress$.pipe(isNotNull)),
-        concatMap(([recipientAddress, mintAddress]) =>
-          getAssociatedTokenPublicKey(
-            new PublicKey(recipientAddress),
-            new PublicKey(mintAddress)
-          ).pipe(
-            map((associatedTokenPublicKey) =>
-              associatedTokenPublicKey.toBase58()
-            )
-          )
-        ),
-        tapResponse(
-          (associatedTokenAddress) =>
-            this.setAssociatedTokenAddress(associatedTokenAddress),
-          (error) => this.logError(error)
-        )
-      );
-    }
-  );
-
-  readonly clearRecipientAssociatedTokenAddress = this.effect(
+  readonly clearAssociatedTokenAccount = this.effect(
     (recipientAddress$: Observable<string>) => {
       return recipientAddress$.pipe(
         tapResponse(
-          () => this.clearAssociatedTokenAddress(),
+          () => this.setAssociatedTokenAccount(null),
           (error) => this.logError(error)
         )
       );
@@ -105,13 +89,13 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
 
   readonly sendTransfer = this.effect((amount$: Observable<number>) =>
     amount$.pipe(
-      withLatestFrom(this.position$, this.associatedTokenAddress$),
+      withLatestFrom(this.position$, this.associatedTokenAccount$),
       tapResponse(
-        ([amount, position, associatedTokenAddress]) => {
-          if (position?.associatedTokenAddress && associatedTokenAddress) {
+        ([amount, position, associatedTokenAccount]) => {
+          if (position?.associatedTokenAddress && associatedTokenAccount) {
             this.transactionService.createSplTransfer(
               position.associatedTokenAddress,
-              associatedTokenAddress,
+              associatedTokenAccount.pubkey.toBase58(),
               position.address,
               amount,
               position.decimals
@@ -124,9 +108,21 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
   );
 
   readonly getAssociatedTokenAccount = this.effect(
-    (associatedTokenAddress$: Observable<string | null>) =>
-      associatedTokenAddress$.pipe(
-        isNotNull,
+    (recipientAddress$: Observable<string>) => {
+      return recipientAddress$.pipe(
+        tap((recipientAddress) => this.setRecipientAddress(recipientAddress)),
+        debounceTime(400),
+        withLatestFrom(this.mintAddress$.pipe(isNotNull)),
+        concatMap(([recipientAddress, mintAddress]) =>
+          getAssociatedTokenPublicKey(
+            new PublicKey(recipientAddress),
+            new PublicKey(mintAddress)
+          ).pipe(
+            map((associatedTokenPublicKey) =>
+              associatedTokenPublicKey.toBase58()
+            )
+          )
+        ),
         concatMap((associatedTokenAddress) =>
           this.accountService.getTokenAccount(
             new PublicKey(associatedTokenAddress)
@@ -137,7 +133,8 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
             this.setAssociatedTokenAccount(associatedTokenAccount),
           (error) => this.logError(error)
         )
-      )
+      );
+    }
   );
 
   private logError(error: unknown) {
@@ -150,8 +147,7 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
     invalidRecipientAddress$: Observable<string>
   ) {
     this.setPosition(position);
-    this.getRecipientAssociatedTokenAddress(validRecipientAddress$);
-    this.clearRecipientAssociatedTokenAddress(invalidRecipientAddress$);
-    this.getAssociatedTokenAccount(this.associatedTokenAddress$);
+    this.clearAssociatedTokenAccount(invalidRecipientAddress$);
+    this.getAssociatedTokenAccount(validRecipientAddress$);
   }
 }
