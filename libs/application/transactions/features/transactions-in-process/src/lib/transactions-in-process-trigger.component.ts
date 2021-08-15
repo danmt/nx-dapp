@@ -19,7 +19,7 @@ import { TransactionsInProcessService } from './transactions-in-process.service'
   `,
 })
 export class TransactionsInProcessTriggerComponent {
-  @HostBinding('class') class = 'block fixed bottom-0 left-0 w-screen';
+  @HostBinding('class') class = 'block fixed bottom-0 left-0 w-screen z-10';
   @Input() inProcess: number | null = null;
 
   constructor(

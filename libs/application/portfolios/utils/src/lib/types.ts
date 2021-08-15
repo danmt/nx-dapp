@@ -7,6 +7,9 @@ export interface Position {
   logo: string;
   total: number;
   isStable: boolean;
+  isNative: boolean;
+  decimals: number;
+  associatedTokenAddress?: string;
 }
 
 export interface Portfolio {

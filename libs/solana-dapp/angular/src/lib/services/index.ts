@@ -1,3 +1,4 @@
+export * from './account.service';
 export * from './balance.service';
 export * from './connection.service';
 export * from './market.service';

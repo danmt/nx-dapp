@@ -1,10 +1,10 @@
 import { getMarketData, getMintAccount } from '@nx-dapp/solana-dapp/account';
+import { GetPriceConfig, TokenPrice } from '@nx-dapp/solana-dapp/utils/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { switchMap, throttleTime } from 'rxjs/operators';
 
 import { mapToPrice } from './operators';
-import { GetPriceConfig, TokenPrice } from './types';
 import { getMarketByBaseMint } from './utils';
 
 const THROTTLE_TIME_IN_MS = 30_000;

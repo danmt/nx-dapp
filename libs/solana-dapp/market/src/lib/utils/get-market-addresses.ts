@@ -1,7 +1,7 @@
 import { MintTokenAccount } from '@nx-dapp/solana-dapp/account';
+import { Market } from '@nx-dapp/solana-dapp/utils/types';
 
 import { getMarketByBaseMint } from '.';
-import { Market } from '../types';
 
 export const getMarketAddresses = (
   mintAccounts: MintTokenAccount[]

@@ -48,22 +48,31 @@
     "application-portfolios-utils": {
       "tags": []
     },
-    "application/shared/ui/focus": {
+    "application-shared-ui-copy-to-clipboard": {
       "tags": []
     },
-    "application/shared/ui/modal-header": {
+    "application-shared-ui-copyable-text": {
       "tags": []
     },
     "application-shared-ui-dark-theme": {
       "tags": []
     },
+    "application-shared-ui-focus": {
+      "tags": []
+    },
+    "application-shared-ui-modal-header": {
+      "tags": []
+    },
     "application-shared-ui-navigation": {
       "tags": []
     },
-    "application/shared/ui/page-header": {
+    "application-shared-ui-page-header": {
       "tags": []
     },
     "application-shared-ui-settings-menu": {
+      "tags": []
+    },
+    "application-shared-utils-obscure-address": {
       "tags": []
     },
     "application-shell": {
@@ -72,19 +81,22 @@
     "application-transactions-features-transactions-in-process": {
       "tags": []
     },
+    "application-transactions-utils-transaction-notifications": {
+      "tags": []
+    },
     "application-wallets-features-connect-wallet": {
       "tags": []
     },
-    "application-wallets-features-send-funds": {
+    "application-wallets-features-native-transfer": {
+      "tags": []
+    },
+    "application-wallets-features-spl-transfer": {
       "tags": []
     },
     "application-wallets-features-view-wallet": {
       "tags": []
     },
-    "application/transactions/utils/transaction-notifications": {
-      "tags": []
-    },
-    "application/wallets/utils/wallet-notifications": {
+    "application-wallets-utils-wallet-notifications": {
       "tags": []
     },
     "shared-utils-operators": {
@@ -114,7 +126,10 @@
     "solana-dapp-transaction": {
       "tags": []
     },
-    "solana-dapp-utils": {
+    "solana-dapp-utils-operations": {
+      "tags": []
+    },
+    "solana-dapp-utils-types": {
       "tags": []
     },
     "solana-dapp-wallet": {

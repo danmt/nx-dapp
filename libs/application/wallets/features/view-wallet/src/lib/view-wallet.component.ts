@@ -1,4 +1,3 @@
-import { FocusMonitor } from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,12 +6,11 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatTooltip } from '@angular/material/tooltip';
 import {
   SolanaDappBalanceService,
   SolanaDappWalletService,
 } from '@nx-dapp/solana-dapp/angular';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -30,28 +28,7 @@ import { filter, takeUntil } from 'rxjs/operators';
       <div>
         <h2 class="mb-1 text-base text-primary">Your Address</h2>
 
-        <div
-          class="bg-black bg-opacity-25 rounded-md px-3 py-1 flex items-center mb-2"
-        >
-          <p class="m-0 truncate flex-shrink">
-            {{ walletAddress }}
-          </p>
-
-          <button
-            id="copy-tooltip"
-            mat-mini-fab
-            color="primary"
-            class="scale-75"
-            #tooltip="matTooltip"
-            matTooltip="Copied!"
-            matTooltipPosition="above"
-            [cdkCopyToClipboard]="walletAddress"
-            [matTooltipDisabled]="(copied$ | async) === false"
-            (click)="onCopyAddress(tooltip)"
-          >
-            <mat-icon>content_copy</mat-icon>
-          </button>
-        </div>
+        <nx-dapp-copyable-text [text]="walletAddress"></nx-dapp-copyable-text>
 
         <div class="flex justify-between items-center mb-2">
           <span>SOL Balance</span>
@@ -98,29 +75,20 @@ import { filter, takeUntil } from 'rxjs/operators';
       <mat-spinner color="primary" diameter="28" class="mx-auto"></mat-spinner>
     </ng-template>
   `,
-  styles: [
-    `
-      .copy-button > .mat-button-wrapper {
-        padding: 0;
-      }
-    `,
-  ],
+  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewWalletComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'block relative w-64';
   private readonly _destroy = new Subject();
-  private readonly _copied = new BehaviorSubject(false);
   disconnecting$ = this.walletService.disconnecting$;
   walletAddress$ = this.walletService.walletAddress$;
   walletBalance$ = this.balanceService.getBalanceForWallet();
-  copied$ = this._copied.asObservable();
 
   constructor(
     private walletService: SolanaDappWalletService,
     private balanceService: SolanaDappBalanceService,
-    private dialogRef: MatDialogRef<ViewWalletComponent>,
-    private focusMonitor: FocusMonitor
+    private dialogRef: MatDialogRef<ViewWalletComponent>
   ) {}
 
   ngOnInit() {
@@ -130,12 +98,6 @@ export class ViewWalletComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy)
       )
       .subscribe(() => this.dialogRef.close());
-
-    const copyTooltipElement = document.getElementById('copy-tooltip');
-
-    if (copyTooltipElement) {
-      this.focusMonitor.stopMonitoring(copyTooltipElement);
-    }
   }
 
   ngOnDestroy() {
@@ -147,15 +109,5 @@ export class ViewWalletComponent implements OnInit, OnDestroy {
     if (confirm('Are you sure? This action will disconnect your wallet.')) {
       this.walletService.disconnect();
     }
-  }
-
-  onCopyAddress(tooltip: MatTooltip) {
-    this._copied.next(true);
-
-    setTimeout(() => tooltip.show());
-    setTimeout(() => {
-      tooltip.hide();
-      this._copied.next(false);
-    }, 2000);
   }
 }

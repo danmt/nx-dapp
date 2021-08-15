@@ -9,6 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { DarkThemeModule } from '@nx-dapp/application/shared/ui/dark-theme';
+import { ObscureAddressModule } from '@nx-dapp/application/shared/utils/obscure-address';
 
 import { NavigationComponent } from './navigation.component';
 
@@ -24,6 +25,7 @@ import { NavigationComponent } from './navigation.component';
     MatSidenavModule,
     MatToolbarModule,
     MatSlideToggleModule,
+    ObscureAddressModule,
   ],
   declarations: [NavigationComponent],
   exports: [NavigationComponent],

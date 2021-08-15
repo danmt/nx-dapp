@@ -4,12 +4,15 @@ import {
   getUserAccountMints,
   getUserAccounts,
 } from '@nx-dapp/solana-dapp/account';
+import {
+  GetPricesFromWalletConfig,
+  TokenPrice,
+} from '@nx-dapp/solana-dapp/utils/types';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { switchMap, throttleTime } from 'rxjs/operators';
 
 import { mapToPrices } from './operators';
-import { GetPricesFromWalletConfig, TokenPrice } from './types';
 import { getMarketAddresses } from './utils';
 
 const THROTTLE_TIME_IN_MS = 30_000;

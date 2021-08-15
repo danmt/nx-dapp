@@ -5,9 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 
 import { SolanaDappNetworkService } from '.';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SolanaDappConnectionService {
   connection$ = this.networkService.network$.pipe(
     map(({ url }) => new Connection(url, 'recent')),

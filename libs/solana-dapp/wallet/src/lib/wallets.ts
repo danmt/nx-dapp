@@ -6,7 +6,7 @@ import {
   SolongWalletAdapter,
   SolongWalletAdapterConfig,
 } from './adapters';
-import { Wallet, WalletName } from './types';
+import { Wallet, WalletName } from '@nx-dapp/solana-dapp/utils/types';
 
 export const ICONS_URL =
   'https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons';

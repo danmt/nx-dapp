@@ -182,17 +182,17 @@
         }
       }
     },
-    "application/shared/ui/focus": {
+    "application-shared-ui-copy-to-clipboard": {
       "projectType": "library",
-      "root": "libs/application/shared/ui/focus",
-      "sourceRoot": "libs/application/shared/ui/focus/src",
+      "root": "libs/application/shared/ui/copy-to-clipboard",
+      "sourceRoot": "libs/application/shared/ui/copy-to-clipboard/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/shared/ui/focus"],
+          "outputs": ["coverage/libs/application/shared/ui/copy-to-clipboard"],
           "options": {
-            "jestConfig": "libs/application/shared/ui/focus/jest.config.js",
+            "jestConfig": "libs/application/shared/ui/copy-to-clipboard/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -200,8 +200,33 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/shared/ui/focus/src/**/*.ts",
-              "libs/application/shared/ui/focus/src/**/*.html"
+              "libs/application/shared/ui/copy-to-clipboard/src/**/*.ts",
+              "libs/application/shared/ui/copy-to-clipboard/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-shared-ui-copyable-text": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/copyable-text",
+      "sourceRoot": "libs/application/shared/ui/copyable-text/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/copyable-text"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/copyable-text/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/copyable-text/src/**/*.ts",
+              "libs/application/shared/ui/copyable-text/src/**/*.html"
             ]
           }
         }
@@ -232,7 +257,32 @@
         }
       }
     },
-    "application/shared/ui/modal-header": {
+    "application-shared-ui-focus": {
+      "projectType": "library",
+      "root": "libs/application/shared/ui/focus",
+      "sourceRoot": "libs/application/shared/ui/focus/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/ui/focus"],
+          "options": {
+            "jestConfig": "libs/application/shared/ui/focus/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/ui/focus/src/**/*.ts",
+              "libs/application/shared/ui/focus/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-shared-ui-modal-header": {
       "projectType": "library",
       "root": "libs/application/shared/ui/modal-header",
       "sourceRoot": "libs/application/shared/ui/modal-header/src",
@@ -282,7 +332,7 @@
         }
       }
     },
-    "application/shared/ui/page-header": {
+    "application-shared-ui-page-header": {
       "projectType": "library",
       "root": "libs/application/shared/ui/page-header",
       "sourceRoot": "libs/application/shared/ui/page-header/src",
@@ -327,6 +377,31 @@
             "lintFilePatterns": [
               "libs/application/shared/ui/settings-menu/src/**/*.ts",
               "libs/application/shared/ui/settings-menu/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-shared-utils-obscure-address": {
+      "projectType": "library",
+      "root": "libs/application/shared/utils/obscure-address",
+      "sourceRoot": "libs/application/shared/utils/obscure-address/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/shared/utils/obscure-address"],
+          "options": {
+            "jestConfig": "libs/application/shared/utils/obscure-address/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/shared/utils/obscure-address/src/**/*.ts",
+              "libs/application/shared/utils/obscure-address/src/**/*.html"
             ]
           }
         }
@@ -384,6 +459,33 @@
         }
       }
     },
+    "application-transactions-utils-transaction-notifications": {
+      "projectType": "library",
+      "root": "libs/application/transactions/utils/transaction-notifications",
+      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/utils/transaction-notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
+              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-wallets-features-connect-wallet": {
       "projectType": "library",
       "root": "libs/application/wallets/features/connect-wallet",
@@ -411,17 +513,19 @@
         }
       }
     },
-    "application-wallets-features-send-funds": {
+    "application-wallets-features-native-transfer": {
       "projectType": "library",
-      "root": "libs/application/wallets/features/send-funds",
-      "sourceRoot": "libs/application/wallets/features/send-funds/src",
+      "root": "libs/application/wallets/features/native-transfer",
+      "sourceRoot": "libs/application/wallets/features/native-transfer/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/application/wallets/features/send-funds"],
+          "outputs": [
+            "coverage/libs/application/wallets/features/native-transfer"
+          ],
           "options": {
-            "jestConfig": "libs/application/wallets/features/send-funds/jest.config.js",
+            "jestConfig": "libs/application/wallets/features/native-transfer/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -429,8 +533,35 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/wallets/features/send-funds/src/**/*.ts",
-              "libs/application/wallets/features/send-funds/src/**/*.html"
+              "libs/application/wallets/features/native-transfer/src/**/*.ts",
+              "libs/application/wallets/features/native-transfer/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-wallets-features-spl-transfer": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/spl-transfer",
+      "sourceRoot": "libs/application/wallets/features/spl-transfer/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/features/spl-transfer"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/spl-transfer/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/spl-transfer/src/**/*.ts",
+              "libs/application/wallets/features/spl-transfer/src/**/*.html"
             ]
           }
         }
@@ -461,34 +592,7 @@
         }
       }
     },
-    "application/transactions/utils/transaction-notifications": {
-      "projectType": "library",
-      "root": "libs/application/transactions/utils/transaction-notifications",
-      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/application/transactions/utils/transaction-notifications"
-          ],
-          "options": {
-            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "application/wallets/utils/wallet-notifications": {
+    "application-wallets-utils-wallet-notifications": {
       "projectType": "library",
       "root": "libs/application/wallets/utils/wallet-notifications",
       "sourceRoot": "libs/application/wallets/utils/wallet-notifications/src",
@@ -708,22 +812,43 @@
         }
       }
     },
-    "solana-dapp-utils": {
-      "root": "libs/solana-dapp/utils",
-      "sourceRoot": "libs/solana-dapp/utils/src",
+    "solana-dapp-utils-operations": {
+      "root": "libs/solana-dapp/utils/operations",
+      "sourceRoot": "libs/solana-dapp/utils/operations/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/solana-dapp/utils/**/*.ts"]
+            "lintFilePatterns": ["libs/solana-dapp/utils/operations/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/utils"],
+          "outputs": ["coverage/libs/solana-dapp/utils/operations"],
           "options": {
-            "jestConfig": "libs/solana-dapp/utils/jest.config.js",
+            "jestConfig": "libs/solana-dapp/utils/operations/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "solana-dapp-utils-types": {
+      "root": "libs/solana-dapp/utils/types",
+      "sourceRoot": "libs/solana-dapp/utils/types/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/solana-dapp/utils/types/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/solana-dapp/utils/types"],
+          "options": {
+            "jestConfig": "libs/solana-dapp/utils/types/jest.config.js",
             "passWithNoTests": true
           }
         }

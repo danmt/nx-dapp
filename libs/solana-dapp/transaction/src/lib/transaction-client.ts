@@ -3,13 +3,13 @@ import {
   confirmTransaction,
   sendTransaction,
 } from '@nx-dapp/solana-dapp/connection';
-import { Network } from '@nx-dapp/solana-dapp/network';
 import {
-  CreateTransactionPayload,
-  getTransferTransaction,
+  CreateNativeTransferPayload,
+  CreateSplTransferPayload,
+  Network,
   Transaction,
   TransactionResponse,
-} from '@nx-dapp/solana-dapp/transaction';
+} from '@nx-dapp/solana-dapp/utils/types';
 import { Connection } from '@solana/web3.js';
 import {
   asyncScheduler,
@@ -29,6 +29,8 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
+import { getNativeTransferTransaction } from './get-native-transfer-transaction';
+import { getSplTransferTransaction } from './get-spl-transfer-transaction';
 import { Action, reducer, transactionInitialState } from './state';
 
 export class TransactionClient {
@@ -38,7 +40,7 @@ export class TransactionClient {
     type: 'init',
   });
   actions$ = this._dispatcher.asObservable();
-  private readonly connection$ = this.actions$.pipe(
+  connection$ = this.actions$.pipe(
     ofType<Action>('setNetwork'),
     map((action) => new Connection((action.payload as Network).url, 'recent')),
     shareReplay({
@@ -69,9 +71,17 @@ export class TransactionClient {
     map(({ inProcess }) => inProcess),
     distinctUntilChanged()
   );
-  onTransactionCreated$ = this.actions$.pipe(
-    ofType<Action>('transactionCreated'),
+  onNativeTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('nativeTransferCreated'),
     map(({ payload }) => payload as Transaction)
+  );
+  onSplTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('splTransferCreated'),
+    map(({ payload }) => payload as Transaction)
+  );
+  onTransactionCreated$ = merge(
+    this.onNativeTransferCreated$,
+    this.onSplTransferCreated$
   );
   onTransactionConfirmed$ = this.actions$.pipe(
     ofType<Action>('transactionConfirmed'),
@@ -82,19 +92,45 @@ export class TransactionClient {
     map(({ payload }) => payload as string)
   );
 
-  private transactionCreated$ = this.actions$.pipe(
-    ofType<Action>('createTransaction'),
+  private nativeTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('createNativeTransfer'),
     withLatestFrom(this.connection$, this.walletAddress$),
-    concatMap(([{ payload: createTransaction }, connection, walletAddress]) =>
-      getTransferTransaction({
+    concatMap(
+      ([{ payload: createNativeTransfer }, connection, walletAddress]) =>
+        getNativeTransferTransaction({
+          connection,
+          walletAddress,
+          recipientAddress: (
+            createNativeTransfer as CreateNativeTransferPayload
+          ).recipientAddress,
+          amount: (createNativeTransfer as CreateNativeTransferPayload).amount,
+        }).pipe(
+          map((transaction) => ({
+            type: 'nativeTransferCreated',
+            payload: transaction,
+          }))
+        )
+    )
+  );
+
+  private splTransferCreated$ = this.actions$.pipe(
+    ofType<Action>('createSplTransfer'),
+    withLatestFrom(this.connection$, this.walletAddress$),
+    concatMap(([{ payload: createSplTransfer }, connection, walletAddress]) =>
+      getSplTransferTransaction({
         connection,
         walletAddress,
-        recipientAddress: (createTransaction as CreateTransactionPayload)
+        mintAddress: (createSplTransfer as CreateSplTransferPayload)
+          .mintAddress,
+        decimals: (createSplTransfer as CreateSplTransferPayload).decimals,
+        amount: (createSplTransfer as CreateSplTransferPayload).amount,
+        emitterAddress: (createSplTransfer as CreateSplTransferPayload)
+          .emitterAddress,
+        recipientAddress: (createSplTransfer as CreateSplTransferPayload)
           .recipientAddress,
-        amount: (createTransaction as CreateTransactionPayload).amount,
       }).pipe(
         map((transaction) => ({
-          type: 'transactionCreated',
+          type: 'splTransferCreated',
           payload: transaction,
         }))
       )
@@ -137,7 +173,8 @@ export class TransactionClient {
     this.runEffects([
       this.confirmTransaction$,
       this.transactionConfirmed$,
-      this.transactionCreated$,
+      this.nativeTransferCreated$,
+      this.splTransferCreated$,
     ]);
   }
 
@@ -166,12 +203,31 @@ export class TransactionClient {
     });
   }
 
-  createTransaction(recipientAddress: string, amount: number) {
+  createNativeTransfer(recipientAddress: string, amount: number) {
     this._dispatcher.next({
-      type: 'createTransaction',
+      type: 'createNativeTransfer',
       payload: {
         recipientAddress,
         amount,
+      },
+    });
+  }
+
+  createSplTransfer(
+    emitterAddress: string,
+    recipientAddress: string,
+    mintAddress: string,
+    amount: number,
+    decimals: number
+  ) {
+    this._dispatcher.next({
+      type: 'createSplTransfer',
+      payload: {
+        emitterAddress,
+        recipientAddress,
+        mintAddress,
+        amount: Math.round(amount * 10 ** decimals),
+        decimals,
       },
     });
   }

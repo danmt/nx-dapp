@@ -3,16 +3,14 @@ import {
   getPrice,
   getPrices,
   getPricesFromWallet,
-  TokenPrice,
 } from '@nx-dapp/solana-dapp/market';
+import { TokenPrice } from '@nx-dapp/solana-dapp/utils/types';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { SolanaDappConnectionService, SolanaDappWalletService } from '.';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SolanaDappMarketService {
   constructor(
     private solanaDappConnectionService: SolanaDappConnectionService,

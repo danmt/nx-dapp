@@ -2,7 +2,7 @@ import {
   ExtendedTransaction,
   Transaction,
   TransactionResponse,
-} from '@nx-dapp/solana-dapp/transaction';
+} from '@nx-dapp/solana-dapp/utils/types';
 
 export interface Action {
   type: string;
@@ -12,7 +12,6 @@ export interface Action {
 export interface TransactionState {
   transactions: ExtendedTransaction[];
   isProcessing: boolean;
-
   inProcess: number;
 }
 
@@ -24,7 +23,8 @@ export const transactionInitialState: TransactionState = {
 
 export const reducer = (state: TransactionState, action: Action) => {
   switch (action.type) {
-    case 'transactionCreated':
+    case 'splTransferCreated':
+    case 'nativeTransferCreated':
       return {
         ...state,
         transactions: [

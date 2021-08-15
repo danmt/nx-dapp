@@ -1,7 +1,10 @@
-import { isNotNull } from '@nx-dapp/shared/utils/operators';
-import { ofType } from '@nx-dapp/shared/utils/operators';
-import { Network } from '@nx-dapp/solana-dapp/network';
-import { Transaction } from '@nx-dapp/solana-dapp/transaction';
+import { isNotNull, ofType } from '@nx-dapp/shared/utils/operators';
+import {
+  Network,
+  Transaction,
+  Wallet,
+  WalletName,
+} from '@nx-dapp/solana-dapp/utils/types';
 import {
   asyncScheduler,
   BehaviorSubject,
@@ -53,7 +56,7 @@ import {
   WalletSelectedAction,
   WalletState,
 } from './state';
-import { IWalletClient, Wallet, WalletName } from './types';
+import { IWalletClient } from './types';
 import {
   WalletError,
   WalletNotConnectedError,

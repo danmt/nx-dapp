@@ -1,6 +1,6 @@
 import {
   getNativeAccount,
-  getTokenAccounts,
+  getTokenAccountsByOwner,
   TokenAccount,
 } from '@nx-dapp/solana-dapp/account';
 import { Connection, PublicKey } from '@solana/web3.js';
@@ -16,7 +16,7 @@ export const getUserAccounts = (
   getNativeAccount(connection, walletPublicKey).pipe(
     observeNativeAccount(connection),
     switchMap((nativeAccount) =>
-      getTokenAccounts(connection, walletPublicKey).pipe(
+      getTokenAccountsByOwner(connection, walletPublicKey).pipe(
         observeTokenAccounts(connection),
         map((tokenAccounts) => [nativeAccount, ...tokenAccounts])
       )

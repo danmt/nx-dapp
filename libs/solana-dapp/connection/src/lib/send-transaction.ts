@@ -1,6 +1,6 @@
 import { Connection } from '@solana/web3.js';
 import { defer, from } from 'rxjs';
-import { Transaction } from '@nx-dapp/solana-dapp/transaction';
+import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
 
 export const sendTransaction = (
   connection: Connection,

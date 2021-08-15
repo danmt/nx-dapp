@@ -1,10 +1,17 @@
-import { getMintAccount, getUserAccounts } from '@nx-dapp/solana-dapp/account';
+import {
+  getAssociatedTokenPublicKey,
+  getMintAccount,
+  getUserAccounts,
+} from '@nx-dapp/solana-dapp/account';
+import {
+  Balance,
+  GetBalanceForWalletConfig,
+} from '@nx-dapp/solana-dapp/utils/types';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
-import { mapToBalance } from './operators';
-import { Balance, GetBalanceForWalletConfig } from './types';
+import { addAssociatedTokenAccountAddress, mapToBalance } from './operators';
 
 export const getBalanceForWallet = (
   config: GetBalanceForWalletConfig
@@ -20,6 +27,7 @@ export const getBalanceForWallet = (
       getMintAccount(connection, userAccounts[0].info.mint).pipe(
         mapToBalance(userAccounts)
       )
-    )
+    ),
+    addAssociatedTokenAccountAddress(walletPublicKey)
   );
 };

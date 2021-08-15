@@ -1,8 +1,11 @@
-import { Transaction } from '@nx-dapp/solana-dapp/transaction';
+import {
+  Transaction,
+  WalletAdapter,
+  WalletAdapterEvents,
+} from '@nx-dapp/solana-dapp/utils/types';
 import { PublicKey, Transaction as Web3Transaction } from '@solana/web3.js';
 import EventEmitter from 'eventemitter3';
 
-import { WalletAdapter, WalletAdapterEvents } from '../types';
 import {
   pollUntilReady,
   WalletAccountError,

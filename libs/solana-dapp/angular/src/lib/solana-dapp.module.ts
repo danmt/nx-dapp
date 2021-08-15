@@ -1,6 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import {
+  SolanaDappAccountService,
   SolanaDappBalanceService,
   SolanaDappConnectionService,
   SolanaDappMarketService,
@@ -15,6 +16,7 @@ export class SolanaDappModule {
     return {
       ngModule: SolanaDappModule,
       providers: [
+        SolanaDappAccountService,
         SolanaDappBalanceService,
         SolanaDappConnectionService,
         SolanaDappMarketService,

@@ -6,7 +6,6 @@ import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wa
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import {
-  obscureWalletAddress,
   SolanaDappTransactionService,
   SolanaDappWalletService,
 } from '@nx-dapp/solana-dapp/angular';
@@ -41,10 +40,7 @@ export class ShellComponent implements OnInit {
   isProcessing$ = this.transactionService.isProcessing$;
   inProcess$ = this.transactionService.inProcess$;
   connected$ = this.walletService.connected$;
-  walletAddress$ = this.walletService.walletAddress$.pipe(
-    isNotNull,
-    obscureWalletAddress
-  );
+  walletAddress$ = this.walletService.walletAddress$.pipe(isNotNull);
 
   constructor(
     private walletNotificationsService: WalletNotificationsService,

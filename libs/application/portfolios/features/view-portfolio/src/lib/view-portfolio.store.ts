@@ -1,26 +1,31 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import {
-  mapToPortfolio,
+  createPortfolio,
   Portfolio,
 } from '@nx-dapp/application/portfolios/utils';
 import {
+  Balance,
   SolanaDappBalanceService,
   SolanaDappMarketService,
   SolanaDappNetworkService,
   SolanaDappWalletService,
+  TokenInfo,
+  TokenPrice,
 } from '@nx-dapp/solana-dapp/angular';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 
 export interface ViewModel {
-  portfolio: Portfolio;
+  prices: TokenPrice[];
+  balances: Balance[];
+  tokens: Map<string, TokenInfo>;
 }
 
 @Injectable()
 export class ViewPortfolioStore extends ComponentStore<ViewModel> {
-  readonly portfolio$: Observable<Portfolio | null> = this.select(
-    (state) => state.portfolio
+  readonly portfolio$: Observable<Portfolio | null> = this.select((state) =>
+    createPortfolio(state.balances, state.prices, state.tokens)
   );
 
   constructor(
@@ -30,33 +35,57 @@ export class ViewPortfolioStore extends ComponentStore<ViewModel> {
     private walletService: SolanaDappWalletService
   ) {
     super({
-      portfolio: {
-        positions: [],
-        totalInUSD: 0,
-        stableCoinsTotalInUSD: 0,
-        nonStableCoinsTotalInUSD: 0,
-      },
+      prices: [],
+      balances: [],
+      tokens: new Map<string, TokenInfo>(),
     });
   }
 
-  readonly setPortfolio = this.updater((state, portfolio: Portfolio) => ({
+  readonly setPrices = this.updater((state, prices: TokenPrice[]) => ({
     ...state,
-    portfolio,
+    prices,
   }));
 
-  readonly init = this.effect(() => {
+  readonly setBalances = this.updater((state, balances: Balance[]) => ({
+    ...state,
+    balances,
+  }));
+
+  readonly setTokens = this.updater(
+    (state, tokens: Map<string, TokenInfo>) => ({
+      ...state,
+      tokens,
+    })
+  );
+
+  private readonly getBalances = this.effect(() => {
     return this.walletService.connected$.pipe(
       filter((connected) => connected),
-      switchMap(() =>
-        combineLatest([
-          this.balanceService.getBalancesFromWallet(),
-          this.networkService.tokens$,
-          this.marketService.getPricesFromWallet(),
-        ])
-      ),
-      mapToPortfolio,
+      switchMap(() => this.balanceService.getBalancesFromWallet()),
       tapResponse(
-        (portfolio) => this.setPortfolio(portfolio),
+        (balances) => this.setBalances(balances),
+        (error) => this.logError(error)
+      )
+    );
+  });
+
+  private readonly getPrices = this.effect(() => {
+    return this.walletService.connected$.pipe(
+      filter((connected) => connected),
+      switchMap(() => this.marketService.getPricesFromWallet()),
+      tapResponse(
+        (prices) => this.setPrices(prices),
+        (error) => this.logError(error)
+      )
+    );
+  });
+
+  private readonly getTokens = this.effect(() => {
+    return this.walletService.connected$.pipe(
+      filter((connected) => connected),
+      switchMap(() => this.networkService.tokens$),
+      tapResponse(
+        (tokens) => this.setTokens(tokens),
         (error) => this.logError(error)
       )
     );
@@ -64,5 +93,11 @@ export class ViewPortfolioStore extends ComponentStore<ViewModel> {
 
   private logError(error: unknown) {
     console.error(error);
+  }
+
+  init() {
+    this.getBalances();
+    this.getPrices();
+    this.getTokens();
   }
 }
