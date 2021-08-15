@@ -12,6 +12,7 @@ export interface Transaction {
   id: string;
   date: Date;
   data?: Web3Transaction;
+  amount: number;
   logo: string;
   symbol: string;
 }
