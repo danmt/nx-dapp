@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { getTokenAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
+import {
+  getNativeAccount,
+  getTokenAccount,
+  TokenAccount,
+} from '@nx-dapp/solana-dapp/account';
 import { PublicKey } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { concatMap, first } from 'rxjs/operators';
@@ -14,6 +18,13 @@ export class SolanaDappAccountService {
     return this.connectionService.connection$.pipe(
       first(),
       concatMap((connection) => getTokenAccount(connection, publicKey))
+    );
+  }
+
+  getNativeAccount(publicKey: PublicKey): Observable<TokenAccount | null> {
+    return this.connectionService.connection$.pipe(
+      first(),
+      concatMap((connection) => getNativeAccount(connection, publicKey))
     );
   }
 }

@@ -7,11 +7,12 @@ import { getAccount } from '..';
 
 export const getTokenAccount = (
   connection: Connection,
-  pubkey: PublicKey,
+  publicKey: PublicKey,
   commitment?: Commitment
 ): Observable<TokenAccount | null> =>
-  getAccount(connection, pubkey, commitment || 'recent').pipe(
+  getAccount(connection, publicKey, commitment || 'recent').pipe(
     map(
-      (tokenAccount) => tokenAccount && TokenAccountParser(pubkey, tokenAccount)
+      (tokenAccount) =>
+        tokenAccount && TokenAccountParser(publicKey, tokenAccount)
     )
   );
