@@ -78,6 +78,9 @@
     "application-shell": {
       "tags": []
     },
+    "application-transactions-features-spl-transfer": {
+      "tags": []
+    },
     "application-transactions-features-transactions-in-process": {
       "tags": []
     },
@@ -91,9 +94,6 @@
       "tags": []
     },
     "application-wallets-features-native-transfer": {
-      "tags": []
-    },
-    "application-wallets-features-spl-transfer": {
       "tags": []
     },
     "application-wallets-features-view-wallet": {
