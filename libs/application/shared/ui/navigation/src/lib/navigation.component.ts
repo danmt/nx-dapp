@@ -6,10 +6,9 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { DarkThemeService } from '@nx-dapp/application/shared/ui/dark-theme';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-
-import { ThemeService } from '../../../dark-theme/src/lib/theme-service.service';
 
 @Component({
   selector: 'nx-dapp-navigation',
@@ -133,7 +132,7 @@ export class NavigationComponent {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private themeService: ThemeService
+    private themeService: DarkThemeService
   ) {}
 
   onConnectWallet() {

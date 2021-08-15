@@ -17,6 +17,9 @@ import {
       <button *ngIf="isConnected" mat-menu-item (click)="onViewWallet()">
         Wallet
       </button>
+      <button *ngIf="isConnected" mat-menu-item (click)="onViewTransactions()">
+        Transactions
+      </button>
       <button
         mat-menu-item
         class="flex justify-between items-center"
@@ -45,6 +48,7 @@ export class SettingsMenuComponent {
   @Input() isConnected: boolean | null = null;
   @Output() changeNetwork = new EventEmitter();
   @Output() viewWallet = new EventEmitter();
+  @Output() viewTransactions = new EventEmitter();
   @Output() disconnectWallet = new EventEmitter();
 
   onChangeNetwork() {
@@ -53,6 +57,10 @@ export class SettingsMenuComponent {
 
   onViewWallet() {
     this.viewWallet.emit();
+  }
+
+  onViewTransactions() {
+    this.viewTransactions.emit();
   }
 
   onDisconnectWallet() {
