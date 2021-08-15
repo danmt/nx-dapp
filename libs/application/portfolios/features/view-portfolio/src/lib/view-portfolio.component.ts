@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Position } from '@nx-dapp/application/portfolios/utils';
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { NativeTransferService } from '@nx-dapp/application/wallets/features/native-transfer';
+import { NativeTransferService } from '@nx-dapp/application-transactions-features-native-transfer';
 import { SplTransferService } from '@nx-dapp/application-transactions-features-spl-transfer';
 import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
 
