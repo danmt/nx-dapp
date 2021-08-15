@@ -55,7 +55,7 @@ import { map, shareReplay } from 'rxjs/operators';
             <mat-slide-toggle
               class="mr-1"
               (change)="toggleDarkMode(!$event.checked)"
-              [nxDappSetDarkTheme]="isDarkThemeEnabled$ | async"
+              [nxDappDarkTheme]="isDarkThemeEnabled$ | async"
               [checked]="(isDarkThemeEnabled$ | async) === false"
             >
             </mat-slide-toggle>
