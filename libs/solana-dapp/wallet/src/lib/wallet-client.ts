@@ -283,6 +283,7 @@ export class WalletClient implements IWalletClient {
       map((signedTransaction) => ({
         id: transaction.id,
         data: signedTransaction,
+        date: transaction.date,
       }))
     );
   }
@@ -306,6 +307,7 @@ export class WalletClient implements IWalletClient {
         signedTransactions.map((signedTransaction, index) => ({
           id: transactions[index].id,
           data: signedTransaction,
+          date: transactions[index].date,
         }))
       )
     );

@@ -33,6 +33,7 @@ export const getNativeTransferTransaction = (
   return getBlockHash(connection).pipe(
     map(({ blockhash }) => ({
       id: uuid(),
+      date: new Date(Date.now()),
       data: new Web3Transaction({
         recentBlockhash: blockhash,
         feePayer: walletPublicKey,

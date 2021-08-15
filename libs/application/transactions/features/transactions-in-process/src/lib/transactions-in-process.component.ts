@@ -22,6 +22,7 @@ import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
             diameter="24"
             color="primary"
           ></mat-spinner>
+          {{ transaction.date | date: 'short' }}
         </p>
         <div
           class="px-4 py-2 text-xs uppercase font-bold rounded-sm"
