@@ -213,7 +213,12 @@ export class TransactionClient {
     });
   }
 
-  createNativeTransfer(recipientAddress: string, amount: number) {
+  createNativeTransfer(
+    recipientAddress: string,
+    amount: number,
+    symbol: string,
+    logo: string
+  ) {
     this._dispatcher.next({
       type: 'createNativeTransfer',
       payload: {
@@ -221,6 +226,8 @@ export class TransactionClient {
         date: new Date(Date.now()),
         recipientAddress,
         amount,
+        symbol,
+        logo,
       },
     });
   }
@@ -230,7 +237,9 @@ export class TransactionClient {
     recipientAddress: string,
     mintAddress: string,
     amount: number,
-    decimals: number
+    decimals: number,
+    symbol: string,
+    logo: string
   ) {
     this._dispatcher.next({
       type: 'createSplTransfer',
@@ -240,8 +249,10 @@ export class TransactionClient {
         emitterAddress,
         recipientAddress,
         mintAddress,
-        amount: Math.round(amount * 10 ** decimals),
+        amount,
         decimals,
+        symbol,
+        logo,
       },
     });
   }

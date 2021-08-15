@@ -12,6 +12,8 @@ export interface Transaction {
   id: string;
   date: Date;
   data?: Web3Transaction;
+  logo: string;
+  symbol: string;
 }
 
 export interface CreateNativeTransferPayload {
@@ -19,6 +21,8 @@ export interface CreateNativeTransferPayload {
   date: Date;
   recipientAddress: string;
   amount: number;
+  logo: string;
+  symbol: string;
 }
 
 export interface CreateSplTransferPayload {
@@ -29,6 +33,8 @@ export interface CreateSplTransferPayload {
   mintAddress: string;
   amount: number;
   decimals: number;
+  logo: string;
+  symbol: string;
 }
 
 export interface TransactionPayload {

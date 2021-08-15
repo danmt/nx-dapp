@@ -41,7 +41,7 @@ export const getSplTransferTransaction = (
           recipientPublicKey,
           walletPublicKey,
           [],
-          config.amount,
+          Math.round(config.amount * 10 ** config.decimals),
           config.decimals
         )
       )

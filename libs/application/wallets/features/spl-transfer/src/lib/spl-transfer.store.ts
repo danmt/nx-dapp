@@ -98,7 +98,9 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
               associatedTokenAccount.pubkey.toBase58(),
               position.address,
               amount,
-              position.decimals
+              position.decimals,
+              position.symbol,
+              position.logo
             );
           }
         },
