@@ -1,6 +1,6 @@
 import {
   Network,
-  Transaction,
+  TransactionPayload,
   Wallet,
   WalletAdapter,
   WalletName,
@@ -31,7 +31,7 @@ export interface WalletState {
   wallet: Wallet | null;
   adapter: WalletAdapter | null;
   signing: boolean;
-  transactions: Transaction[];
+  transactions: TransactionPayload[];
   network: Network | null;
 }
 

@@ -1,6 +1,6 @@
 import {
   Network,
-  Transaction,
+  TransactionPayload,
   Wallet,
   WalletName,
 } from '@nx-dapp/solana-dapp/utils/types';
@@ -52,25 +52,25 @@ export class WalletDisconnectedAction {
 export class SignTransactionAction {
   type = 'signTransaction';
 
-  constructor(public payload: Transaction) {}
+  constructor(public payload: TransactionPayload) {}
 }
 
 export class TransactionSignedAction {
   type = 'transactionSigned';
 
-  constructor(public payload: Transaction) {}
+  constructor(public payload: TransactionPayload) {}
 }
 
 export class SignTransactionsAction {
   type = 'signTransactions';
 
-  constructor(public payload: Transaction[]) {}
+  constructor(public payload: TransactionPayload[]) {}
 }
 
 export class TransactionsSignedAction {
   type = 'transactionsSigned';
 
-  constructor(public payload: Transaction[]) {}
+  constructor(public payload: TransactionPayload[]) {}
 }
 
 export class SetNetworkAction {

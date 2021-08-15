@@ -172,7 +172,9 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
     if (this.nativeTransferGroup.valid) {
       this.transactionService.createNativeTransfer(
         this.recipientAddressControl.value,
-        this.amountControl.value
+        this.amountControl.value,
+        this.data.position.symbol,
+        this.data.position.logo
       );
       this.dialogRef.close();
     }

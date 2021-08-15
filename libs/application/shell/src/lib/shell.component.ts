@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
+import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { TransactionNotificationsService } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
@@ -23,6 +24,7 @@ import {
       <nx-dapp-settings-menu
         [isConnected]="isConnected"
         (viewWallet)="onViewWallet()"
+        (viewTransactions)="onViewTransactions()"
         (changeNetwork)="onChangeNetwork()"
         (disconnectWallet)="onDisconnectWallet()"
       >
@@ -49,7 +51,8 @@ export class ShellComponent implements OnInit {
     private walletService: SolanaDappWalletService,
     private connectWalletService: ConnectWalletService,
     private changeNetworkService: ChangeNetworkService,
-    private viewWalletService: ViewWalletService
+    private viewWalletService: ViewWalletService,
+    private transactionsInProcessService: TransactionsInProcessService
   ) {}
 
   ngOnInit() {
@@ -67,6 +70,10 @@ export class ShellComponent implements OnInit {
 
   onViewWallet() {
     this.viewWalletService.open();
+  }
+
+  onViewTransactions() {
+    this.transactionsInProcessService.open();
   }
 
   onChangeNetwork() {

@@ -81,6 +81,9 @@
     "application-transactions-features-transactions-in-process": {
       "tags": []
     },
+    "application-transactions-ui-transaction-item": {
+      "tags": []
+    },
     "application-transactions-utils-transaction-notifications": {
       "tags": []
     },

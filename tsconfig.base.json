@@ -67,6 +67,9 @@
       "@nx-dapp/application/transactions/features/transactions-in-process": [
         "libs/application/transactions/features/transactions-in-process/src/index.ts"
       ],
+      "@nx-dapp/application/transactions/ui/transaction-item": [
+        "libs/application/transactions/ui/transaction-item/src/index.ts"
+      ],
       "@nx-dapp/application/transactions/utils/transaction-notifications": [
         "libs/application/transactions/utils/transaction-notifications/src/index.ts"
       ],

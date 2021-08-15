@@ -1,5 +1,5 @@
 import {
-  Transaction,
+  TransactionPayload,
   Wallet,
   WalletAdapter,
   WalletName,
@@ -33,7 +33,7 @@ export interface IWalletClient {
 
   disconnect(): void;
 
-  signTransaction(transaction: Transaction): void;
+  signTransaction(transaction: TransactionPayload): void;
 
-  signAllTransactions(transactions: Transaction[]): void;
+  signAllTransactions(transactions: TransactionPayload[]): void;
 }

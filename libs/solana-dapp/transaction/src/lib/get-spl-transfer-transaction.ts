@@ -1,12 +1,8 @@
 import { getBlockHash } from '@nx-dapp/solana-dapp/connection';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import {
-  Connection,
-  PublicKey,
-  Transaction as Web3Transaction,
-} from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
 
 import { createTransferCheckedInstruction } from './create-transfer-checked-instruction';
 
@@ -20,7 +16,9 @@ export interface SplTransferConfig {
   decimals: number;
 }
 
-export const getSplTransferTransaction = (config: SplTransferConfig) => {
+export const getSplTransferTransaction = (
+  config: SplTransferConfig
+): Observable<Transaction> => {
   const connection =
     config.connection instanceof Connection
       ? config.connection
@@ -31,9 +29,8 @@ export const getSplTransferTransaction = (config: SplTransferConfig) => {
   const mintPublicKey = new PublicKey(config.mintAddress);
 
   return getBlockHash(connection).pipe(
-    map(({ blockhash }) => ({
-      id: uuid(),
-      data: new Web3Transaction({
+    map(({ blockhash }) =>
+      new Transaction({
         recentBlockhash: blockhash,
         feePayer: walletPublicKey,
       }).add(
@@ -44,10 +41,10 @@ export const getSplTransferTransaction = (config: SplTransferConfig) => {
           recipientPublicKey,
           walletPublicKey,
           [],
-          config.amount,
+          Math.round(config.amount * 10 ** config.decimals),
           config.decimals
         )
-      ),
-    }))
+      )
+    )
   );
 };

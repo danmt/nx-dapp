@@ -1,10 +1,10 @@
 import { Directive, Input } from '@angular/core';
 
 @Directive({
-  selector: '[nxDappSetDarkTheme]',
+  selector: '[nxDappDarkTheme]',
 })
-export class SetDarkThemeDirective {
-  @Input('nxDappSetDarkTheme') set darkThemeValue(value: boolean | null) {
+export class DarkThemeDirective {
+  @Input('nxDappDarkTheme') set darkThemeValue(value: boolean | null) {
     if (value !== null) {
       this.setDarkTheme(value);
     }
