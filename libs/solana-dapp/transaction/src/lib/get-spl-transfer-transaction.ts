@@ -1,10 +1,8 @@
 import { getBlockHash } from '@nx-dapp/solana-dapp/connection';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { createTransferCheckedInstruction } from './create-transfer-checked-instruction';
 
 export interface SplTransferConfig {
   connection: Connection;
@@ -34,7 +32,7 @@ export const getSplTransferTransaction = (
         recentBlockhash: blockhash,
         feePayer: walletPublicKey,
       }).add(
-        createTransferCheckedInstruction(
+        Token.createTransferCheckedInstruction(
           TOKEN_PROGRAM_ID,
           emitterPublicKey,
           mintPublicKey,
