@@ -1,10 +1,11 @@
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import {
   OrderbookAccount,
   OrderBookParser,
 } from '@nx-dapp/solana-dapp/account';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { concatMap, map, toArray } from 'rxjs/operators';
 
 import { getMultipleAccounts } from '..';
 
@@ -13,12 +14,16 @@ export const getOrderbookAccounts = (
   orderbookAddresses: string[]
 ): Observable<OrderbookAccount[]> =>
   getMultipleAccounts(connection, orderbookAddresses, 'single').pipe(
-    map(({ array: orderbookAccounts, keys: orderbookAccountAddresses }) =>
-      orderbookAccounts.map((orderbookAccount, index) =>
-        OrderBookParser(
-          new PublicKey(orderbookAccountAddresses[index]),
-          orderbookAccount
-        )
+    concatMap(({ array: orderbookAccounts, keys: orderbookAccountAddresses }) =>
+      from(orderbookAccounts).pipe(
+        isNotNull,
+        map((orderbookAccount, index) =>
+          OrderBookParser(
+            new PublicKey(orderbookAccountAddresses[index]),
+            orderbookAccount
+          )
+        ),
+        toArray()
       )
     )
   );
