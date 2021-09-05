@@ -2,15 +2,21 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  OnInit,
+  ViewContainerRef,
 } from '@angular/core';
-import { Position } from '@nx-dapp/application/portfolios/utils';
-import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { WalletStore } from '@danmt/wallet-adapter-angular';
+import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
+import {
+  createPortfolio,
+  Position,
+} from '@nx-dapp/application/portfolios/utils';
 import { NativeTransferService } from '@nx-dapp/application/transactions/features/native-transfer';
 import { SplTransferService } from '@nx-dapp/application/transactions/features/spl-transfer';
-import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
-
-import { ViewPortfolioStore } from './view-portfolio.store';
+import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
+import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { SolanaDappNetworkService } from '@nx-dapp/solana-dapp/angular';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-view-portfolio',
@@ -86,27 +92,33 @@ import { ViewPortfolioStore } from './view-portfolio.store';
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ViewPortfolioStore],
 })
-export class ViewPortfolioComponent implements OnInit {
+export class ViewPortfolioComponent {
   @HostBinding('class') class = 'block p-4';
-  portfolio$ = this.viewPortfolioStore.portfolio$;
-  connected$ = this.walletService.connected$;
+  connected$ = this.walletStore.connected$;
+  portfolio$ = combineLatest([
+    this.balancesStore.balances$,
+    this.pricesStore.prices$,
+    this.networkService.tokens$,
+  ]).pipe(
+    map(([balances, prices, tokens]) =>
+      createPortfolio(balances, prices, tokens)
+    )
+  );
 
   constructor(
-    private viewPortfolioStore: ViewPortfolioStore,
-    private walletService: SolanaDappWalletService,
+    private viewContainerRef: ViewContainerRef,
+    private balancesStore: BalancesStore,
+    private networkService: SolanaDappNetworkService,
+    private pricesStore: PricesStore,
+    private walletStore: WalletStore,
     private connectWalletService: ConnectWalletService,
     private nativeTransferService: NativeTransferService,
     private splTransferService: SplTransferService
   ) {}
 
-  ngOnInit() {
-    this.viewPortfolioStore.init();
-  }
-
   onConnectWallet() {
-    this.connectWalletService.open();
+    this.connectWalletService.open(this.viewContainerRef);
   }
 
   onSendFunds(position: Position) {

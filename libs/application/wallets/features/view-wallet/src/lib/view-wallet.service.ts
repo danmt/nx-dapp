@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ViewWalletComponent } from './view-wallet.component';
@@ -7,9 +7,10 @@ import { ViewWalletComponent } from './view-wallet.component';
 export class ViewWalletService {
   constructor(private matDialog: MatDialog) {}
 
-  open() {
+  open(viewContainerRef: ViewContainerRef) {
     this.matDialog.open(ViewWalletComponent, {
       hasBackdrop: true,
+      viewContainerRef,
     });
   }
 }

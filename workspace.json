@@ -1,6 +1,31 @@
 {
   "version": 2,
   "projects": {
+    "application-market-data-access-prices": {
+      "projectType": "library",
+      "root": "libs/application/market/data-access/prices",
+      "sourceRoot": "libs/application/market/data-access/prices/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/market/data-access/prices"],
+          "options": {
+            "jestConfig": "libs/application/market/data-access/prices/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/market/data-access/prices/src/**/*.ts",
+              "libs/application/market/data-access/prices/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-networks-features-change-network": {
       "projectType": "library",
       "root": "libs/application/networks/features/change-network",
@@ -562,6 +587,31 @@
             "lintFilePatterns": [
               "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
               "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-wallets-data-access-balances": {
+      "projectType": "library",
+      "root": "libs/application/wallets/data-access/balances",
+      "sourceRoot": "libs/application/wallets/data-access/balances/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/wallets/data-access/balances"],
+          "options": {
+            "jestConfig": "libs/application/wallets/data-access/balances/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/data-access/balances/src/**/*.ts",
+              "libs/application/wallets/data-access/balances/src/**/*.html"
             ]
           }
         }

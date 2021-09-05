@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import {
-  SolanaDappWalletService,
-  WalletName,
-} from '@nx-dapp/solana-dapp/angular';
+import { WalletStore } from '@danmt/wallet-adapter-angular';
+import { WalletName } from '@solana/wallet-adapter-wallets';
 
 @Component({
   selector: 'nx-dapp-connect-wallet',
@@ -47,16 +45,16 @@ import {
 })
 export class ConnectWalletComponent {
   @HostBinding('class') class = 'block w-72 relative';
-  wallets$ = this.walletService.wallets$;
-  selectedWallet$ = this.walletService.selectedWallet$;
+  wallets$ = this.walletStore.wallets$;
+  selectedWallet$ = this.walletStore.selectedWallet$;
 
   constructor(
-    private walletService: SolanaDappWalletService,
+    private walletStore: WalletStore,
     private dialogRef: MatDialogRef<ConnectWalletComponent>
   ) {}
 
   onConnectWallet(walletName: WalletName) {
-    this.walletService.selectAndConnect(walletName);
+    this.walletStore.selectWallet(walletName);
     this.dialogRef.close();
   }
 }
