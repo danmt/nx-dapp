@@ -106,7 +106,7 @@ export class ViewPortfolioComponent {
 
   onSendFunds(position: Position) {
     if (position.isNative) {
-      this.nativeTransferService.open(position);
+      this.nativeTransferService.open(position, this.viewContainerRef);
     } else {
       this.splTransferService.open(position, this.viewContainerRef);
     }

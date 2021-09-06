@@ -8,10 +8,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  base58Validator,
-  SolanaDappTransactionService,
-} from '@nx-dapp/solana-dapp/angular';
+import { base58Validator } from '@nx-dapp/solana-dapp/angular';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
@@ -139,7 +136,6 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<NativeTransferComponent>,
     @Inject(MAT_DIALOG_DATA) public data: NativeTransferData,
-    private transactionService: SolanaDappTransactionService,
     private nativeTransferStore: NativeTransferStore
   ) {}
 
@@ -150,10 +146,12 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
         this.recipientAccountControl.setValue(recipientAccount)
       );
 
-    this.nativeTransferStore.init(
+    this.nativeTransferStore.getRecipientAccount(
       this.recipientAddressControl.valueChanges.pipe(
         filter(() => this.recipientAddressControl.valid)
-      ),
+      )
+    );
+    this.nativeTransferStore.clearRecipientAccount(
       this.recipientAddressControl.valueChanges.pipe(
         filter(() => this.recipientAddressControl.invalid)
       )
@@ -170,12 +168,7 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
     this.nativeTransferGroup.markAllAsTouched();
 
     if (this.nativeTransferGroup.valid) {
-      this.transactionService.createNativeTransfer(
-        this.recipientAddressControl.value,
-        this.amountControl.value,
-        this.data.position.symbol,
-        this.data.position.logo
-      );
+      this.nativeTransferStore.sendTransfer(this.amountControl.value);
       this.dialogRef.close();
     }
   }

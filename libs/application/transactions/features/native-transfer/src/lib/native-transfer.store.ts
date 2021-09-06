@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
+import { ConnectionStore, WalletStore } from '@danmt/wallet-adapter-angular';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
+import { getNativeAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
 import {
-  SolanaDappAccountService,
-  TokenAccount,
-} from '@nx-dapp/solana-dapp/angular';
-import { PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
-import { concatMap, tap } from 'rxjs/operators';
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from '@solana/web3.js';
+import { Observable, of } from 'rxjs';
+import { concatMap, tap, withLatestFrom } from 'rxjs/operators';
 
 export interface ViewModel {
   recipientAddress: string | null;
@@ -21,7 +24,10 @@ export class NativeTransferStore extends ComponentStore<ViewModel> {
   readonly recipientAccount$ = this.select((state) => state.recipientAccount);
   readonly loading$ = this.select((state) => state.loading);
 
-  constructor(private accountService: SolanaDappAccountService) {
+  constructor(
+    private walletStore: WalletStore,
+    private connectionStore: ConnectionStore
+  ) {
     super({
       recipientAddress: null,
       recipientAccount: null,
@@ -29,33 +35,28 @@ export class NativeTransferStore extends ComponentStore<ViewModel> {
     });
   }
 
-  readonly setRecipientAccount = this.updater(
-    (state, recipientAccount: TokenAccount | null) => ({
-      ...state,
-      recipientAccount,
-      loading: true,
-    })
-  );
-
-  readonly setRecipientAddress = this.updater(
-    (state, recipientAddress: string | null) => ({
-      ...state,
-      loading: false,
-      recipientAddress,
-      recipientAccount: null,
-    })
-  );
-
   readonly getRecipientAccount = this.effect(
     (recipientAddress$: Observable<string | null>) =>
       recipientAddress$.pipe(
-        tap((recipientAddress) => this.setRecipientAddress(recipientAddress)),
+        tap((recipientAddress) =>
+          this.patchState({
+            loading: true,
+            recipientAddress,
+            recipientAccount: null,
+          })
+        ),
         isNotNull,
         concatMap((recipientAddress) =>
-          this.accountService.getNativeAccount(new PublicKey(recipientAddress))
+          of(null).pipe(
+            withLatestFrom(this.connectionStore.connection$.pipe(isNotNull)),
+            concatMap(([, connection]) =>
+              getNativeAccount(connection, new PublicKey(recipientAddress))
+            )
+          )
         ),
         tapResponse(
-          (recipientAccount) => this.setRecipientAccount(recipientAccount),
+          (recipientAccount) =>
+            this.patchState({ recipientAccount, loading: false }),
           (error) => this.logError(error)
         )
       )
@@ -65,21 +66,35 @@ export class NativeTransferStore extends ComponentStore<ViewModel> {
     (recipientAddress$: Observable<string | null>) =>
       recipientAddress$.pipe(
         tapResponse(
-          () => this.setRecipientAccount(null),
+          () => this.patchState({ recipientAccount: null, loading: false }),
           (error) => this.logError(error)
         )
       )
   );
 
+  readonly sendTransfer = this.effect((amount$: Observable<number>) => {
+    return amount$.pipe(
+      withLatestFrom(
+        this.connectionStore.connection$.pipe(isNotNull),
+        this.walletStore.publicKey$.pipe(isNotNull),
+        this.recipientAddress$.pipe(isNotNull)
+      ),
+      concatMap(([amount, connection, walletPublicKey, recipientAddress]) =>
+        this.walletStore.sendTransaction(
+          new Transaction().add(
+            SystemProgram.transfer({
+              fromPubkey: walletPublicKey,
+              toPubkey: new PublicKey(recipientAddress),
+              lamports: LAMPORTS_PER_SOL * amount || 0,
+            })
+          ),
+          connection
+        )
+      )
+    );
+  });
+
   private logError(error: unknown) {
     console.error(error);
-  }
-
-  init(
-    validRecipientAddress$: Observable<string>,
-    invalidRecipientAddress$: Observable<string>
-  ) {
-    this.getRecipientAccount(validRecipientAddress$);
-    this.clearRecipientAccount(invalidRecipientAddress$);
   }
 }
