@@ -66,7 +66,7 @@ import { SplTransferData } from './types';
           submitted &&
           recipientAddressControl.valid &&
           (loading$ | async) === false &&
-          (recipientAssociatedAddress$ | async) === null
+          (associatedTokenAccount$ | async) === null
         "
         class="text-center text-warn text-xs m-0"
       >
@@ -107,8 +107,7 @@ export class SplTransferComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'block w-72 relative';
   private readonly _destroy = new Subject();
   loading$ = this.splTransferStore.loading$;
-  recipientAssociatedAddress$ =
-    this.splTransferStore.recipientAssociatedAddress$;
+  associatedTokenAccount$ = this.splTransferStore.associatedTokenAccount$;
   submitted = false;
   splTransferGroup = new FormGroup({
     recipientAddress: new FormControl('', [
@@ -116,7 +115,7 @@ export class SplTransferComponent implements OnInit, OnDestroy {
       base58Validator,
     ]),
     amount: new FormControl(null, { validators: [Validators.required] }),
-    recipientAssociatedAddress: new FormControl(null, {
+    associatedTokenAccount: new FormControl(null, {
       validators: [Validators.required],
     }),
   });
@@ -129,10 +128,8 @@ export class SplTransferComponent implements OnInit, OnDestroy {
     return this.splTransferGroup.get('amount') as FormControl;
   }
 
-  get recipientAssociatedAddressControl() {
-    return this.splTransferGroup.get(
-      'recipientAssociatedAddress'
-    ) as FormControl;
+  get associatedTokenAccountControl() {
+    return this.splTransferGroup.get('associatedTokenAccount') as FormControl;
   }
 
   constructor(
@@ -142,12 +139,10 @@ export class SplTransferComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.splTransferStore.recipientAssociatedAddress$
+    this.splTransferStore.associatedTokenAccount$
       .pipe(takeUntil(this._destroy))
-      .subscribe((recipientAssociatedAddress) => {
-        this.recipientAssociatedAddressControl.setValue(
-          recipientAssociatedAddress
-        );
+      .subscribe((associatedTokenAccount) => {
+        this.associatedTokenAccountControl.setValue(associatedTokenAccount);
       });
 
     this.splTransferStore.patchState({ position: this.data.position });

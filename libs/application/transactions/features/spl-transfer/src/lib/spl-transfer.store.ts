@@ -3,16 +3,26 @@ import { ConnectionStore, WalletStore } from '@danmt/wallet-adapter-angular';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { Position } from '@nx-dapp/application/portfolios/utils';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
-import { getAssociatedTokenPublicKey } from '@nx-dapp/solana-dapp/angular';
+import { getTokenAccount } from '@nx-dapp/solana-dapp/account';
+import {
+  getAssociatedTokenPublicKey,
+  TokenAccount,
+} from '@nx-dapp/solana-dapp/angular';
 import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PublicKey, Transaction } from '@solana/web3.js';
-import { combineLatest, Observable } from 'rxjs';
-import { concatMap, debounceTime, tap, withLatestFrom } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import {
+  concatMap,
+  debounceTime,
+  map,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 
 export interface ViewModel {
   emitterAddress: string | null;
   recipientAddress: string | null;
-  recipientAssociatedAddress: string | null;
+  associatedTokenAccount: TokenAccount | null;
   position: Position | null;
   loading: boolean;
 }
@@ -26,8 +36,8 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
   readonly mintAddress$ = this.select(this.position$, (position) =>
     position ? position.address : null
   );
-  readonly recipientAssociatedAddress$ = this.select(
-    (state) => state.recipientAssociatedAddress
+  readonly associatedTokenAccount$ = this.select(
+    (state) => state.associatedTokenAccount
   );
   readonly loading$ = this.select((state) => state.loading);
   readonly emitterAddress$ = this.select((state) => state.emitterAddress);
@@ -39,7 +49,7 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
     super({
       emitterAddress: null,
       recipientAddress: null,
-      recipientAssociatedAddress: null,
+      associatedTokenAccount: null,
       position: null,
       loading: false,
     });
@@ -61,10 +71,7 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
       return recipientAddress$.pipe(
         tapResponse(
           () =>
-            this.patchState({
-              recipientAssociatedAddress: null,
-              loading: false,
-            }),
+            this.patchState({ associatedTokenAccount: null, loading: false }),
           (error) => this.logError(error)
         )
       );
@@ -81,7 +88,7 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
         this.decimals$.pipe(isNotNull),
         this.mintAddress$.pipe(isNotNull),
         this.emitterAddress$.pipe(isNotNull),
-        this.recipientAssociatedAddress$.pipe(isNotNull)
+        this.associatedTokenAccount$.pipe(isNotNull)
       ),
       concatMap(
         ([
@@ -97,7 +104,7 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
                 TOKEN_PROGRAM_ID,
                 new PublicKey(emitterAddress),
                 new PublicKey(mintAddress),
-                new PublicKey(associatedTokenAccount),
+                associatedTokenAccount.pubkey,
                 walletPublicKey,
                 [],
                 Math.round(amount * 10 ** decimals),
@@ -117,7 +124,7 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
         tap((recipientAddress) =>
           this.patchState({
             recipientAddress,
-            recipientAssociatedAddress: null,
+            associatedTokenAccount: null,
             loading: true,
           })
         ),
@@ -128,13 +135,24 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
             new PublicKey(recipientAddress),
             new PublicKey(mintAddress)
           ).pipe(
+            map((associatedTokenPublicKey) =>
+              associatedTokenPublicKey.toBase58()
+            )
+          )
+        ),
+        concatMap((associatedTokenAddress) =>
+          of(associatedTokenAddress).pipe(
+            withLatestFrom(this.connectionStore.connection$.pipe(isNotNull))
+          )
+        ),
+        concatMap(([associatedTokenAddress, connection]) =>
+          getTokenAccount(
+            connection,
+            new PublicKey(associatedTokenAddress)
+          ).pipe(
             tapResponse(
-              (associatedTokenPublicKey) =>
-                this.patchState({
-                  recipientAssociatedAddress:
-                    associatedTokenPublicKey.toBase58(),
-                  loading: false,
-                }),
+              (associatedTokenAccount) =>
+                this.patchState({ associatedTokenAccount, loading: false }),
               (error) => this.logError(error)
             )
           )
