@@ -484,6 +484,33 @@
         }
       }
     },
+    "application-transactions-data-access-transactions": {
+      "projectType": "library",
+      "root": "libs/application/transactions/data-access/transactions",
+      "sourceRoot": "libs/application/transactions/data-access/transactions/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/data-access/transactions"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/data-access/transactions/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/data-access/transactions/src/**/*.ts",
+              "libs/application/transactions/data-access/transactions/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-transactions-features-native-transfer": {
       "projectType": "library",
       "root": "libs/application/transactions/features/native-transfer",

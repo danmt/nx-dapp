@@ -13,6 +13,7 @@ import {
 import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
 import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
 import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { TransactionNotificationsService } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
@@ -20,7 +21,6 @@ import { ConnectWalletService } from '@nx-dapp/application/wallets/features/conn
 import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
-import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
 import {
   getBitpieWallet,
   getBloctoWallet,
@@ -51,8 +51,9 @@ import { map } from 'rxjs/operators';
       </nx-dapp-settings-menu>
     </nx-dapp-navigation>
     <nx-dapp-transactions-in-process-trigger
-      *ngIf="isProcessing$ | async"
+      *ngIf="processing$ | async"
       [inProcess]="inProcess$ | async"
+      (openSheet)="onViewTransactions()"
     ></nx-dapp-transactions-in-process-trigger>
   `,
   styles: [],
@@ -67,17 +68,18 @@ import { map } from 'rxjs/operators';
         getBitpieWallet(),
         getBloctoWallet(),
       ],
-      autoConnect: true,
+      // autoConnect: true,
     }),
     ...connectionProvider(),
     BalancesStore,
     PricesStore,
     NetworksStore,
+    TransactionsStore,
   ],
 })
 export class ShellComponent implements OnInit {
-  isProcessing$ = this.transactionService.isProcessing$;
-  inProcess$ = this.transactionService.inProcess$;
+  processing$ = this.transactionsStore.processing$;
+  inProcess$ = this.transactionsStore.inProcess$;
   connected$ = this.walletStore.connected$;
   walletAddress$ = this.walletStore.publicKey$.pipe(
     isNotNull,
@@ -90,7 +92,7 @@ export class ShellComponent implements OnInit {
     private connectionStore: ConnectionStore,
     private walletNotificationsService: WalletNotificationsService,
     private transactionNotificationsService: TransactionNotificationsService,
-    private transactionService: SolanaDappTransactionService,
+    private transactionsStore: TransactionsStore,
     private networksStore: NetworksStore,
     private connectWalletService: ConnectWalletService,
     private changeNetworkService: ChangeNetworkService,
@@ -123,7 +125,7 @@ export class ShellComponent implements OnInit {
   }
 
   onViewTransactions() {
-    this.transactionsInProcessService.open();
+    this.transactionsInProcessService.open(this.viewContainerRef);
   }
 
   onChangeNetwork() {

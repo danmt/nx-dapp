@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ConnectionStore, WalletStore } from '@danmt/wallet-adapter-angular';
+import { ConnectionStore } from '@danmt/wallet-adapter-angular';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { getNativeAccount, TokenAccount } from '@nx-dapp/solana-dapp/account';
-import {
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-} from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { concatMap, tap, withLatestFrom } from 'rxjs/operators';
 
@@ -24,10 +19,7 @@ export class NativeTransferStore extends ComponentStore<ViewModel> {
   readonly recipientAccount$ = this.select((state) => state.recipientAccount);
   readonly loading$ = this.select((state) => state.loading);
 
-  constructor(
-    private walletStore: WalletStore,
-    private connectionStore: ConnectionStore
-  ) {
+  constructor(private connectionStore: ConnectionStore) {
     super({
       recipientAddress: null,
       recipientAccount: null,
@@ -71,28 +63,6 @@ export class NativeTransferStore extends ComponentStore<ViewModel> {
         )
       )
   );
-
-  readonly sendTransfer = this.effect((amount$: Observable<number>) => {
-    return amount$.pipe(
-      withLatestFrom(
-        this.connectionStore.connection$.pipe(isNotNull),
-        this.walletStore.publicKey$.pipe(isNotNull),
-        this.recipientAddress$.pipe(isNotNull)
-      ),
-      concatMap(([amount, connection, walletPublicKey, recipientAddress]) =>
-        this.walletStore.sendTransaction(
-          new Transaction().add(
-            SystemProgram.transfer({
-              fromPubkey: walletPublicKey,
-              toPubkey: new PublicKey(recipientAddress),
-              lamports: LAMPORTS_PER_SOL * amount || 0,
-            })
-          ),
-          connection
-        )
-      )
-    );
-  });
 
   private logError(error: unknown) {
     console.error(error);

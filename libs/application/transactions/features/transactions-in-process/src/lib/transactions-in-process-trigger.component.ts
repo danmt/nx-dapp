@@ -1,6 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
-
-import { TransactionsInProcessService } from './transactions-in-process.service';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'nx-dapp-transactions-in-process-trigger',
@@ -9,7 +13,7 @@ import { TransactionsInProcessService } from './transactions-in-process.service'
       class="mx-auto block"
       mat-raised-button
       color="primary"
-      (click)="openTransactionsSheet()"
+      (click)="onOpenSheet()"
     >
       <span class="flex justify-center gap-2 items-center">
         Transactions in Process ({{ inProcess }})
@@ -21,12 +25,9 @@ import { TransactionsInProcessService } from './transactions-in-process.service'
 export class TransactionsInProcessTriggerComponent {
   @HostBinding('class') class = 'block fixed bottom-0 left-0 w-screen z-10';
   @Input() inProcess: number | null = null;
+  @Output() openSheet = new EventEmitter();
 
-  constructor(
-    private transactionsInProcessService: TransactionsInProcessService
-  ) {}
-
-  openTransactionsSheet() {
-    this.transactionsInProcessService.open();
+  onOpenSheet() {
+    this.openSheet.emit();
   }
 }

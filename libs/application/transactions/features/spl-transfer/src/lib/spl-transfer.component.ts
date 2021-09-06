@@ -12,6 +12,7 @@ import { base58Validator } from '@nx-dapp/solana-dapp/angular';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { SplTransferStore } from './spl-transfer.store';
 import { SplTransferData } from './types';
 
@@ -135,7 +136,8 @@ export class SplTransferComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<SplTransferComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SplTransferData,
-    private splTransferStore: SplTransferStore
+    private splTransferStore: SplTransferStore,
+    private transactionsStore: TransactionsStore
   ) {}
 
   ngOnInit() {
@@ -166,9 +168,19 @@ export class SplTransferComponent implements OnInit, OnDestroy {
   onSend() {
     this.submitted = true;
     this.splTransferGroup.markAllAsTouched();
+    const emitterAddress = this.data.position.associatedTokenAddress;
 
-    if (this.splTransferGroup.valid) {
-      this.splTransferStore.sendTransfer(this.amountControl.value);
+    if (this.splTransferGroup.valid && emitterAddress) {
+      this.transactionsStore.sendSplTransfer({
+        emitterAddress,
+        recipientAddress:
+          this.associatedTokenAccountControl.value?.pubkey?.toBase58(),
+        amount: this.amountControl.value,
+        logo: this.data.position.logo,
+        decimals: this.data.position.decimals,
+        symbol: this.data.position.symbol,
+        mintAddress: this.data.position.address,
+      });
       this.dialogRef.close();
     }
   }

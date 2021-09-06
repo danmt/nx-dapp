@@ -70,6 +70,9 @@
         "libs/application/shared/utils/obscure-address/src/index.ts"
       ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
+      "@nx-dapp/application/transactions/data-access/transactions": [
+        "libs/application/transactions/data-access/transactions/src/index.ts"
+      ],
       "@nx-dapp/application/transactions/features/native-transfer": [
         "libs/application/transactions/features/native-transfer/src/index.ts"
       ],

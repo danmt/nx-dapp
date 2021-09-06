@@ -84,6 +84,9 @@
     "application-shell": {
       "tags": []
     },
+    "application-transactions-data-access-transactions": {
+      "tags": []
+    },
     "application-transactions-features-native-transfer": {
       "tags": []
     },

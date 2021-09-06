@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 
 @Component({
   selector: 'nx-dapp-transactions-in-process',
@@ -29,11 +29,11 @@ import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
   `,
 })
 export class TransactionsInProcessComponent {
-  transactions$ = this.transactionService.transactions$;
-  inProcess$ = this.transactionService.inProcess$;
+  transactions$ = this.transactionsStore.transactions$;
+  inProcess$ = this.transactionsStore.inProcess$;
 
   constructor(
-    private transactionService: SolanaDappTransactionService,
+    private transactionsStore: TransactionsStore,
     private bottomSheetRef: MatBottomSheetRef<TransactionsInProcessComponent>
   ) {}
 

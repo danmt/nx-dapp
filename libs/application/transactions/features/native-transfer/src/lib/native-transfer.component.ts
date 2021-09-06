@@ -14,6 +14,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 
 import { NativeTransferStore } from './native-transfer.store';
 import { NativeTransferData } from './types';
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 
 @Component({
   selector: 'nx-dapp-native-transfer',
@@ -136,7 +137,8 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<NativeTransferComponent>,
     @Inject(MAT_DIALOG_DATA) public data: NativeTransferData,
-    private nativeTransferStore: NativeTransferStore
+    private nativeTransferStore: NativeTransferStore,
+    private transactionsStore: TransactionsStore
   ) {}
 
   ngOnInit() {
@@ -168,7 +170,12 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
     this.nativeTransferGroup.markAllAsTouched();
 
     if (this.nativeTransferGroup.valid) {
-      this.nativeTransferStore.sendTransfer(this.amountControl.value);
+      this.transactionsStore.sendNativeTransfer({
+        amount: this.amountControl.value,
+        recipientAddress: this.recipientAddressControl.value,
+        logo: this.data.position.logo,
+        symbol: this.data.position.symbol,
+      });
       this.dialogRef.close();
     }
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { TransactionsInProcessComponent } from './transactions-in-process.component';
@@ -7,9 +7,10 @@ import { TransactionsInProcessComponent } from './transactions-in-process.compon
 export class TransactionsInProcessService {
   constructor(private matBottomSheet: MatBottomSheet) {}
 
-  open() {
+  open(viewContainerRef: ViewContainerRef) {
     this.matBottomSheet.open(TransactionsInProcessComponent, {
       hasBackdrop: true,
+      viewContainerRef,
     });
   }
 }
