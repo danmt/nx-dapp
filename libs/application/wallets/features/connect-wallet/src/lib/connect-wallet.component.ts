@@ -55,6 +55,10 @@ export class ConnectWalletComponent {
 
   onConnectWallet(walletName: WalletName) {
     this.walletStore.selectWallet(walletName);
-    this.dialogRef.close();
+
+    setTimeout(() => {
+      this.walletStore.connect();
+      this.dialogRef.close();
+    });
   }
 }
