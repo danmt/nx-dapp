@@ -18,6 +18,9 @@
       "@nx-dapp/application/market/data-access/prices": [
         "libs/application/market/data-access/prices/src/index.ts"
       ],
+      "@nx-dapp/application/networks/data-access/networks": [
+        "libs/application/networks/data-access/networks/src/index.ts"
+      ],
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
       ],

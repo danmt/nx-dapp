@@ -30,6 +30,9 @@
     "application-market-data-access-prices": {
       "tags": []
     },
+    "application-networks-data-access-networks": {
+      "tags": []
+    },
     "application-networks-features-change-network": {
       "tags": []
     },

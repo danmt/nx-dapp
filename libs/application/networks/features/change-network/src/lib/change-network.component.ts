@@ -7,12 +7,10 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import {
-  Network,
-  SolanaDappNetworkService,
-  SolanaDappWalletService,
-} from '@nx-dapp/solana-dapp/angular';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { WalletStore } from '@danmt/wallet-adapter-angular';
+import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
+import { Network } from '@nx-dapp/solana-dapp/angular';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -28,11 +26,11 @@ import { takeUntil } from 'rxjs/operators';
         <form
           class="flex flex-col gap-2"
           [formGroup]="changeNetworkGroup"
-          (ngSubmit)="onChangeNetwork(connected, selectedNetwork!)"
+          (ngSubmit)="onChangeNetwork(connected)"
         >
           <nx-dapp-networks-radio-group
-            [networks]="networks"
-            [network]="network$ | async"
+            [networks]="networks$ | async"
+            [network]="selectedNetwork$ | async"
             (networkSelected)="onNetworkSelected($event)"
           ></nx-dapp-networks-radio-group>
 
@@ -67,19 +65,17 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ChangeNetworkComponent implements OnInit, OnDestroy {
   private readonly _destroy = new Subject();
-  private readonly _selectedNetwork = new BehaviorSubject<Network | null>(null);
   @HostBinding('class') class = 'block relative w-64';
-  networks = this.networkService.networks;
-  network$ = this.networkService.network$;
-  selectedNetwork$ = this._selectedNetwork.asObservable();
-  connected$ = this.walletService.connected$;
+  networks$ = this.networksStore.networks$;
+  selectedNetwork$ = this.networksStore.selectedNetwork$;
+  connected$ = this.walletStore.connected$;
   changeNetworkGroup = new FormGroup({
     selectedNetwork: new FormControl(null, [Validators.required]),
   });
 
   constructor(
-    private networkService: SolanaDappNetworkService,
-    private walletService: SolanaDappWalletService,
+    private networksStore: NetworksStore,
+    private walletStore: WalletStore,
     private dialogRef: MatDialogRef<ChangeNetworkComponent>
   ) {}
 
@@ -96,18 +92,20 @@ export class ChangeNetworkComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  onChangeNetwork(connected: boolean, network: Network) {
+  onChangeNetwork(connected: boolean) {
     if (
       !connected ||
       (connected &&
         confirm('Are you sure? This action will disconnect your wallet.'))
     ) {
-      this.networkService.changeNetwork(network);
+      this.networksStore.changeNetwork(
+        this.changeNetworkGroup.get('selectedNetwork')?.value
+      );
       this.dialogRef.close();
     }
   }
 
   onNetworkSelected(network: Network) {
-    this._selectedNetwork.next(network);
+    this.changeNetworkGroup.setValue({ selectedNetwork: network });
   }
 }

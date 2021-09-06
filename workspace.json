@@ -26,6 +26,33 @@
         }
       }
     },
+    "application-networks-data-access-networks": {
+      "projectType": "library",
+      "root": "libs/application/networks/data-access/networks",
+      "sourceRoot": "libs/application/networks/data-access/networks/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/networks/data-access/networks"
+          ],
+          "options": {
+            "jestConfig": "libs/application/networks/data-access/networks/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/networks/data-access/networks/src/**/*.ts",
+              "libs/application/networks/data-access/networks/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-networks-features-change-network": {
       "projectType": "library",
       "root": "libs/application/networks/features/change-network",

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ChangeNetworkComponent } from './change-network.component';
@@ -7,9 +7,10 @@ import { ChangeNetworkComponent } from './change-network.component';
 export class ChangeNetworkService {
   constructor(private matDialog: MatDialog) {}
 
-  open() {
+  open(viewContainerRef: ViewContainerRef) {
     this.matDialog.open(ChangeNetworkComponent, {
       hasBackdrop: true,
+      viewContainerRef,
     });
   }
 }

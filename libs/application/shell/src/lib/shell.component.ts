@@ -10,6 +10,8 @@ import {
   walletProvider,
   WalletStore,
 } from '@danmt/wallet-adapter-angular';
+import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
+import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
 import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
 import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { TransactionNotificationsService } from '@nx-dapp/application/transactions/utils/transaction-notifications';
@@ -18,10 +20,7 @@ import { ConnectWalletService } from '@nx-dapp/application/wallets/features/conn
 import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
-import {
-  SolanaDappNetworkService,
-  SolanaDappTransactionService,
-} from '@nx-dapp/solana-dapp/angular';
+import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
 import {
   getBitpieWallet,
   getBloctoWallet,
@@ -31,7 +30,6 @@ import {
   getSolongWallet,
 } from '@solana/wallet-adapter-wallets';
 import { map } from 'rxjs/operators';
-import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
 
 @Component({
   selector: 'nx-dapp-shell',
@@ -74,6 +72,7 @@ import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
     ...connectionProvider(),
     BalancesStore,
     PricesStore,
+    NetworksStore,
   ],
 })
 export class ShellComponent implements OnInit {
@@ -92,7 +91,7 @@ export class ShellComponent implements OnInit {
     private walletNotificationsService: WalletNotificationsService,
     private transactionNotificationsService: TransactionNotificationsService,
     private transactionService: SolanaDappTransactionService,
-    private networkService: SolanaDappNetworkService,
+    private networksStore: NetworksStore,
     private connectWalletService: ConnectWalletService,
     private changeNetworkService: ChangeNetworkService,
     private viewWalletService: ViewWalletService,
@@ -104,7 +103,10 @@ export class ShellComponent implements OnInit {
     this.transactionNotificationsService.init();
 
     this.connectionStore.setEndpoint(
-      this.networkService.network$.pipe(map(({ url }) => url))
+      this.networksStore.selectedNetwork$.pipe(
+        isNotNull,
+        map(({ url }) => url)
+      )
     );
   }
 
@@ -125,6 +127,6 @@ export class ShellComponent implements OnInit {
   }
 
   onChangeNetwork() {
-    this.changeNetworkService.open();
+    this.changeNetworkService.open(this.viewContainerRef);
   }
 }
