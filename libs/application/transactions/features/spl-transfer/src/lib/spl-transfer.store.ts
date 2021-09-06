@@ -1,26 +1,18 @@
 import { Injectable } from '@angular/core';
+import { ConnectionStore, WalletStore } from '@danmt/wallet-adapter-angular';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { Position } from '@nx-dapp/application/portfolios/utils';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
-import {
-  getAssociatedTokenPublicKey,
-  SolanaDappAccountService,
-  SolanaDappTransactionService,
-  TokenAccount,
-} from '@nx-dapp/solana-dapp/angular';
-import { PublicKey } from '@solana/web3.js';
-import { Observable } from 'rxjs';
-import {
-  concatMap,
-  debounceTime,
-  map,
-  tap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { getAssociatedTokenPublicKey } from '@nx-dapp/solana-dapp/angular';
+import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { PublicKey, Transaction } from '@solana/web3.js';
+import { combineLatest, Observable } from 'rxjs';
+import { concatMap, debounceTime, tap, withLatestFrom } from 'rxjs/operators';
 
 export interface ViewModel {
+  emitterAddress: string | null;
   recipientAddress: string | null;
-  associatedTokenAccount: TokenAccount | null;
+  recipientAssociatedAddress: string | null;
   position: Position | null;
   loading: boolean;
 }
@@ -28,91 +20,107 @@ export interface ViewModel {
 @Injectable()
 export class SplTransferStore extends ComponentStore<ViewModel> {
   readonly position$ = this.select((state) => state.position);
+  readonly decimals$ = this.select(this.position$, (position) =>
+    position ? position.decimals : null
+  );
   readonly mintAddress$ = this.select(this.position$, (position) =>
     position ? position.address : null
   );
-  readonly associatedTokenAccount$ = this.select(
-    (state) => state.associatedTokenAccount
+  readonly recipientAssociatedAddress$ = this.select(
+    (state) => state.recipientAssociatedAddress
   );
   readonly loading$ = this.select((state) => state.loading);
+  readonly emitterAddress$ = this.select((state) => state.emitterAddress);
 
   constructor(
-    private transactionService: SolanaDappTransactionService,
-    private accountService: SolanaDappAccountService
+    private connectionStore: ConnectionStore,
+    private walletStore: WalletStore
   ) {
     super({
+      emitterAddress: null,
       recipientAddress: null,
-      associatedTokenAccount: null,
+      recipientAssociatedAddress: null,
       position: null,
       loading: false,
     });
   }
 
-  readonly setPosition = this.updater((state, position: Position) => ({
-    ...state,
-    position,
-  }));
-
-  readonly setRecipientAddress = this.updater(
-    (state, recipientAddress: string | null) => ({
-      ...state,
-      recipientAddress,
-      associatedTokenAccount: null,
-      loading: true,
-    })
+  readonly loadEmitterAddress = this.effect(() =>
+    this.position$.pipe(
+      isNotNull,
+      tap((position) =>
+        this.patchState({
+          emitterAddress: position.associatedTokenAddress || null,
+        })
+      )
+    )
   );
-
-  readonly setAssociatedTokenAccount = this.updater(
-    (state, associatedTokenAccount: TokenAccount | null) => ({
-      ...state,
-      associatedTokenAccount,
-      loading: false,
-    })
-  );
-
-  readonly clearRecipientAddress = this.updater((state) => ({
-    ...state,
-    recipientAddress: null,
-    associatedTokenAccount: null,
-  }));
 
   readonly clearAssociatedTokenAccount = this.effect(
     (recipientAddress$: Observable<string>) => {
       return recipientAddress$.pipe(
         tapResponse(
-          () => this.setAssociatedTokenAccount(null),
+          () =>
+            this.patchState({
+              recipientAssociatedAddress: null,
+              loading: false,
+            }),
           (error) => this.logError(error)
         )
       );
     }
   );
 
-  readonly sendTransfer = this.effect((amount$: Observable<number>) =>
-    amount$.pipe(
-      withLatestFrom(this.position$, this.associatedTokenAccount$),
-      tapResponse(
-        ([amount, position, associatedTokenAccount]) => {
-          if (position?.associatedTokenAddress && associatedTokenAccount) {
-            this.transactionService.createSplTransfer(
-              position.associatedTokenAddress,
-              associatedTokenAccount.pubkey.toBase58(),
-              position.address,
-              amount,
-              position.decimals,
-              position.symbol,
-              position.logo
-            );
-          }
-        },
-        (error) => this.logError(error)
+  readonly sendTransfer = this.effect((amount$: Observable<number>) => {
+    return combineLatest([
+      amount$,
+      this.connectionStore.connection$.pipe(isNotNull),
+      this.walletStore.publicKey$.pipe(isNotNull),
+    ]).pipe(
+      withLatestFrom(
+        this.decimals$.pipe(isNotNull),
+        this.mintAddress$.pipe(isNotNull),
+        this.emitterAddress$.pipe(isNotNull),
+        this.recipientAssociatedAddress$.pipe(isNotNull)
+      ),
+      concatMap(
+        ([
+          [amount, connection, walletPublicKey],
+          decimals,
+          mintAddress,
+          emitterAddress,
+          associatedTokenAccount,
+        ]) => {
+          return this.walletStore.sendTransaction(
+            new Transaction().add(
+              Token.createTransferCheckedInstruction(
+                TOKEN_PROGRAM_ID,
+                new PublicKey(emitterAddress),
+                new PublicKey(mintAddress),
+                new PublicKey(associatedTokenAccount),
+                walletPublicKey,
+                [],
+                Math.round(amount * 10 ** decimals),
+                decimals
+              )
+            ),
+            connection
+          );
+        }
       )
-    )
-  );
+    );
+  });
 
   readonly getAssociatedTokenAccount = this.effect(
     (recipientAddress$: Observable<string>) => {
       return recipientAddress$.pipe(
-        tap((recipientAddress) => this.setRecipientAddress(recipientAddress)),
+        tap((recipientAddress) =>
+          this.patchState({
+            recipientAddress,
+            recipientAssociatedAddress: null,
+            loading: true,
+          })
+        ),
         debounceTime(400),
         withLatestFrom(this.mintAddress$.pipe(isNotNull)),
         concatMap(([recipientAddress, mintAddress]) =>
@@ -120,20 +128,16 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
             new PublicKey(recipientAddress),
             new PublicKey(mintAddress)
           ).pipe(
-            map((associatedTokenPublicKey) =>
-              associatedTokenPublicKey.toBase58()
+            tapResponse(
+              (associatedTokenPublicKey) =>
+                this.patchState({
+                  recipientAssociatedAddress:
+                    associatedTokenPublicKey.toBase58(),
+                  loading: false,
+                }),
+              (error) => this.logError(error)
             )
           )
-        ),
-        concatMap((associatedTokenAddress) =>
-          this.accountService.getTokenAccount(
-            new PublicKey(associatedTokenAddress)
-          )
-        ),
-        tapResponse(
-          (associatedTokenAccount) =>
-            this.setAssociatedTokenAccount(associatedTokenAccount),
-          (error) => this.logError(error)
         )
       );
     }
@@ -141,15 +145,5 @@ export class SplTransferStore extends ComponentStore<ViewModel> {
 
   private logError(error: unknown) {
     console.error(error);
-  }
-
-  init(
-    position: Position,
-    validRecipientAddress$: Observable<string>,
-    invalidRecipientAddress$: Observable<string>
-  ) {
-    this.setPosition(position);
-    this.clearAssociatedTokenAccount(invalidRecipientAddress$);
-    this.getAssociatedTokenAccount(validRecipientAddress$);
   }
 }

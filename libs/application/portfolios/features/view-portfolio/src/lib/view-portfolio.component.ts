@@ -108,7 +108,7 @@ export class ViewPortfolioComponent {
     if (position.isNative) {
       this.nativeTransferService.open(position);
     } else {
-      this.splTransferService.open(position);
+      this.splTransferService.open(position, this.viewContainerRef);
     }
   }
 }
