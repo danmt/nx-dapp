@@ -4,19 +4,12 @@ import {
   HostBinding,
   ViewContainerRef,
 } from '@angular/core';
-import { WalletStore } from '@danmt/wallet-adapter-angular';
-import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
-import {
-  createPortfolio,
-  Position,
-} from '@nx-dapp/application/portfolios/utils';
+import { Position } from '@nx-dapp/application/portfolios/utils';
 import { NativeTransferService } from '@nx-dapp/application/transactions/features/native-transfer';
 import { SplTransferService } from '@nx-dapp/application/transactions/features/spl-transfer';
-import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { SolanaDappNetworkService } from '@nx-dapp/solana-dapp/angular';
-import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+
+import { ViewPortfolioStore } from './view-portfolio.store';
 
 @Component({
   selector: 'nx-dapp-view-portfolio',
@@ -92,26 +85,16 @@ import { map } from 'rxjs/operators';
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [ViewPortfolioStore],
 })
 export class ViewPortfolioComponent {
   @HostBinding('class') class = 'block p-4';
-  connected$ = this.walletStore.connected$;
-  portfolio$ = combineLatest([
-    this.balancesStore.balances$,
-    this.pricesStore.prices$,
-    this.networkService.tokens$,
-  ]).pipe(
-    map(([balances, prices, tokens]) =>
-      createPortfolio(balances, prices, tokens)
-    )
-  );
+  connected$ = this.viewPortfolioStore.connected$;
+  portfolio$ = this.viewPortfolioStore.portfolio$;
 
   constructor(
+    private viewPortfolioStore: ViewPortfolioStore,
     private viewContainerRef: ViewContainerRef,
-    private balancesStore: BalancesStore,
-    private networkService: SolanaDappNetworkService,
-    private pricesStore: PricesStore,
-    private walletStore: WalletStore,
     private connectWalletService: ConnectWalletService,
     private nativeTransferService: NativeTransferService,
     private splTransferService: SplTransferService
