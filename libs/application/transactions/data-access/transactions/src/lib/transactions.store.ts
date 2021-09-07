@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ConnectionStore, WalletStore } from '@danmt/wallet-adapter-angular';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
+import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
+import { NATIVE_MINT, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
   Transaction,
 } from '@solana/web3.js';
-import { defer, from, Observable } from 'rxjs';
-import { concatMap, withLatestFrom } from 'rxjs/operators';
+import { defer, from, Observable, of } from 'rxjs';
+import { concatMap, tap, withLatestFrom } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
-import { NATIVE_MINT, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
 
 export interface TransactionDetails {
   transactionId: string;
@@ -42,8 +42,6 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
     private networksStore: NetworksStore
   ) {
     super({ transactions: [], inProcess: 0 });
-
-    this.state$.subscribe((a) => console.log(a));
   }
 
   markAsSending = this.updater(
@@ -90,10 +88,14 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
       }>
     ) => {
       return nativeTransferConfig$.pipe(
-        withLatestFrom(
-          this.connectionStore.connection$.pipe(isNotNull),
-          this.walletStore.publicKey$.pipe(isNotNull),
-          this.networksStore.tokens$
+        concatMap((nativeTransferConfig) =>
+          of(nativeTransferConfig).pipe(
+            withLatestFrom(
+              this.connectionStore.connection$.pipe(isNotNull),
+              this.walletStore.publicKey$.pipe(isNotNull),
+              this.networksStore.tokens$
+            )
+          )
         ),
         concatMap(
           ([
@@ -126,21 +128,8 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
               .pipe(
                 tapResponse(
                   (signature) =>
-                    this.markAsConfirming({
-                      id: transactionId,
-                      changes: { signature },
-                    }),
+                    this.confirmTransaction({ transactionId, signature }),
                   (error) => this.logError(error)
-                ),
-                concatMap((signature) =>
-                  from(
-                    defer(() => connection.confirmTransaction(signature))
-                  ).pipe(
-                    tapResponse(
-                      () => this.markAsConfirmed(transactionId),
-                      (error) => this.logError(error)
-                    )
-                  )
                 )
               );
           }
@@ -160,10 +149,14 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
       }>
     ) => {
       return splTransferConfig$.pipe(
-        withLatestFrom(
-          this.connectionStore.connection$.pipe(isNotNull),
-          this.walletStore.publicKey$.pipe(isNotNull),
-          this.networksStore.tokens$
+        concatMap((splTransferConfig) =>
+          of(splTransferConfig).pipe(
+            withLatestFrom(
+              this.connectionStore.connection$.pipe(isNotNull),
+              this.walletStore.publicKey$.pipe(isNotNull),
+              this.networksStore.tokens$
+            )
+          )
         ),
         concatMap(
           ([
@@ -201,27 +194,41 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
               .pipe(
                 tapResponse(
                   (signature) =>
-                    this.markAsConfirming({
-                      id: transactionId,
-                      changes: { signature },
-                    }),
+                    this.confirmTransaction({ signature, transactionId }),
                   (error) => this.logError(error)
-                ),
-                concatMap((signature) =>
-                  from(
-                    defer(() => connection.confirmTransaction(signature))
-                  ).pipe(
-                    tapResponse(
-                      () => this.markAsConfirmed(transactionId),
-                      (error) => this.logError(error)
-                    )
-                  )
                 )
               );
           }
         )
       );
     }
+  );
+
+  confirmTransaction = this.effect(
+    (
+      transactionData$: Observable<{ transactionId: string; signature: string }>
+    ) =>
+      transactionData$.pipe(
+        tap(({ transactionId, signature }) =>
+          this.markAsConfirming({
+            id: transactionId,
+            changes: { signature },
+          })
+        ),
+        concatMap((transactionData) =>
+          of(transactionData).pipe(
+            withLatestFrom(this.connectionStore.connection$.pipe(isNotNull))
+          )
+        ),
+        concatMap(([{ signature, transactionId }, connection]) =>
+          from(defer(() => connection.confirmTransaction(signature))).pipe(
+            tapResponse(
+              () => this.markAsConfirmed(transactionId),
+              (error) => this.logError(error)
+            )
+          )
+        )
+      )
   );
 
   private logError(error: unknown) {
