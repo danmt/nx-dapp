@@ -176,10 +176,8 @@ export class SplTransferComponent implements OnInit, OnDestroy {
         recipientAddress:
           this.associatedTokenAccountControl.value?.pubkey?.toBase58(),
         amount: this.amountControl.value,
-        logo: this.data.position.logo,
-        decimals: this.data.position.decimals,
-        symbol: this.data.position.symbol,
         mintAddress: this.data.position.address,
+        decimals: this.data.position.decimals,
       });
       this.dialogRef.close();
     }

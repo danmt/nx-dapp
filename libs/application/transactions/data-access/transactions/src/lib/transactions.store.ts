@@ -11,7 +11,8 @@ import {
 import { defer, from, Observable } from 'rxjs';
 import { concatMap, withLatestFrom } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
-import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { NATIVE_MINT, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
 
 export interface TransactionDetails {
   transactionId: string;
@@ -37,7 +38,8 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
 
   constructor(
     private connectionStore: ConnectionStore,
-    private walletStore: WalletStore
+    private walletStore: WalletStore,
+    private networksStore: NetworksStore
   ) {
     super({ transactions: [], inProcess: 0 });
 
@@ -85,21 +87,22 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
       nativeTransferConfig$: Observable<{
         amount: number;
         recipientAddress: string;
-        logo: string;
-        symbol: string;
       }>
     ) => {
       return nativeTransferConfig$.pipe(
         withLatestFrom(
           this.connectionStore.connection$.pipe(isNotNull),
-          this.walletStore.publicKey$.pipe(isNotNull)
+          this.walletStore.publicKey$.pipe(isNotNull),
+          this.networksStore.tokens$
         ),
         concatMap(
           ([
-            { amount, recipientAddress, logo, symbol },
+            { amount, recipientAddress },
             connection,
             walletPublicKey,
+            tokens,
           ]) => {
+            const token = tokens.get(NATIVE_MINT.toBase58());
             const transactionId = uuid();
             const transaction = new Transaction().add(
               SystemProgram.transfer({
@@ -114,8 +117,8 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
               date: new Date(Date.now()),
               processing: true,
               amount,
-              logo,
-              symbol,
+              logo: token?.logoURI ? token.logoURI : '',
+              symbol: token?.symbol ? token.symbol : '',
             });
 
             return this.walletStore
@@ -153,41 +156,23 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
         emitterAddress: string;
         recipientAddress: string;
         mintAddress: string;
-        logo: string;
-        symbol: string;
         decimals: number;
       }>
     ) => {
       return splTransferConfig$.pipe(
         withLatestFrom(
           this.connectionStore.connection$.pipe(isNotNull),
-          this.walletStore.publicKey$.pipe(isNotNull)
+          this.walletStore.publicKey$.pipe(isNotNull),
+          this.networksStore.tokens$
         ),
         concatMap(
           ([
-            {
-              amount,
-              emitterAddress,
-              mintAddress,
-              recipientAddress,
-              logo,
-              symbol,
-              decimals,
-            },
+            { amount, emitterAddress, mintAddress, recipientAddress, decimals },
             connection,
             walletPublicKey,
+            tokens,
           ]) => {
-            console.log(
-              TOKEN_PROGRAM_ID.toBase58(),
-              emitterAddress,
-              mintAddress,
-              recipientAddress,
-              walletPublicKey,
-              [],
-              Math.round(amount * 10 ** decimals),
-              decimals
-            );
-
+            const token = tokens.get(mintAddress);
             const transactionId = uuid();
             const transaction = new Transaction().add(
               Token.createTransferCheckedInstruction(
@@ -207,8 +192,8 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
               date: new Date(Date.now()),
               processing: true,
               amount,
-              logo,
-              symbol,
+              logo: token?.logoURI ? token.logoURI : '',
+              symbol: token?.symbol ? token.symbol : '',
             });
 
             return this.walletStore
