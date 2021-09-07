@@ -4,10 +4,11 @@ import {
   HostBinding,
   ViewContainerRef,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Position } from '@nx-dapp/application/portfolios/utils';
 import { NativeTransferService } from '@nx-dapp/application/transactions/features/native-transfer';
 import { SplTransferService } from '@nx-dapp/application/transactions/features/spl-transfer';
-import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
 
 import { ViewPortfolioStore } from './view-portfolio.store';
 
@@ -95,13 +96,17 @@ export class ViewPortfolioComponent {
   constructor(
     private viewPortfolioStore: ViewPortfolioStore,
     private viewContainerRef: ViewContainerRef,
-    private connectWalletService: ConnectWalletService,
     private nativeTransferService: NativeTransferService,
-    private splTransferService: SplTransferService
+    private splTransferService: SplTransferService,
+    private matDialog: MatDialog
   ) {}
 
   onConnectWallet() {
-    this.connectWalletService.open(this.viewContainerRef);
+    this.matDialog.open(ConnectWalletComponent, {
+      hasBackdrop: true,
+      autoFocus: false,
+      viewContainerRef: this.viewContainerRef,
+    });
   }
 
   onSendFunds(position: Position) {

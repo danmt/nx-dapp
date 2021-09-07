@@ -1,16 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { InjectionToken, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { ReactiveComponentModule } from '@ngrx/component';
 import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/change-network';
+import { CopyableTextModule } from '@nx-dapp/application/shared/ui/copyable-text';
+import { FocusModule } from '@nx-dapp/application/shared/ui/focus';
 import { NavigationModule } from '@nx-dapp/application/shared/ui/navigation';
 import { SettingsMenuModule } from '@nx-dapp/application/shared/ui/settings-menu';
 import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
-import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { ViewWalletModule } from '@nx-dapp/application/wallets/features/view-wallet';
+import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 
 import { ShellComponent } from './shell.component';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 
 @NgModule({
   imports: [
@@ -34,21 +41,20 @@ import { ShellComponent } from './shell.component';
         ],
       },
     ]),
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
     MatSnackBarModule,
     ReactiveComponentModule,
-    ConnectWalletModule,
     ChangeNetworkModule,
-    ViewWalletModule,
     TransactionsInProcessModule,
     SettingsMenuModule,
     NavigationModule,
+    CopyableTextModule,
+    FocusModule,
+    ModalHeaderModule,
   ],
-  declarations: [ShellComponent],
-  providers: [
-    {
-      provide: new InjectionToken('document'),
-      useValue: document,
-    },
-  ],
+  declarations: [ShellComponent, ConnectWalletComponent, ViewWalletComponent],
 })
 export class ShellModule {}

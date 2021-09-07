@@ -16,9 +16,9 @@ import { ChangeNetworkService } from '@nx-dapp/application/networks/features/cha
 import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
-import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/features/notifications';
-import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
+import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import {
   getBitpieWallet,
@@ -30,6 +30,7 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { map } from 'rxjs/operators';
 import { TransactionNotificationsService } from '@nx-dapp/application/transactions/features/notifications';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'nx-dapp-shell',
@@ -94,12 +95,11 @@ export class ShellComponent implements OnInit {
     private connectionStore: ConnectionStore,
     private transactionsStore: TransactionsStore,
     private networksStore: NetworksStore,
-    private connectWalletService: ConnectWalletService,
     private changeNetworkService: ChangeNetworkService,
-    private viewWalletService: ViewWalletService,
     private transactionsInProcessService: TransactionsInProcessService,
     private walletNotificationsService: WalletNotificationsService,
-    private transactionNotificationsService: TransactionNotificationsService
+    private transactionNotificationsService: TransactionNotificationsService,
+    private matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -115,7 +115,11 @@ export class ShellComponent implements OnInit {
   }
 
   onConnectWallet() {
-    this.connectWalletService.open(this.viewContainerRef);
+    this.matDialog.open(ConnectWalletComponent, {
+      hasBackdrop: true,
+      autoFocus: false,
+      viewContainerRef: this.viewContainerRef,
+    });
   }
 
   onDisconnectWallet() {
@@ -123,7 +127,11 @@ export class ShellComponent implements OnInit {
   }
 
   onViewWallet() {
-    this.viewWalletService.open(this.viewContainerRef);
+    this.matDialog.open(ViewWalletComponent, {
+      hasBackdrop: true,
+      autoFocus: false,
+      viewContainerRef: this.viewContainerRef,
+    });
   }
 
   onViewTransactions() {

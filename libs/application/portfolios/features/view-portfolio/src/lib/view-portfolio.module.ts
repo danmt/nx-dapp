@@ -8,7 +8,6 @@ import { PositionListItemModule } from '@nx-dapp/application/portfolios/ui/posit
 import { PageHeaderModule } from '@nx-dapp/application/shared/ui/page-header';
 import { NativeTransferModule } from '@nx-dapp/application/transactions/features/native-transfer';
 import { SplTransferModule } from '@nx-dapp/application/transactions/features/spl-transfer';
-import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
 
 import { ViewPortfolioComponent } from './view-portfolio.component';
 
@@ -25,7 +24,6 @@ import { ViewPortfolioComponent } from './view-portfolio.component';
     PortfolioTotalsModule,
     SplTransferModule,
     NativeTransferModule,
-    ConnectWalletModule,
   ],
   declarations: [ViewPortfolioComponent],
 })
