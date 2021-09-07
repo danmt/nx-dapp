@@ -8,13 +8,13 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Position } from '@nx-dapp/application/portfolios/utils';
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { base58Validator } from '@nx-dapp/solana-dapp/angular';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 import { NativeTransferStore } from './native-transfer.store';
-import { NativeTransferData } from './types';
-import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 
 @Component({
   selector: 'nx-dapp-native-transfer',
@@ -55,8 +55,8 @@ import { TransactionsStore } from '@nx-dapp/application/transactions/data-access
           autocomplete="off"
         />
         <mat-hint
-          >Maximum amount is {{ data.position.quantity }}
-          {{ data.position.symbol }}
+          >Maximum amount is {{ data.quantity }}
+          {{ data.symbol }}
         </mat-hint>
         <mat-error *ngIf="submitted && amountControl.errors?.required"
           >The amount is mandatory.</mat-error
@@ -136,7 +136,7 @@ export class NativeTransferComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialogRef: MatDialogRef<NativeTransferComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: NativeTransferData,
+    @Inject(MAT_DIALOG_DATA) public data: Position,
     private nativeTransferStore: NativeTransferStore,
     private transactionsStore: TransactionsStore
   ) {}

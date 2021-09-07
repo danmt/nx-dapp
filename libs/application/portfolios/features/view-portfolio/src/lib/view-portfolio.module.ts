@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { PortfolioTotalsModule } from '@nx-dapp/application/portfolios/ui/portfolio-totals';
 import { PositionListItemModule } from '@nx-dapp/application/portfolios/ui/position-list-item';
 import { PageHeaderModule } from '@nx-dapp/application/shared/ui/page-header';
-import { NativeTransferModule } from '@nx-dapp/application/transactions/features/native-transfer';
-import { SplTransferModule } from '@nx-dapp/application/transactions/features/spl-transfer';
+import { NativeTransferComponent } from '@nx-dapp/application/transactions/features/native-transfer';
+import { SplTransferComponent } from '@nx-dapp/application/transactions/features/spl-transfer';
 
 import { ViewPortfolioComponent } from './view-portfolio.component';
 
@@ -17,14 +21,20 @@ import { ViewPortfolioComponent } from './view-portfolio.component';
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: ViewPortfolioComponent },
     ]),
+    ReactiveFormsModule,
     MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatGridListModule,
     PageHeaderModule,
     PositionListItemModule,
     PortfolioTotalsModule,
-    SplTransferModule,
-    NativeTransferModule,
   ],
-  declarations: [ViewPortfolioComponent],
+  declarations: [
+    ViewPortfolioComponent,
+    NativeTransferComponent,
+    SplTransferComponent,
+  ],
 })
 export class ViewPortfolioModule {}
