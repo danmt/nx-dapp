@@ -44,12 +44,24 @@ body {
   @include snackbar($success-bgcolor, $white-text-color, 'Hooray 🎉!');
 }
 
+.bg-success {
+  background-color: $success-bgcolor !important;
+}
+
 .warning-snackbar {
   @include snackbar($warning-bgcolor, $black-text-color, 'Wee-oww 🚨!');
 }
 
+.bg-warning {
+  background-color: $warning-bgcolor !important;
+}
+
 .error-snackbar {
   @include snackbar($error-bgcolor, $white-text-color, 'Upss 🚧!');
+}
+
+.bg-error {
+  background-color: $error-bgcolor !important;
 }
 
 input[readonly] {
