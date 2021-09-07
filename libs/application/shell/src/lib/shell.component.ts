@@ -12,7 +12,6 @@ import {
 } from '@danmt/wallet-adapter-angular';
 import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
 import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
-import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
 import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
@@ -31,6 +30,7 @@ import {
 import { map } from 'rxjs/operators';
 import { TransactionNotificationsService } from '@nx-dapp/application/transactions/features/notifications';
 import { MatDialog } from '@angular/material/dialog';
+import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
 
 @Component({
   selector: 'nx-dapp-shell',
@@ -95,7 +95,6 @@ export class ShellComponent implements OnInit {
     private connectionStore: ConnectionStore,
     private transactionsStore: TransactionsStore,
     private networksStore: NetworksStore,
-    private changeNetworkService: ChangeNetworkService,
     private transactionsInProcessService: TransactionsInProcessService,
     private walletNotificationsService: WalletNotificationsService,
     private transactionNotificationsService: TransactionNotificationsService,
@@ -139,6 +138,10 @@ export class ShellComponent implements OnInit {
   }
 
   onChangeNetwork() {
-    this.changeNetworkService.open(this.viewContainerRef);
+    this.matDialog.open(ChangeNetworkComponent, {
+      hasBackdrop: true,
+      autoFocus: false,
+      viewContainerRef: this.viewContainerRef,
+    });
   }
 }

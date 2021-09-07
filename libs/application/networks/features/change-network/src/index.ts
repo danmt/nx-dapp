@@ -1,2 +1,1 @@
-export * from './lib/change-network.module';
-export * from './lib/change-network.service';
+export * from './lib/change-network.component';
