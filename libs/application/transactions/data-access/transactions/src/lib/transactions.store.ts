@@ -80,6 +80,20 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
     inProcess: state.inProcess - 1,
   }));
 
+  markAsCancelled = this.updater((state, transactionId: string) => ({
+    ...state,
+    transactions: state.transactions.map((transaction) =>
+      transaction.transactionId === transactionId
+        ? {
+            ...transaction,
+            status: 'Cancelled',
+            processing: false,
+          }
+        : transaction
+    ),
+    inProcess: state.inProcess - 1,
+  }));
+
   readonly sendNativeTransfer = this.effect(
     (
       nativeTransferConfig$: Observable<{
@@ -129,7 +143,7 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
                 tapResponse(
                   (signature) =>
                     this.confirmTransaction({ transactionId, signature }),
-                  (error) => this.logError(error)
+                  () => this.markAsCancelled(transactionId)
                 )
               );
           }
@@ -195,7 +209,7 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
                 tapResponse(
                   (signature) =>
                     this.confirmTransaction({ signature, transactionId }),
-                  (error) => this.logError(error)
+                  () => this.markAsCancelled(transactionId)
                 )
               );
           }
