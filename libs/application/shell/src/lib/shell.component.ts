@@ -15,11 +15,10 @@ import { NetworksStore } from '@nx-dapp/application/networks/data-access/network
 import { ChangeNetworkService } from '@nx-dapp/application/networks/features/change-network';
 import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
-import { TransactionNotificationsService } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
 import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { WalletNotificationsService } from '@nx-dapp/application/wallets/features/notifications';
 import { ViewWalletService } from '@nx-dapp/application/wallets/features/view-wallet';
-import { WalletNotificationsService } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import {
   getBitpieWallet,
@@ -75,6 +74,7 @@ import { map } from 'rxjs/operators';
     PricesStore,
     NetworksStore,
     TransactionsStore,
+    WalletNotificationsService,
   ],
 })
 export class ShellComponent implements OnInit {
@@ -90,19 +90,17 @@ export class ShellComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private walletStore: WalletStore,
     private connectionStore: ConnectionStore,
-    private walletNotificationsService: WalletNotificationsService,
-    private transactionNotificationsService: TransactionNotificationsService,
     private transactionsStore: TransactionsStore,
     private networksStore: NetworksStore,
     private connectWalletService: ConnectWalletService,
     private changeNetworkService: ChangeNetworkService,
     private viewWalletService: ViewWalletService,
-    private transactionsInProcessService: TransactionsInProcessService
+    private transactionsInProcessService: TransactionsInProcessService,
+    private walletNotificationsService: WalletNotificationsService
   ) {}
 
   ngOnInit() {
     this.walletNotificationsService.init();
-    this.transactionNotificationsService.init();
 
     this.connectionStore.setEndpoint(
       this.networksStore.selectedNetwork$.pipe(

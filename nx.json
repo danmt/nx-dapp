@@ -108,10 +108,10 @@
     "application-wallets-features-connect-wallet": {
       "tags": []
     },
-    "application-wallets-features-view-wallet": {
+    "application-wallets-features-notifications": {
       "tags": []
     },
-    "application-wallets-utils-wallet-notifications": {
+    "application-wallets-features-view-wallet": {
       "tags": []
     },
     "shared-utils-operators": {

@@ -698,6 +698,33 @@
         }
       }
     },
+    "application-wallets-features-notifications": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/notifications",
+      "sourceRoot": "libs/application/wallets/features/notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/features/notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/notifications/src/**/*.ts",
+              "libs/application/wallets/features/notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-wallets-features-view-wallet": {
       "projectType": "library",
       "root": "libs/application/wallets/features/view-wallet",
@@ -718,33 +745,6 @@
             "lintFilePatterns": [
               "libs/application/wallets/features/view-wallet/src/**/*.ts",
               "libs/application/wallets/features/view-wallet/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "application-wallets-utils-wallet-notifications": {
-      "projectType": "library",
-      "root": "libs/application/wallets/utils/wallet-notifications",
-      "sourceRoot": "libs/application/wallets/utils/wallet-notifications/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/application/wallets/utils/wallet-notifications"
-          ],
-          "options": {
-            "jestConfig": "libs/application/wallets/utils/wallet-notifications/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/application/wallets/utils/wallet-notifications/src/**/*.ts",
-              "libs/application/wallets/utils/wallet-notifications/src/**/*.html"
             ]
           }
         }

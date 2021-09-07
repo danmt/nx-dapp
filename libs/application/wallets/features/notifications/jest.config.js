@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'application/wallets/utils/wallet-notifications',
+  displayName: 'application-wallets-features-notifications',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../../coverage/libs/application/wallets/utils/wallet-notifications',
+    '../../../../../coverage/libs/application/wallets/features/notifications',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

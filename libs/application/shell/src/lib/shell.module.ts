@@ -9,7 +9,6 @@ import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/f
 import { TransactionNotificationsModule } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { ViewWalletModule } from '@nx-dapp/application/wallets/features/view-wallet';
-import { WalletNotificationsModule } from '@nx-dapp/application/wallets/utils/wallet-notifications';
 
 import { ShellComponent } from './shell.component';
 
@@ -36,7 +35,6 @@ import { ShellComponent } from './shell.component';
       },
     ]),
     ReactiveComponentModule,
-    WalletNotificationsModule,
     TransactionNotificationsModule,
     ConnectWalletModule,
     ChangeNetworkModule,
@@ -49,8 +47,8 @@ import { ShellComponent } from './shell.component';
   providers: [
     {
       provide: new InjectionToken('document'),
-      useValue: document
-    }
-  ]
+      useValue: document,
+    },
+  ],
 })
 export class ShellModule {}
