@@ -10,7 +10,7 @@ import {
   SystemProgram,
   Transaction,
 } from '@solana/web3.js';
-import { defer, from, Observable, of } from 'rxjs';
+import { defer, from, Observable, of, Subject } from 'rxjs';
 import { concatMap, tap, withLatestFrom } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
 
@@ -32,6 +32,10 @@ export interface ViewModel {
 
 @Injectable()
 export class TransactionsStore extends ComponentStore<ViewModel> {
+  private readonly _transactionConfirmed = new Subject();
+  private readonly _transactionCancelled = new Subject();
+  transactionConfirmed$ = this._transactionConfirmed.asObservable();
+  transactionCancelled$ = this._transactionCancelled.asObservable();
   transactions$ = this.select((state) => state.transactions);
   inProcess$ = this.select((state) => state.inProcess);
   processing$ = this.select(this.inProcess$, (inProcess) => inProcess > 0);
@@ -143,7 +147,10 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
                 tapResponse(
                   (signature) =>
                     this.confirmTransaction({ transactionId, signature }),
-                  () => this.markAsCancelled(transactionId)
+                  () => {
+                    this._transactionCancelled.next();
+                    this.markAsCancelled(transactionId);
+                  }
                 )
               );
           }
@@ -209,7 +216,10 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
                 tapResponse(
                   (signature) =>
                     this.confirmTransaction({ signature, transactionId }),
-                  () => this.markAsCancelled(transactionId)
+                  () => {
+                    this._transactionCancelled.next();
+                    this.markAsCancelled(transactionId);
+                  }
                 )
               );
           }
@@ -237,7 +247,10 @@ export class TransactionsStore extends ComponentStore<ViewModel> {
         concatMap(([{ signature, transactionId }, connection]) =>
           from(defer(() => connection.confirmTransaction(signature))).pipe(
             tapResponse(
-              () => this.markAsConfirmed(transactionId),
+              () => {
+                this._transactionConfirmed.next();
+                this.markAsConfirmed(transactionId);
+              },
               (error) => this.logError(error)
             )
           )

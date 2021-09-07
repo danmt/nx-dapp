@@ -29,6 +29,7 @@ import {
   getSolongWallet,
 } from '@solana/wallet-adapter-wallets';
 import { map } from 'rxjs/operators';
+import { TransactionNotificationsService } from '@nx-dapp/application/transactions/features/notifications';
 
 @Component({
   selector: 'nx-dapp-shell',
@@ -75,6 +76,7 @@ import { map } from 'rxjs/operators';
     NetworksStore,
     TransactionsStore,
     WalletNotificationsService,
+    TransactionNotificationsService,
   ],
 })
 export class ShellComponent implements OnInit {
@@ -96,11 +98,13 @@ export class ShellComponent implements OnInit {
     private changeNetworkService: ChangeNetworkService,
     private viewWalletService: ViewWalletService,
     private transactionsInProcessService: TransactionsInProcessService,
-    private walletNotificationsService: WalletNotificationsService
+    private walletNotificationsService: WalletNotificationsService,
+    private transactionNotificationsService: TransactionNotificationsService
   ) {}
 
   ngOnInit() {
     this.walletNotificationsService.init();
+    this.transactionNotificationsService.init();
 
     this.connectionStore.setEndpoint(
       this.networksStore.selectedNetwork$.pipe(

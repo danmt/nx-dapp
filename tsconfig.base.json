@@ -76,6 +76,9 @@
       "@nx-dapp/application/transactions/features/native-transfer": [
         "libs/application/transactions/features/native-transfer/src/index.ts"
       ],
+      "@nx-dapp/application/transactions/features/notifications": [
+        "libs/application/transactions/features/notifications/src/index.ts"
+      ],
       "@nx-dapp/application/transactions/features/spl-transfer": [
         "libs/application/transactions/features/spl-transfer/src/index.ts"
       ],
@@ -84,9 +87,6 @@
       ],
       "@nx-dapp/application/transactions/ui/transaction-item": [
         "libs/application/transactions/ui/transaction-item/src/index.ts"
-      ],
-      "@nx-dapp/application/transactions/utils/transaction-notifications": [
-        "libs/application/transactions/utils/transaction-notifications/src/index.ts"
       ],
       "@nx-dapp/application/wallets/data-access/balances": [
         "libs/application/wallets/data-access/balances/src/index.ts"

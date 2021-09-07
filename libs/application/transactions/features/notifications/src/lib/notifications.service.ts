@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SolanaDappTransactionService } from '@nx-dapp/solana-dapp/angular';
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { merge, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
@@ -15,35 +15,25 @@ export class TransactionNotificationsService implements OnDestroy {
   private readonly _destroy = new Subject();
 
   private readonly _transactionConfirmed$ =
-    this.transactionService.onTransactionConfirmed$.pipe(
+    this.transactionsStore.transactionConfirmed$.pipe(
       tap(() =>
         this.showMessage('Transaction confirmed', MessageTypes.Success, 3000)
       )
     );
   private readonly _transactionCancelled$ =
-    this.transactionService.onTransactionCancelled$.pipe(
+    this.transactionsStore.transactionCancelled$.pipe(
       tap(() =>
         this.showMessage('Transaction cancelled', MessageTypes.Warning, 3000)
-      )
-    );
-  private readonly _transactionFailed$ =
-    this.transactionService.onTransactionFailed$.pipe(
-      tap(() =>
-        this.showMessage('Transaction failed', MessageTypes.Error, 3000)
       )
     );
 
   constructor(
     private snackBar: MatSnackBar,
-    private transactionService: SolanaDappTransactionService
+    private transactionsStore: TransactionsStore
   ) {}
 
   init() {
-    merge(
-      this._transactionConfirmed$,
-      this._transactionCancelled$,
-      this._transactionFailed$
-    )
+    merge(this._transactionConfirmed$, this._transactionCancelled$)
       .pipe(takeUntil(this._destroy))
       .subscribe();
   }

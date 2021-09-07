@@ -6,7 +6,6 @@ import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/chan
 import { NavigationModule } from '@nx-dapp/application/shared/ui/navigation';
 import { SettingsMenuModule } from '@nx-dapp/application/shared/ui/settings-menu';
 import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
-import { TransactionNotificationsModule } from '@nx-dapp/application/transactions/utils/transaction-notifications';
 import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { ViewWalletModule } from '@nx-dapp/application/wallets/features/view-wallet';
 
@@ -35,7 +34,6 @@ import { ShellComponent } from './shell.component';
       },
     ]),
     ReactiveComponentModule,
-    TransactionNotificationsModule,
     ConnectWalletModule,
     ChangeNetworkModule,
     ViewWalletModule,

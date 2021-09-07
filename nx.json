@@ -90,6 +90,9 @@
     "application-transactions-features-native-transfer": {
       "tags": []
     },
+    "application-transactions-features-notifications": {
+      "tags": []
+    },
     "application-transactions-features-spl-transfer": {
       "tags": []
     },
@@ -97,9 +100,6 @@
       "tags": []
     },
     "application-transactions-ui-transaction-item": {
-      "tags": []
-    },
-    "application-transactions-utils-transaction-notifications": {
       "tags": []
     },
     "application-wallets-data-access-balances": {

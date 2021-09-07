@@ -538,6 +538,33 @@
         }
       }
     },
+    "application-transactions-features-notifications": {
+      "projectType": "library",
+      "root": "libs/application/transactions/features/notifications",
+      "sourceRoot": "libs/application/transactions/features/notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/features/notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/features/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/features/notifications/src/**/*.ts",
+              "libs/application/transactions/features/notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-transactions-features-spl-transfer": {
       "projectType": "library",
       "root": "libs/application/transactions/features/spl-transfer",
@@ -614,33 +641,6 @@
             "lintFilePatterns": [
               "libs/application/transactions/ui/transaction-item/src/**/*.ts",
               "libs/application/transactions/ui/transaction-item/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "application-transactions-utils-transaction-notifications": {
-      "projectType": "library",
-      "root": "libs/application/transactions/utils/transaction-notifications",
-      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/application/transactions/utils/transaction-notifications"
-          ],
-          "options": {
-            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
             ]
           }
         }

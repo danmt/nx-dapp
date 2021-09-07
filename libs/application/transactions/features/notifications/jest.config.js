@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'application/transactions/utils/transaction-notifications',
+  displayName: 'application-transactions-features-notifications',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../../coverage/libs/application/transactions/utils/transaction-notifications',
+    '../../../../../coverage/libs/application/transactions/features/notifications',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },
