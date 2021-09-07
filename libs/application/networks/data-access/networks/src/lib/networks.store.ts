@@ -1,11 +1,33 @@
 import { Injectable } from '@angular/core';
 import { WalletStore } from '@danmt/wallet-adapter-angular';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { DEFAULT_NETWORK, NETWORKS } from '@nx-dapp/solana-dapp/network';
 import { getTokens, TokenInfo } from '@nx-dapp/solana-dapp/token';
-import { Network } from '@nx-dapp/solana-dapp/utils/types';
+import { ENV, Network } from '@nx-dapp/solana-dapp/utils/types';
+import { ENV as ChainID } from '@solana/spl-token-registry';
+import { clusterApiUrl } from '@solana/web3.js';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, tap, withLatestFrom } from 'rxjs/operators';
+
+export const NETWORKS: Network[] = [
+  {
+    name: 'mainnet-beta' as ENV,
+    url: 'https://solana-api.projectserum.com/',
+    chainID: ChainID.MainnetBeta,
+  },
+  {
+    name: 'testnet' as ENV,
+    url: clusterApiUrl('testnet'),
+    chainID: ChainID.Testnet,
+  },
+  {
+    name: 'devnet' as ENV,
+    url: clusterApiUrl('devnet'),
+    chainID: ChainID.Devnet,
+  },
+];
+
+export const DEFAULT_NETWORK = NETWORKS[2];
+export const DEFAULT_SLIPPAGE = 0.25;
 
 export interface ViewModel {
   networks: Network[];

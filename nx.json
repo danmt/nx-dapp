@@ -126,28 +126,16 @@
     "solana-dapp-balance": {
       "tags": []
     },
-    "solana-dapp-connection": {
-      "tags": []
-    },
     "solana-dapp-market": {
       "tags": []
     },
-    "solana-dapp-network": {
-      "tags": []
-    },
     "solana-dapp-token": {
-      "tags": []
-    },
-    "solana-dapp-transaction": {
       "tags": []
     },
     "solana-dapp-utils-operations": {
       "tags": []
     },
     "solana-dapp-utils-types": {
-      "tags": []
-    },
-    "solana-dapp-wallet": {
       "tags": []
     },
     "web-client": {

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { InjectionToken, NgModule } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { ReactiveComponentModule } from '@ngrx/component';
 import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/change-network';
@@ -33,6 +34,7 @@ import { ShellComponent } from './shell.component';
         ],
       },
     ]),
+    MatSnackBarModule,
     ReactiveComponentModule,
     ConnectWalletModule,
     ChangeNetworkModule,
