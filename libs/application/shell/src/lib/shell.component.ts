@@ -7,10 +7,9 @@ import {
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import {
-  connectionProvider,
   ConnectionStore,
-  walletProvider,
   WalletStore,
+  WALLET_CONFIG,
 } from '@danmt/wallet-adapter-angular';
 import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
 import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
@@ -70,18 +69,22 @@ import { map } from 'rxjs/operators';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    ...walletProvider({
-      wallets: [
-        getSolletWallet(),
-        getPhantomWallet(),
-        getSolflareWallet(),
-        getSolongWallet(),
-        getBitpieWallet(),
-        getBloctoWallet(),
-      ],
-      autoConnect: true,
-    }),
-    ...connectionProvider(),
+    {
+      provide: WALLET_CONFIG,
+      useValue: {
+        wallets: [
+          getSolletWallet(),
+          getPhantomWallet(),
+          getSolflareWallet(),
+          getSolongWallet(),
+          getBitpieWallet(),
+          getBloctoWallet(),
+        ],
+        autoConnect: true,
+      },
+    },
+    WalletStore,
+    ConnectionStore,
     BalancesStore,
     PricesStore,
     NetworksStore,
