@@ -1,2 +1,1 @@
-export * from './lib/native-transfer.module';
-export * from './lib/native-transfer.service';
+export * from './lib/native-transfer.component';

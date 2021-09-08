@@ -6,12 +6,11 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import {
-  SolanaDappBalanceService,
-  SolanaDappWalletService,
-} from '@nx-dapp/solana-dapp/angular';
+import { WalletStore } from '@danmt/wallet-adapter-angular';
+import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
+import { isNotNull } from '@nx-dapp/shared/utils/operators';
 import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'nx-dapp-view-wallet',
@@ -81,18 +80,21 @@ import { filter, takeUntil } from 'rxjs/operators';
 export class ViewWalletComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'block relative w-64';
   private readonly _destroy = new Subject();
-  disconnecting$ = this.walletService.disconnecting$;
-  walletAddress$ = this.walletService.walletAddress$;
-  walletBalance$ = this.balanceService.getBalanceForWallet();
+  disconnecting$ = this.walletStore.disconnecting$;
+  walletAddress$ = this.walletStore.publicKey$.pipe(
+    isNotNull,
+    map((publicKey) => publicKey.toBase58())
+  );
+  walletBalance$ = this.balancesStore.walletBalance$;
 
   constructor(
-    private walletService: SolanaDappWalletService,
-    private balanceService: SolanaDappBalanceService,
+    private balancesStore: BalancesStore,
+    private walletStore: WalletStore,
     private dialogRef: MatDialogRef<ViewWalletComponent>
   ) {}
 
   ngOnInit() {
-    this.walletService.connected$
+    this.walletStore.connected$
       .pipe(
         filter((connected) => !connected),
         takeUntil(this._destroy)
@@ -107,7 +109,7 @@ export class ViewWalletComponent implements OnInit, OnDestroy {
 
   onDisconnectWallet() {
     if (confirm('Are you sure? This action will disconnect your wallet.')) {
-      this.walletService.disconnect();
+      this.walletStore.disconnect();
     }
   }
 }

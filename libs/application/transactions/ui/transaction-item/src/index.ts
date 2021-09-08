@@ -1,1 +1,1 @@
-export * from './lib/transaction-item.module';
+export * from './lib/transaction-item.component';

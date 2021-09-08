@@ -12,8 +12,9 @@ import { base58Validator } from '@nx-dapp/solana-dapp/angular';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
+import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
 import { SplTransferStore } from './spl-transfer.store';
-import { SplTransferData } from './types';
+import { Position } from '@nx-dapp/application/portfolios/utils';
 
 @Component({
   selector: 'nx-dapp-spl-transfer',
@@ -53,8 +54,8 @@ import { SplTransferData } from './types';
           autocomplete="off"
         />
         <mat-hint *ngIf="!submitted || amountControl.valid"
-          >Maximum amount is {{ data.position.quantity }}
-          {{ data.position.symbol }}
+          >Maximum amount is {{ data.quantity }}
+          {{ data.symbol }}
         </mat-hint>
         <mat-error *ngIf="submitted && amountControl.errors?.required"
           >The amount is mandatory.</mat-error
@@ -134,8 +135,9 @@ export class SplTransferComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialogRef: MatDialogRef<SplTransferComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SplTransferData,
-    private splTransferStore: SplTransferStore
+    @Inject(MAT_DIALOG_DATA) public data: Position,
+    private splTransferStore: SplTransferStore,
+    private transactionsStore: TransactionsStore
   ) {}
 
   ngOnInit() {
@@ -145,13 +147,15 @@ export class SplTransferComponent implements OnInit, OnDestroy {
         this.associatedTokenAccountControl.setValue(associatedTokenAccount);
       });
 
-    this.splTransferStore.init(
-      this.data.position,
-      this.recipientAddressControl.valueChanges.pipe(
-        filter(() => this.recipientAddressControl.valid)
-      ),
+    this.splTransferStore.patchState({ position: this.data });
+    this.splTransferStore.clearAssociatedTokenAccount(
       this.recipientAddressControl.valueChanges.pipe(
         filter(() => this.recipientAddressControl.invalid)
+      )
+    );
+    this.splTransferStore.getAssociatedTokenAccount(
+      this.recipientAddressControl.valueChanges.pipe(
+        filter(() => this.recipientAddressControl.valid)
       )
     );
   }
@@ -164,9 +168,17 @@ export class SplTransferComponent implements OnInit, OnDestroy {
   onSend() {
     this.submitted = true;
     this.splTransferGroup.markAllAsTouched();
+    const emitterAddress = this.data.associatedTokenAddress;
 
-    if (this.splTransferGroup.valid) {
-      this.splTransferStore.sendTransfer(this.amountControl.value);
+    if (this.splTransferGroup.valid && emitterAddress) {
+      this.transactionsStore.sendSplTransfer({
+        emitterAddress,
+        recipientAddress:
+          this.associatedTokenAccountControl.value?.pubkey?.toBase58(),
+        amount: this.amountControl.value,
+        mintAddress: this.data.address,
+        decimals: this.data.decimals,
+      });
       this.dialogRef.close();
     }
   }

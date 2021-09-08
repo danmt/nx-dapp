@@ -3,6 +3,7 @@ module.exports = (config) => {
     path: false,
     fs: false,
     os: false,
+    crypto: false
   };
 
   return config;

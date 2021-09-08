@@ -2,14 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  OnInit,
+  ViewContainerRef,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Position } from '@nx-dapp/application/portfolios/utils';
-import { ConnectWalletService } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { NativeTransferService } from '@nx-dapp/application/transactions/features/native-transfer';
-import { SplTransferService } from '@nx-dapp/application/transactions/features/spl-transfer';
-import { SolanaDappWalletService } from '@nx-dapp/solana-dapp/angular';
-
+import { NativeTransferComponent } from '@nx-dapp/application/transactions/features/native-transfer';
+import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { SplTransferComponent } from '@nx-dapp/application/transactions/features/spl-transfer';
 import { ViewPortfolioStore } from './view-portfolio.store';
 
 @Component({
@@ -86,34 +85,42 @@ import { ViewPortfolioStore } from './view-portfolio.store';
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ViewPortfolioStore],
+  viewProviders: [ViewPortfolioStore],
 })
-export class ViewPortfolioComponent implements OnInit {
+export class ViewPortfolioComponent {
   @HostBinding('class') class = 'block p-4';
+  connected$ = this.viewPortfolioStore.connected$;
   portfolio$ = this.viewPortfolioStore.portfolio$;
-  connected$ = this.walletService.connected$;
 
   constructor(
     private viewPortfolioStore: ViewPortfolioStore,
-    private walletService: SolanaDappWalletService,
-    private connectWalletService: ConnectWalletService,
-    private nativeTransferService: NativeTransferService,
-    private splTransferService: SplTransferService
+    private viewContainerRef: ViewContainerRef,
+    private matDialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    this.viewPortfolioStore.init();
-  }
-
   onConnectWallet() {
-    this.connectWalletService.open();
+    this.matDialog.open(ConnectWalletComponent, {
+      hasBackdrop: true,
+      autoFocus: false,
+      viewContainerRef: this.viewContainerRef,
+    });
   }
 
   onSendFunds(position: Position) {
     if (position.isNative) {
-      this.nativeTransferService.open(position);
+      this.matDialog.open(NativeTransferComponent, {
+        hasBackdrop: true,
+        autoFocus: false,
+        data: position,
+        viewContainerRef: this.viewContainerRef,
+      });
     } else {
-      this.splTransferService.open(position);
+      this.matDialog.open(SplTransferComponent, {
+        hasBackdrop: true,
+        autoFocus: false,
+        data: position,
+        viewContainerRef: this.viewContainerRef,
+      });
     }
   }
 }

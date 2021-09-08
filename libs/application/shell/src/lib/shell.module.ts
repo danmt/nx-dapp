@@ -1,15 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { InjectionToken, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { ReactiveComponentModule } from '@ngrx/component';
-import { ChangeNetworkModule } from '@nx-dapp/application/networks/features/change-network';
+import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
+import { NetworksRadioGroupModule } from '@nx-dapp/application/networks/ui/networks-radio-group';
+import { CopyableTextModule } from '@nx-dapp/application/shared/ui/copyable-text';
+import { FocusModule } from '@nx-dapp/application/shared/ui/focus';
+import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 import { NavigationModule } from '@nx-dapp/application/shared/ui/navigation';
 import { SettingsMenuModule } from '@nx-dapp/application/shared/ui/settings-menu';
-import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
-import { TransactionNotificationsModule } from '@nx-dapp/application/transactions/utils/transaction-notifications';
-import { ConnectWalletModule } from '@nx-dapp/application/wallets/features/connect-wallet';
-import { ViewWalletModule } from '@nx-dapp/application/wallets/features/view-wallet';
-import { WalletNotificationsModule } from '@nx-dapp/application/wallets/utils/wallet-notifications';
+import { TransactionsInProcessComponent } from '@nx-dapp/application/transactions/features/transactions-in-process';
+import { TransactionItemComponent } from '@nx-dapp/application/transactions/ui/transaction-item';
+import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
+import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 
 import { ShellComponent } from './shell.component';
 
@@ -35,22 +45,28 @@ import { ShellComponent } from './shell.component';
         ],
       },
     ]),
+    ReactiveFormsModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
     ReactiveComponentModule,
-    WalletNotificationsModule,
-    TransactionNotificationsModule,
-    ConnectWalletModule,
-    ChangeNetworkModule,
-    ViewWalletModule,
-    TransactionsInProcessModule,
     SettingsMenuModule,
     NavigationModule,
+    CopyableTextModule,
+    FocusModule,
+    ModalHeaderModule,
+    NetworksRadioGroupModule,
   ],
-  declarations: [ShellComponent],
-  providers: [
-    {
-      provide: new InjectionToken('document'),
-      useValue: document
-    }
-  ]
+  declarations: [
+    ShellComponent,
+    ConnectWalletComponent,
+    ViewWalletComponent,
+    ChangeNetworkComponent,
+    TransactionsInProcessComponent,
+    TransactionItemComponent,
+  ],
 })
 export class ShellModule {}

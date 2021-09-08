@@ -15,8 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-dapp/application/transactions/features/native-transfer": [
-        "libs/application/transactions/features/native-transfer/src/index.ts"
+      "@nx-dapp/application/market/data-access/prices": [
+        "libs/application/market/data-access/prices/src/index.ts"
+      ],
+      "@nx-dapp/application/networks/data-access/networks": [
+        "libs/application/networks/data-access/networks/src/index.ts"
       ],
       "@nx-dapp/application/networks/features/change-network": [
         "libs/application/networks/features/change-network/src/index.ts"
@@ -67,6 +70,15 @@
         "libs/application/shared/utils/obscure-address/src/index.ts"
       ],
       "@nx-dapp/application/shell": ["libs/application/shell/src/index.ts"],
+      "@nx-dapp/application/transactions/data-access/transactions": [
+        "libs/application/transactions/data-access/transactions/src/index.ts"
+      ],
+      "@nx-dapp/application/transactions/features/native-transfer": [
+        "libs/application/transactions/features/native-transfer/src/index.ts"
+      ],
+      "@nx-dapp/application/transactions/features/notifications": [
+        "libs/application/transactions/features/notifications/src/index.ts"
+      ],
       "@nx-dapp/application/transactions/features/spl-transfer": [
         "libs/application/transactions/features/spl-transfer/src/index.ts"
       ],
@@ -76,17 +88,17 @@
       "@nx-dapp/application/transactions/ui/transaction-item": [
         "libs/application/transactions/ui/transaction-item/src/index.ts"
       ],
-      "@nx-dapp/application/transactions/utils/transaction-notifications": [
-        "libs/application/transactions/utils/transaction-notifications/src/index.ts"
+      "@nx-dapp/application/wallets/data-access/balances": [
+        "libs/application/wallets/data-access/balances/src/index.ts"
       ],
       "@nx-dapp/application/wallets/features/connect-wallet": [
         "libs/application/wallets/features/connect-wallet/src/index.ts"
       ],
+      "@nx-dapp/application/wallets/features/notifications": [
+        "libs/application/wallets/features/notifications/src/index.ts"
+      ],
       "@nx-dapp/application/wallets/features/view-wallet": [
         "libs/application/wallets/features/view-wallet/src/index.ts"
-      ],
-      "@nx-dapp/application/wallets/utils/wallet-notifications": [
-        "libs/application/wallets/utils/wallet-notifications/src/index.ts"
       ],
       "@nx-dapp/shared/utils/operators": [
         "libs/shared/utils/operators/src/index.ts"
@@ -94,22 +106,14 @@
       "@nx-dapp/solana-dapp/account": ["libs/solana-dapp/account/src/index.ts"],
       "@nx-dapp/solana-dapp/angular": ["libs/solana-dapp/angular/src/index.ts"],
       "@nx-dapp/solana-dapp/balance": ["libs/solana-dapp/balance/src/index.ts"],
-      "@nx-dapp/solana-dapp/connection": [
-        "libs/solana-dapp/connection/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/market": ["libs/solana-dapp/market/src/index.ts"],
-      "@nx-dapp/solana-dapp/network": ["libs/solana-dapp/network/src/index.ts"],
       "@nx-dapp/solana-dapp/token": ["libs/solana-dapp/token/src/index.ts"],
-      "@nx-dapp/solana-dapp/transaction": [
-        "libs/solana-dapp/transaction/src/index.ts"
-      ],
       "@nx-dapp/solana-dapp/utils/operations": [
         "libs/solana-dapp/utils/operations/src/index.ts"
       ],
       "@nx-dapp/solana-dapp/utils/types": [
         "libs/solana-dapp/utils/types/src/index.ts"
-      ],
-      "@nx-dapp/solana-dapp/wallet": ["libs/solana-dapp/wallet/src/index.ts"]
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

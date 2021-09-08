@@ -7,7 +7,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { SolanaDappModule } from '@nx-dapp/solana-dapp/angular';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -40,7 +39,6 @@ import { AppComponent } from './app.component';
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot(),
-    SolanaDappModule.forRoot(),
     MatTooltipModule,
   ],
   bootstrap: [AppComponent],

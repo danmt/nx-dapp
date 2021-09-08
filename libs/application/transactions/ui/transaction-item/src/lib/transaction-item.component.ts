@@ -4,7 +4,7 @@ import {
   HostBinding,
   Input,
 } from '@angular/core';
-import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
+import { TransactionDetails } from '@nx-dapp/application/transactions/data-access/transactions';
 
 @Component({
   selector: 'nx-dapp-transaction-item',
@@ -14,7 +14,6 @@ import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
         <figure class="w-16 h-16 bg-black bg-opacity-25">
           <img [src]="transaction.logo" />
         </figure>
-
         <div>
           <p class="m-0">
             <span class="text-lg">
@@ -23,8 +22,8 @@ import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
             {{ transaction.symbol }}
           </p>
           <a
-            *ngIf="transaction.txId"
-            [href]="'https://solscan.io/tx/' + transaction.txId"
+            *ngIf="transaction.signature"
+            [href]="'https://solscan.io/tx/' + transaction.signature"
             target="_blank"
             class="inline-block text-xs underline"
           >
@@ -33,7 +32,7 @@ import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
         </div>
 
         <mat-spinner
-          *ngIf="transaction.isProcessing"
+          *ngIf="transaction.processing"
           diameter="24"
           color="primary"
         ></mat-spinner>
@@ -66,5 +65,5 @@ import { Transaction } from '@nx-dapp/solana-dapp/utils/types';
 })
 export class TransactionItemComponent {
   @HostBinding('class') class = 'flex justify-between items-center mb-4';
-  @Input() transaction: Transaction | null = null;
+  @Input() transaction: TransactionDetails | null = null;
 }

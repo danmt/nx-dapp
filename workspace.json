@@ -1,6 +1,58 @@
 {
   "version": 2,
   "projects": {
+    "application-market-data-access-prices": {
+      "projectType": "library",
+      "root": "libs/application/market/data-access/prices",
+      "sourceRoot": "libs/application/market/data-access/prices/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/application/market/data-access/prices"],
+          "options": {
+            "jestConfig": "libs/application/market/data-access/prices/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/market/data-access/prices/src/**/*.ts",
+              "libs/application/market/data-access/prices/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-networks-data-access-networks": {
+      "projectType": "library",
+      "root": "libs/application/networks/data-access/networks",
+      "sourceRoot": "libs/application/networks/data-access/networks/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/networks/data-access/networks"
+          ],
+          "options": {
+            "jestConfig": "libs/application/networks/data-access/networks/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/networks/data-access/networks/src/**/*.ts",
+              "libs/application/networks/data-access/networks/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-networks-features-change-network": {
       "projectType": "library",
       "root": "libs/application/networks/features/change-network",
@@ -432,6 +484,33 @@
         }
       }
     },
+    "application-transactions-data-access-transactions": {
+      "projectType": "library",
+      "root": "libs/application/transactions/data-access/transactions",
+      "sourceRoot": "libs/application/transactions/data-access/transactions/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/data-access/transactions"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/data-access/transactions/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/data-access/transactions/src/**/*.ts",
+              "libs/application/transactions/data-access/transactions/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-transactions-features-native-transfer": {
       "projectType": "library",
       "root": "libs/application/transactions/features/native-transfer",
@@ -454,6 +533,33 @@
             "lintFilePatterns": [
               "libs/application/transactions/features/native-transfer/src/**/*.ts",
               "libs/application/transactions/features/native-transfer/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "application-transactions-features-notifications": {
+      "projectType": "library",
+      "root": "libs/application/transactions/features/notifications",
+      "sourceRoot": "libs/application/transactions/features/notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/transactions/features/notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/transactions/features/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/transactions/features/notifications/src/**/*.ts",
+              "libs/application/transactions/features/notifications/src/**/*.html"
             ]
           }
         }
@@ -540,19 +646,17 @@
         }
       }
     },
-    "application-transactions-utils-transaction-notifications": {
+    "application-wallets-data-access-balances": {
       "projectType": "library",
-      "root": "libs/application/transactions/utils/transaction-notifications",
-      "sourceRoot": "libs/application/transactions/utils/transaction-notifications/src",
+      "root": "libs/application/wallets/data-access/balances",
+      "sourceRoot": "libs/application/wallets/data-access/balances/src",
       "prefix": "nx-dapp",
       "targets": {
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/application/transactions/utils/transaction-notifications"
-          ],
+          "outputs": ["coverage/libs/application/wallets/data-access/balances"],
           "options": {
-            "jestConfig": "libs/application/transactions/utils/transaction-notifications/jest.config.js",
+            "jestConfig": "libs/application/wallets/data-access/balances/jest.config.js",
             "passWithNoTests": true
           }
         },
@@ -560,8 +664,8 @@
           "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.ts",
-              "libs/application/transactions/utils/transaction-notifications/src/**/*.html"
+              "libs/application/wallets/data-access/balances/src/**/*.ts",
+              "libs/application/wallets/data-access/balances/src/**/*.html"
             ]
           }
         }
@@ -594,6 +698,33 @@
         }
       }
     },
+    "application-wallets-features-notifications": {
+      "projectType": "library",
+      "root": "libs/application/wallets/features/notifications",
+      "sourceRoot": "libs/application/wallets/features/notifications/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/application/wallets/features/notifications"
+          ],
+          "options": {
+            "jestConfig": "libs/application/wallets/features/notifications/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/application/wallets/features/notifications/src/**/*.ts",
+              "libs/application/wallets/features/notifications/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "application-wallets-features-view-wallet": {
       "projectType": "library",
       "root": "libs/application/wallets/features/view-wallet",
@@ -614,33 +745,6 @@
             "lintFilePatterns": [
               "libs/application/wallets/features/view-wallet/src/**/*.ts",
               "libs/application/wallets/features/view-wallet/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "application-wallets-utils-wallet-notifications": {
-      "projectType": "library",
-      "root": "libs/application/wallets/utils/wallet-notifications",
-      "sourceRoot": "libs/application/wallets/utils/wallet-notifications/src",
-      "prefix": "nx-dapp",
-      "targets": {
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/application/wallets/utils/wallet-notifications"
-          ],
-          "options": {
-            "jestConfig": "libs/application/wallets/utils/wallet-notifications/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/application/wallets/utils/wallet-notifications/src/**/*.ts",
-              "libs/application/wallets/utils/wallet-notifications/src/**/*.html"
             ]
           }
         }
@@ -734,27 +838,6 @@
         }
       }
     },
-    "solana-dapp-connection": {
-      "root": "libs/solana-dapp/connection",
-      "sourceRoot": "libs/solana-dapp/connection/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/solana-dapp/connection/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/connection"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/connection/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "solana-dapp-market": {
       "root": "libs/solana-dapp/market",
       "sourceRoot": "libs/solana-dapp/market/src",
@@ -776,27 +859,6 @@
         }
       }
     },
-    "solana-dapp-network": {
-      "root": "libs/solana-dapp/network",
-      "sourceRoot": "libs/solana-dapp/network/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/solana-dapp/network/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/network"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/network/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "solana-dapp-token": {
       "root": "libs/solana-dapp/token",
       "sourceRoot": "libs/solana-dapp/token/src",
@@ -813,27 +875,6 @@
           "outputs": ["coverage/libs/solana-dapp/token"],
           "options": {
             "jestConfig": "libs/solana-dapp/token/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-transaction": {
-      "root": "libs/solana-dapp/transaction",
-      "sourceRoot": "libs/solana-dapp/transaction/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/solana-dapp/transaction/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/transaction"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/transaction/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -876,27 +917,6 @@
           "outputs": ["coverage/libs/solana-dapp/utils/types"],
           "options": {
             "jestConfig": "libs/solana-dapp/utils/types/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "solana-dapp-wallet": {
-      "root": "libs/solana-dapp/wallet",
-      "sourceRoot": "libs/solana-dapp/wallet/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/solana-dapp/wallet/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/solana-dapp/wallet"],
-          "options": {
-            "jestConfig": "libs/solana-dapp/wallet/jest.config.js",
             "passWithNoTests": true
           }
         }
