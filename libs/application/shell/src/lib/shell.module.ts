@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +16,8 @@ import { FocusModule } from '@nx-dapp/application/shared/ui/focus';
 import { ModalHeaderModule } from '@nx-dapp/application/shared/ui/modal-header';
 import { NavigationModule } from '@nx-dapp/application/shared/ui/navigation';
 import { SettingsMenuModule } from '@nx-dapp/application/shared/ui/settings-menu';
-import { TransactionsInProcessModule } from '@nx-dapp/application/transactions/features/transactions-in-process';
+import { TransactionsInProcessComponent } from '@nx-dapp/application/transactions/features/transactions-in-process';
+import { TransactionItemComponent } from '@nx-dapp/application/transactions/ui/transaction-item';
 import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { ViewWalletComponent } from '@nx-dapp/application/wallets/features/view-wallet';
 
@@ -44,13 +46,13 @@ import { ShellComponent } from './shell.component';
       },
     ]),
     ReactiveFormsModule,
+    MatBottomSheetModule,
     MatButtonModule,
     MatDialogModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     ReactiveComponentModule,
-    TransactionsInProcessModule,
     SettingsMenuModule,
     NavigationModule,
     CopyableTextModule,
@@ -63,6 +65,8 @@ import { ShellComponent } from './shell.component';
     ConnectWalletComponent,
     ViewWalletComponent,
     ChangeNetworkComponent,
+    TransactionsInProcessComponent,
+    TransactionItemComponent,
   ],
 })
 export class ShellModule {}

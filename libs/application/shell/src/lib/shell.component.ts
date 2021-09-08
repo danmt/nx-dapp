@@ -4,6 +4,8 @@ import {
   OnInit,
   ViewContainerRef,
 } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import {
   connectionProvider,
   ConnectionStore,
@@ -12,8 +14,10 @@ import {
 } from '@danmt/wallet-adapter-angular';
 import { PricesStore } from '@nx-dapp/application/market/data-access/prices';
 import { NetworksStore } from '@nx-dapp/application/networks/data-access/networks';
+import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
 import { TransactionsStore } from '@nx-dapp/application/transactions/data-access/transactions';
-import { TransactionsInProcessService } from '@nx-dapp/application/transactions/features/transactions-in-process';
+import { TransactionNotificationsService } from '@nx-dapp/application/transactions/features/notifications';
+import { TransactionsInProcessComponent } from '@nx-dapp/application/transactions/features/transactions-in-process';
 import { BalancesStore } from '@nx-dapp/application/wallets/data-access/balances';
 import { ConnectWalletComponent } from '@nx-dapp/application/wallets/features/connect-wallet';
 import { WalletNotificationsService } from '@nx-dapp/application/wallets/features/notifications';
@@ -28,9 +32,6 @@ import {
   getSolongWallet,
 } from '@solana/wallet-adapter-wallets';
 import { map } from 'rxjs/operators';
-import { TransactionNotificationsService } from '@nx-dapp/application/transactions/features/notifications';
-import { MatDialog } from '@angular/material/dialog';
-import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/change-network';
 
 @Component({
   selector: 'nx-dapp-shell',
@@ -51,11 +52,20 @@ import { ChangeNetworkComponent } from '@nx-dapp/application/networks/features/c
       >
       </nx-dapp-settings-menu>
     </nx-dapp-navigation>
-    <nx-dapp-transactions-in-process-trigger
-      *ngIf="processing$ | async"
-      [inProcess]="inProcess$ | async"
-      (openSheet)="onViewTransactions()"
-    ></nx-dapp-transactions-in-process-trigger>
+    <div class="block fixed bottom-0 left-0 w-screen z-10">
+      <button
+        *ngIf="processing$ | async"
+        class="mx-auto block"
+        mat-raised-button
+        color="primary"
+        (click)="onViewTransactions()"
+      >
+        <span class="flex justify-center gap-2 items-center">
+          Transactions in Process ({{ inProcess$ | async }})
+          <mat-spinner color="accent" diameter="24"></mat-spinner>
+        </span>
+      </button>
+    </div>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,10 +105,10 @@ export class ShellComponent implements OnInit {
     private connectionStore: ConnectionStore,
     private transactionsStore: TransactionsStore,
     private networksStore: NetworksStore,
-    private transactionsInProcessService: TransactionsInProcessService,
     private walletNotificationsService: WalletNotificationsService,
     private transactionNotificationsService: TransactionNotificationsService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private matBottomSheet: MatBottomSheet
   ) {}
 
   ngOnInit() {
@@ -134,7 +144,11 @@ export class ShellComponent implements OnInit {
   }
 
   onViewTransactions() {
-    this.transactionsInProcessService.open(this.viewContainerRef);
+    this.matBottomSheet.open(TransactionsInProcessComponent, {
+      hasBackdrop: true,
+      autoFocus: false,
+      viewContainerRef: this.viewContainerRef,
+    });
   }
 
   onChangeNetwork() {
