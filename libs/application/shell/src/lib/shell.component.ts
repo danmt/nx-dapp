@@ -79,7 +79,7 @@ import { map } from 'rxjs/operators';
         getBitpieWallet(),
         getBloctoWallet(),
       ],
-      // autoConnect: true,
+      autoConnect: true,
     }),
     ...connectionProvider(),
     BalancesStore,
