@@ -22,9 +22,10 @@ import { map, shareReplay } from 'rxjs/operators';
         [mode]="(isHandset$ | async) ? 'over' : 'side'"
         [opened]="(isHandset$ | async) === false"
       >
-        <figure class="mx-4 mt-4 mb-2">
-          <img src="assets/images/logo.jpeg" />
+        <figure class="mt-4 w-full flex justify-center">
+          <img src="assets/images/logo.png" class="w-4/6"/>
         </figure>
+        <h2 class="mt-4 text-center">DEMOCODE</h2>
         <mat-nav-list>
           <a mat-list-item routerLink="/portfolios/view-portfolio">Portfolio</a>
           <div class="mt-8 px-4" *ngIf="isConnected">
