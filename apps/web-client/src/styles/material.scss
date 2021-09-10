@@ -30,7 +30,7 @@ $fontConfig: (
 
 
 // Light Theme Text
-$dark-text: #ffffff;
+$dark-text: #000000;
 $dark-primary-text: rgba($dark-text, 0.87);
 $dark-accent-text: rgba($dark-primary-text, 0.54);
 $dark-disabled-text: rgba($dark-primary-text, 0.38);
@@ -85,15 +85,15 @@ $mat-dark-theme-foreground: (
 
 // Background config
 // Light bg
-$light-background:    #011627;
+$light-background:    #b9e3f9;
 $light-bg-darker-5:   darken($light-background, 5%);
 $light-bg-darker-10:  darken($light-background, 10%);
 $light-bg-darker-20:  darken($light-background, 20%);
 $light-bg-darker-30:  darken($light-background, 30%);
 $light-bg-lighter-5:  lighten($light-background, 5%);
-$dark-bg-tooltip:     lighten(#141414, 20%);
-$dark-bg-alpha-4:     rgba(#141414, 0.04);
-$dark-bg-alpha-12:    rgba(#141414, 0.12);
+$dark-bg-tooltip:     lighten(#011627, 20%);
+$dark-bg-alpha-4:     rgba(#011627, 0.04);
+$dark-bg-alpha-12:    rgba(#011627, 0.12);
 
 $mat-light-theme-background: (
   background:               $light-background,
@@ -114,13 +114,13 @@ $mat-light-theme-background: (
 );
 
 // Dark bg
-$dark-background:     #141414;
+$dark-background:     #011627;
 $dark-bg-lighter-5:   lighten($dark-background, 5%);
 $dark-bg-lighter-10:  lighten($dark-background, 10%);
 $dark-bg-lighter-20:  lighten($dark-background, 20%);
 $dark-bg-lighter-30:  lighten($dark-background, 30%);
-$light-bg-alpha-4:    rgba(#011627, 0.04);
-$light-bg-alpha-12:   rgba(#011627, 0.12);
+$light-bg-alpha-4:    rgba(#b9e3f9, 0.04);
+$light-bg-alpha-12:   rgba(#b9e3f9, 0.12);
 
 // Background palette for dark themes.
 $mat-dark-theme-background: (
@@ -147,18 +147,18 @@ $mat-dark-theme-background: (
 // Theme Config
 
 body {
-  --primary-color: #f52b01;
-  --primary-lighter-color: #fcbfb3;
-  --primary-darker-color: #f01a01;
+  --primary-color: #1b4eb8;
+  --primary-lighter-color: #bbcaea;
+  --primary-darker-color: #1035a0;
   --text-primary-color: #{$light-primary-text};
   --text-primary-lighter-color: #{$dark-primary-text};
   --text-primary-darker-color: #{$light-primary-text};
 }   
 $mat-primary: (
-  main: #f52b01,
-  lighter: #fcbfb3,
-  darker: #f01a01,
-  200: #f52b01, // For slide toggle,
+  main: #1b4eb8,
+  lighter: #bbcaea,
+  darker: #1035a0,
+  200: #1b4eb8, // For slide toggle,
   contrast : (
     main: $light-primary-text,
     lighter: $dark-primary-text,
@@ -169,40 +169,40 @@ $theme-primary: mat-palette($mat-primary, main, lighter, darker);
 
 
 body {
-  --accent-color: #00e95a;
-  --accent-lighter-color: #b3f8ce;
-  --accent-darker-color: #00df3f;
+  --accent-color: #43a6f3;
+  --accent-lighter-color: #c7e4fb;
+  --accent-darker-color: #2c8bed;
   --text-accent-color: #{$dark-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
-  --text-accent-darker-color: #{$dark-primary-text};
+  --text-accent-darker-color: #{$light-primary-text};
 }   
 $mat-accent: (
-  main: #00e95a,
-  lighter: #b3f8ce,
-  darker: #00df3f,
-  200: #00e95a, // For slide toggle,
+  main: #43a6f3,
+  lighter: #c7e4fb,
+  darker: #2c8bed,
+  200: #43a6f3, // For slide toggle,
   contrast : (
     main: $dark-primary-text,
     lighter: $dark-primary-text,
-    darker: $dark-primary-text,
+    darker: $light-primary-text,
   )
 );
 $theme-accent: mat-palette($mat-accent, main, lighter, darker);
 
 
 body {
-  --warn-color: #d91e18;
-  --warn-lighter-color: #f4bcba;
-  --warn-darker-color: #ca120e;
+  --warn-color: #d40000;
+  --warn-lighter-color: #f2b3b3;
+  --warn-darker-color: #c30000;
   --text-warn-color: #{$light-primary-text};
   --text-warn-lighter-color: #{$dark-primary-text};
   --text-warn-darker-color: #{$light-primary-text};
 }   
 $mat-warn: (
-  main: #d91e18,
-  lighter: #f4bcba,
-  darker: #ca120e,
-  200: #d91e18, // For slide toggle,
+  main: #d40000,
+  lighter: #f2b3b3,
+  darker: #c30000,
+  200: #d40000, // For slide toggle,
   contrast : (
     main: $light-primary-text,
     lighter: $dark-primary-text,
@@ -210,6 +210,7 @@ $mat-warn: (
   )
 );
 $theme-warn: mat-palette($mat-warn, main, lighter, darker);
+
 
 
 @function set-light-theme($primary, $accent, $warn) {
