@@ -1,6 +1,27 @@
 {
   "version": 2,
   "projects": {
+    "-arweave--arweave-sdk": {
+      "root": "libs//arweave//arweave-sdk",
+      "sourceRoot": "libs/arweave/arweave-sdk/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs//arweave//arweave-sdk/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/arweave/arweave-sdk"],
+          "options": {
+            "jestConfig": "libs/arweave/arweave-sdk/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "application-market-data-access-prices": {
       "projectType": "library",
       "root": "libs/application/market/data-access/prices",
@@ -746,6 +767,149 @@
               "libs/application/wallets/features/view-wallet/src/**/*.ts",
               "libs/application/wallets/features/view-wallet/src/**/*.html"
             ]
+          }
+        }
+      }
+    },
+    "arweave-sdk": {
+      "projectType": "library",
+      "root": "libs/arweave-sdk",
+      "sourceRoot": "libs/arweave-sdk/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/arweave-sdk"],
+          "options": {
+            "jestConfig": "libs/arweave-sdk/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/arweave-sdk/src/**/*.ts",
+              "libs/arweave-sdk/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "arweave-upload": {
+      "projectType": "application",
+      "root": "apps/arweave-upload",
+      "sourceRoot": "apps/arweave-upload/src",
+      "prefix": "nx-dapp",
+      "targets": {
+        "build": {
+          "executor": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/arweave-upload",
+            "index": "apps/arweave-upload/src/index.html",
+            "main": "apps/arweave-upload/src/main.ts",
+            "polyfills": "apps/arweave-upload/src/polyfills.ts",
+            "tsConfig": "apps/arweave-upload/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/arweave-upload/src/favicon.ico",
+              "apps/arweave-upload/src/assets"
+            ],
+            "styles": ["apps/arweave-upload/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/arweave-upload/src/environments/environment.ts",
+                  "with": "apps/arweave-upload/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "executor": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "arweave-upload:build:production"
+            },
+            "development": {
+              "browserTarget": "arweave-upload:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "executor": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "arweave-upload:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/arweave-upload/src/**/*.ts",
+              "apps/arweave-upload/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/arweave-upload"],
+          "options": {
+            "jestConfig": "apps/arweave-upload/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "arweave-upload-e2e": {
+      "root": "apps/arweave-upload-e2e",
+      "sourceRoot": "apps/arweave-upload-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/arweave-upload-e2e/cypress.json",
+            "devServerTarget": "arweave-upload:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "arweave-upload:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/arweave-upload-e2e/**/*.{js,ts}"]
           }
         }
       }

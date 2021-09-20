@@ -27,6 +27,9 @@
     ]
   },
   "projects": {
+    "-arweave--arweave-sdk": {
+      "tags": []
+    },
     "application-market-data-access-prices": {
       "tags": []
     },
@@ -113,6 +116,16 @@
     },
     "application-wallets-features-view-wallet": {
       "tags": []
+    },
+    "arweave-sdk": {
+      "tags": []
+    },
+    "arweave-upload": {
+      "tags": []
+    },
+    "arweave-upload-e2e": {
+      "tags": [],
+      "implicitDependencies": ["arweave-upload"]
     },
     "shared-utils-operators": {
       "tags": []

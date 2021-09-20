@@ -1,0 +1,9 @@
+<main>
+  <h1>Upload a text with <b>Arweave</b></h1>
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+    <input name="upload-text" type="text" aria-label="Arweave text uploader input" formControlName="uploadText" />
+    <button type="submit">
+      Upload Now
+    </button>
+  </form>
+</main>
