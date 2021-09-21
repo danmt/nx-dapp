@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;300;400&display=swap');
 
-body, h1{
+body, h1, h3{
     font-family: 'Roboto Mono', monospace;
 }
 
@@ -10,7 +10,14 @@ main {
     margin: 0;
 }
 
+h1, h3 {
+    font-weight: 400;
+}
+
 h1 {
     font-size: 64px !important;
-    font-weight: 400;
+}
+
+h3 {
+    font-size: 24px !important;
 }
